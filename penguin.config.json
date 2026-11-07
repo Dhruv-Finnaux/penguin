@@ -1,0 +1,41 @@
+{
+  "repos": {
+    "frontend": {
+      "label": "Frontend",
+      "name": "Finnaux2.0-UI",
+      "path": "../FINNAUX2.0-UI",
+      "skills": {
+        "TYPECHECK": "npx tsc --noEmit",
+        "LINT": "npx eslint <changed .ts and .tsx files>",
+        "CHECK_EXAMPLES": "`npx tsc --noEmit`, `npm run lint`",
+        "RULE_EXAMPLES": "a token in `localStorage`, money computed with floats, raw `useForm` or `.register()`, a hardcoded enum or ID",
+        "PROJECT_RULES": [
+          "No session tokens in `localStorage`.",
+          "Money from the API is shown as formatted strings, never computed with floats.",
+          "Every API call handles loading and error states.",
+          "No secrets in code.",
+          "Forms use `useFormFlow`. No hardcoded enums or IDs."
+        ]
+      }
+    },
+    "backend": {
+      "label": "Backend",
+      "name": "Finnaux2.0-API",
+      "path": "../FINNAUX2.0-API",
+      "skills": {
+        "TYPECHECK": "bunx tsc --noEmit",
+        "LINT": "bunx oxlint <changed .ts files>",
+        "CHECK_EXAMPLES": "`bunx tsc --noEmit`, `bunx oxlint apps libs` (never `bun lint`, it runs `--fix`)",
+        "RULE_EXAMPLES": "`@ApiPropertyOptional()` or `@IsIn([...])` in a DTO, a date normalised or sliced outside its origin, money rounded outside the central rounding utilities, a raw `sql` query where Drizzle syntax works, a hardcoded enum or ID",
+        "PROJECT_RULES": [
+          "Optional Swagger fields use `@ApiProperty({ required: false })`, never `@ApiPropertyOptional()`. Array DTO fields use `@IsArray()` and `@ToArray()`. Date DTO fields use `@IsISO8601()`.",
+          "No `@IsIn([...rawValues])`. Enums live in the Drizzle enums file and are used in validation and `@ApiProperty({ enum, enumName })`.",
+          "Date strings are trusted as validated ISO strings. No date formatter or normaliser helpers, no slicing or rebuilding dates in consumers.",
+          "Money uses the centralized rounding utilities. No float drift, no local rounding.",
+          "Drizzle syntax over raw `sql` where possible. `import type` for type-only imports, no unused imports.",
+          "No changes to bootstrap, connection, Drizzle core, config or `main.ts` unless the task needs them. No secrets in code."
+        ]
+      }
+    }
+  }
+}

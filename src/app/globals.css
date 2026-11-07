@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (min-width: 400px) {
+  html {
+    font-size: 14.3px;
+  }
+}
+
+html,
+body,
+:root {
+  height: 100%;
+}
+
+/* base ui starts */
+.root {
+  isolation: isolate;
+}
+
+body {
+  position: relative;
+}
+/* base ui ends */
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --card: 0 0% 94%;
+    --popover: 0 0% 90%;
+    --secondary: 0 0% 86%;
+    --accent: 0 0% 82%;
+
+    --foreground: 0 0% 4%;
+    --card-foreground: 0 0% 4%;
+    --popover-foreground: 0 0% 4%;
+    --secondary-foreground: 0 0% 4%;
+    --accent-foreground: 0 0% 4%;
+
+    /* Unique */
+    --primary: 252 80% 40%;
+    --primary-foreground: 0 0% 92%;
+
+    /* Will make a pattern */
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --border: 0 0% 86%;
+    --input: 0 0% 86%;
+
+    --radius: 0.625rem;
+
+    --success: 142 76% 36%;
+    --success-foreground: 141 84% 93%;
+    --info: 210 78% 46%; /* Deep sky blue */
+    --info-foreground: 208 100% 98%;
+    --warning: 38 92% 52%; /* Golden yellow */
+    --warning-foreground: 49 100% 98%;
+    --destructive: 0 74% 54%; /* Vibrant red */
+    --destructive-foreground: 0 0% 100%;
+
+    /* charts */
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    /* sidebar */
+    --sidebar: 0 0% 94%;
+    --sidebar-foreground: 0 0% 4%;
+
+    /* colors generated from word */
+    --word-bg-s: 60%;
+    --word-bg-l: 88%;
+    --word-fg-s: 70%;
+    --word-fg-l: 30%;
+  }
+
+  .light {
+    --background: 0 0% 96.5%;
+    --card: 0 0% 100%;
+    --popover: 0 0% 97%;
+    --secondary: 0 0% 86%;
+    --accent: 0 0% 91%;
+
+    --foreground: 0 0% 4%;
+    --card-foreground: 0 0% 4%;
+    --popover-foreground: 0 0% 4%;
+    --secondary-foreground: 0 0% 4%;
+    --accent-foreground: 0 0% 4%;
+
+    /* Unique */
+    --primary-foreground: 0 0% 92%;
+
+    /* Will make a pattern */
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 50%;
+
+    --border: 0 0% 82%;
+    --input: 0 0% 86%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 141 84% 93%;
+
+    --info-foreground: 208 100% 98%;
+    --info: 210 92% 45%;
+
+    --warning-foreground: 49 100% 98%;
+    --warning: 32.1 94.6% 40.7%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* charts */
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    /* sidebar */
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 0 0% 4%;
+
+    /* colors generated from word */
+    --word-bg-s: 60%;
+    --word-bg-l: 88%;
+    --word-fg-s: 70%;
+    --word-fg-l: 30%;
+  }
+
+  .dark {
+    --hue: 225 12;
+    --background: var(--hue) 7.5%;
+    --card: var(--hue) 9.5%;
+    --popover: var(--hue) 14%;
+    --secondary: var(--hue) 25%;
+    --accent: var(--hue) 18%;
+    --border: var(--hue) 15%;
+    --input: var(--hue) 15%;
+
+    --foreground: var(--hue) 92%;
+    --card-foreground: var(--hue) 92%;
+    --popover-foreground: var(--hue) 92%;
+    --secondary-foreground: var(--hue) 92%;
+    --accent-foreground: var(--hue) 92%;
+
+    --primary-foreground: 0 0% 92%;
+
+    --muted: var(--hue) 16%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --success: 158 64% 42%; /* Emerald green */
+    --success-foreground: 143 85% 98%;
+
+    --info: 199 100% 62%;
+    --info-foreground: 215 100% 1%;
+    --warning: 38 92% 58%;
+    --warning-foreground: 64 100% 1%;
+    --destructive: 0 74% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* charts */
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    /* sidebar */
+    --sidebar: var(--hue) 9.5%;
+    --sidebar-foreground: var(--hue) 92%;
+
+    /* Colors generated from words */
+    --word-bg-s: 55%;
+    --word-bg-l: 18%;
+    --word-fg-s: 80%;
+    --word-fg-l: 70%;
+  }
+
+  /* Brand New Colors */
+  .color-rose {
+    --primary: 350 80% 40%;
+    --ring: 340 80% 40%;
+  }
+
+  .color-orange {
+    --primary: 15 80% 40%;
+    --ring: 15 80% 40%;
+  }
+
+  .color-teal {
+    --primary: 168 80% 30%;
+    --ring: 168 80% 30%;
+  }
+
+  .color-purple {
+    --primary: 270 80% 52%;
+    --ring: 270 80% 52%;
+  }
+
+  .color-blue {
+    --primary: 214 100% 56%;
+    --ring: 214 100% 56%;
+  }
+
+  .color-coral {
+    --primary: 5 78% 62%;
+    --ring: 5 78% 62%;
+  }
+
+  .color-amber {
+    --primary: 45.57 99.16% 46.86%;
+    --ring: 45.57 99.16% 46.86%;
+    --primary-foreground: 26 83.3% 8.1%;
+  }
+
+  * {
+    @apply border-border;
+    @apply scrollbar-thin scrollbar-track-background scrollbar-thumb-foreground/20;
+    @apply outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+}
+
+@layer utilities {
+  .font-hindi {
+    font-family: "Noto Sans Devanagari", "Hind", "Poppins", sans-serif;
+  }
+}
+
+/* Penguin: menus, popovers and cards are plain white in light mode. */
+.light {
+  --popover: 0 0% 100%;
+  --card: 0 0% 100%;
+}
+
+/* Heat map cells and cards ease in, a column after another. */
+@keyframes heat-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes heat-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Flow lines draw themselves from the newer commit down to its parent. */
+@keyframes flow-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

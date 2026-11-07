@@ -1,0 +1,111 @@
+# 🐧 Explain Me · Backend
+
+> Generated from `data/backend/explainme.json`. Edit the JSON, not this file. 1 entry, newest first.
+
+## explainme-1
+
+| Field | Value |
+|---|---|
+| id | explainme-1 |
+| generatedAt | 2026-11-07T10:42:12+05:30 |
+| author | Dhruv |
+| question | List all files touched from 6 October 2026 to date |
+| problem | Which files were changed in this repo between 2026-10-06 and 2026-11-07. 81 files were touched in 51 commits on dev; 5 were later deleted. |
+| reason | Taken from git log --since=2026-10-06 --name-only on branch dev, so merged work from dhruv, shekhar and feat/report-builder is included. A file counts once however many commits touched it. |
+| solution | Most changes are the report builder (2026-10-06 to 11-02, Shekhar), report rights per designation (10-31 to 11-02), the UCRF consumer report (10-30, Dhruv) and HRMS fixes (11-02, PR #93). |
+| advice | Counts come from git history, not from reading each diff. Files only touched by merges with no changes of their own may be missing from the list. Only this backend repo was checked; the frontend repo has its own list. |
+
+### sourceFiles (81)
+
+- .gitignore
+- CONTRIBUTING.md
+- apps/finnaux-api/src/auth/guards/auth.guard.ts
+- apps/finnaux-api/src/configurations/import-data/attendance/lib/generate-import-attendance-template.ts
+- apps/finnaux-api/src/configurations/import-data/attendance/schemas/import-attendance.schema.ts
+- apps/finnaux-api/src/configurations/import-data/import-attendance.service.ts
+- apps/finnaux-api/src/configurations/import-data/import-data.controller.ts
+- apps/finnaux-api/src/configurations/import-data/import-data.module.ts
+- apps/finnaux-api/src/configurations/import-data/import-salary.service.ts
+- apps/finnaux-api/src/configurations/import-data/salary/lib/generate-import-salary-template.ts
+- apps/finnaux-api/src/drizzle/drizzle.module.ts
+- apps/finnaux-api/src/drizzle/schema/accounts.ts
+- apps/finnaux-api/src/drizzle/schema/custom-report.schema.ts
+- apps/finnaux-api/src/drizzle/schema/enum-map.ts
+- apps/finnaux-api/src/drizzle/schema/enums.ts
+- apps/finnaux-api/src/drizzle/schema/index.ts
+- apps/finnaux-api/src/drizzle/schema/menu/designation.menu.pages.ts
+- apps/finnaux-api/src/drizzle/schema/performance-management.schema.ts
+- apps/finnaux-api/src/dropdown/dropdown.service.ts
+- apps/finnaux-api/src/fixed-cuids.ts
+- apps/finnaux-api/src/hrms/attendance-management/attendance-management.service.ts
+- apps/finnaux-api/src/hrms/designation/designation.module.ts
+- apps/finnaux-api/src/hrms/designation/designation.service.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/__tests__/fake-report-rights.repository.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/__tests__/report-rights.rules.spec.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/__tests__/report-rights.service.spec.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/dto/update-report-rights.dto.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/report-rights.controller.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/report-rights.module.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/report-rights.repository.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/report-rights.rules.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/report-rights.service.ts
+- apps/finnaux-api/src/hrms/designation/report-rights/report-rights.types.ts
+- apps/finnaux-api/src/hrms/employee/employee.service.ts
+- apps/finnaux-api/src/hrms/leave-management/leave-management.service.ts
+- apps/finnaux-api/src/hrms/payroll-management/dto/index.ts
+- apps/finnaux-api/src/hrms/payroll-management/payroll-management.service.ts
+- apps/finnaux-api/src/hrms/payroll-management/payroll-processor.ts
+- apps/finnaux-api/src/hrms/performance-management/dto/performance-management.dto.ts
+- apps/finnaux-api/src/hrms/performance-management/performance-management.service.ts
+- apps/finnaux-api/src/hrms/recruitment/dto/recruitment.dto.ts
+- apps/finnaux-api/src/hrms/recruitment/recruitment.service.ts
+- apps/finnaux-api/src/lms/customer/dto/create-customer.dto.ts
+- apps/finnaux-api/src/reports/report-builder/__tests__/fake-report-builder.repository.ts
+- apps/finnaux-api/src/reports/report-builder/__tests__/fixtures.ts
+- apps/finnaux-api/src/reports/report-builder/__tests__/report-builder.controller.spec.ts
+- apps/finnaux-api/src/reports/report-builder/__tests__/report-builder.module.spec.ts
+- apps/finnaux-api/src/reports/report-builder/__tests__/report-builder.query.spec.ts
+- apps/finnaux-api/src/reports/report-builder/__tests__/report-builder.rules.spec.ts
+- apps/finnaux-api/src/reports/report-builder/__tests__/report-builder.run.spec.ts
+- apps/finnaux-api/src/reports/report-builder/__tests__/report-builder.service.spec.ts
+- apps/finnaux-api/src/reports/report-builder/__tests__/report-summary.query.spec.ts
+- apps/finnaux-api/src/reports/report-builder/dto/index.ts (deleted)
+- apps/finnaux-api/src/reports/report-builder/dto/query-custom-report.dto.ts
+- apps/finnaux-api/src/reports/report-builder/dto/update-custom-report.dto.ts (deleted)
+- apps/finnaux-api/src/reports/report-builder/report-builder.constants.ts (deleted)
+- apps/finnaux-api/src/reports/report-builder/report-builder.controller.ts
+- apps/finnaux-api/src/reports/report-builder/report-builder.module.spec.ts (deleted)
+- apps/finnaux-api/src/reports/report-builder/report-builder.module.ts
+- apps/finnaux-api/src/reports/report-builder/report-builder.query.ts
+- apps/finnaux-api/src/reports/report-builder/report-builder.repository.ts
+- apps/finnaux-api/src/reports/report-builder/report-builder.rules.spec.ts (deleted)
+- apps/finnaux-api/src/reports/report-builder/report-builder.rules.ts
+- apps/finnaux-api/src/reports/report-builder/report-builder.service.ts
+- apps/finnaux-api/src/reports/report-builder/report-builder.sources.ts
+- apps/finnaux-api/src/reports/report-builder/report-builder.types.ts
+- apps/finnaux-api/src/reports/report-builder/report-summary.query.ts
+- apps/finnaux-api/src/reports/reports.module.ts
+- apps/finnaux-api/src/reports/ucrf-report/dto/generate-ucrf-report.dto.ts
+- apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts
+- apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts
+- apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts
+- apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts
+- apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts
+- apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts
+- apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts
+- bun.lock
+- jest.config.js
+- package.json
+- public/swagger/index.js
+- public/swagger/style.css
+
+### approach (6)
+
+- Report builder: 24 files under reports/report-builder (module, controller, service, repository, query, rules, types, DTOs, jest specs), plus reports.module.ts. Five old files were removed or moved: dto/index.ts, dto/update-custom-report.dto.ts, report-builder.constants.ts and the two root spec files.
+- Report rights: 12 files under hrms/designation (report-rights module, rules, repository, service, controller, DTO, specs, designation.service.ts and module).
+- Schema and ids: drizzle schema files (custom-report.schema.ts, enums.ts, enum-map.ts, index.ts, accounts.ts, performance-management.schema.ts, designation.menu.pages.ts), drizzle.module.ts and fixed-cuids.ts.
+- UCRF consumer report: 8 files under reports/ucrf-report (service, TUDF builder, grid mapper, format utils, types, DTOs).
+- HRMS and import data: attendance, leave, payroll, performance, recruitment and employee services/DTOs, and configurations/import-data attendance and salary import files.
+- Shared and tooling: auth.guard.ts, dropdown.service.ts, create-customer.dto.ts, swagger index.js and style.css, .gitignore, CONTRIBUTING.md, jest.config.js, package.json and bun.lock.
+
+---

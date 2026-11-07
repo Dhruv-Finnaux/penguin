@@ -1,0 +1,72 @@
+[
+  {
+    "id": "todo-10",
+    "text": "Traced Aadhaar and PAN verification and saved the guide in Explanations",
+    "status": "done",
+    "createdAt": "2026-11-05T12:21:34.482Z",
+    "doneAt": "2026-11-05T12:42:21.854Z"
+  },
+  {
+    "id": "todo-9",
+    "text": "Wrote the backend contract and the two agent guides for the dashboards",
+    "status": "done",
+    "createdAt": "2026-11-05T12:21:34.482Z",
+    "doneAt": "2026-11-05T12:46:30.499Z"
+  },
+  {
+    "id": "todo-8",
+    "text": "Collections and Sales Advanced dashboards: marked the dummy data, wired the backend calls",
+    "status": "done",
+    "createdAt": "2026-11-05T12:21:34.482Z",
+    "doneAt": "2026-11-05T12:21:34.482Z"
+  },
+  {
+    "id": "todo-7",
+    "text": "Sorted the theme colour fallback so it lands on blue, not navy",
+    "status": "done",
+    "createdAt": "2026-11-05T12:21:34.482Z",
+    "doneAt": "2026-11-05T12:21:34.482Z"
+  },
+  {
+    "id": "todo-6",
+    "text": "UCRF: proper date picker, friendly empty states, columns stop jumping between pages",
+    "status": "done",
+    "createdAt": "2026-11-05T12:21:34.482Z",
+    "doneAt": "2026-11-05T12:21:34.482Z"
+  },
+  {
+    "id": "todo-5",
+    "text": "Print and Export now use the rows on screen, and skip totals when a search is on",
+    "status": "done",
+    "createdAt": "2026-11-05T12:21:34.482Z",
+    "doneAt": "2026-11-05T12:21:34.482Z"
+  },
+  {
+    "id": "todo-4",
+    "text": "Fixed the Excel export: real column names, name and date on top, dates and decimals tidy",
+    "status": "todo",
+    "createdAt": "2026-11-05T12:21:34.482Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-3",
+    "text": "Put the report name and a date line above My Reports and Report Builder",
+    "status": "future",
+    "createdAt": "2026-11-05T12:21:34.482Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-2",
+    "text": "Use number type for the right align in the table",
+    "status": "done",
+    "createdAt": "2026-11-04T10:16:27.721Z",
+    "doneAt": "2026-11-05T12:18:56.498Z"
+  },
+  {
+    "id": "todo-1",
+    "text": "Format Date in all Reports",
+    "status": "done",
+    "createdAt": "2026-11-04T10:15:53.328Z",
+    "doneAt": "2026-11-05T12:18:57.678Z"
+  }
+]

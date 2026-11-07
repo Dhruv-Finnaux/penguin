@@ -1,0 +1,607 @@
+[
+  {
+    "id": "committable-13",
+    "generatedAt": "2026-10-30T14:43:57+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 5,
+      "staged": 0,
+      "unstaged": 5,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-12",
+    "generatedAt": "2026-10-30T14:25:06+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 5,
+      "staged": 0,
+      "unstaged": 5,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-11",
+    "generatedAt": "2026-10-30T13:30:03+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 5,
+      "staged": 0,
+      "unstaged": 5,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-10",
+    "generatedAt": "2026-10-30T11:25:19+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 5,
+      "staged": 0,
+      "unstaged": 5,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-9",
+    "generatedAt": "2026-10-30T10:10:45+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 8,
+      "staged": 0,
+      "unstaged": 8,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-8",
+    "generatedAt": "2026-10-30T10:02:06+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 11,
+      "staged": 0,
+      "unstaged": 8,
+      "untracked": 3
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts",
+      "docs/ucrf/overview.md",
+      "docs/ucrf/report-format.md",
+      "docs/ucrf/ucrf-field-specification.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-7",
+    "generatedAt": "2026-10-30T09:55:38+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 13,
+      "staged": 0,
+      "unstaged": 10,
+      "untracked": 3
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-xlsx.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts",
+      "docs/ucrf/overview.md",
+      "docs/ucrf/report-format.md",
+      "docs/ucrf/ucrf-field-specification.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-6",
+    "generatedAt": "2026-10-29T15:34:15+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 13,
+      "staged": 0,
+      "unstaged": 10,
+      "untracked": 3
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-xlsx.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts",
+      "docs/ucrf/overview.md",
+      "docs/ucrf/report-format.md",
+      "docs/ucrf/ucrf-field-specification.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-5",
+    "generatedAt": "2026-10-29T11:20:00+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 13,
+      "staged": 0,
+      "unstaged": 10,
+      "untracked": 3
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-xlsx.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts",
+      "docs/ucrf/overview.md",
+      "docs/ucrf/report-format.md",
+      "docs/ucrf/ucrf-field-specification.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-4",
+    "generatedAt": "2026-10-29T11:13:31+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 13,
+      "staged": 0,
+      "unstaged": 10,
+      "untracked": 3
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-xlsx.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts",
+      "docs/ucrf/overview.md",
+      "docs/ucrf/report-format.md",
+      "docs/ucrf/ucrf-field-specification.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-3",
+    "generatedAt": "2026-10-29T11:12:31+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 12,
+      "staged": 0,
+      "unstaged": 9,
+      "untracked": 3
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts",
+        "line": 1606,
+        "priority": "low",
+        "issue": "Noisy 'COMING NULL' comment",
+        "fix": "Remove or resolve this comment."
+      }
+    ],
+    "safeFiles": [
+      ".gitignore",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-xlsx.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "docs/ucrf/overview.md",
+      "docs/ucrf/report-format.md",
+      "docs/ucrf/ucrf-field-specification.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-2",
+    "generatedAt": "2026-10-29T11:10:54+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 12,
+      "staged": 0,
+      "unstaged": 9,
+      "untracked": 3
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts",
+        "line": 1586,
+        "priority": "low",
+        "issue": "Noisy 'COMING NULL' comments",
+        "fix": "Remove or resolve these comments."
+      }
+    ],
+    "safeFiles": [
+      ".gitignore",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-xlsx.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "docs/ucrf/overview.md",
+      "docs/ucrf/report-format.md",
+      "docs/ucrf/ucrf-field-specification.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-1",
+    "generatedAt": "2026-10-29T11:03:00+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 15,
+      "staged": 0,
+      "unstaged": 9,
+      "untracked": 7
+    },
+    "attention": [
+      {
+        "path": ".claude/skills/",
+        "line": null,
+        "priority": "high",
+        "issue": ".claude folder must not be committed",
+        "fix": "Leave .claude/ out of the commit or add it to .gitignore."
+      },
+      {
+        "path": "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/tudf-file.builder.ts",
+        "line": 9,
+        "priority": "medium",
+        "issue": "Unused import TUDF_OCCUPATION",
+        "fix": "Remove the unused import."
+      },
+      {
+        "path": "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts",
+        "line": 1697,
+        "priority": "low",
+        "issue": "Commented-out code in query",
+        "fix": "Delete the commented eq() debug filter."
+      },
+      {
+        "path": "apps/finnaux-api/src/reports/ucrf-report/ucrf-report.service.ts",
+        "line": 1586,
+        "priority": "low",
+        "issue": "Noisy 'COMING NULL' comments",
+        "fix": "Remove or resolve these comments."
+      },
+      {
+        "path": "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-grid.mapper.ts",
+        "line": 175,
+        "priority": "low",
+        "issue": "Open-question comment left in code",
+        "fix": "Resolve or remove the comment."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/dto/ucrf-consumer-grid-row.dto.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/consumer/ucrf-consumer-xlsx.builder.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/format-utils.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-types.ts",
+      "apps/finnaux-api/src/reports/ucrf-report/lib/shared/ucrf-ui.types.ts",
+      "docs/ucrf/overview.md",
+      "docs/ucrf/report-format.md",
+      "docs/ucrf/ucrf-field-specification.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  }
+]

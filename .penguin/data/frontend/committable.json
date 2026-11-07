@@ -1,0 +1,2136 @@
+[
+  {
+    "id": "committable-30",
+    "generatedAt": "2026-11-05T15:02:29+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "committable",
+    "files": {
+      "total": 14,
+      "staged": 0,
+      "unstaged": 12,
+      "untracked": 2
+    },
+    "attention": [],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/_shared/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx",
+      "src/components/data-table/data-table-export-button.tsx",
+      "src/components/file-actions.tsx",
+      "src/features/reports/reports-builder/file-data.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/lib/export-tanstack-table-data.ts",
+      "src/lib/file.ts",
+      "src/lib/format-value.ts",
+      "src/app/(app)/(main)/reports-user/_shared/report-heading.ts",
+      "src/app/(app)/(main)/reports-user/_shared/visible-file-actions.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <14 changed .ts and .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script is configured in package.json (CLAUDE.md)"
+      }
+    ],
+    "advice": [
+      "ignore the todos, I need them: the two TODO comments (report-actions.tsx:37, visible-file-actions.tsx:30) are not listed",
+      "not the final deploy to production: no match, no item depends on it"
+    ]
+  },
+  {
+    "id": "committable-29",
+    "generatedAt": "2026-11-05T14:52:06+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "committable",
+    "files": {
+      "total": 15,
+      "staged": 0,
+      "unstaged": 13,
+      "untracked": 2
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx",
+        "line": 37,
+        "priority": "low",
+        "issue": "New TODO: server export API",
+        "fix": "Keep as a reminder until the server pagination or total report API exists."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/_shared/visible-file-actions.tsx",
+        "line": 30,
+        "priority": "low",
+        "issue": "New TODO: server export API",
+        "fix": "Keep as a reminder until the server pagination or total report API exists."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/page.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/components/data-table/data-table-export-button.tsx",
+      "src/components/file-actions.tsx",
+      "src/features/reports/reports-builder/file-data.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/lib/export-tanstack-table-data.ts",
+      "src/lib/file.ts",
+      "src/lib/format-value.ts",
+      "src/app/(app)/(main)/reports-user/_shared/report-heading.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <15 changed .ts and .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script is configured in package.json (CLAUDE.md)"
+      }
+    ],
+    "advice": []
+  },
+  {
+    "id": "committable-28",
+    "generatedAt": "2026-11-03T12:03:42+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 12,
+      "staged": 0,
+      "unstaged": 10,
+      "untracked": 2
+    },
+    "attention": [
+      {
+        "path": "src/lib/format-value.ts",
+        "line": 11,
+        "priority": "medium",
+        "issue": "Money text parsed to float",
+        "fix": "truncateDecimals turns text like \"12345678901234567.89\" into a JS number before clipping, so very large amounts lose digits and money is handled as a float (CLAUDE.md rule). Display only, but clip number text as text (cut after the 2nd decimal) instead of Number() for strings."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/_shared/report-columns.tsx",
+        "line": 17,
+        "priority": "low",
+        "issue": "Screen and export show different values",
+        "fix": "Cells show dd-mm-yyyy dates and 2 clipped decimals, but Excel export and Print still use the raw values (ISO timestamps, full decimals). Decide which the files should show; if the screen version, pass the same formatters into the export data."
+      },
+      {
+        "path": "src/lib/format-value.ts",
+        "line": 44,
+        "priority": "low",
+        "issue": "Number columns guessed from data",
+        "fix": "Alignment comes from the values and the column name, not from a field type: a column with one non-number value (\"N/A\") stays left, and a name the ID pattern misses (or wrongly matches) is aligned wrong. Ask the backend for a type per field and switch to it."
+      },
+      {
+        "path": "src/features/reports/ucrf/ucrf-grid-format.ts",
+        "line": 11,
+        "priority": "low",
+        "issue": "Date columns found by key name",
+        "fix": "Any UCRF key containing \"date\" or \"dob\" is treated as a date, so a key like \"updateFlag\" would match too. Only 8-digit values are reformatted, so the risk is small; a fixed list of date keys would be exact."
+      },
+      {
+        "path": "src/lib/format-value.ts",
+        "line": 70,
+        "priority": "low",
+        "issue": "Date-only text depends on time zone",
+        "fix": "formatDateDMY reads \"2026-11-01\" as UTC midnight, so a user west of UTC would see 31-10-2026. Fine for India; parse date-only text as a local date if users outside India appear."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/_shared/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-commercial-grid-columns.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-commercial-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-consumer-grid-columns.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-consumer-report-panel.tsx",
+      "src/components/data-table/data-table.tsx",
+      "src/components/data-table/global-filter.ts",
+      "src/features/reports/reports-builder/aggregation-footer.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <12 changed ts/tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "advice": [
+      "tell me about the current changes: Report Builder and My Reports (shared report-columns, aggregation footer) and the UCRF consumer and commercial grids now clip decimals to 2, show dates as dd-mm-yyyy and right-align number columns, through new src/lib/format-value.ts and features/reports/ucrf/ucrf-grid-format.ts. The shared DataTable gained an opt-in meta.align (no other table changes). Footer borders cover every column, and From Date defaults to the 1st of the month at UTC midnight like the picker.",
+      "state possible leaks: no secrets, console.log, TODO, conflict markers or forbidden files; one Medium (money text parsed to float) and four Low items listed",
+      "area of improvements: listed as the Low items (export consistency, typed fields from the backend, exact UCRF date keys, date-only time zone)"
+    ]
+  },
+  {
+    "id": "committable-27",
+    "generatedAt": "2026-11-02T17:54:48+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 37,
+      "staged": 0,
+      "unstaged": 28,
+      "untracked": 9
+    },
+    "attention": [
+      {
+        "path": "src/features/session/hooks.ts",
+        "line": 23,
+        "priority": "medium",
+        "issue": "Product filter fails without HRMS rights",
+        "fix": "The Loan Products dropdown calls the HRMS employee endpoint, so a cashier gets 403 and an empty list while reports still run. Ask the backend for a session products dropdown."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/_shared/filter-schema.ts",
+      "src/app/(app)/(main)/reports-user/_shared/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-source.ts",
+      "src/app/(app)/(main)/reports-user/_shared/reports-layout.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/_shared/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_schema.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-button.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/page.tsx",
+      "src/features/reports/reports-builder/aggregation-footer.tsx",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/file-data.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/features/session/api.ts",
+      "src/features/session/queries.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed ts/tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-26",
+    "generatedAt": "2026-11-02T17:20:08+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 37,
+      "staged": 0,
+      "unstaged": 28,
+      "untracked": 9
+    },
+    "attention": [
+      {
+        "path": "src/features/session/hooks.ts",
+        "line": 23,
+        "priority": "medium",
+        "issue": "Product filter fails without HRMS rights",
+        "fix": "The Loan Products dropdown calls the HRMS employee endpoint, which needs the HRMS Employees page right, so a cashier gets 403 and an empty list while reports still run. Fix: a backend products dropdown for the logged-in employee (like the branch one), or load products for the picked branches."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/_shared/filter-schema.ts",
+      "src/app/(app)/(main)/reports-user/_shared/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-source.ts",
+      "src/app/(app)/(main)/reports-user/_shared/reports-layout.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/_shared/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_schema.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-button.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/page.tsx",
+      "src/features/reports/reports-builder/aggregation-footer.tsx",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/file-data.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/features/session/api.ts",
+      "src/features/session/queries.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed ts/tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "advice": [
+      "Build screen opens from a typed URL: fixed, report-builder/page.tsx sends the user back to the report list unless they have canAdd (or canEdit while editing)",
+      "Save not tied to rights: fixed, save-button.tsx is disabled unless canAdd (new or duplicate) or canEdit (editing)",
+      "Products filter 403: kept as the one remaining item, explained in plain words"
+    ]
+  },
+  {
+    "id": "committable-25",
+    "generatedAt": "2026-11-02T17:14:08+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 35,
+      "staged": 0,
+      "unstaged": 12,
+      "untracked": 9
+    },
+    "attention": [
+      {
+        "path": "src/features/session/hooks.ts",
+        "line": 23,
+        "priority": "medium",
+        "issue": "Product filter fails without HRMS rights",
+        "fix": "In plain words: the Loan Products dropdown asks the HRMS employee screen for the user's products. A user such as a cashier has no right to that HRMS screen, so the server says 403 and the dropdown is empty. This is not about report rights: the report itself runs fine, only the product choices cannot load. Fix: ask the backend for a products dropdown that needs no HRMS right, like the branch one."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/page.tsx",
+        "line": 23,
+        "priority": "low",
+        "issue": "Build screen opens from a typed URL",
+        "fix": "In plain words: hiding the Build Report button stops clicks, but anyone can type ?view=build-report in the address bar and the build screen opens. Saving is then refused by the server (403), so no data is lost or leaked, the user just fills a form that cannot save. Fix: if the user has no canAdd, send them back to the report list when that URL is used."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-button.tsx",
+        "line": 14,
+        "priority": "low",
+        "issue": "Save button not tied to rights",
+        "fix": "In plain words: the buttons that lead into the builder check your rights, but once inside, Save is always clickable. A user who got in (for example a Duplicate before rights changed, or an old open tab) can press Save and only then be told no (403). Fix: grey out Save unless the user has canAdd for a new report or canEdit when editing."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/_shared/filter-schema.ts",
+      "src/app/(app)/(main)/reports-user/_shared/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/report-source.ts",
+      "src/app/(app)/(main)/reports-user/_shared/reports-layout.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/_shared/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/_shared/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_schema.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/features/reports/reports-builder/aggregation-footer.tsx",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/file-data.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/features/session/api.ts",
+      "src/features/session/queries.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed ts/tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "advice": [
+      "Print/Export rights only hide buttons: backend will enforce; the route is set up for future use: not listed",
+      "Products filter 403s for cashier: explained in plain words as a Medium item (it is the HRMS products call, not report rights)",
+      "Run returns all rows; export reruns it: backend will handle in a future release: not listed",
+      "Build view opens by URL without canAdd: kept as Low, explained in plain words",
+      "Old rows show under the new report: fixed. Rows are kept only while the same report reloads (hooks.ts keepRowsOfSameReport)",
+      "Page IDs hardcoded: match the DB: not listed",
+      "Flip API_TOTALS_READY: done by the user (now true): not listed",
+      "Gate Save on rights: kept as Low, explained in plain words",
+      "Merge duplicated report code: done. Both screens now use reports-user/_shared (filters sidebar, results, template card, filter options, run hook, columns, filter schema, layout). Differences are parameters: source (templates or designation), template actions, header buttons",
+      "Delete unused ReportActions: done (my-reports/_components/report-actions.tsx removed, nothing imported it)"
+    ]
+  },
+  {
+    "id": "committable-24",
+    "generatedAt": "2026-11-02T16:24:31+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 21,
+      "staged": 0,
+      "unstaged": 21,
+      "untracked": 0
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+        "line": 68,
+        "priority": "high",
+        "issue": "Print/Export rights only hide buttons",
+        "fix": "Backend must enforce canPrint/canExport; anyone with My Reports view can call the run endpoint and keep the data."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/use-filter-options.ts",
+        "line": 14,
+        "priority": "medium",
+        "issue": "Products filter 403s for cashier",
+        "fix": "It uses /hrms/employees/:id/products; ask the backend for a session-wide products dropdown or build the list per picked branch."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+        "line": 68,
+        "priority": "medium",
+        "issue": "Run returns all rows; export reruns it",
+        "fix": "Backend pagination (Phase 3) and a dedicated export/print endpoint, so each click stops loading the whole report twice."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/page.tsx",
+        "line": 22,
+        "priority": "low",
+        "issue": "Build view opens by URL without canAdd",
+        "fix": "Redirect to My Reports when ?view=build-report and the user lacks canAdd; the backend already rejects the save with 403."
+      },
+      {
+        "path": "src/features/reports/reports-builder/hooks.ts",
+        "line": 34,
+        "priority": "low",
+        "issue": "Old rows show under the new report",
+        "fix": "Drop keepPreviousData when the report id changes so old rows never appear under a new title; exported files stay correct."
+      },
+      {
+        "path": "src/config/page-ids.config.ts",
+        "line": 74,
+        "priority": "low",
+        "issue": "Page IDs hardcoded, must match the DB",
+        "fix": "Confirm REPORT_BUILDER and MY_REPORTS match the database, or everyone sees Access Denied."
+      },
+      {
+        "path": "src/features/reports/reports-builder/types.ts",
+        "line": 164,
+        "priority": "low",
+        "issue": "Improvement: flip API_TOTALS_READY",
+        "fix": "Set it to true when backend Phase 3 ships real totals."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-button.tsx",
+        "line": 14,
+        "priority": "low",
+        "issue": "Improvement: gate Save on rights",
+        "fix": "Disable Save unless canAdd (new) or canEdit (edit), not only the buttons that open the builder."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/use-filter-options.ts",
+        "line": 9,
+        "priority": "low",
+        "issue": "Improvement: merge duplicated report code",
+        "fix": "my-reports/_components and report-builder/_views/my-reports share near-identical filters, filter options and columns; make one shared module."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/report-actions.tsx",
+        "line": 17,
+        "priority": "low",
+        "issue": "Improvement: delete unused ReportActions",
+        "fix": "Nothing imports it any more; remove the file."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_schema.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_schema.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/use-report-filters.ts",
+      "src/features/reports/reports-builder/aggregation-footer.tsx",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/file-data.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/session/api.ts",
+      "src/features/session/hooks.ts",
+      "src/features/session/queries.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <21 changed ts/tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "advice": [
+      "Report Builder API contract implemented; leaks and points of improvement added as attention items (high/medium/low). Items marked Improvement are points of improvement, not leaks."
+    ]
+  },
+  {
+    "id": "committable-23",
+    "generatedAt": "2026-11-02T15:49:11+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 14,
+      "staged": 0,
+      "unstaged": 11,
+      "untracked": 3
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/use-report-filters.ts",
+        "line": 70,
+        "priority": "medium",
+        "issue": "No branch limit on report query",
+        "fix": "Send the user's branches when none are picked, or scope it in POST /query on the backend."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/page.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/page.tsx",
+      "src/components/file-actions.tsx",
+      "src/config/page-ids.config.ts",
+      "src/features/reports/reports-builder/aggregation-footer.tsx",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/file-data.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/lib/file.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <14 changed ts/tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "advice": [
+      "print/export utility renamed from reportFile to file (lib/file.ts, components/file-actions.tsx): checked, no old names left, no match for any issue"
+    ]
+  },
+  {
+    "id": "committable-22",
+    "generatedAt": "2026-11-02T15:02:50+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "committable",
+    "files": {
+      "total": 6,
+      "staged": 0,
+      "unstaged": 4,
+      "untracked": 2
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+        "line": 42,
+        "priority": "low",
+        "issue": "New TODO(api) for print/export API",
+        "fix": "Swap getFileData to the backend print/export API when it exists."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/my-reports/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_lib/report-columns.tsx",
+      "src/features/reports/reports-builder/aggregation-footer.tsx",
+      "src/components/report-file-actions.tsx",
+      "src/lib/report-file.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <6 changed ts/tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "advice": [
+      "check findings of commit 65e6a5d and adjust its finding data: howismycommit-12 updated. F3 Print no-op, F4 float totals and F5 page rows marked resolved (fix not committed yet). F1 rights guard still open. F2 branch limit was marked resolved by hand but the code is unchanged, so it is flagged needs attention; the mark is kept."
+    ]
+  },
+  {
+    "id": "committable-21",
+    "generatedAt": "2026-11-02T14:24:46+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 52,
+      "staged": 0,
+      "unstaged": 39,
+      "untracked": 13
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/use-report-filters.ts",
+        "line": 70,
+        "priority": "medium",
+        "issue": "No branch limit on report query",
+        "fix": "Send the user's branches when none are picked, or have the backend scope it."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+        "line": 68,
+        "priority": "medium",
+        "issue": "Print and Export buttons do nothing",
+        "fix": "Wire onPrint and onExport to the print dialog and export API before release."
+      },
+      {
+        "path": "src/features/reports/reports-builder/aggregation-footer.tsx",
+        "line": 13,
+        "priority": "medium",
+        "issue": "Totals computed with floats",
+        "fix": "Treat shown-rows totals as indicative, or have the API return them as formatted strings."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/configuration/branches/_components/branch-details-form.tsx",
+      "src/app/(app)/(main)/configuration/co-lending/_components/lender-form.tsx",
+      "src/app/(app)/(main)/configuration/dealers/_components/dealer-detail-form.tsx",
+      "src/app/(app)/(main)/configuration/loan-products/_components/product-details-form.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/designations/[id]/_tabs/reports-rights.tab.tsx",
+      "src/app/(app)/(main)/hrms/designations/[id]/page.tsx",
+      "src/app/(app)/(main)/hrms/designations/_components/designation-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/employees/_components/employee-on-role.form.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_schema.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/page.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_hooks/use-builder-session.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/available-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/category-pills.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/field-list.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/mode-banner.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-template-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-column-row.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/stale-columns-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/table-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-column-selection.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-save-template.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/page.tsx",
+      "src/components/data-table/data-table.tsx",
+      "src/components/data-table/global-filter.ts",
+      "src/config/page-ids.config.ts",
+      "src/features/hrms/designations/api.ts",
+      "src/features/hrms/designations/hooks.ts",
+      "src/features/hrms/designations/queries.ts",
+      "src/features/hrms/designations/types.ts",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/reports/reports-builder/types.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed ts/tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "advice": [
+      "ignore: rights check off on both pages: not listed (commented guards in both page.tsx files too)",
+      "no branch limit on report query: kept, set to medium",
+      "let them medium: applied to the branch limit item",
+      "find any other thing: added Print/Export no-op handlers and float totals in the footer"
+    ]
+  },
+  {
+    "id": "committable-20",
+    "generatedAt": "2026-11-02T13:03:33+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 51,
+      "staged": 0,
+      "unstaged": 39,
+      "untracked": 12
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/use-report-filters.ts",
+        "line": 70,
+        "priority": "high",
+        "issue": "No branch scoping on report query",
+        "fix": "Backend must limit POST /query to the user branches and products; the client sends them only when picked."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+        "line": 81,
+        "priority": "high",
+        "issue": "Print and Export rights only hide buttons",
+        "fix": "Until the Print/Export API enforces canPrint and canExport, a crafted request to POST /query or GET /templates/:id bypasses the buttons."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/configuration/branches/_components/branch-details-form.tsx",
+      "src/app/(app)/(main)/configuration/co-lending/_components/lender-form.tsx",
+      "src/app/(app)/(main)/configuration/dealers/_components/dealer-detail-form.tsx",
+      "src/app/(app)/(main)/configuration/loan-products/_components/product-details-form.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/designations/[id]/page.tsx",
+      "src/app/(app)/(main)/hrms/designations/_components/designation-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/employees/_components/employee-on-role.form.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_hooks/use-builder-session.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/available-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/category-pills.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/field-list.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/mode-banner.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-template-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-column-row.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/table-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-column-selection.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-save-template.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/page.tsx",
+      "src/components/data-table/data-table.tsx",
+      "src/components/data-table/global-filter.ts",
+      "src/config/page-ids.config.ts",
+      "src/features/hrms/designations/api.ts",
+      "src/features/hrms/designations/hooks.ts",
+      "src/features/hrms/designations/queries.ts",
+      "src/features/hrms/designations/types.ts",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/app/(app)/(main)/hrms/designations/[id]/_tabs/reports-rights.tab.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_schema.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/page.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/stale-columns-modal.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed .ts and .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "advice": [
+      "rights are commented off intentionally: not listed (report-builder/page.tsx and my-reports/page.tsx guards and their commented imports)",
+      "branch fetch is high: kept as high at my-reports/_components/use-report-filters.ts:70",
+      "anyone can delete and edit reports, only creator is BRD approved: not listed (filters-sidebar.tsx edit and delete buttons)",
+      "print and export call an API with the right and all report data, console added to check it: console.log in my-reports/_components/report-results.tsx:48 not listed; the UI-only rights item stays high until that API enforces them",
+      "real aggregations added to the my-reports response: matched, no item. queries.ts maps api.aggregations into footer rows, shared by my-reports and report-builder; the TODO(api) and commented getReportTotals are gone"
+    ]
+  },
+  {
+    "id": "committable-19",
+    "generatedAt": "2026-11-02T12:31:53+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 51,
+      "staged": 0,
+      "unstaged": 39,
+      "untracked": 12
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/use-report-filters.ts",
+        "line": 70,
+        "priority": "high",
+        "issue": "No branch scoping on report query",
+        "fix": "Backend must limit POST /query to the user branches and products; the client sends them only when picked."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+        "line": 65,
+        "priority": "high",
+        "issue": "Print and Export rights only hide buttons",
+        "fix": "Backend does not enforce canPrint or canExport, and GET /templates/:id and POST /query skip rights, so a crafted request bypasses the buttons."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/page.tsx",
+        "line": 22,
+        "priority": "medium",
+        "issue": "Page rights check switched off",
+        "fix": "Restore the commented PermissionGuard, its two imports and PAGE_ID once role rights exist for this page."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/page.tsx",
+        "line": 13,
+        "priority": "medium",
+        "issue": "Page rights check switched off",
+        "fix": "Restore the commented PermissionGuard, its two imports and PAGE_ID once role rights exist for this page."
+      },
+      {
+        "path": "src/features/reports/reports-builder/queries.ts",
+        "line": 10,
+        "priority": "medium",
+        "issue": "Totals API call still commented out",
+        "fix": "Replace the TODO(api) block and getReportTotals in api.ts with the real call; the footer stays hidden until aggregations arrive."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/filters-sidebar.tsx",
+        "line": 86,
+        "priority": "medium",
+        "issue": "Edit and delete shown on others reports",
+        "fix": "Listing every creator reports is BRD-approved for now; backend refuses edits by non-creators, so consider hiding the buttons for them later."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/configuration/branches/_components/branch-details-form.tsx",
+      "src/app/(app)/(main)/configuration/co-lending/_components/lender-form.tsx",
+      "src/app/(app)/(main)/configuration/dealers/_components/dealer-detail-form.tsx",
+      "src/app/(app)/(main)/configuration/loan-products/_components/product-details-form.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/designations/[id]/page.tsx",
+      "src/app/(app)/(main)/hrms/designations/_components/designation-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/employees/_components/employee-on-role.form.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_hooks/use-builder-session.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/available-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/category-pills.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/field-list.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/mode-banner.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-template-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-column-row.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/table-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-column-selection.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-save-template.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/use-report-filters.ts",
+      "src/components/data-table/data-table.tsx",
+      "src/components/data-table/global-filter.ts",
+      "src/config/page-ids.config.ts",
+      "src/features/hrms/designations/api.ts",
+      "src/features/hrms/designations/hooks.ts",
+      "src/features/hrms/designations/queries.ts",
+      "src/features/hrms/designations/types.ts",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/app/(app)/(main)/hrms/designations/[id]/_tabs/reports-rights.tab.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_schema.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/stale-columns-modal.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed .ts and .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "manual review of rights, scoping and data-loss gaps",
+        "result": "done by reading the diff and API contract; not run in a browser or against the backend. Silent column drop on Update is now a confirm modal listing the columns."
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-18",
+    "generatedAt": "2026-11-02T12:18:44+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 50,
+      "staged": 0,
+      "unstaged": 39,
+      "untracked": 11
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/page.tsx",
+        "line": 22,
+        "priority": "high",
+        "issue": "Rights guard switched off on page",
+        "fix": "Restore the commented PermissionGuard, its two imports and PAGE_ID before merging."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/page.tsx",
+        "line": 13,
+        "priority": "high",
+        "issue": "Rights guard switched off on page",
+        "fix": "Restore the commented PermissionGuard, its two imports and PAGE_ID before merging."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/use-report-filters.ts",
+        "line": 70,
+        "priority": "high",
+        "issue": "No branch scoping on report query",
+        "fix": "Ask backend to limit POST /query to the user branches and products; the client only sends them when the user picks them."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+        "line": 65,
+        "priority": "medium",
+        "issue": "Print and export rights UI-only",
+        "fix": "Backend does not enforce canPrint or canExport, and GET /templates/:id and POST /query have no rights check, so a crafted request skips the buttons."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/filters-sidebar.tsx",
+        "line": 86,
+        "priority": "medium",
+        "issue": "Edit and delete shown on others reports",
+        "fix": "GET /templates now lists every creator reports; hide edit and delete unless the user is the creator."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-column-selection.ts",
+        "line": 83,
+        "priority": "medium",
+        "issue": "Update can silently drop saved columns",
+        "fix": "Warn before saving, or block Update, when saved fields were removed as no longer available."
+      },
+      {
+        "path": "src/features/reports/reports-builder/queries.ts",
+        "line": 10,
+        "priority": "low",
+        "issue": "TODO and commented totals API",
+        "fix": "Replace with the real totals call; footer stays hidden until aggregations arrive."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/configuration/branches/_components/branch-details-form.tsx",
+      "src/app/(app)/(main)/configuration/co-lending/_components/lender-form.tsx",
+      "src/app/(app)/(main)/configuration/dealers/_components/dealer-detail-form.tsx",
+      "src/app/(app)/(main)/configuration/loan-products/_components/product-details-form.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/designations/[id]/page.tsx",
+      "src/app/(app)/(main)/hrms/designations/_components/designation-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/employees/_components/employee-on-role.form.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_hooks/use-builder-session.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/available-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/category-pills.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/field-list.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/mode-banner.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-template-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-column-row.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/table-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-save-template.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/use-report-filters.ts",
+      "src/components/data-table/data-table.tsx",
+      "src/components/data-table/global-filter.ts",
+      "src/config/page-ids.config.ts",
+      "src/features/hrms/designations/api.ts",
+      "src/features/hrms/designations/hooks.ts",
+      "src/features/hrms/designations/queries.ts",
+      "src/features/hrms/designations/types.ts",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/app/(app)/(main)/hrms/designations/[id]/_tabs/reports-rights.tab.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_schema.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed .ts and .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "manual review: gaps beyond role rights and missing totals",
+        "result": "done by reading the diff and API contract; not run in a browser or against the backend"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-17",
+    "generatedAt": "2026-11-02T09:58:08+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 49,
+      "staged": 0,
+      "unstaged": 37,
+      "untracked": 12
+    },
+    "attention": [
+      {
+        "path": "src/features/reports/reports-builder/queries.ts",
+        "line": 13,
+        "priority": "high",
+        "issue": "Random mock totals shown as real",
+        "fix": "Hide totals until the API sends them, or label them as sample data; delete mock-aggregations.ts."
+      },
+      {
+        "path": "src/features/reports/reports-builder/mock-aggregations.ts",
+        "line": 4,
+        "priority": "high",
+        "issue": "Fabricated financial figures in live report",
+        "fix": "Do not ship; values change on every refetch and look like real portfolio totals."
+      },
+      {
+        "path": "src/components/data-table/data-table.tsx",
+        "line": 135,
+        "priority": "medium",
+        "issue": "Shared footer restyle hits 8 tables",
+        "fix": "Make width, truncate and pinning opt-in so LMS, loan closure, calculator and repossess footers are unchanged."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+        "line": 59,
+        "priority": "medium",
+        "issue": "Export rights enforced in UI only",
+        "fix": "Backend does not check canExport or canPrint and GET /templates/:id and POST /query have no rights check; ask backend to enforce."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/my-reports/_lib/report-columns.tsx",
+        "line": 56,
+        "priority": "low",
+        "issue": "Money total formatted client-side",
+        "fix": "CLAUDE.md wants API money as formatted strings; use a string from the API once totals are real."
+      },
+      {
+        "path": "src/components/ui/select.tsx",
+        "line": 321,
+        "priority": "low",
+        "issue": "Global Select clear icon restyled",
+        "fix": "Confirm pr-1 and cursor-pointer are wanted for every Select in the app."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/configuration/branches/_components/branch-details-form.tsx",
+      "src/app/(app)/(main)/configuration/co-lending/_components/lender-form.tsx",
+      "src/app/(app)/(main)/configuration/dealers/_components/dealer-detail-form.tsx",
+      "src/app/(app)/(main)/configuration/loan-products/_components/product-details-form.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/designations/[id]/page.tsx",
+      "src/app/(app)/(main)/hrms/designations/_components/designation-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/employees/_components/employee-on-role.form.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/available-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/category-pills.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/field-list.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/mode-banner.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-template-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-column-row.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/table-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-column-selection.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-save-template.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/use-report-filters.ts",
+      "src/components/data-table/global-filter.ts",
+      "src/features/hrms/designations/api.ts",
+      "src/features/hrms/designations/hooks.ts",
+      "src/features/hrms/designations/queries.ts",
+      "src/features/hrms/designations/types.ts",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/app/(app)/(main)/hrms/designations/[id]/_tabs/reports-rights.tab.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_schema.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/page.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed .ts and .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "manual impact review of shared components and API flow",
+        "result": "done by reading the diff; not run in a browser, so the table footer impact is unverified"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-16",
+    "generatedAt": "2026-10-31T18:26:35+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "committable",
+    "files": {
+      "total": 49,
+      "staged": 0,
+      "unstaged": 37,
+      "untracked": 12
+    },
+    "attention": [],
+    "safeFiles": [
+      "src/app/(app)/(main)/configuration/branches/_components/branch-details-form.tsx",
+      "src/app/(app)/(main)/configuration/co-lending/_components/lender-form.tsx",
+      "src/app/(app)/(main)/configuration/dealers/_components/dealer-detail-form.tsx",
+      "src/app/(app)/(main)/configuration/loan-products/_components/product-details-form.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/designations/[id]/page.tsx",
+      "src/app/(app)/(main)/hrms/designations/_components/designation-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/employees/_components/employee-on-role.form.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/available-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/category-pills.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/field-list.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/mode-banner.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-template-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-column-row.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/table-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-column-selection.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-save-template.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/use-report-filters.ts",
+      "src/components/data-table/data-table.tsx",
+      "src/components/data-table/global-filter.ts",
+      "src/components/ui/select.tsx",
+      "src/features/hrms/designations/api.ts",
+      "src/features/hrms/designations/hooks.ts",
+      "src/features/hrms/designations/queries.ts",
+      "src/features/hrms/designations/types.ts",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/app/(app)/(main)/hrms/designations/[id]/_tabs/reports-rights.tab.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_schema.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/page.tsx",
+      "src/features/reports/reports-builder/mock-aggregations.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed .ts and .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-15",
+    "generatedAt": "2026-10-31T18:24:57+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 49,
+      "staged": 0,
+      "unstaged": 37,
+      "untracked": 12
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-results.tsx",
+        "line": 3,
+        "priority": "medium",
+        "issue": "Unused useEffect import (lint error)",
+        "fix": "Remove useEffect from the react import."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/configuration/branches/_components/branch-details-form.tsx",
+      "src/app/(app)/(main)/configuration/co-lending/_components/lender-form.tsx",
+      "src/app/(app)/(main)/configuration/dealers/_components/dealer-detail-form.tsx",
+      "src/app/(app)/(main)/configuration/loan-products/_components/product-details-form.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/designations/[id]/page.tsx",
+      "src/app/(app)/(main)/hrms/designations/_components/designation-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/employees/_components/employee-on-role.form.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/available-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/category-pills.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/field-list.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/mode-banner.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/save-template-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-column-row.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-columns-panel.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/table-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-column-selection.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-save-template.ts",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/index.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/use-report-filters.ts",
+      "src/components/data-table/data-table.tsx",
+      "src/components/data-table/global-filter.ts",
+      "src/components/ui/select.tsx",
+      "src/features/hrms/designations/api.ts",
+      "src/features/hrms/designations/hooks.ts",
+      "src/features/hrms/designations/queries.ts",
+      "src/features/hrms/designations/types.ts",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/app/(app)/(main)/hrms/designations/[id]/_tabs/reports-rights.tab.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/filters-sidebar.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/my-reports-view.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-actions.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/report-results.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/template-card.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-filter-options.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_components/use-report-filters.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/_lib/report-columns.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_schema.ts",
+      "src/app/(app)/(main)/reports-user/my-reports/page.tsx",
+      "src/features/reports/reports-builder/mock-aggregations.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "red",
+        "command": "npx eslint <changed .ts and .tsx files>",
+        "result": "failed: 1 error"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-14",
+    "generatedAt": "2026-10-31T18:23:54+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 48,
+      "staged": 0,
+      "unstaged": 36,
+      "untracked": 12
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/use-save-template.ts",
+        "line": 46,
+        "priority": "medium",
+        "issue": "New console.log in save flow",
+        "fix": "Remove the temporary save payload log before committing."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-results.tsx",
+        "line": 46,
+        "priority": "medium",
+        "issue": "New console.log of report data",
+        "fix": "Remove the temporary report data log before committing."
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/report-builder/_views/build-report/selected-column-row.tsx",
+        "line": 34,
+        "priority": "low",
+        "issue": "Commented-out code block",
+        "fix": "Delete the commented-out position badge."
+      }
+    ],
+    "safeFiles": [
+      "src/app/(app)/(main)/configuration/branches/_components/branch-details-form.tsx",
+      "src/app/(app)/(main)/configuration/co-lending/_components/lender-form.tsx",
+      "src/app/(app)/(main)/configuration/dealers/_components/dealer-detail-form.tsx",
+      "src/app/(app)/(main)/configuration/loan-products/_components/product-details-form.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/designations/[id]/page.tsx",
+      "src/app/(app)/(main)/hrms/designations/_components/designation-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/employees/_components/employee-on-role.form.tsx",
+      "src/components/data-table/data-table.tsx",
+      "src/components/data-table/global-filter.ts",
+      "src/components/ui/select.tsx",
+      "src/features/hrms/designations/api.ts",
+      "src/features/hrms/designations/hooks.ts",
+      "src/features/hrms/designations/queries.ts",
+      "src/features/hrms/designations/types.ts",
+      "src/features/reports/reports-builder/api.ts",
+      "src/features/reports/reports-builder/hooks.ts",
+      "src/features/reports/reports-builder/queries.ts",
+      "src/features/reports/reports-builder/types.ts",
+      "src/features/reports/reports-builder/mock-aggregations.ts",
+      "src/app/(app)/(main)/hrms/designations/[id]/_tabs/reports-rights.tab.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/page.tsx",
+      "src/app/(app)/(main)/reports-user/my-reports/_schema.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed .ts and .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-13",
+    "generatedAt": "2026-10-31T11:22:19+05:30",
+    "author": "Dhruv",
+    "branch": "feat/report-builder",
+    "verdict": "committable",
+    "files": {
+      "total": 8,
+      "staged": 0,
+      "unstaged": 8,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "src/app/(app)/(main)/configuration/branches/_components/branch-details-form.tsx",
+      "src/app/(app)/(main)/configuration/co-lending/_components/lender-form.tsx",
+      "src/app/(app)/(main)/configuration/dealers/_components/dealer-detail-form.tsx",
+      "src/app/(app)/(main)/configuration/loan-products/_components/product-details-form.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/designations/_components/designation-detail-form.tsx",
+      "src/app/(app)/(main)/hrms/employees/_components/employee-on-role.form.tsx",
+      "src/app/(app)/(main)/reports-user/report-builder/_views/my-reports/report-actions.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <8 changed .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-12",
+    "generatedAt": "2026-10-30T14:25:20+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 3,
+      "staged": 0,
+      "unstaged": 3,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-commercial-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <3 changed .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-11",
+    "generatedAt": "2026-10-30T13:30:08+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 3,
+      "staged": 0,
+      "unstaged": 3,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-commercial-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <3 changed .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-10",
+    "generatedAt": "2026-10-30T13:09:26+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 3,
+      "staged": 0,
+      "unstaged": 3,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-commercial-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <3 changed .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-9",
+    "generatedAt": "2026-10-30T11:32:06+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 3,
+      "staged": 0,
+      "unstaged": 3,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-commercial-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <3 changed .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-8",
+    "generatedAt": "2026-10-30T10:33:15+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 4,
+      "staged": 0,
+      "unstaged": 4,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-commercial-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx",
+      "src/components/ui/button.tsx"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <4 changed .tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-7",
+    "generatedAt": "2026-10-29T11:10:36+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 15,
+      "staged": 0,
+      "unstaged": 15,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "docs/ucrf-report-audit.md",
+      "docs/ucrf-report.md",
+      "docs/ucrf-submission-responsiveness.md",
+      "src/app/(app)/(main)/_components/navbar/navbar.tsx",
+      "src/app/(app)/(main)/_components/navbar/user-settings-panel.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-consumer-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-grid-pagination.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx",
+      "src/app/(app)/layout.tsx",
+      "src/app/(app)/test/page.tsx",
+      "src/components/ui/sonner.tsx",
+      "tailwind.config.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <10 changed .ts/.tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-6",
+    "generatedAt": "2026-10-28T17:23:49+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 15,
+      "staged": 0,
+      "unstaged": 15,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "docs/ucrf-report-audit.md",
+      "docs/ucrf-report.md",
+      "docs/ucrf-submission-responsiveness.md",
+      "src/app/(app)/(main)/_components/navbar/navbar.tsx",
+      "src/app/(app)/(main)/_components/navbar/user-settings-panel.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-consumer-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-grid-pagination.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx",
+      "src/app/(app)/layout.tsx",
+      "src/app/(app)/test/page.tsx",
+      "src/components/ui/sonner.tsx",
+      "tailwind.config.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <10 changed .ts/.tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-5",
+    "generatedAt": "2026-10-28T13:13:45+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 41,
+      "staged": 0,
+      "unstaged": 13,
+      "untracked": 28
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "docs/ucrf-report-audit.md",
+      "docs/ucrf-report.md",
+      "docs/ucrf-submission-responsiveness.md",
+      "src/app/(app)/(main)/_components/navbar/navbar.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-consumer-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-grid-pagination.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx",
+      "src/app/(app)/layout.tsx",
+      "src/app/(app)/test/page.tsx",
+      "src/components/ui/sonner.tsx",
+      "docs/configurations/asset-products/dataflow.md",
+      "docs/configurations/branch-areas/dataflow.md",
+      "docs/configurations/branches/dataflow.md",
+      "docs/configurations/co-lending/dataflow.md",
+      "docs/configurations/company-configuration/dataflow.md",
+      "docs/configurations/crm-configuration/dataflow.md",
+      "docs/configurations/dealers/dataflow.md",
+      "docs/configurations/external-apis/dataflow.md",
+      "docs/configurations/insurance-companies/dataflow.md",
+      "docs/configurations/legal/dataflow.md",
+      "docs/configurations/loan-products/dataflow.md",
+      "docs/configurations/locations/dataflow.md",
+      "docs/configurations/mclr/dataflow.md",
+      "docs/configurations/menu-management/dataflow.md",
+      "docs/configurations/parking-yards/dataflow.md",
+      "docs/configurations/questions-configuration/dataflow.md",
+      "docs/configurations/reports/dataflow.md",
+      "docs/configurations/templates/dataflow.md",
+      "docs/configurations/vendors/dataflow.md",
+      "docs/dataflow-design.md",
+      "docs/knowledge-transfer/day1.md",
+      "docs/knowledge-transfer/day2.md",
+      "docs/knowledge-transfer/day3.md",
+      "docs/knowledge-transfer/day4.md",
+      "docs/knowledge-transfer/questions.md",
+      "docs/reports-u/ucrf-submission/ucrf-report-audit.md",
+      "docs/reports-u/ucrf-submission/ucrf-report.md",
+      "docs/reports-u/ucrf-submission/ucrf-submission-responsiveness.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <8 changed .ts/.tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ]
+  },
+  {
+    "id": "committable-4",
+    "generatedAt": "2026-10-27T18:28:13+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 40,
+      "staged": 0,
+      "unstaged": 13,
+      "untracked": 27
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "docs/ucrf-report-audit.md",
+      "docs/ucrf-report.md",
+      "docs/ucrf-submission-responsiveness.md",
+      "src/app/(app)/(main)/_components/navbar/navbar.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-consumer-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-grid-pagination.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx",
+      "src/app/(app)/layout.tsx",
+      "src/app/(app)/test/page.tsx",
+      "src/components/ui/sonner.tsx",
+      "docs/configurations/asset-products/dataflow.md",
+      "docs/configurations/branch-areas/dataflow.md",
+      "docs/configurations/branches/dataflow.md",
+      "docs/configurations/co-lending/dataflow.md",
+      "docs/configurations/company-configuration/dataflow.md",
+      "docs/configurations/crm-configuration/dataflow.md",
+      "docs/configurations/dealers/dataflow.md",
+      "docs/configurations/external-apis/dataflow.md",
+      "docs/configurations/insurance-companies/dataflow.md",
+      "docs/configurations/legal/dataflow.md",
+      "docs/configurations/loan-products/dataflow.md",
+      "docs/configurations/locations/dataflow.md",
+      "docs/configurations/mclr/dataflow.md",
+      "docs/configurations/menu-management/dataflow.md",
+      "docs/configurations/parking-yards/dataflow.md",
+      "docs/configurations/questions-configuration/dataflow.md",
+      "docs/configurations/reports/dataflow.md",
+      "docs/configurations/templates/dataflow.md",
+      "docs/configurations/vendors/dataflow.md",
+      "docs/dataflow-design.md",
+      "docs/knowledge-transfer/day1.md",
+      "docs/knowledge-transfer/day2.md",
+      "docs/knowledge-transfer/day3.md",
+      "docs/knowledge-transfer/questions.md",
+      "docs/reports-u/ucrf-submission/ucrf-report-audit.md",
+      "docs/reports-u/ucrf-submission/ucrf-report.md",
+      "docs/reports-u/ucrf-submission/ucrf-submission-responsiveness.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed ts and tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script is configured in package.json"
+      }
+    ]
+  },
+  {
+    "id": "committable-3",
+    "generatedAt": "2026-10-27T15:32:07+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 23,
+      "staged": 0,
+      "unstaged": 13,
+      "untracked": 10
+    },
+    "attention": [],
+    "safeFiles": [
+      ".gitignore",
+      "docs/ucrf-report-audit.md",
+      "docs/ucrf-report.md",
+      "docs/ucrf-submission-responsiveness.md",
+      "src/app/(app)/(main)/_components/navbar/navbar.tsx",
+      "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-consumer-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-grid-pagination.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx",
+      "src/app/(app)/layout.tsx",
+      "src/app/(app)/test/page.tsx",
+      "src/components/ui/sonner.tsx",
+      "docs/dataflow-design.md",
+      "docs/dealers/dataflow.md",
+      "docs/knowledge-transfer/day1.md",
+      "docs/knowledge-transfer/day2.md",
+      "docs/knowledge-transfer/day3.md",
+      "docs/knowledge-transfer/questions.md",
+      "docs/ucrf-report/ucrf-report-audit.md",
+      "docs/ucrf-report/ucrf-report.md",
+      "docs/ucrf-report/ucrf-submission-responsiveness.md",
+      "docs/vendors/dataflow.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed ts and tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script is configured in package.json"
+      }
+    ]
+  },
+  {
+    "id": "committable-2",
+    "generatedAt": "2026-10-27T13:01:36+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 22,
+      "staged": 0,
+      "unstaged": 13,
+      "untracked": 9
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+        "line": 51,
+        "priority": "low",
+        "issue": "TODO comment added",
+        "fix": "Resolve it or track it before merging."
+      }
+    ],
+    "safeFiles": [
+      ".gitignore",
+      "docs/ucrf-report-audit.md",
+      "docs/ucrf-report.md",
+      "docs/ucrf-submission-responsiveness.md",
+      "src/app/(app)/(main)/_components/navbar/navbar.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-consumer-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-grid-pagination.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx",
+      "src/app/(app)/layout.tsx",
+      "src/app/(app)/test/page.tsx",
+      "src/components/ui/sonner.tsx",
+      "docs/dataflow-design.md",
+      "docs/dealers/dataflow.md",
+      "docs/knowledge-transfer/day1.md",
+      "docs/knowledge-transfer/day2.md",
+      "docs/knowledge-transfer/questions.md",
+      "docs/ucrf-report/ucrf-report-audit.md",
+      "docs/ucrf-report/ucrf-report.md",
+      "docs/ucrf-report/ucrf-submission-responsiveness.md",
+      "docs/vendors/dataflow.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed ts and tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script is configured in package.json"
+      }
+    ]
+  },
+  {
+    "id": "committable-1",
+    "generatedAt": "2026-10-27T12:55:26+05:30",
+    "author": "Dhruv",
+    "branch": "dhruv",
+    "verdict": "committable",
+    "files": {
+      "total": 22,
+      "staged": 0,
+      "unstaged": 13,
+      "untracked": 9
+    },
+    "attention": [
+      {
+        "path": "src/app/(app)/(main)/configuration/vendors/_components/vendor-detail-form.tsx",
+        "line": 51,
+        "priority": "low",
+        "issue": "TODO comment added",
+        "fix": "Resolve it or track it before merging."
+      }
+    ],
+    "safeFiles": [
+      ".gitignore",
+      "docs/ucrf-report-audit.md",
+      "docs/ucrf-report.md",
+      "docs/ucrf-submission-responsiveness.md",
+      "src/app/(app)/(main)/_components/navbar/navbar.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-consumer-report-panel.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-grid-pagination.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-tudf-preview-modal.tsx",
+      "src/app/(app)/(main)/reports-user/ucrf-submission/_components/ucrf-xlsx-preview-modal.tsx",
+      "src/app/(app)/layout.tsx",
+      "src/app/(app)/test/page.tsx",
+      "src/components/ui/sonner.tsx",
+      "docs/dataflow-design.md",
+      "docs/dealers/dataflow.md",
+      "docs/knowledge-transfer/day1.md",
+      "docs/knowledge-transfer/day2.md",
+      "docs/knowledge-transfer/questions.md",
+      "docs/ucrf-report/ucrf-report-audit.md",
+      "docs/ucrf-report/ucrf-report.md",
+      "docs/ucrf-report/ucrf-submission-responsiveness.md",
+      "docs/vendors/dataflow.md"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <changed ts and tsx files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script is configured in package.json"
+      }
+    ]
+  }
+]
