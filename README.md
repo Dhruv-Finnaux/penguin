@@ -35,6 +35,7 @@ Other layouts: change the paths in `penguin.config.json`, or set `PENGUIN_FRONTE
 | Git Guides         | `/talktomegit` guides from both repos (`.penguin/data/<repo>/talktomegit.json`): goal, approach, steps and questions, shown as one list.                                                                  |
 | Documents          | Markdown in the `docs/` folder of both repos, grouped by repo and sub folder.                                                                                                                            |
 | Questions          | `.penguin/data/<repo>/questions.json`, edited here.                                                                                                                                                      |
+| DB Backups         | Every `db backup` / `db restore` run by the backend's local `db` script (`.penguin/data/backend/dbbackups.json`), as a timeline, plus the backup files on disk read live from `dbBackupDir` in `penguin.config.json`. |
 
 Findings, Committables and Explanations have an **All / Frontend / Backend** filter.
 

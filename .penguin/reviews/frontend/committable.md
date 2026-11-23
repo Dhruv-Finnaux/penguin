@@ -1,6 +1,637 @@
 # 🐧 Committable · Frontend
 
-> Generated from `data/frontend/committable.json`. Edit the JSON, not this file. 30 entries, newest first.
+> Generated from `data/frontend/committable.json`. Edit the JSON, not this file. 44 entries, newest first.
+
+## committable-44
+
+| Field | Value |
+|---|---|
+| id | committable-44 |
+| generatedAt | 2026-11-21T13:11:35+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| verdict | committable |
+| files.total | 10 |
+| files.staged | 0 |
+| files.unstaged | 8 |
+| files.untracked | 2 |
+
+### attention (2)
+
+| path | line | priority | issue | fix |
+|---|---|---|---|---|
+| src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx | 150 | low | Error-code check for unreadable keys removed | Reverts f17bc85d; detection relies on the exact message again, so confirm with the backend contract before committing. |
+| src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx | 130 | low | Saved non-required keys shown again | Reverses the earlier rule of showing only required keys (an old apiKey reappears); keep only if the backend contract asks for it. |
+
+### safeFiles (9)
+
+- src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx
+- src/config/fixed-enums.ts
+- src/features/configurations/external-apis/types.ts
+- src/features/configurations/loan-products/types.ts
+- src/features/loan-application/components/esign-dialog.tsx
+- src/features/loan-application/components/esign-utils.ts
+- src/features/loan-application/components/loan-documents.tsx
+- src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/_components/digio-esign-fields.tsx
+- src/features/loan-application/components/esign-audit-trail-dialog.tsx
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <10 changed .ts/.tsx files> | passed |
+| green | scan of added lines for conflict markers, secrets, console.log, debugger, TODO/FIXME, localStorage, raw useForm/.register, hardcoded IDs and enum strings outside src/config | passed: only an example JSON placeholder in digio-esign-fields.tsx, not a hardcoded enum |
+| grey | tests | not run: no test command configured in package.json |
+
+### advice (1)
+
+- honest review: applied; also listed two behaviour reversals in the External APIs modal that undo earlier requested changes, as Low notes
+
+---
+
+## committable-43
+
+| Field | Value |
+|---|---|
+| id | committable-43 |
+| generatedAt | 2026-11-20T16:49:19+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| verdict | committable |
+| files.total | 30 |
+| files.staged | 0 |
+| files.unstaged | 13 |
+| files.untracked | 17 |
+
+### attention (3)
+
+| path | line | priority | issue | fix |
+|---|---|---|---|---|
+| src/features/loan-application/components/loan-documents.tsx | 354 | low | E-Sign hidden unless eSign enabled | Intended by the contract; documents that used Digio E-Sign without Enable E-Sign in the loan product lose the menu item until it is turned on. |
+| src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx | 234 | low | Digio mode and coordinates inputs removed | Intended by the contract and the backend DTO no longer accepts them, but Digio still reads saved eSignMode, signCoordinates and notificationReceivers (esign.service.ts:164), which can no longer be edited from the UI. |
+| src/features/loan-application/components/esign-dialog.tsx | 351 | low | Digio upload now asks to confirm | useFormFlow shows its default confirmation before the Digio request; pass showConfirmation: false if the old one-click behaviour must stay. |
+
+### safeFiles (27)
+
+- package-lock.json
+- package.json
+- src/app/(app)/(main)/configuration/templates/_components/template-form.tsx
+- src/config/external-api-ids.ts
+- src/config/fixed-enums.ts
+- src/features/configurations/loan-products/types.ts
+- src/features/configurations/templates/api.ts
+- src/features/configurations/templates/hooks.ts
+- src/features/configurations/templates/queries.ts
+- src/features/configurations/templates/types.ts
+- src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-designer-lib.ts
+- src/app/(app)/(main)/configuration/templates/_components/esign-designer-toolbar.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-designer.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-page-preview.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-schema.ts
+- src/app/(app)/(main)/configuration/templates/_components/esign-settings.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-signer-card.tsx
+- src/app/(app)/(main)/configuration/templates/_components/pdf-page-canvas.tsx
+- src/app/(app)/(main)/configuration/templates/_components/preview-loan-application-picker.tsx
+- src/app/(app)/(main)/configuration/templates/_components/template-schema.ts
+- src/app/(app)/(main)/configuration/templates/_components/use-element-width.ts
+- src/app/(app)/(main)/configuration/templates/_components/use-esign-drawing.ts
+- src/app/(app)/(main)/configuration/templates/_components/use-esign-pdf-preview.ts
+- src/app/(app)/(main)/configuration/templates/_components/use-esign-signers.ts
+- src/features/configurations/templates/esign.ts
+- src/features/loan-application/components/esign-utils.ts
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <28 changed and untracked .ts/.tsx files> | passed |
+| green | scan of added lines for conflict markers, secrets, console.log, debugger, TODO/FIXME, localStorage, raw useForm/.register, hardcoded IDs and enum strings outside src/config | passed: no matches |
+| green | scope check: grep for pdfjs-dist imports and review of every changed file | passed: pdfjs-dist is imported only by the template designer; all other changes are in templates, loan product documents, loan application documents/eSign and additive config entries |
+| grey | tests | not run: no test command configured in package.json |
+
+### advice (1)
+
+- Check that changes stay within the eSign feature and do not break working features: applied. Every change is in the eSign/template area; non-eSign behaviour of templates (SMS, email, WhatsApp, print) keeps its old validation and the backend ignores the new fields when Print friendly is off. Three intended behaviour changes to existing eSign flows are listed as Low notes.
+
+---
+
+## committable-42
+
+| Field | Value |
+|---|---|
+| id | committable-42 |
+| generatedAt | 2026-11-20T16:43:09+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| verdict | committable |
+| files.total | 30 |
+| files.staged | 0 |
+| files.unstaged | 13 |
+| files.untracked | 17 |
+
+### attention (0)
+
+_Empty._
+
+### safeFiles (30)
+
+- package-lock.json
+- package.json
+- src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx
+- src/app/(app)/(main)/configuration/templates/_components/template-form.tsx
+- src/config/external-api-ids.ts
+- src/config/fixed-enums.ts
+- src/features/configurations/loan-products/types.ts
+- src/features/configurations/templates/api.ts
+- src/features/configurations/templates/hooks.ts
+- src/features/configurations/templates/queries.ts
+- src/features/configurations/templates/types.ts
+- src/features/loan-application/components/esign-dialog.tsx
+- src/features/loan-application/components/loan-documents.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-designer-lib.ts
+- src/app/(app)/(main)/configuration/templates/_components/esign-designer-toolbar.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-designer.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-page-preview.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-schema.ts
+- src/app/(app)/(main)/configuration/templates/_components/esign-settings.tsx
+- src/app/(app)/(main)/configuration/templates/_components/esign-signer-card.tsx
+- src/app/(app)/(main)/configuration/templates/_components/pdf-page-canvas.tsx
+- src/app/(app)/(main)/configuration/templates/_components/preview-loan-application-picker.tsx
+- src/app/(app)/(main)/configuration/templates/_components/template-schema.ts
+- src/app/(app)/(main)/configuration/templates/_components/use-element-width.ts
+- src/app/(app)/(main)/configuration/templates/_components/use-esign-drawing.ts
+- src/app/(app)/(main)/configuration/templates/_components/use-esign-pdf-preview.ts
+- src/app/(app)/(main)/configuration/templates/_components/use-esign-signers.ts
+- src/features/configurations/templates/esign.ts
+- src/features/loan-application/components/esign-utils.ts
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <28 changed and untracked .ts/.tsx files> | passed |
+| green | scan of added lines for conflict markers, secrets, console.log, debugger, TODO/FIXME, localStorage, raw useForm/.register, hardcoded IDs and enum strings outside src/config | passed: no matches |
+| grey | tests | not run: no test command configured in package.json |
+
+### advice (1)
+
+- honest review: applied as a strict scan with nothing excluded; no items found
+
+---
+
+## committable-41
+
+| Field | Value |
+|---|---|
+| id | committable-41 |
+| generatedAt | 2026-11-17T12:24:25+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| verdict | committable |
+| files.total | 3 |
+| files.staged | 0 |
+| files.unstaged | 3 |
+| files.untracked | 0 |
+
+### attention (0)
+
+_Empty._
+
+### safeFiles (3)
+
+- src/features/customers/components/add-customer-forms/components/kyc-section.tsx
+- src/features/customers/components/add-customer-forms/individual-customer.tsx
+- src/features/external-apis/types.ts
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint kyc-section.tsx individual-customer.tsx types.ts | passed |
+
+### advice (1)
+
+- honest review: not a rule the skill can apply, so no match. I checked the changed lines for conflict markers, secrets, console.log, debugger, TODO and localStorage and found none. Known limit, not a defect: the PAN lock is kept in a ref, so a PAN verified in the modal and closed without saving is not remembered after a remount.
+
+---
+
+## committable-40
+
+| Field | Value |
+|---|---|
+| id | committable-40 |
+| generatedAt | 2026-11-16T15:17:13+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| verdict | committable |
+| files.total | 1 |
+| files.staged | 0 |
+| files.unstaged | 1 |
+| files.untracked | 0 |
+
+### attention (1)
+
+| path | line | priority | issue | fix |
+|---|---|---|---|---|
+| src/features/external-apis/hooks.ts | 93 | low | Old Digipehchan hooks now unused | Remove useGenerateDigipehchanAadharOtpMutation and useVerifyDigipehchanAadharOtpMutation, which only the deleted file used. |
+
+### safeFiles (1)
+
+- src/features/external-apis/components/aadhar-verify/flows/digipehchan-flow.tsx
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| grey | npx eslint <changed files> | not run: the only change is a deleted file |
+
+### advice (1)
+
+- check it against the howismycommits of last commit: report howismycommit-54 (ea3e2c3d) has one open finding, F1 (old Digipehchan flow left as a duplicate). This change deletes that file, so F1 is fixed. No file still imports it. The two hooks only that file used are left, listed as a low note.
+
+---
+
+## committable-39
+
+| Field | Value |
+|---|---|
+| id | committable-39 |
+| generatedAt | 2026-11-13T14:15:55+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| verdict | committable |
+| files.total | 4 |
+| files.staged | 0 |
+| files.unstaged | 4 |
+| files.untracked | 0 |
+
+### attention (0)
+
+_Empty._
+
+### safeFiles (4)
+
+- src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx
+- src/app/(app)/(main)/configuration/external-apis/page.tsx
+- src/components/data-table/data-table-pagination.tsx
+- src/features/configurations/external-apis/hooks.ts
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <4 changed .ts/.tsx files> | passed: no errors or warnings |
+| grey | tests | not run: no test script configured |
+
+---
+
+## committable-38
+
+| Field | Value |
+|---|---|
+| id | committable-38 |
+| generatedAt | 2026-11-13T13:46:03+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| verdict | needs-attention |
+| files.total | 1 |
+| files.staged | 0 |
+| files.unstaged | 1 |
+| files.untracked | 0 |
+
+### attention (6)
+
+| path | line | priority | issue | fix |
+|---|---|---|---|---|
+| src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx | 203 | medium | Autofill may drop login password into keys | Remove autoComplete="off" so the password input's own new-password value applies; "off" overrides it and browsers may autofill the saved login password into an API key field. |
+| src/features/configurations/external-apis/hooks.ts | 60 | low | Typed keys stay in memory after save | Add gcTime: 0 to the credentials mutation, so the plain-text keys in its variables are not kept in the mutation cache for 5 minutes. |
+| src/features/configurations/external-apis/hooks.ts | 78 | low | Page list refetched twice per save | Invalidate once after the second request (or only the credentials key after the keys save). |
+| src/components/ui/badge.tsx | 9 | low | Unrequested global Badge shape change | rounded-full became rounded-md for every Badge in the app; confirm it is intended or revert it. |
+| src/components/data-table/data-table-pagination.tsx | 28 | low | Unrequested global pagination spacing change | mt-2 was added for every table's pagination; confirm it is intended or revert it. |
+| src/app/(app)/(main)/configuration/external-apis/page.tsx | 68 | low | Edit button unnamed, edit right not checked | Add an aria-label to the icon button and hide or disable it when the page's canEdit right is missing. |
+
+### safeFiles (0)
+
+_Empty._
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <11 files changed on this branch against dev> | passed: no errors or warnings |
+| grey | tests | not run: no test script configured |
+
+### advice (1)
+
+- check all previous changes, leaks and problems: read the whole branch against dev (11 files), not only the 1 uncommitted file. No secret, console.log, localStorage or conflict marker found; key values are never logged, stored in the browser or put in a URL. One Medium (autofill) and five Low items listed. Not tried in a browser.
+
+---
+
+## committable-37
+
+| Field | Value |
+|---|---|
+| id | committable-37 |
+| generatedAt | 2026-11-13T13:01:26+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| verdict | committable |
+| files.total | 1 |
+| files.staged | 0 |
+| files.unstaged | 1 |
+| files.untracked | 0 |
+
+### attention (0)
+
+_Empty._
+
+### safeFiles (1)
+
+- src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint integration-group-form.tsx | passed: no errors or warnings |
+| grey | tests | not run: no test script configured |
+
+---
+
+## committable-36
+
+| Field | Value |
+|---|---|
+| id | committable-36 |
+| generatedAt | 2026-11-13T12:46:17+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| verdict | needs-attention |
+| files.total | 1 |
+| files.staged | 0 |
+| files.unstaged | 1 |
+| files.untracked | 0 |
+
+### attention (4)
+
+| path | line | priority | issue | fix |
+|---|---|---|---|---|
+| src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx | 87 | medium | Keyless providers forced to invent an apiKey | Make keys required only for providers whose requiredCredentialKeys is not empty; for [] show the optional apiKey field, or none if authType is none. |
+| src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx | 93 | medium | Failed key load blocks enabling, forces overwrite | When the credentials GET fails, skip the required check for keys flagged hasCredentialsConfigured and block save with the error instead of asking for retyped keys. |
+| src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx | 125 | low | Credentials fetched while fields hidden | Pass `isEnabled ? apiGroupId : null` to useApiGroupCredentials so a disabled integration makes no request. |
+| src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx | 40 | low | Many comments against AGENTS.md rule | Keep only comments that explain a business reason (mask is never sent back, keys saved before selection). |
+
+### safeFiles (0)
+
+_Empty._
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint integration-group-form.tsx | passed: no errors or warnings |
+| grey | tests | not run: no test script configured |
+
+### advice (1)
+
+- devil's advocate, leaks and optimisations: no secret leak found (masked values only, nothing logged or stored in localStorage or a URL; masked keys stay in the query cache for 5 minutes). Two behaviour risks listed as Medium, one wasted request as Low. Not tried in a browser.
+
+---
+
+## committable-35
+
+| Field | Value |
+|---|---|
+| id | committable-35 |
+| generatedAt | 2026-11-12T14:47:00+05:30 |
+| author | Dhruv |
+| branch | feat/dashboard |
+| verdict | committable |
+| files.total | 27 |
+| files.staged | 27 |
+| files.unstaged | 22 |
+| files.untracked | 0 |
+
+### attention (2)
+
+| path | line | priority | issue | fix |
+|---|---|---|---|---|
+| src/features/collections-dashboard/api.ts | 15 | low | Endpoints not built on backend yet | Backend controller has only executive, sales, collections, los, lms; build the 8 /nbfc-dashboard/collections/* routes and /sales/advanced with the row shapes in the types files. |
+| src/features/collections-dashboard/hooks.ts | 22 | low | Sidebar filters never sent to API | Tabs call hooks with no filters, so filter choices will not change live data; pass filter state when the backend supports it. |
+
+### safeFiles (0)
+
+_Empty._
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <changed .ts/.tsx files> | passed: no errors or warnings |
+| grey | tests | not run: no test script configured |
+
+### advice (2)
+
+- 1 live APIs show data: No today, Yes later. The 8 Collections routes and /sales/advanced do not exist in FINNAUX2.0-API (apps/finnaux-api/src/reports/nbfc-dashboard/nbfc-dashboard.controller.ts has only executive, sales, collections, los, lms), so placeholders show. Once built with the same URL and row fields it will show the data with no frontend change. Not tested against a live backend.
+- 2 other things: filters are not sent; 404 calls retry 3 times per tab; Sales main data still uses the existing API and error view; money fallback in risk-analysis still floats; no date fields so 15 August 1947 never shows.
+
+---
+
+## committable-34
+
+| Field | Value |
+|---|---|
+| id | committable-34 |
+| generatedAt | 2026-11-12T14:37:53+05:30 |
+| author | Dhruv |
+| branch | feat/dashboard |
+| verdict | committable |
+| files.total | 27 |
+| files.staged | 27 |
+| files.unstaged | 22 |
+| files.untracked | 0 |
+
+### attention (0)
+
+_Empty._
+
+### safeFiles (0)
+
+_Empty._
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <changed .ts/.tsx files> | passed: no errors or warnings |
+| grey | tests | not run: no test script configured |
+
+---
+
+## committable-33
+
+| Field | Value |
+|---|---|
+| id | committable-33 |
+| generatedAt | 2026-11-12T14:06:28+05:30 |
+| author | Dhruv |
+| branch | feat/dashboard |
+| verdict | committable |
+| files.total | 27 |
+| files.staged | 0 |
+| files.unstaged | 20 |
+| files.untracked | 7 |
+
+### attention (5)
+
+| path | line | priority | issue | fix |
+|---|---|---|---|---|
+| src/app/(app)/(main)/dashboard/dashboard-collections/page.tsx | 43 | low | Fallback skips null or partial API row | Once endpoints exist, use `data ?? FALLBACK` and merge per field, because the `= FALLBACK` default only covers undefined; same pattern in all 8 Collections tabs and sales advanced.tab.tsx:30. |
+| src/app/(app)/(main)/dashboard/dashboard-sales/page.tsx | 240 | low | Sales API failure shows error, not placeholders | Left as is on purpose (data from the API untouched); the main Sales call still uses LoadingErrorView, so only the Advanced tab and all Collections tabs show placeholders. |
+| src/features/collections-dashboard/fallback.ts | 16 | low | Comments say 27/JaneDoe, values are 0/ABC | Update the stale comment here, in 8 tab files, nbfc-dashboard/fallback.ts and collections-dashboard/hooks.ts:4 (also says 'not used yet'). |
+| src/lib/placeholder-data.ts | 6 | low | PLACEHOLDER_DATE defined but never used | No dashboard type has a date field, so no 15 August 1947 can show; wire it in when a date field is added. |
+| src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/risk-analysis.tab.tsx | 0 | low | Money fallback computed with floats | Kept as the fallback for avgLoanAmountDisplay; goes away once the backend sends the formatted string. |
+
+### safeFiles (22)
+
+- src/app/(app)/(main)/dashboard/dashboard-collections/_components/filter-sidebar.tsx
+- src/app/(app)/(main)/dashboard/dashboard-collections/_components/tabs/agent-performance.tab.tsx
+- src/app/(app)/(main)/dashboard/dashboard-collections/_components/tabs/bucket-analysis.tab.tsx
+- src/app/(app)/(main)/dashboard/dashboard-collections/_components/tabs/collection-trends.tab.tsx
+- src/app/(app)/(main)/dashboard/dashboard-collections/_components/tabs/delinquency-analysis.tab.tsx
+- src/app/(app)/(main)/dashboard/dashboard-collections/_components/tabs/overview.tab.tsx
+- src/app/(app)/(main)/dashboard/dashboard-collections/_components/tabs/recovery-funnel.tab.tsx
+- src/app/(app)/(main)/dashboard/dashboard-collections/_components/tabs/regional-performance.tab.tsx
+- src/app/(app)/(main)/dashboard/dashboard-collections/mock-data.ts
+- src/app/(app)/(main)/dashboard/dashboard-sales/_components/filter-sidebar.tsx
+- src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/advanced.tab.tsx
+- src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/demographics.tab.tsx
+- src/app/(app)/(main)/dashboard/dashboard-sales/mock-data.ts
+- src/features/nbfc-dashboard/api.ts
+- src/features/nbfc-dashboard/hooks.ts
+- src/features/nbfc-dashboard/queries.ts
+- src/features/nbfc-dashboard/types.ts
+- src/features/nbfc-dashboard/fallback.ts
+- src/features/collections-dashboard/api.ts
+- src/features/collections-dashboard/hooks.ts
+- src/features/collections-dashboard/queries.ts
+- src/features/collections-dashboard/types.ts
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <changed and untracked .ts/.tsx files> | passed: 0 errors, 1 warning (sales page.tsx:100 useMemo deps, not from this change) |
+| grey | tests | not run: no test script configured |
+
+### advice (4)
+
+- 1 catastrophic or not: not catastrophic. Frontend only, no writes, no schema or auth change. Worst case is one dashboard tab crashing if the backend later sends a null or partial row (see page.tsx:43).
+- 2 dashboard route only: yes for the screens. Changes sit in the two dashboard routes plus features/nbfc-dashboard, features/collections-dashboard and the new lib/placeholder-data.ts, all dashboard-only. No other route imports the deleted mock-data files (tsc passes).
+- 3 0 / ABC / 15 August 1947 or API data: numbers show 0 and text shows ABC while loading, on error or when an endpoint is missing; API data replaces them once it arrives. Dates: no date fields exist, so 15 August 1947 never appears. Main Sales call shows an error view on failure, not placeholders.
+- 4 works when backend ships endpoints: only if the backend uses the exact URLs (/nbfc-dashboard/collections/{kpis,overview,trends,delinquency,agents,recovery-funnel,buckets,regional} and /nbfc-dashboard/sales/advanced) and the row shape in the types files. A different URL or shape keeps the placeholders (or crashes on a partial row). Not verified against a live backend.
+
+---
+
+## committable-32
+
+| Field | Value |
+|---|---|
+| id | committable-32 |
+| generatedAt | 2026-11-12T12:44:35+05:30 |
+| author | Dhruv |
+| branch | main |
+| verdict | committable |
+| files.total | 7 |
+| files.staged | 7 |
+| files.unstaged | 0 |
+| files.untracked | 0 |
+
+### attention (2)
+
+| path | line | priority | issue | fix |
+|---|---|---|---|---|
+| src/app/(app)/(main)/los/los-process/(page)/_context.tsx | 101 | low | Null API rows now look like empty list | Accepted: a bad response shows 'no applications' instead of crashing; watch for it in monitoring. |
+| src/features/customers/components/view-edit-customer/_components/address.tab.tsx | 85 | low | Missing field shows as no records | Same in bank, communication and KYC tabs: if the API renames or drops a field, the tab says empty instead of failing loudly. |
+
+### safeFiles (5)
+
+- src/app/(app)/(main)/los/los-process/[id]/page.tsx
+- src/features/customers/components/view-edit-customer/_components/bank-details.tab.tsx
+- src/features/customers/components/view-edit-customer/_components/communication.tab.tsx
+- src/features/customers/components/view-edit-customer/_components/kyc-details.tab.tsx
+- src/features/loan-application/tabs/foir/income.tsx
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <7 changed files> | passed |
+| grey | tests | not run: no test command configured in CLAUDE.md |
+
+### advice (2)
+
+- catastrophe or data-display risk at deployment level: no crash, data loss or wrong-number path found in the 7 changed files; changes only default null lists to empty and never write or compute data
+- not in this change but related: los-process/[id]/page.tsx lines 122, 305, 338 still use losDetails! and will crash if losDetails is null (process id missing from the URL); not listed as an item because those lines were not touched
+
+---
+
+## committable-31
+
+| Field | Value |
+|---|---|
+| id | committable-31 |
+| generatedAt | 2026-11-12T12:39:26+05:30 |
+| author | Dhruv |
+| branch | main |
+| verdict | committable |
+| files.total | 7 |
+| files.staged | 0 |
+| files.unstaged | 7 |
+| files.untracked | 0 |
+
+### attention (0)
+
+_Empty._
+
+### safeFiles (7)
+
+- src/app/(app)/(main)/los/los-process/(page)/_context.tsx
+- src/app/(app)/(main)/los/los-process/[id]/page.tsx
+- src/features/customers/components/view-edit-customer/_components/address.tab.tsx
+- src/features/customers/components/view-edit-customer/_components/bank-details.tab.tsx
+- src/features/customers/components/view-edit-customer/_components/communication.tab.tsx
+- src/features/customers/components/view-edit-customer/_components/kyc-details.tab.tsx
+- src/features/loan-application/tabs/foir/income.tsx
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <7 changed files> | passed |
+| grey | tests | not run: no test command configured in CLAUDE.md |
+
+### advice (0)
+
+_Empty._
+
+---
 
 ## committable-30
 

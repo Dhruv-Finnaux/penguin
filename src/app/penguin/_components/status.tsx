@@ -36,8 +36,9 @@ export function severityStatus(severity: Severity): Status {
   return severity === "P0" || severity === "P1" ? "red" : "amber"
 }
 
+// Green is reserved for scores above 89.
 export function scoreStatus(score: number): Status {
-  if (score >= 75) return "green"
+  if (score > 89) return "green"
   if (score >= 50) return "amber"
   return "red"
 }
@@ -70,12 +71,11 @@ export const STATUS_SURFACE: Record<Status, string> = {
 export function ScoreBadge({
   score,
   quality,
-  verdict,
   size = "sm",
 }: {
   score: number
   quality: Quality
-  verdict: Verdict
+  verdict?: Verdict
   size?: "sm" | "lg"
 }) {
   const large = size === "lg"
@@ -85,7 +85,7 @@ export function ScoreBadge({
       className={cn(
         "inline-flex shrink-0 items-baseline gap-1 rounded-lg font-semibold tabular-nums",
         large ? "px-3 py-1.5" : "px-2 py-0.5",
-        large || STATUS_SURFACE[verdictStatus(verdict)],
+        large || STATUS_SURFACE[scoreStatus(score)],
       )}>
       <span className={large ? "text-3xl leading-none" : "text-sm"}>{score}</span>
       <span className={cn("font-medium", large ? "text-xl" : "text-[10px]")}>

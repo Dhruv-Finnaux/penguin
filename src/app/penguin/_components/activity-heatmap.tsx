@@ -1,6 +1,6 @@
 "use client"
 
-import { Skeleton } from "@/components/ui/skeleton"
+import { LoadingIndicatorView } from "@/components/loading-indicator-view"
 import { cn } from "@/lib/utils"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useState } from "react"
@@ -202,7 +202,7 @@ export function ActivityHeatmap({
     return top
   }, [query.data, metric])
 
-  if (query.isLoading) return <Skeleton className="h-48 w-full" />
+  if (query.isLoading) return <LoadingIndicatorView className="min-h-[60vh]" />
   if (query.isError) {
     return (
       <div className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">

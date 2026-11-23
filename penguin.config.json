@@ -35,7 +35,8 @@
           "Drizzle syntax over raw `sql` where possible. `import type` for type-only imports, no unused imports.",
           "No changes to bootstrap, connection, Drizzle core, config or `main.ts` unless the task needs them. No secrets in code."
         ]
-      }
+      },
+      "dbBackupDir": "~/Desktop/Work/db-backups"
     }
   }
 }

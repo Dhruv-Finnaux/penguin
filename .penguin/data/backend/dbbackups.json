@@ -1,0 +1,50 @@
+[
+  {
+    "id": "dbbackups-4",
+    "generatedAt": "2026-11-23T11:06:12+05:30",
+    "author": "Dhruv",
+    "action": "backup",
+    "database": "finnaux_local",
+    "file": "/Users/kunaljain/Desktop/Work/db-backups/finnaux_local.dump",
+    "sizeBytes": 8414775,
+    "fileModifiedAt": "2026-11-23T05:36:12.181Z",
+    "tables": 364,
+    "migrations": null
+  },
+  {
+    "id": "dbbackups-3",
+    "generatedAt": "2026-11-23T11:06:10+05:30",
+    "author": "Dhruv",
+    "action": "backup",
+    "database": "finnaux_dev_before_f20",
+    "file": "/Users/kunaljain/Desktop/Work/db-backups/finnaux_dev_before_f20.dump",
+    "sizeBytes": 5296819,
+    "fileModifiedAt": "2026-11-23T05:36:10.505Z",
+    "tables": 370,
+    "migrations": 12
+  },
+  {
+    "id": "dbbackups-2",
+    "generatedAt": "2026-11-23T11:06:09+05:30",
+    "author": "Dhruv",
+    "action": "backup",
+    "database": "finnaux_dev",
+    "file": "/Users/kunaljain/Desktop/Work/db-backups/finnaux_dev.dump",
+    "sizeBytes": 11518373,
+    "fileModifiedAt": "2026-11-23T05:36:09.273Z",
+    "tables": 370,
+    "migrations": 12
+  },
+  {
+    "id": "dbbackups-1",
+    "generatedAt": "2026-11-23T10:58:06+05:30",
+    "author": "Dhruv",
+    "action": "backup",
+    "database": "finnaux_dev",
+    "file": "/Users/kunaljain/Desktop/Work/db-backups/finnaux_dev.dump",
+    "sizeBytes": 11518375,
+    "fileModifiedAt": "2026-11-23T05:28:06.268Z",
+    "tables": 370,
+    "migrations": 12
+  }
+]

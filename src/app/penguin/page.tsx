@@ -7,6 +7,7 @@ import { PenguinTabs } from "./_components/penguin-tabs"
 import {
   getCommitTimes,
   getCommittableRuns,
+  getDbBackups,
   getDocGroups,
   getExplainRuns,
   getGitGuideRuns,
@@ -23,7 +24,7 @@ export default function PenguinPage() {
   return (
     <div className="mx-5 h-dvh overflow-y-auto scroll-smooth border-x border-black/15 bg-white shadow-2xl dark:border-white/15 dark:bg-background">
       <div className="mx-auto w-full space-y-4 p-4 md:p-10">
-        <Suspense fallback={<LoadingIndicatorView message="Please Wait" />}>
+        <Suspense fallback={<LoadingIndicatorView />}>
           <PenguinData />
         </Suspense>
       </div>
@@ -42,6 +43,7 @@ async function loadPenguinData() {
     backendQuestions,
     frontend,
     backend,
+    dbBackups,
   ] = await Promise.all([
     getReviews(),
     getCommittableRuns(),
@@ -52,6 +54,7 @@ async function loadPenguinData() {
     getQuestions("backend"),
     getRepoInfo("frontend"),
     getRepoInfo("backend"),
+    getDbBackups(),
   ])
   const reviewedCommits = await getReviewedCommits(reviews)
   const commitTimes = await getCommitTimes(committableRuns)
@@ -66,6 +69,7 @@ async function loadPenguinData() {
     frontendQuestions,
     backendQuestions,
     repos: { frontend, backend },
+    dbBackups,
   }
 }
 

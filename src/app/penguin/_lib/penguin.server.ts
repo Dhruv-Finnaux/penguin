@@ -1,5 +1,6 @@
 import { execFile } from "node:child_process"
 import { existsSync, readFileSync, promises as fs } from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import { promisify } from "node:util"
 import { createStore } from "../../../../scripts/store.mjs"
@@ -9,6 +10,10 @@ import type {
   CommitTime,
   CommitPage,
   CommittableRun,
+  DbBackupData,
+  DbBackupFile,
+  DbBackupFileStatus,
+  DbBackupRun,
   QuestionItem,
   QuestionKind,
   QuestionPriority,
@@ -193,7 +198,7 @@ function normalizeReview(raw: any, fileName: string, repo: RepoKey): Review {
       attentionNote: typeof f?.attentionNote === "string" ? f.attentionNote : null,
       confirmed: f?.confirmed === true,
       confirmedNote: typeof f?.confirmedNote === "string" ? f.confirmedNote : null,
-      optional: f?.optional === true,
+      future: f?.future === true || f?.optional === true,
     })),
     checks: asArray(raw?.checks).map((c) => ({
       status: pick(c?.status, ["green", "red", "grey"] as const, "grey"),
@@ -386,6 +391,43 @@ export async function getContributors(repo: RepoKey, branch: string): Promise<Co
 // git matches --author as a regex against "Name <email>", so each name is matched whole.
 const authorPattern = (name: string) => `^${name.replace(/[\\.[*^$]/g, "\\$&")} <`
 
+const TRUNK_FIRST = ["main", "master", "dev", "develop"]
+const membershipCache = new Map<string, { key: string; byCommit: Map<string, string[]> }>()
+
+// Which branches contain each commit. One rev-list per branch, cached until a branch tip moves.
+async function getMembership(repo: RepoKey): Promise<Map<string, string[]>> {
+  const branches = await getBranches(repo)
+  const key = branches.map((b) => `${b.name}@${b.hash}`).join("|")
+  const cached = membershipCache.get(repo)
+  if (cached?.key === key) return cached.byCommit
+
+  const tips = new Map<string, string[]>()
+  for (const branch of branches) {
+    const name = branch.remote ? branch.name.replace(/^origin\//, "") : branch.name
+    tips.set(name, [...(tips.get(name) ?? []), branch.remote ? `refs/remotes/${branch.name}` : `refs/heads/${branch.name}`])
+  }
+  const names = [...tips.keys()].sort((a, b) => {
+    const rank = (n: string) => (TRUNK_FIRST.includes(n) ? TRUNK_FIRST.indexOf(n) : TRUNK_FIRST.length)
+    return rank(a) - rank(b) || a.localeCompare(b)
+  })
+
+  const byCommit = new Map<string, string[]>()
+  await Promise.all(
+    names.map(async (name) => {
+      const out = await git(repo, ["rev-list", ...tips.get(name)!, "--"])
+      for (const hash of out.split("\n")) {
+        if (!hash) continue
+        const list = byCommit.get(hash)
+        if (list) list.push(name)
+        else byCommit.set(hash, [name])
+      }
+    }),
+  )
+  for (const list of byCommit.values()) list.sort((a, b) => names.indexOf(a) - names.indexOf(b))
+  membershipCache.set(repo, { key, byCommit })
+  return byCommit
+}
+
 export async function getCommitPage(
   repo: RepoKey,
   branch: string,
@@ -409,6 +451,8 @@ export async function getCommitPage(
     "--",
   ])
   const commits = parseLog(out, repo, reviewsByCommit(reviews, repo))
+  const membership = await getMembership(repo)
+  for (const commit of commits) commit.branches = membership.get(commit.hash) ?? []
   return { commits: commits.slice(0, take), hasMore: commits.length > take }
 }
 
@@ -691,7 +735,7 @@ export async function setFindingResolved(fileName: string, findingId: string, re
   })
 }
 
-export async function setFindingOptional(fileName: string, findingId: string, optional: boolean) {
+export async function setFindingFuture(fileName: string, findingId: string, future: boolean) {
   const match = fileName.match(REVIEW_ID_PATTERN)
   if (!match) throw new Error("Invalid review")
   const [, repo, reviewId] = match
@@ -701,7 +745,8 @@ export async function setFindingOptional(fileName: string, findingId: string, op
     if (!review) throw new Error("Review not found")
     const finding = asArray(review.findings).find((f) => f?.id === findingId)
     if (!finding) throw new Error("Finding not found")
-    finding.optional = optional
+    finding.future = future
+    delete finding.optional
     return items
   })
 }
@@ -780,6 +825,73 @@ export const getGitGuideRuns = () =>
       options: asStrings(q?.options),
     })),
   }))
+
+/* ----------------------------------------------------------- db backups */
+
+// The backend's `db` script records every backup and restore here. The backup folder itself is
+// read live, so a file that was overwritten or deleted shows as such.
+function dbBackupDir() {
+  const config = JSON.parse(readFileSync(path.join(ROOT, "penguin.config.json"), "utf8"))
+  const dir = String(config?.repos?.backend?.dbBackupDir ?? "~/Desktop/Work/db-backups")
+  return path.resolve(/*turbopackIgnore: true*/ dir.replace(/^~(?=$|\/)/, os.homedir()))
+}
+
+async function readDbBackupFiles(dir: string): Promise<DbBackupFile[]> {
+  let names: string[] = []
+  try {
+    names = await fs.readdir(dir)
+  } catch {
+    return []
+  }
+  const files: DbBackupFile[] = []
+  for (const name of names.filter((n) => n.endsWith(".dump"))) {
+    const filePath = path.join(dir, name)
+    try {
+      const stat = await fs.stat(filePath)
+      files.push({
+        name: name.slice(0, -5),
+        path: filePath,
+        sizeBytes: stat.size,
+        modifiedAt: stat.mtime.toISOString(),
+      })
+    } catch {
+      continue
+    }
+  }
+  return files.sort((a, b) => b.modifiedAt.localeCompare(a.modifiedAt))
+}
+
+function fileStatus(file: string, writtenAt: string, files: DbBackupFile[]): DbBackupFileStatus {
+  const onDisk = files.find((f) => f.path === file)
+  if (!onDisk) return "deleted"
+  const drift = Math.abs(new Date(onDisk.modifiedAt).getTime() - new Date(writtenAt).getTime())
+  return drift < 2000 ? "current" : "replaced"
+}
+
+export async function getDbBackups(): Promise<DbBackupData> {
+  const dir = dbBackupDir()
+  const files = await readDbBackupFiles(dir)
+  const runs = await readRepoRuns<DbBackupRun>("dbbackups", (raw, fileName, repo) => {
+    const file = asString(raw?.file)
+    const fileModifiedAt = asString(raw?.fileModifiedAt)
+    return {
+      fileName,
+      repo,
+      author: asString(raw?.author),
+      generatedAt: asString(raw?.generatedAt),
+      action: pick(raw?.action, ["backup", "restore"] as const, "backup"),
+      database: asString(raw?.database),
+      file,
+      backupName: asString(raw?.backupName),
+      sizeBytes: asNumber(raw?.sizeBytes),
+      tables: typeof raw?.tables === "number" ? raw.tables : null,
+      migrations: typeof raw?.migrations === "number" ? raw.migrations : null,
+      fileModifiedAt,
+      fileStatus: fileStatus(file, fileModifiedAt, files),
+    }
+  })
+  return { dir, runs, files }
+}
 
 /* ---------------------------------------------------------- committable */
 

@@ -11,10 +11,13 @@ import { matchesQuery } from "../_lib/fuzzy"
 import { CopyHash } from "./copy-hash"
 import { SearchBox } from "./search-box"
 import { ScoreBadge } from "./status"
+import { NextTabs } from "./penguin-tabs"
 import {
   countByPriority,
   countAttention,
-  countOptional,
+  countFuture,
+  isFuture,
+  isResolved,
   countResolved,
   PriorityCounts,
   sortFindings,
@@ -42,7 +45,7 @@ interface FindingGroup {
   startIndex: number
 }
 
-function groupFindings(reviews: Review[], commits: CommitInfo[], keyword: string): FindingGroup[] {
+function groupFindings(reviews: Review[], commits: CommitInfo[], keyword: string, futureOnly = false): FindingGroup[] {
   const commitKey = (repo: RepoKey, hash: string) => `${repo}:${hash}`
   const subjectByHash = new Map(commits.map((c) => [commitKey(c.repo, c.hash), c.subject]))
   const commitByHash = new Map(commits.map((c) => [commitKey(c.repo, c.hash), c]))
@@ -52,7 +55,7 @@ function groupFindings(reviews: Review[], commits: CommitInfo[], keyword: string
     const hash = review.target.commit
     const commitId = hash ? commitKey(review.repo, hash) : review.fileName
     const key = review.fileName
-    const visible = review.findings
+    const visible = futureOnly ? review.findings.filter((f) => isFuture(f) && !isResolved(f)) : review.findings
     if (visible.length === 0) continue
 
     const shortHash = hash ? hash.slice(0, 7) : null
@@ -137,13 +140,13 @@ function FindingGroupCard({ group }: { group: FindingGroup }) {
           />
         )}
         <code className="min-w-72 flex-1 truncate text-xs">
-          <Highlight text={group.subject} />
+          <Highlight text={group.subject} />s
         </code>
         <ScoreBadge score={group.score} quality={group.quality} verdict={group.verdict} />
         <PriorityCounts
           counts={countByPriority(group.findings)}
           resolved={countResolved(group.findings)}
-          optional={countOptional(group.findings)}
+          future={countFuture(group.findings)}
           attention={countAttention(group.findings)}
         />
       </button>
@@ -159,15 +162,17 @@ function FindingGroupCard({ group }: { group: FindingGroup }) {
 export function ReviewTab({ reviews: allReviews, commits }: { reviews: Review[]; commits: CommitInfo[] }) {
   const [keyword, setKeyword] = useState("")
   const [repo, setRepo] = useState<RepoFilterValue>("all")
+  const [view, setView] = useState<"all" | "future">("all")
   const reviews = useMemo(() => filterByRepo(allReviews, repo), [allReviews, repo])
-  const groups = groupFindings(reviews, commits, keyword)
+  const groups = groupFindings(reviews, commits, keyword, view === "future")
   const days = useMemo(() => groupByDay(groups), [groups])
 
   const allGroups = groupFindings(allReviews, commits, "")
   const hasAny = allGroups.length > 0
+  const futureCount = allGroups.reduce((sum, group) => sum + countFuture(group.findings), 0)
 
   const findingCounts = { all: 0, frontend: 0, backend: 0 }
-  for (const group of allGroups) {
+  for (const group of view === "future" ? groupFindings(allReviews, commits, "", true) : allGroups) {
     findingCounts.all += group.findings.length
     findingCounts[group.repo] += group.findings.length
   }
@@ -191,13 +196,26 @@ export function ReviewTab({ reviews: allReviews, commits }: { reviews: Review[];
     <SearchHighlightProvider query={keyword}>
       <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-3">
+          <NextTabs
+            value={view}
+            onValueChange={(next) => setView(next as "all" | "future")}
+            shouldPersist={false}
+            delayTabs={false}
+            tabsClassNames={{ base: "flex-none p-0", panel: "hidden" }}
+            tabs={[
+              { value: "all", label: "All findings", component: null },
+              { value: "future", label: `Future (${futureCount})`, component: null },
+            ]}
+          />
           <RepoFilter value={repo} onChange={setRepo} counts={findingCounts} />
           <div className="min-w-64 flex-1">
             <SearchBox value={keyword} onChange={setKeyword} />
           </div>
         </div>
         {groups.length === 0 ? (
-          <div className="p-20 text-center text-sm text-muted-foreground">No findings match.</div>
+          <div className="p-20 text-center text-sm text-muted-foreground">
+            {view === "future" && !keyword.trim() ? "Nothing is delayed for the future." : "No findings match."}
+          </div>
         ) : (
           <ol>
             {days.map((day, dayIndex) => {

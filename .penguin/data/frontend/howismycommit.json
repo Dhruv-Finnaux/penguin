@@ -1,5 +1,4813 @@
 [
   {
+    "id": "howismycommit-77",
+    "generatedAt": "2026-11-23T12:32:58+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "7a2e1acb54ec3b93c1c930e5746d481f36d9e558"
+    },
+    "files": {
+      "changed": 3,
+      "added": 0,
+      "modified": 3,
+      "deleted": 0,
+      "insertions": 210,
+      "deletions": 16
+    },
+    "changeType": [
+      "feature",
+      "UI",
+      "API"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "Document cards showed only the overall eSign status, the Send panel had no company signer, and signer statuses in the dialog were plain text.",
+    "after": "Cards list each signer from esignSignerStatuses with a badge (green Signed, red Rejected) and Copy link while pending and not expired; the Send panel shows the company signer line or toggle when the template has a Company box and sends companySigner; the dialog notes that links expire after 48 hours.",
+    "effects": [
+      "Loan application Document Attachments cards and eSign dialog",
+      "New call GET /los/loan-application/:id/esign/company-signers"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/loan-application/components/esign-dialog.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/components/esign-utils.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/components/loan-documents.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "e92ca8cc4f3c5d3916dceefebcd5a7c5db91d9e3",
+        "findingId": "F1",
+        "title": "Loan product form treats unknown provider as Digio",
+        "result": "resolved",
+        "note": "Fixed by 9896da192f42e8ccd1be73bf5b7f30f83942289b: LoadingErrorView waits for the provider at src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx:131."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <files of the three commits>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser or against the live company-signers endpoint; Send for eSign was not clicked (billed)."
+    ],
+    "info": [
+      "Send is disabled until the company signers load, with a retry if they fail.",
+      "The 48-hour expiry is a fixed constant (ESIGN_LINK_VALID_HOURS); the per-signer expiresAt from the backend still decides when Copy link hides."
+    ]
+  },
+  {
+    "id": "howismycommit-76",
+    "generatedAt": "2026-11-23T12:32:58+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "4e66ecaf1402da0efb2e0a370a59997d2a0f2bdd"
+    },
+    "files": {
+      "changed": 9,
+      "added": 0,
+      "modified": 9,
+      "deleted": 0,
+      "insertions": 116,
+      "deletions": 21
+    },
+    "changeType": [
+      "feature",
+      "UI"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "Template signature boxes were assigned by position (Signer 1 = applicant, then co-applicants, then guarantors), with at most 6 signers.",
+    "after": "Every signer card has a required Role (Borrower, Co-borrower, Guarantor, Company); exactly one Borrower and at most one Company are enforced, up to 10 boxes, and cards and boxes are labelled by role (B, CB1, G1, C).",
+    "effects": [
+      "Configuration > Templates eSign designer",
+      "Template save payload now includes esignSigners[].role (required by the backend)"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-designer-lib.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-designer.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-page-preview.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-schema.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-signer-card.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/use-esign-signers.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/config/fixed-enums.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/templates/esign.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/templates/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "e92ca8cc4f3c5d3916dceefebcd5a7c5db91d9e3",
+        "findingId": "F1",
+        "title": "Loan product form treats unknown provider as Digio",
+        "result": "resolved",
+        "note": "Fixed by 9896da192f42e8ccd1be73bf5b7f30f83942289b: LoadingErrorView waits for the provider at src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx:131."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <files of the three commits>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser; not saved against the backend role validation."
+    ],
+    "info": [
+      "Ship together with the backend role change: the backend requires role on every box, and old templates must pick a role before they can be saved.",
+      "If an old template already has two Borrower cards, the Borrower option is hidden on both; the 'exactly one borrower' error guides the fix."
+    ]
+  },
+  {
+    "id": "howismycommit-75",
+    "generatedAt": "2026-11-23T12:32:58+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "9896da192f42e8ccd1be73bf5b7f30f83942289b"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 14,
+      "deletions": 2
+    },
+    "changeType": [
+      "bug fix",
+      "UI"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 1
+    },
+    "before": "The loan product Documents tab read only isFinnaux, so while the eSign provider setting was loading or failed it behaved as Digio.",
+    "after": "The tab waits for both the documents and the provider setting, shows a retry with a specific message if either fails, and only then renders cards and the edit form.",
+    "effects": [
+      "Configuration > Loan Products > Documents > Loan"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "e92ca8cc4f3c5d3916dceefebcd5a7c5db91d9e3",
+        "findingId": "F1",
+        "title": "Loan product form treats unknown provider as Digio",
+        "result": "resolved",
+        "note": "Fixed by 9896da192f42e8ccd1be73bf5b7f30f83942289b: LoadingErrorView waits for the provider at src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx:131."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <files of the three commits>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser."
+    ],
+    "info": [
+      "Resolves howismycommit-72 F1."
+    ]
+  },
+  {
+    "id": "howismycommit-74",
+    "generatedAt": "2026-11-23T10:39:40+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "a18d3cd1e42a4c352770afc60cf0507bd098708b"
+    },
+    "files": {
+      "changed": 2,
+      "added": 0,
+      "modified": 2,
+      "deleted": 0,
+      "insertions": 2,
+      "deletions": 2
+    },
+    "changeType": [
+      "bug fix",
+      "API"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 1
+    },
+    "before": "Saving an integration group sent apiGroupKey as the selected group's name, or null when none was selected.",
+    "after": "apiGroupKey is sent only when a group is selected and is optional in UpdateExternalApiBody, matching the backend DTO (@IsOptional apiGroupKey?: string).",
+    "effects": [
+      "Configuration > External APIs: integration group save request body only"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/external-apis/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "e92ca8cc4f3c5d3916dceefebcd5a7c5db91d9e3",
+        "findingId": "F1",
+        "title": "Loan product form treats unknown provider as Digio",
+        "result": "open",
+        "note": "Still present: src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx:118 reads only isFinnaux from useIsFinnauxEsign."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <2 changed files>",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser; behaviour is unchanged because the backend skips the lookup for both a missing and a null apiGroupKey (external-apis.service.ts:289)."
+    ],
+    "info": [
+      "No behaviour change for users; the request body is cleaner and matches the backend DTO."
+    ]
+  },
+  {
+    "id": "howismycommit-73",
+    "generatedAt": "2026-11-21T13:15:14+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "46b5f8b431d6c7c1fb5412cf24e1c4542a180591"
+    },
+    "files": {
+      "changed": 4,
+      "added": 1,
+      "modified": 3,
+      "deleted": 0,
+      "insertions": 404,
+      "deletions": 19
+    },
+    "changeType": [
+      "feature",
+      "UI",
+      "API"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "Loan application documents had no audit trail view, always followed the global eSign provider, counted a document as done only when files were uploaded, and the Digio upload asked for confirmation.",
+    "after": "Signed Finnaux documents get View audit trail (card link, menu and eSign dialog) opening a mapped modal with refresh and print; open requests follow the document's own esignProvider; a signed document counts as complete; the Digio upload sends on one click.",
+    "effects": [
+      "Loan application Document Attachments cards, eSign dialog and per-process counts",
+      "New calls to GET /los/loan-application/:id/esign/audit-trail (refresh=true asks Finnaux again)"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/loan-application/components/esign-audit-trail-dialog.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/components/esign-dialog.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/components/esign-utils.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/components/loan-documents.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "82bef66d681c604ef0227e6b463b44058f8d716c",
+        "findingId": "F1",
+        "title": "Provider lookup failure falls back to Digio UI",
+        "result": "resolved",
+        "note": "Still fixed at src/features/loan-application/components/esign-dialog.tsx:95."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <files of both commits>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "The audit trail modal was not opened against real backend data in this review; the user confirmed the documents response carries esignProvider FINNAUX."
+    ],
+    "info": [
+      "The audit trail is stored by the backend only when a STATUS call returns signed; automatic storage without a click is a backend request, not a frontend defect.",
+      "Each Refresh in the modal calls Finnaux again and may be billed."
+    ]
+  },
+  {
+    "id": "howismycommit-72",
+    "generatedAt": "2026-11-21T13:15:14+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "e92ca8cc4f3c5d3916dceefebcd5a7c5db91d9e3"
+    },
+    "files": {
+      "changed": 4,
+      "added": 1,
+      "modified": 3,
+      "deleted": 0,
+      "insertions": 182,
+      "deletions": 19
+    },
+    "changeType": [
+      "bug fix",
+      "UI"
+    ],
+    "verdict": "review-with-caution",
+    "score": 91,
+    "commitScore": 91,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 1,
+      "green": 2,
+      "info": 2
+    },
+    "before": "The loan product Documents form only had Enable E-Sign and a required print-friendly template; Digio's sign mode, coordinates, receivers and channel could not be edited, and saving sent none of them.",
+    "after": "When Digio is the selected eSign provider, the form shows the four Digio settings (receivers required, coordinates JSON for CUSTOM) and does not require a template. Every save sends each document's Digio settings so stored values are kept; Finnaux keeps the template rule and card warnings.",
+    "effects": [
+      "Configuration > Loan Products > Documents > Loan: edit form, save payload and cards",
+      "Adds FIXED_ENUMS.LOAN_DOCUMENT_PRIMARY_NOTIFICATION_CHANNEL and ESIGN_PROVIDER"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/_components/digio-esign-fields.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/config/fixed-enums.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/loan-products/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Loan product form treats unknown provider as Digio",
+        "location": "src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx:118",
+        "problem": "The form reads only isFinnaux from useIsFinnauxEsign. While the external APIs config is loading, or when it fails to load, isFinnaux is false, so the form behaves as if Digio were selected.",
+        "impact": "With Finnaux selected but the config request slow or failing, the edit dialog shows the Digio settings, requires a notification receiver and skips the template check; the user is asked for the wrong fields (the backend still enforces the template rule).",
+        "fix": "Use isLoading/isError from useIsFinnauxEsign: wait or show a retry before rendering the eSign part of the form, as the eSign dialog already does.",
+        "evidence": "  const { isFinnaux } = useIsFinnauxEsign()",
+        "status": "resolved",
+        "resolvedIn": "9896da192f42e8ccd1be73bf5b7f30f83942289b",
+        "resolvedAt": "2026-11-23T07:02:58.467Z",
+        "resolvedNote": "Fixed in 9896da19: the Documents tab waits for the eSign provider (isLoading/isError with retry) before rendering cards or the form at src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx:131.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "82bef66d681c604ef0227e6b463b44058f8d716c",
+        "findingId": "F1",
+        "title": "Provider lookup failure falls back to Digio UI",
+        "result": "resolved",
+        "note": "Still fixed: the eSign dialog waits on isLoading/isError with a retry at src/features/loan-application/components/esign-dialog.tsx:95."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <files of both commits>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser; not checked that the backend DTO accepts the Digio fields again (contract section 1.1)."
+    ],
+    "info": [
+      "If the backend still strips eSignMode, signCoordinates, notificationReceivers and primaryNotificationChannel, saves succeed but Digio settings are not stored.",
+      "The files are unchanged since this commit."
+    ]
+  },
+  {
+    "id": "howismycommit-71",
+    "generatedAt": "2026-11-20T18:11:52+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "f799f4c57cbe0854be815c558449eaec2834901a"
+    },
+    "files": {
+      "changed": 3,
+      "added": 0,
+      "modified": 3,
+      "deleted": 0,
+      "insertions": 16,
+      "deletions": 8
+    },
+    "changeType": [
+      "bug fix",
+      "UI"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 3,
+      "info": 2
+    },
+    "before": "If GET /configuration/external-apis was loading or failed, the eSign dialog treated the provider as Digio and showed the upload form, and the documents card offered Digio actions.",
+    "after": "The provider hook reports isError, isKnown and refetch. The dialog shows an error with Retry when the lookup fails, and the card hides E-Sign and Check E-Sign Status until the provider is known; the status badge still shows.",
+    "effects": [
+      "Loan application > Documents cards and the eSign dialog only"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/loan-application/components/esign-dialog.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/components/esign-utils.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/components/loan-documents.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "82bef66d681c604ef0227e6b463b44058f8d716c",
+        "findingId": "F1",
+        "title": "Provider lookup failure falls back to Digio UI",
+        "result": "resolved",
+        "note": "Verified fixed: the dialog passes isError with a Retry at src/features/loan-application/components/esign-dialog.tsx:74 and the card gates actions on canUseEsign at src/features/loan-application/components/loan-documents.tsx:357."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <3 files in the commit>",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "git diff f799f4c5 -- <files>; git status",
+        "result": "passed: working tree clean, review describes the committed code"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser; the error and Retry state was not seen on screen."
+    ],
+    "info": [
+      "With TanStack Query v5, a failed background refetch sets isError even when earlier data exists, so the dialog may show the error instead of usable data; this errs on the safe side.",
+      "The 5 earlier commits checked include merge d9cc958b, which has no report."
+    ]
+  },
+  {
+    "id": "howismycommit-70",
+    "generatedAt": "2026-11-20T18:05:29+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "7d2edc61e46bbb41e3740218e0f757640bafde4c"
+    },
+    "files": {
+      "changed": 2,
+      "added": 0,
+      "modified": 2,
+      "deleted": 0,
+      "insertions": 87,
+      "deletions": 154
+    },
+    "changeType": [
+      "refactor",
+      "UI",
+      "API"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 3,
+      "info": 2
+    },
+    "before": "The loan product document form had E-Sign Mode, Sign Coordinates (JSON), Notification Receivers and Primary Notification Channel, did not require a template for eSign, and saved every document with all its fields spread in.",
+    "after": "The form has Should Ask, Must Ask, Process, one print-friendly Template and Enable E-Sign; a template is required when eSign is on. Every document is saved as exactly { id, shouldAsk, mustAsk, processId, templateIds, isEsignEnabled }, and cards show the template name plus ESIGN READY or a warning (no template, not print friendly, no signature boxes).",
+    "effects": [
+      "Configuration > Loan Products > Documents > Loan tab",
+      "PUT .../documents/loan-documents body shape for every document of the product"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/loan-products/[id]/_tabs/product-document.tab/_tabs/loan.tab.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/loan-products/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "82bef66d681c604ef0227e6b463b44058f8d716c",
+        "findingId": "F1",
+        "title": "Provider lookup failure falls back to Digio UI",
+        "result": "open",
+        "note": "Still present at src/features/loan-application/components/esign-dialog.tsx:72."
+      },
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F1",
+        "title": "Conflict and PR steps use bun, but this repo uses npm",
+        "result": "resolved",
+        "note": "Still fixed: CONTRIBUTING.md:65 uses package-lock.json and npm install."
+      },
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F2",
+        "title": "PR checklist points to drizzle/ and DATABASE.md that do not exist here",
+        "result": "resolved",
+        "note": "Still fixed: no drizzle or DATABASE.md reference in CONTRIBUTING.md (PR checklist at CONTRIBUTING.md:83)."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <2 files in the commit>",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "compare with backend UpdateLoanDocumentDto in ../FINNAUX2.0-API",
+        "result": "passed: body fields match (id, shouldAsk, mustAsk, processId ULID optional, templateIds max 1, isEsignEnabled)"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser; the template-required error placement under the Template field was not seen on screen."
+    ],
+    "info": [
+      "The backend's Digio flow still reads eSignMode, signCoordinates and notificationReceivers (esign.service.ts:164); existing values stay but can no longer be edited here, as the contract asks.",
+      "Documents without a process are now sent with processId null instead of the field being omitted; the DTO allows it (IsOptional)."
+    ]
+  },
+  {
+    "id": "howismycommit-69",
+    "generatedAt": "2026-11-20T18:05:11+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "82bef66d681c604ef0227e6b463b44058f8d716c"
+    },
+    "files": {
+      "changed": 3,
+      "added": 1,
+      "modified": 2,
+      "deleted": 0,
+      "insertions": 532,
+      "deletions": 125
+    },
+    "changeType": [
+      "feature",
+      "UI",
+      "API"
+    ],
+    "verdict": "review-with-caution",
+    "score": 91,
+    "commitScore": 91,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 1,
+      "green": 3,
+      "info": 3
+    },
+    "before": "Every loan application document showed E-Sign, which always opened a Digio upload dialog; the status badge compared against 'requested' and 'completed', which the backend never sends, so Check E-Sign Status never appeared.",
+    "after": "E-Sign shows only when isEsignEnabled is true. With Finnaux selected, the dialog shows the template settings and Send for eSign (confirm first, disabled while running), then signers with Copy link and expiry, plus Check status, Resend and Revoke while pending. Other providers keep the Digio upload. Statuses map to Not sent, Waiting for signature, Signed and Failed, revoked or expired.",
+    "effects": [
+      "Loan application > Documents cards for every process",
+      "Calls GET /configuration/external-apis to decide Finnaux vs Digio",
+      "Digio upload now goes through useFormFlow, which adds its default confirmation"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/loan-application/components/esign-dialog.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/features/loan-application/components/esign-utils.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/components/loan-documents.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Provider lookup failure falls back to Digio UI",
+        "location": "src/features/loan-application/components/esign-dialog.tsx:72",
+        "problem": "useIsFinnauxEsign returns false while GET /configuration/external-apis is loading or when it fails, and the dialog passes isError={false}, so a failed lookup shows the Digio upload form. The card also uses the Digio Check E-Sign Status path until the lookup finishes.",
+        "impact": "If that request fails while Finnaux is the active provider, the user uploads a file and the backend creates a billed Finnaux request (it ignores documentUrl), but the dialog shows no template, signers or links and closes.",
+        "fix": "Expose isError from useIsFinnauxEsign, pass it to LoadingErrorView, and hide the E-Sign actions on the card until the provider is known.",
+        "evidence": "<LoadingErrorView isLoading={isLoading} isError={false}>",
+        "status": "resolved",
+        "resolvedIn": "f799f4c57cbe0854be815c558449eaec2834901a",
+        "resolvedAt": "2026-11-20T12:38:10.552Z",
+        "resolvedNote": "Fixed in f799f4c5: the dialog shows an error with Retry when the provider lookup fails (src/features/loan-application/components/esign-dialog.tsx:74), and the card hides E-Sign and Check E-Sign Status until the provider is known (src/features/loan-application/components/loan-documents.tsx:357).",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F1",
+        "title": "Conflict and PR steps use bun, but this repo uses npm",
+        "result": "resolved",
+        "note": "Still fixed: CONTRIBUTING.md:65 uses package-lock.json and npm install."
+      },
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F2",
+        "title": "PR checklist points to drizzle/ and DATABASE.md that do not exist here",
+        "result": "resolved",
+        "note": "Still fixed: no drizzle or DATABASE.md reference in CONTRIBUTING.md (PR checklist at CONTRIBUTING.md:83)."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <3 files in the commit>",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "compare with backend esign service, DTOs and documents list in ../FINNAUX2.0-API",
+        "result": "passed: create/action bodies, response shape, status values, Finnaux group id and isEsignEnabled/templates[] fields match"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser and no eSign request was sent (each create call is billed).",
+      "Where Finnaux returns the signed PDF is not confirmed by the backend, so esignedFileUrl may stay null after signing; the dialog then says the file is not available yet."
+    ],
+    "info": [
+      "Behaviour change: documents without Enable E-Sign in the loan product no longer show E-Sign, including Digio setups that relied on it; this follows the contract.",
+      "The signer list is empty when the dialog is reopened until Check status is clicked, because the documents list does not return signers.",
+      "The Digio upload now asks for confirmation before creating the request (useFormFlow default)."
+    ]
+  },
+  {
+    "id": "howismycommit-68",
+    "generatedAt": "2026-11-20T18:04:50+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "5298c5ce28b75b7dc0a838de864e8278cbede18c"
+    },
+    "files": {
+      "changed": 25,
+      "added": 16,
+      "modified": 9,
+      "deleted": 0,
+      "insertions": 1372,
+      "deletions": 25
+    },
+    "changeType": [
+      "feature",
+      "UI",
+      "dependency"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 4,
+      "info": 4
+    },
+    "before": "The template form had name, description, channel checkboxes, SMS fields and the content editor, with no eSign settings.",
+    "after": "When Print friendly is on, the form shows paper size, orientation, sign pages, page numbers, Aadhaar name check and a designer that draws up to 6 signers' boxes on the template's real PDF (pdfjs-dist) or a blank page, validated as integer, top-left-origin PDF points inside the page.",
+    "effects": [
+      "Configuration > Templates create and edit pages",
+      "New dependency pdfjs-dist, loaded only by the designer through a dynamic import",
+      "Shared eSign enums, the Finnaux eSign API group id and template types used by later commits"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/template-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-schema.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/template-schema.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-designer.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-page-preview.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/pdf-page-canvas.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/use-esign-pdf-preview.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/use-esign-drawing.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-designer-lib.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/use-esign-signers.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-signer-card.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-designer-toolbar.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/esign-settings.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/preview-loan-application-picker.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/templates/_components/use-element-width.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/templates/esign.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/templates/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/templates/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/templates/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/templates/queries.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/config/fixed-enums.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/config/external-api-ids.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "package.json",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "package-lock.json",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F1",
+        "title": "Conflict and PR steps use bun, but this repo uses npm",
+        "result": "resolved",
+        "note": "Still fixed: CONTRIBUTING.md:65 uses package-lock.json and npm install."
+      },
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F2",
+        "title": "PR checklist points to drizzle/ and DATABASE.md that do not exist here",
+        "result": "resolved",
+        "note": "Still fixed: no drizzle or DATABASE.md reference in CONTRIBUTING.md (PR checklist at CONTRIBUTING.md:83)."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <23 .ts/.tsx files in the commit>",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx next build",
+        "result": "passed; pdf.worker.min.mjs emitted as a static asset"
+      },
+      {
+        "status": "green",
+        "command": "compare with backend DTO, enums and the templates pdf route in ../FINNAUX2.0-API",
+        "result": "passed: field names, enum values, 6-signer limit, integer 0-2000 boxes, page-number regex and the PDF paper size all match"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser: drawing, quick-place, PDF rendering and the loan application picker were not exercised.",
+      "The PDF preview depends on a saved template and a real loan application; not tried against the live backend."
+    ],
+    "info": [
+      "The preview PDF is rendered by the backend at the saved paper size and stretched to the form's paper size; after changing paper size or orientation, save before trusting box positions (the UI says so).",
+      "The picker reuses SearchLoanApplicationModal, which only lists PENDING applications and assumes every row has a borrower; that pre-existing bug is now reachable from Configuration > Templates.",
+      "Boxes are not checked against the PDF's real page count or esignSignPageNumbers; new boxes default to page 0 (every signing page).",
+      "Templates that are not print friendly still send the eSign fields with defaults; the backend ignores them (IgnoreIf isPrintFriendly)."
+    ]
+  },
+  {
+    "id": "howismycommit-67",
+    "generatedAt": "2026-11-19T12:01:37+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "2f3cf8b22404401027edcd92c46b04843078d5af"
+    },
+    "files": {
+      "changed": 0,
+      "added": 0,
+      "modified": 0,
+      "deleted": 0,
+      "insertions": 0,
+      "deletions": 0
+    },
+    "changeType": [
+      "merge"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "feat/external-apis held the five external-apis commits and the two CONTRIBUTING.md commits on top of 06445bee.",
+    "after": "Local dev (88924e6a, the release merge of PR #137 into main) is merged in. The resulting tree is identical to ee69d81d, so no file changes.",
+    "effects": [
+      "Branch history only: the PR from feat/external-apis into dev will also carry 88924e6a and the main history behind it"
+    ],
+    "filesReviewed": [],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F1",
+        "title": "Conflict and PR steps use bun, but this repo uses npm",
+        "result": "resolved",
+        "note": "Still fixed: CONTRIBUTING.md:65 uses package-lock.json and npm install."
+      },
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F2",
+        "title": "PR checklist points to drizzle/ and DATABASE.md that do not exist here",
+        "result": "resolved",
+        "note": "Still fixed: no drizzle or DATABASE.md reference in CONTRIBUTING.md (PR checklist at CONTRIBUTING.md:83)."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "git diff 2f3cf8b2^1 2f3cf8b2",
+        "result": "passed: empty, the merge changes no files"
+      },
+      {
+        "status": "green",
+        "command": "git show --cc 2f3cf8b2",
+        "result": "passed: no conflict resolution in the merge"
+      }
+    ],
+    "gaps": [
+      "No fetch was run, so origin/dev may be newer than the local ref (06445bee)."
+    ],
+    "info": [
+      "The reflog shows main was pulled, local dev was fast-forwarded to main (88924e6a), and that dev was merged here. CONTRIBUTING.md says to sync with git merge origin/dev; merging main into dev is meant to be a main to dev back-merge PR.",
+      "88924e6a is already on origin/main and origin/feat/external-apis; the local ref origin/dev still points to 06445bee.",
+      "Since main and dev had the same content, nothing is lost or duplicated, but the feat/external-apis PR into dev will also act as the main to dev back-merge."
+    ]
+  },
+  {
+    "id": "howismycommit-66",
+    "generatedAt": "2026-11-19T11:33:44+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "ee69d81d66318faf8564cc1e2a2193996fd50d28"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 5,
+      "deletions": 6
+    },
+    "changeType": [
+      "docs"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 1
+    },
+    "before": "CONTRIBUTING.md told contributors to resolve bun.lock conflicts with bun install, run bun lint and bunx tsc, and add drizzle/ migrations described in DATABASE.md, none of which exist in this npm-based frontend repo.",
+    "after": "Lockfile conflicts use package-lock.json and npm install, the merge and PR checks use npm run lint, npm run build and npx tsc --noEmit, and the backend-only drizzle/DATABASE.md line is gone.",
+    "effects": [
+      "Team workflow docs only; the local /commitforme skill reminder now matches it"
+    ],
+    "filesReviewed": [
+      {
+        "path": "CONTRIBUTING.md",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F1",
+        "title": "Conflict and PR steps use bun, but this repo uses npm",
+        "result": "resolved",
+        "note": "Verified fixed by this commit: CONTRIBUTING.md:65 uses package-lock.json and npm install, and CONTRIBUTING.md:86 uses npm run lint, npm run build and npx tsc --noEmit."
+      },
+      {
+        "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0",
+        "findingId": "F2",
+        "title": "PR checklist points to drizzle/ and DATABASE.md that do not exist here",
+        "result": "resolved",
+        "note": "Verified fixed by this commit: no drizzle or DATABASE.md reference remains in CONTRIBUTING.md (Before opening a PR list at CONTRIBUTING.md:83)."
+      },
+      {
+        "commit": "96a421d2e090e09664350dccb0d18263912fc883",
+        "findingId": "F1",
+        "title": "RC address save needs Customer Address add rights",
+        "result": "resolved",
+        "note": "Still fixed: the modal saves through the rc-address route at src/features/loan-application/tabs/assets-vehicle/hooks.ts:160."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "grep -iE 'bun|drizzle|DATABASE' CONTRIBUTING.md",
+        "result": "passed: no matches; package-lock.json exists"
+      },
+      {
+        "status": "green",
+        "command": "npx prettier --check CONTRIBUTING.md",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "The npm commands were not run as part of this review; npm run build also runs tsc --noEmit through prebuild outside production."
+    ],
+    "info": [
+      "The working tree is clean; CONTRIBUTING.md is unchanged since this commit."
+    ]
+  },
+  {
+    "id": "howismycommit-65",
+    "generatedAt": "2026-11-19T11:27:09+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "291a2d8f9cd2ad01597c39b6b75ef19f412cccf0"
+    },
+    "files": {
+      "changed": 1,
+      "added": 1,
+      "modified": 0,
+      "deleted": 0,
+      "insertions": 159,
+      "deletions": 0
+    },
+    "changeType": [
+      "docs"
+    ],
+    "verdict": "review-with-caution",
+    "score": 92,
+    "commitScore": 92,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 2,
+      "green": 0,
+      "info": 2
+    },
+    "before": "The frontend repo had no contribution guide.",
+    "after": "CONTRIBUTING.md documents branches (no direct commits to dev or main), feature branch flow, syncing with dev, conflict resolution, PR checks, merge-commit policy, releases, hotfixes and the category(scope): message commit convention.",
+    "effects": [
+      "Team workflow only; no runtime code changes",
+      "The local /commitforme skill reads this file and follows it"
+    ],
+    "filesReviewed": [
+      {
+        "path": "CONTRIBUTING.md",
+        "change": "added",
+        "status": "amber",
+        "note": "F1"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Conflict and PR steps use bun, but this repo uses npm",
+        "location": "CONTRIBUTING.md:65",
+        "problem": "The guide tells contributors to resolve lockfile conflicts with bun.lock and bun install, and to run bun lint / bunx tsc. This repo has package-lock.json and no bun.lock, and CLAUDE.md lists npm commands.",
+        "impact": "During a merge conflict, `git checkout origin/dev -- bun.lock` fails, package-lock.json conflicts get no guidance, and running bun install can add a stray bun.lock to the diff.",
+        "fix": "Use package-lock.json, npm install, npm run lint, npm run build and npx tsc --noEmit (or state that bun is required and add bun.lock).",
+        "evidence": "3. `bun.lock` conflicts: do not edit by hand. Take dev's version and reinstall:\n   git checkout origin/dev -- bun.lock\n   bun install",
+        "status": "resolved",
+        "resolvedIn": "ee69d81d66318faf8564cc1e2a2193996fd50d28",
+        "resolvedAt": "2026-11-19T05:59:11.039Z",
+        "resolvedNote": "Fixed in ee69d81d: the conflict and PR steps now use package-lock.json, npm install, npm run lint/build and npx tsc --noEmit at CONTRIBUTING.md:65 and CONTRIBUTING.md:86.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F2",
+        "severity": "P3",
+        "title": "PR checklist points to drizzle/ and DATABASE.md that do not exist here",
+        "location": "CONTRIBUTING.md:87",
+        "problem": "The PR checklist requires schema migrations in drizzle/ and links DATABASE.md and db:push. Neither drizzle/ nor DATABASE.md exists in this frontend repo; the line appears copied from the API repo.",
+        "impact": "Contributors follow a check that cannot apply here and a broken reference, which makes the real checklist easier to skip.",
+        "fix": "Remove the line from the frontend guide, or replace it with a frontend-specific check.",
+        "evidence": "- Schema changes come with a migration in `drizzle/` (see `DATABASE.md`). Never `db:push`.",
+        "status": "resolved",
+        "resolvedIn": "ee69d81d66318faf8564cc1e2a2193996fd50d28",
+        "resolvedAt": "2026-11-19T05:59:11.039Z",
+        "resolvedNote": "Fixed in ee69d81d: the drizzle/ and DATABASE.md line is removed from the PR checklist at CONTRIBUTING.md:83-87.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "96a421d2e090e09664350dccb0d18263912fc883",
+        "findingId": "F1",
+        "title": "RC address save needs Customer Address add rights",
+        "result": "resolved",
+        "note": "Still fixed: the modal saves through the rc-address route at src/features/loan-application/tabs/assets-vehicle/hooks.ts:160."
+      },
+      {
+        "commit": "8e06b64e2455f4dd1c36daff937b53b53155d46d",
+        "findingId": "F1",
+        "title": "Finnaux DL error bypasses the axios message normalisation",
+        "result": "resolved",
+        "note": "Still fixed: onFailure(error?.message || ...) at src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx:35."
+      }
+    ],
+    "checks": [
+      {
+        "status": "grey",
+        "command": "npx tsc --noEmit / npx eslint",
+        "result": "not run: the commit changes only a Markdown file"
+      },
+      {
+        "status": "grey",
+        "command": "ls drizzle DATABASE.md; ls *lock*",
+        "result": "not run as a pass/fail check: used as evidence; drizzle/ and DATABASE.md are missing, only package-lock.json exists"
+      }
+    ],
+    "gaps": [
+      "The branch, merge and release policies were not checked against the GitHub repository settings (branch protection, disabled squash merge, CODEOWNERS)."
+    ],
+    "info": [
+      "The local /commitforme skill's reply also quotes bun lint / bun run build / bunx tsc; update it together with F1.",
+      "The commit is on feat/external-apis, which matches the guide's own rule against committing on dev."
+    ]
+  },
+  {
+    "id": "howismycommit-64",
+    "generatedAt": "2026-11-19T11:03:05+05:30",
+    "author": "Dhruv",
+    "branch": "dev",
+    "target": {
+      "kind": "commit",
+      "commit": "f17bc85dc5248b877ce13b335fdfb995a4257323"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 11,
+      "deletions": 1
+    },
+    "changeType": [
+      "bug fix"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "The External APIs credentials form treated saved keys as unreadable only when the error message equalled 'Stored external API credentials are invalid'.",
+    "after": "It first checks for errorCode CREDENTIALS_UNREADABLE in the axios error response, then falls back to the same exact message, so behaviour is unchanged until the backend sends the code.",
+    "effects": [
+      "Configuration > External APIs credentials modal: which load failures show 'enter every key again' instead of the blocking Retry box"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "8e06b64e2455f4dd1c36daff937b53b53155d46d",
+        "findingId": "F1",
+        "title": "Finnaux DL error bypasses the axios message normalisation",
+        "result": "resolved",
+        "note": "Still fixed at src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx:35."
+      },
+      {
+        "commit": "96a421d2e090e09664350dccb0d18263912fc883",
+        "findingId": "F1",
+        "title": "RC address save needs Customer Address add rights",
+        "result": "resolved",
+        "note": "Still fixed: the modal saves through the rc-address route at src/features/loan-application/tabs/assets-vehicle/hooks.ts:160."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "The errorCode path cannot be exercised until the backend sends CREDENTIALS_UNREADABLE; not run in a browser."
+    ],
+    "info": [
+      "This commit is the frontend half of the open 'Unreadable keys detected by message text' finding (howismycommit-45 F7, howismycommit-47 F1). Those stay open: the message fallback at src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:60 is still what works until the backend ships the code (contract docs/contracts/external-apis-credentials-unreadable-code.md).",
+      "Once the backend sends the code, remove the message fallback and mark those findings resolved."
+    ]
+  },
+  {
+    "id": "howismycommit-63",
+    "generatedAt": "2026-11-19T11:02:53+05:30",
+    "author": "Dhruv",
+    "branch": "dev",
+    "target": {
+      "kind": "commit",
+      "commit": "ff67f507630d46470ccac03489535332c20b0272"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 1,
+      "deletions": 3
+    },
+    "changeType": [
+      "bug fix"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 1
+    },
+    "before": "When Finnaux Driving License verification failed, the dialog read only response.data.message, so errors sent as `messages` or as an array showed a generic text or a joined array.",
+    "after": "The failure toast uses error.message, which the axios interceptor already normalises from message, messages or the HTTP status, and still falls back to 'Driving license verification failed'.",
+    "effects": [
+      "Finnaux DL verify dialog on the customer form and the identification document modal: only the error toast text changes"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "8e06b64e2455f4dd1c36daff937b53b53155d46d",
+        "findingId": "F1",
+        "title": "Finnaux DL error bypasses the axios message normalisation",
+        "result": "resolved",
+        "note": "Verified fixed by this commit: onFailure(error?.message || ...) at src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx:35."
+      },
+      {
+        "commit": "96a421d2e090e09664350dccb0d18263912fc883",
+        "findingId": "F1",
+        "title": "RC address save needs Customer Address add rights",
+        "result": "resolved",
+        "note": "Still fixed: the modal saves through the rc-address route at src/features/loan-application/tabs/assets-vehicle/hooks.ts:160."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "Error path not exercised in a browser or against the live Finnaux DL endpoint."
+    ],
+    "info": [
+      "The file is unchanged since this commit; the working tree is clean."
+    ]
+  },
+  {
+    "id": "howismycommit-62",
+    "generatedAt": "2026-11-18T18:36:13+05:30",
+    "author": "Dhruv",
+    "branch": "dev",
+    "target": {
+      "kind": "commit",
+      "commit": "e914f690b4dcbafe3b3656638a3feeec49e9402e"
+    },
+    "files": {
+      "changed": 3,
+      "added": 0,
+      "modified": 3,
+      "deleted": 0,
+      "insertions": 47,
+      "deletions": 10
+    },
+    "changeType": [
+      "feature",
+      "API",
+      "UI"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 3,
+      "info": 2
+    },
+    "before": "The RC address modal saved through the customer address route, which needs Customer Address add rights, and the RC Address dropdown only showed a spinner on its first load.",
+    "after": "The modal saves through POST los/loan-application/:id/asset-vehicles/rc-address with only the fields the backend needs, waits for the borrower's addresses to reload before closing, and the RC Address dropdown is disabled with 'Loading addresses...' while they reload. The Permanent Address field shows only to users who can add (new vehicle) or edit (saved vehicle) vehicles.",
+    "effects": [
+      "Asset vehicle form: Permanent Address (from RC) field, RC address modal and RC Address dropdown",
+      "Borrower customer address queries are refetched after a save"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/loan-application/tabs/assets-vehicle/form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/tabs/assets-vehicle/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/tabs/assets-vehicle/rc-permanent-address-field.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "96a421d2e090e09664350dccb0d18263912fc883",
+        "findingId": "F1",
+        "title": "RC address save needs Customer Address add rights",
+        "result": "resolved",
+        "note": "Verified fixed: the modal uses useAddRcAddressMutation at src/features/loan-application/tabs/assets-vehicle/rc-permanent-address-field.tsx:110, which posts to the rc-address route at src/features/loan-application/tabs/assets-vehicle/hooks.ts:160."
+      },
+      {
+        "commit": "8e06b64e2455f4dd1c36daff937b53b53155d46d",
+        "findingId": "F1",
+        "title": "Finnaux DL error bypasses the axios message normalisation",
+        "result": "open",
+        "note": "Still present at src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx:35."
+      },
+      {
+        "commit": "ea8fd9b6a3d16cad34f54ec0d15e54338a81f197",
+        "findingId": "F1",
+        "title": "PAN details fill the non-individual form",
+        "result": "resolved",
+        "note": "Still fixed: applyPan returns early for non-individual customers at src/features/customers/components/add-customer-forms/components/kyc-section.tsx:126."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint src/features/loan-application/tabs/assets-vehicle",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "git diff e914f690 (working tree)",
+        "result": "passed: clean, the review describes the committed code"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "No test command; the save, refetch and dropdown lock were not exercised.",
+      "Not run in a browser or against the live rc-address endpoint."
+    ],
+    "info": [
+      "The backend compares streetRoadLane with the RC permanentAddress after trimming; the modal sends the read-only RC text trimmed by the form schema.",
+      "The request body is typed as Record<string, unknown>, so the compiler does not check the field names against the contract."
+    ]
+  },
+  {
+    "id": "howismycommit-61",
+    "generatedAt": "2026-11-18T18:35:48+05:30",
+    "author": "Dhruv",
+    "branch": "dev",
+    "target": {
+      "kind": "commit",
+      "commit": "96a421d2e090e09664350dccb0d18263912fc883"
+    },
+    "files": {
+      "changed": 11,
+      "added": 2,
+      "modified": 9,
+      "deleted": 0,
+      "insertions": 360,
+      "deletions": 55
+    },
+    "changeType": [
+      "feature",
+      "UI",
+      "API"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 85,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 3,
+      "info": 2
+    },
+    "before": "Vehicle RC verification only had a Surepass flow, so with Finnaux active the Verify RC dialog was empty, and the saved vehicle card verified through the autofill route without updating lastVerifiedAt.",
+    "after": "A Finnaux RC flow is added, the form also fills Permit Upto, and the saved card calls the backend verify-rc route after a confirm. A verified RC's permanent address is shown next to RC Address with a small modal that saves it as a borrower address.",
+    "effects": [
+      "Loan application asset vehicle form and saved vehicle cards",
+      "RC Address dropdown reloads the borrower's addresses after a save",
+      "Shared address form fields now export AddressLocationFields for reuse"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/customers/components/shared/address-form-fields.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/rc-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/rc-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/rc-verify/flows/finnaux-rc-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/tabs/assets-vehicle/form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/tabs/assets-vehicle/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/tabs/assets-vehicle/index.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/loan-application/tabs/assets-vehicle/rc-permanent-address-field.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "F1 (resolved)"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P2",
+        "title": "RC address save needs Customer Address add rights",
+        "location": "src/features/loan-application/tabs/assets-vehicle/rc-permanent-address-field.tsx:107",
+        "problem": "The RC address modal saved through the customer address route, which the backend allows only for users with add rights on the Customer Address page. The user verifying the RC only needs vehicle rights.",
+        "impact": "A user who can verify the RC but lacks Customer Address add rights fills the whole modal and gets an error on Save, so the government RC address is not stored.",
+        "fix": "Save through a loan-scoped route that checks vehicle rights instead.",
+        "evidence": "const mutation = useCreateCustomerAddressMutation(borrowerCustomerId)",
+        "status": "resolved",
+        "resolvedIn": "e914f690b4dcbafe3b3656638a3feeec49e9402e",
+        "resolvedAt": "2026-11-18T13:05:54.474Z",
+        "resolvedNote": "Resolved: the modal now saves through the loan-scoped rc-address route (src/features/loan-application/tabs/assets-vehicle/rc-permanent-address-field.tsx:110, src/features/loan-application/tabs/assets-vehicle/hooks.ts:160), which the backend allows on login like the vehicle edit route.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "8e06b64e2455f4dd1c36daff937b53b53155d46d",
+        "findingId": "F1",
+        "title": "Finnaux DL error bypasses the axios message normalisation",
+        "result": "open",
+        "note": "Still present at src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx:35."
+      },
+      {
+        "commit": "ea8fd9b6a3d16cad34f54ec0d15e54338a81f197",
+        "findingId": "F1",
+        "title": "PAN details fill the non-individual form",
+        "result": "resolved",
+        "note": "Still fixed: applyPan returns early for non-individual customers at src/features/customers/components/add-customer-forms/components/kyc-section.tsx:126."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <11 changed files>",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "re-read current tree for each finding",
+        "result": "passed: F1 fixed in e914f690"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "No test command; RC autofill, card verify and the RC address modal were not exercised.",
+      "Not run in a browser or against the live Finnaux RC, verify-rc and rc-address endpoints."
+    ],
+    "info": [
+      "Later commit e914f690 changed the RC address save route, removed the types field and hid the field from users without vehicle add/edit rights.",
+      "The RC Address dropdown is disabled during any refetch of the borrower's addresses, including background refetches, not only after a save."
+    ]
+  },
+  {
+    "id": "howismycommit-60",
+    "generatedAt": "2026-11-18T18:34:57+05:30",
+    "author": "Dhruv",
+    "branch": "dev",
+    "target": {
+      "kind": "commit",
+      "commit": "8e06b64e2455f4dd1c36daff937b53b53155d46d"
+    },
+    "files": {
+      "changed": 12,
+      "added": 2,
+      "modified": 10,
+      "deleted": 0,
+      "insertions": 311,
+      "deletions": 28
+    },
+    "changeType": [
+      "feature",
+      "UI",
+      "API"
+    ],
+    "verdict": "review-with-caution",
+    "score": 91,
+    "commitScore": 91,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 1,
+      "green": 2,
+      "info": 2
+    },
+    "before": "Driving License verification only had a Surepass flow, required a date of birth before the dialog opened, and marked the document verified without filling any customer details.",
+    "after": "A Finnaux DL flow is added and both flows ask for the date of birth inside the dialog. A verified DL fills empty name, DOB, gender and relation fields and an empty address, keeps any document details the user already entered, and shows warnings for an inactive or expired licence.",
+    "effects": [
+      "Customer add form KYC section (inline Verify) and the identification document modal",
+      "DirectVerificationFlow gained children and isVerifyDisabled, used by every direct verification flow",
+      "IAadhaarVerificationResponse.profilePicUrl is now nullable"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/config/fixed-enums.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/identification-document-modal/identification-document-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/common/direct-verification-flow.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/dl-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/dl-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx",
+        "change": "added",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/features/external-apis/components/dl-verify/flows/surepass-dl-flow.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/dl-verify/utils.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Finnaux DL error bypasses the axios message normalisation",
+        "location": "src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx:35",
+        "problem": "onError reads only error.response.data.message as a string. The axios interceptor already puts the readable message in error.message, including when the backend sends a `messages` field or an array `message`.",
+        "impact": "When the backend replies with `messages`, the user sees the generic 'Driving license verification failed' instead of the reason; when `message` is an array, an array is passed to onFailure and the toast joins the items with no separator.",
+        "fix": "Use onFailure(error?.message || \"Driving license verification failed\"), as the Surepass and RC flows do.",
+        "evidence": "const responseMessage = (error as { response?: { data?: { message?: string } } }).response\n            ?.data?.message\n          onFailure(responseMessage || \"Driving license verification failed\")",
+        "status": "resolved",
+        "resolvedIn": "ff67f507630d46470ccac03489535332c20b0272",
+        "resolvedAt": "2026-11-18T13:07:45.943Z",
+        "resolvedNote": "Fixed in ff67f507: the Finnaux DL flow shows the axios-normalised error.message at src/features/external-apis/components/dl-verify/flows/finnaux-dl-flow.tsx:35.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "ea8fd9b6a3d16cad34f54ec0d15e54338a81f197",
+        "findingId": "F1",
+        "title": "PAN details fill the non-individual form",
+        "result": "resolved",
+        "note": "Still fixed: applyPan returns early for non-individual customers at src/features/customers/components/add-customer-forms/components/kyc-section.tsx:126."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <12 changed files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in package.json"
+      }
+    ],
+    "gaps": [
+      "No test command; DL fill rules and warnings were not exercised.",
+      "Not run in a browser or against the real Finnaux DL endpoint."
+    ],
+    "info": [
+      "The commit's DL code is unchanged in the current tree; later commits only touched RC code in the shared api, hooks and types files.",
+      "The date-of-birth check moved from the trigger into the dialog, so Verify now opens even without a DOB and the user enters it there."
+    ]
+  },
+  {
+    "id": "howismycommit-59",
+    "generatedAt": "2026-11-17T14:07:07+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "f8940301fae9f9208c67cbc2a381ee8222a57ade"
+    },
+    "files": {
+      "changed": 9,
+      "added": 0,
+      "modified": 9,
+      "deleted": 0,
+      "insertions": 83,
+      "deletions": 67
+    },
+    "changeType": [
+      "feature",
+      "ui",
+      "refactor"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "A verified PAN or Aadhaar filled only form fields that were empty. Comments were still in several touched files.",
+    "after": "A verified PAN overwrites first, middle and last name and date of birth, locks what it filled, and shows the name match score and an Aadhaar-linked hint. Aadhaar skips locked fields. Full-line comments are removed from the files touched since 87b21c69.",
+    "effects": [
+      "Add Customer (Individual): name and date of birth come from PAN and cannot be overwritten by a later Aadhaar verify.",
+      "First Name shows a PAN name match percentage, and the KYC section can show whether the PAN is linked to Aadhaar.",
+      "Non-individual customers are not affected by the PAN fill.",
+      "Report filters, the integration form and the document modal lose comments only."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/add-customer-forms/individual-customer.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/identification-document-modal/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/identification-document-modal/identification-document-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "comments removed only"
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/_shared/filters-sidebar.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "comments removed only"
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/_shared/use-report-filters.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "comments removed only"
+      },
+      {
+        "path": "src/features/reports/reports-builder/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "comments removed only"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "ea8fd9b6a3d16cad34f54ec0d15e54338a81f197",
+        "findingId": "F1",
+        "title": "PAN details fill the non-individual form",
+        "result": "resolved",
+        "note": "applyPan returns early unless customerType is INDIVIDUAL at src/features/customers/components/add-customer-forms/components/kyc-section.tsx:102, and this commit contains that fix."
+      },
+      {
+        "commit": "ea3e2c3dce9bbd0adbf94bd09c96ecf0b735e765",
+        "findingId": "F1",
+        "title": "Old Digipehchan flow left as a duplicate",
+        "result": "resolved",
+        "note": "src/features/external-apis/components/aadhar-verify/flows has no digipehchan-flow.tsx."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint on the .ts and .tsx files of the commit",
+        "result": "passed: no errors"
+      }
+    ],
+    "gaps": [
+      "No test command is configured, and I did not run the Add Customer screen or call the real Finnaux PAN endpoint.",
+      "I checked the fill rules against the contract you pasted, not against the backend code."
+    ],
+    "info": [
+      "The PAN lock and name match score stay in place if the PAN number is changed to a different PAN after verifying, because they are only cleared when the PAN document type is removed.",
+      "The lock lives in a ref, so a PAN verified in the modal and closed without saving is not remembered after the section remounts."
+    ]
+  },
+  {
+    "id": "howismycommit-58",
+    "generatedAt": "2026-11-17T14:05:57+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "ea8fd9b6a3d16cad34f54ec0d15e54338a81f197"
+    },
+    "files": {
+      "changed": 5,
+      "added": 0,
+      "modified": 5,
+      "deleted": 0,
+      "insertions": 47,
+      "deletions": 14
+    },
+    "changeType": [
+      "feature",
+      "ui",
+      "api"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 91,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "Verifying a PAN only marked the document verified. Aadhaar verify replaced the basic details and the whole address every time.",
+    "after": "As committed, PAN and Aadhaar both filled only form fields that were empty, from both the inline Verify button and the document modal. The working tree has since replaced this with the PAN-priority rule: PAN overwrites name and date of birth and locks them, and Aadhaar skips locked fields.",
+    "effects": [
+      "Add Customer fills name and date of birth from a verified PAN.",
+      "The document modal passes the verify response up through a new onVerifiedDetails callback.",
+      "Aadhaar no longer overwrote existing values in the committed version; the current code overwrites again except for fields PAN locked."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F1 (resolved)"
+      },
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-field.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/identification-document-modal/identification-document-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/identification-document-modal/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "PAN details fill the non-individual form",
+        "location": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx:133",
+        "problem": "The committed code filled basicDetails from a PAN verify with no check on the customer type. KycSection is also used by the non-individual form, which has no first name, last name or date of birth fields.",
+        "impact": "Verifying a PAN in a non-individual customer would write firstName, lastName or dateOfBirth into that form's values, and they could be sent with the save request.",
+        "fix": "Apply the PAN details only when customerType is INDIVIDUAL.",
+        "evidence": "if (data) fillFromVerification(data)",
+        "status": "resolved",
+        "resolvedIn": null,
+        "resolvedAt": "2026-11-17T00:00:00.000Z",
+        "resolvedNote": "applyPan returns early unless customerType is INDIVIDUAL at src/features/customers/components/add-customer-forms/components/kyc-section.tsx:102 (uncommitted).",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "ea3e2c3dce9bbd0adbf94bd09c96ecf0b735e765",
+        "findingId": "F1",
+        "title": "Old Digipehchan flow left as a duplicate",
+        "result": "resolved",
+        "note": "src/features/external-apis/components/aadhar-verify/flows has no digipehchan-flow.tsx and nothing references it."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed (current working tree)"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint on the changed kyc, modal and types files",
+        "result": "passed (current working tree)"
+      }
+    ],
+    "gaps": [
+      "The working tree has uncommitted changes in these files, so the score and verdict describe the current code, and the commit itself scored lower (see commitScore).",
+      "No test command is configured, and I did not run the screens in a browser.",
+      "I did not check the Finnaux PAN response against the real backend."
+    ],
+    "info": [
+      "The PAN lock is kept in a ref. A PAN verified inside the modal and closed without saving is not remembered after the section remounts.",
+      "The committed version and the current version apply different rules for PAN and Aadhaar fill. Only the current one matches the latest contract."
+    ]
+  },
+  {
+    "id": "howismycommit-57",
+    "generatedAt": "2026-11-16T18:16:28+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "9c85c0fc9ce3f25ab1c69bd902068e5afbd7272d"
+    },
+    "files": {
+      "changed": 5,
+      "added": 1,
+      "modified": 4,
+      "deleted": 0,
+      "insertions": 93,
+      "deletions": 1
+    },
+    "changeType": [
+      "feature",
+      "api",
+      "ui"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "The PAN verify dialog only had a Surepass flow. Any other provider opened an empty dialog.",
+    "after": "A finnaux provider opens a dialog that shows the PAN number and asks for the name on the PAN, then calls /external/finnaux/pan/verify. Errors show as a toast and the dialog stays open for a retry.",
+    "effects": [
+      "Add Customer and the document modal can verify PAN with Finnaux once the backend group has provider finnaux.",
+      "Success uses the same response shape as Surepass PAN, so the existing form fill and verified mark work unchanged.",
+      "Surepass PAN is unchanged."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/components/pan-verify/flows/finnaux-pan-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/pan-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/pan-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "ea3e2c3dce9bbd0adbf94bd09c96ecf0b735e765",
+        "findingId": "F1",
+        "title": "Old Digipehchan flow left as a duplicate",
+        "result": "resolved",
+        "note": "digipehchan-flow.tsx is not in src/features/external-apis/components/aadhar-verify/flows and nothing references DigipehchanFlow."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint src/features/external-apis",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "No test command is configured, and I did not run the dialog in a browser or call the real Finnaux endpoint.",
+      "The request and response were checked against the pasted backend description, not against the backend code."
+    ],
+    "info": [
+      "The name typed in the dialog is not compared with the customer's name on the form, so a verified PAN can belong to a different name than the customer being added.",
+      "A provider with no flow in the PAN dialog still opens an empty dialog. The same is true for the other verify dialogs."
+    ]
+  },
+  {
+    "id": "howismycommit-56",
+    "generatedAt": "2026-11-16T17:20:57+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "1c006b9ec5e70e7049d060671d69b904c91dabd5"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 1,
+      "deletions": 1
+    },
+    "changeType": [
+      "bug fix",
+      "ui"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "getOptions returned undefined while the customer dropdowns were loading or had failed. IdentificationDocumentForm then crashed on options.find and showed an empty modal.",
+    "after": "getOptions always returns a list, empty until the dropdowns load, so the document form opens without crashing.",
+    "effects": [
+      "The KYC document modals in Add Customer open even when the dropdowns request has not finished or has failed.",
+      "The Document Type select is empty in that case instead of the modal crashing."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "ea3e2c3dce9bbd0adbf94bd09c96ecf0b735e765",
+        "findingId": "F1",
+        "title": "Old Digipehchan flow left as a duplicate",
+        "result": "resolved",
+        "note": "digipehchan-flow.tsx no longer exists in src/features/external-apis/components/aadhar-verify/flows and nothing references DigipehchanFlow."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint kyc-section.tsx",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "No test command is configured, so the fix was not tested, and I did not reproduce the crash in a browser.",
+      "I only checked the one caller of the document form that I found, KycField in kyc-section.tsx."
+    ],
+    "info": [
+      "When the dropdowns request fails, the user sees an empty Document Type list with no error message. The type of options in the form still says it is always a list.",
+      "The empty PAN verify modal from the same screen is a separate problem and is not touched by this commit."
+    ]
+  },
+  {
+    "id": "howismycommit-55",
+    "generatedAt": "2026-11-16T15:18:48+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "8361af67545e0b98431fba5f550e3fbebbf36ef2"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 0,
+      "deleted": 1,
+      "insertions": 0,
+      "deletions": 168
+    },
+    "changeType": [
+      "refactor"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 1
+    },
+    "before": "The old Digipehchan OTP flow component sat in the repo next to the shared AadhaarOtpFlow, with no importers.",
+    "after": "Only the shared AadhaarOtpFlow handles the Digipehchan and Finnaux OTP steps. The unused copy is gone.",
+    "effects": [
+      "No screen changes: dialog-manager.tsx already used AadhaarOtpFlow for digipehchan and finnaux.",
+      "Fixes the duplicate-file finding F1 from the previous commit's review."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/components/aadhar-verify/flows/digipehchan-flow.tsx",
+        "change": "deleted",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "ea3e2c3dce9bbd0adbf94bd09c96ecf0b735e765",
+        "findingId": "F1",
+        "title": "Old Digipehchan flow left as a duplicate",
+        "result": "resolved",
+        "note": "The file is deleted and nothing under src references DigipehchanFlow or digipehchan-flow; the shared flow is at src/features/external-apis/components/aadhar-verify/flows/aadhaar-otp-flow.tsx:25."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "grep for DigipehchanFlow and digipehchan-flow in src",
+        "result": "passed: no matches"
+      },
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "No test command is configured, and I did not open the Aadhaar dialog in a browser.",
+      "The change only deletes a file, so there is no new logic to review."
+    ],
+    "info": [
+      "useGenerateDigipehchanAadharOtpMutation and useVerifyDigipehchanAadharOtpMutation in src/features/external-apis/hooks.ts have no users left and can be removed."
+    ]
+  },
+  {
+    "id": "howismycommit-54",
+    "generatedAt": "2026-11-16T15:13:08+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "ea3e2c3dce9bbd0adbf94bd09c96ecf0b735e765"
+    },
+    "files": {
+      "changed": 6,
+      "added": 1,
+      "modified": 5,
+      "deleted": 0,
+      "insertions": 213,
+      "deletions": 5
+    },
+    "changeType": [
+      "feature",
+      "ui",
+      "refactor"
+    ],
+    "verdict": "review-with-caution",
+    "score": 91,
+    "commitScore": 91,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 1,
+      "green": 2,
+      "info": 2
+    },
+    "before": "Aadhaar verification supported Digio, Surepass and Digipehchan. The Digipehchan OTP flow lived in digipehchan-flow.tsx, and the integration modal showed required keys plus every saved key.",
+    "after": "A Finnaux provider runs the same OTP flow through a shared AadhaarOtpFlow with its own generate and verify endpoints. The modal shows only the declared required keys, then saved keys, then one apiKey field.",
+    "effects": [
+      "Customer form Aadhaar Verify works with a provider named finnaux, once the backend has the group and endpoints.",
+      "Configuration > External APIs shows fewer credential fields for groups that declare required keys.",
+      "Old Digipehchan calls now go through AadhaarOtpFlow with provider digipehchan."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/components/aadhar-verify/flows/aadhaar-otp-flow.tsx",
+        "change": "added",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/features/external-apis/components/aadhar-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/aadhar-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Old Digipehchan flow left as a duplicate",
+        "location": "src/features/external-apis/components/aadhar-verify/flows/digipehchan-flow.tsx:23",
+        "problem": "The commit adds aadhaar-otp-flow.tsx as a copy of digipehchan-flow.tsx but does not delete the old file. Nothing imports DigipehchanFlow any more, so about 170 lines are dead and match the new file except for the provider handling.",
+        "impact": "A later fix to the OTP flow (timer, error text, resend) can be made in one file and missed in the other. The old hooks useGenerateDigipehchanAadharOtpMutation and useVerifyDigipehchanAadharOtpMutation are only kept alive by this file.",
+        "fix": "Delete digipehchan-flow.tsx and the two Digipehchan-only hooks in hooks.ts.",
+        "evidence": "export function DigipehchanFlow() {",
+        "status": "resolved",
+        "resolvedIn": "8361af67545e0b98431fba5f550e3fbebbf36ef2",
+        "resolvedAt": "2026-11-16T09:48:48.000Z",
+        "resolvedNote": "digipehchan-flow.tsx is deleted; the only flow file left is src/features/external-apis/components/aadhar-verify/flows/aadhaar-otp-flow.tsx:25, and nothing imports the old one.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint src/features/external-apis and configuration/external-apis",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "No test command is configured, so the OTP flow and the credential field rules were not tested.",
+      "I did not run the dialog or the modal in a browser, and the Finnaux endpoints do not exist on the backend yet, so the real calls were not exercised.",
+      "I did not review the backend contract document (docs/contracts), which is not part of this commit."
+    ],
+    "info": [
+      "The finnaux provider id is not in src/config/external-api-ids.ts. The flow picks the provider by name, so this is fine until some code needs the API group id.",
+      "When a group declares required keys, a saved key it no longer declares (for example an old apiKey) is hidden and never sent. It stays stored on the backend."
+    ]
+  },
+  {
+    "id": "howismycommit-53",
+    "generatedAt": "2026-11-16T15:12:24+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "87b21c69047d5c7eb2e18b7eae3da556b608bb89"
+    },
+    "files": {
+      "changed": 4,
+      "added": 0,
+      "modified": 4,
+      "deleted": 0,
+      "insertions": 11,
+      "deletions": 0
+    },
+    "changeType": [
+      "feature",
+      "ui",
+      "api"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "The report filters sidebar had date, branch and product filters, and the run request sent only those.",
+    "after": "The sidebar also has an Include Internal Vouchers checkbox, off by default. Its value is sent as includeInternalVouchers in the body of both report run calls.",
+    "effects": [
+      "My Reports and Report Builder (My Reports view) both show the new checkbox, because they share FiltersSidebar.",
+      "Every report run now sends includeInternalVouchers, true or false.",
+      "The backend only logs the field for now (per the contract), so report results do not change yet."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/reports-user/_shared/filter-schema.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/_shared/filters-sidebar.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/reports-user/_shared/use-report-filters.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/reports/reports-builder/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "c94a61ef78f2f77342abfad51c8e0d890a97bb44",
+        "findingId": "F1",
+        "title": "Clipboard read on open and every tab focus",
+        "result": "resolved",
+        "note": "readText is only called from the click handler at src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:172; onFocus only selects text (line 224)."
+      },
+      {
+        "commit": "c94a61ef78f2f77342abfad51c8e0d890a97bb44",
+        "findingId": "F2",
+        "title": "Paste fires on any focus, not only a click",
+        "result": "resolved",
+        "note": "Paste runs from onClick only (integration-group-form.tsx:225)."
+      },
+      {
+        "commit": "d616233a634560a7bb7925abf4f3926d16c326a6",
+        "findingId": "F1",
+        "title": "Paste fires on any focus, not only a click",
+        "result": "resolved",
+        "note": "Paste runs from onClick only (integration-group-form.tsx:225)."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint reports-user/_shared and reports-builder/types.ts",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "No test command is configured, so the checkbox and the request body were not tested.",
+      "I did not open the screen or watch the network call in a browser.",
+      "The backend side was not reviewed. I only compared the sent field with docs/contracts/report-builder-include-internal-vouchers-contract.md."
+    ],
+    "info": [
+      "The checkbox has no effect on report results until the backend applies the filter. Users may think it filters already.",
+      "toReportFilters sends includeInternalVouchers: false when unchecked instead of leaving it out. This matches the contract (boolean, never null)."
+    ]
+  },
+  {
+    "id": "howismycommit-52",
+    "generatedAt": "2026-11-16T15:11:43+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "72907a54fc278904741c66274d5a39223fe87476"
+    },
+    "files": {
+      "changed": 5,
+      "added": 0,
+      "modified": 1,
+      "deleted": 4,
+      "insertions": 1,
+      "deletions": 785
+    },
+    "changeType": [
+      "refactor",
+      "ui"
+    ],
+    "verdict": "review-with-caution",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "The Audit Logs page showed three tabs: Activity Log, Application Log and Redis Activity, each with its own tab file and API helpers.",
+    "after": "The page shows one tab, Application Log. The Activity Log and Redis tab files and their API code are deleted, and page.tsx no longer imports them.",
+    "effects": [
+      "Configuration > Audit Logs loses the Activity Log and Redis Activity tabs.",
+      "Users who relied on those tabs lose the screens. Nothing else in src imports the deleted files."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/audit-logs/page.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/audit-logs/_lib/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/audit-logs/_tabs/activity-log.tab.tsx",
+        "change": "deleted",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/audit-logs/_tabs/redis-activity.tab.tsx",
+        "change": "deleted",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/audit-logs/_tabs/redis-history.tsx",
+        "change": "deleted",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "findingId": "F1",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "Still compares the error message to a fixed sentence at src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:159."
+      },
+      {
+        "commit": "c94a61ef78f2f77342abfad51c8e0d890a97bb44",
+        "findingId": "F1",
+        "title": "Clipboard read on open and every tab focus",
+        "result": "resolved",
+        "note": "readText is only called from the click handler at integration-group-form.tsx:172, and the focus handler only selects text (line 224)."
+      },
+      {
+        "commit": "c94a61ef78f2f77342abfad51c8e0d890a97bb44",
+        "findingId": "F2",
+        "title": "Paste fires on any focus, not only a click",
+        "result": "resolved",
+        "note": "Paste runs from onClick only (integration-group-form.tsx:225); onFocus just selects the text."
+      },
+      {
+        "commit": "d616233a634560a7bb7925abf4f3926d16c326a6",
+        "findingId": "F1",
+        "title": "Paste fires on any focus, not only a click",
+        "result": "resolved",
+        "note": "Paste runs from onClick only (integration-group-form.tsx:225); onFocus just selects the text."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint src/app/(app)/(main)/configuration/audit-logs",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "This is a merge commit. I reviewed its diff against the first parent (32b53099) only, which is the effect of bringing dev into this branch.",
+      "No test command is configured, so the removed tabs and the remaining Application Log tab were not tested.",
+      "I did not open the page in a browser. The working tree has uncommitted changes elsewhere (external-apis), which this review does not cover."
+    ],
+    "info": [
+      "The deletions match dev commit 780003e2 (feat(audit-logs): remove redis and activity tabs), so they are intended and unrelated to the external-apis branch work.",
+      "Check that no permission or menu entry still points at the removed tabs."
+    ]
+  },
+  {
+    "id": "howismycommit-51",
+    "generatedAt": "2026-11-13T17:53:20+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "32b53099b094720fa2c5a72ca5f615d668ef568d"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 2,
+      "deletions": 4
+    },
+    "changeType": [
+      "bug fix"
+    ],
+    "verdict": "looks-good",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 3,
+      "info": 3
+    },
+    "before": "The first-use clipboard paste into an API key field started from the input's onFocus, so tabbing into the field also pasted.",
+    "after": "onFocus only selects the field's text, and the paste starts from onClick, so only a click (or tap) on an empty key field pastes the clipboard.",
+    "effects": [
+      "Tabbing into a key field no longer reads the clipboard or uses up that field's one paste.",
+      "Keyboard users have no way to trigger the paste: Enter in an input submits the form and Space types a space, neither produces a click. They can still paste with Ctrl or Cmd+V.",
+      "Only the External APIs modal is affected."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "d616233a634560a7bb7925abf4f3926d16c326a6",
+        "findingId": "F1",
+        "title": "Paste fires on any focus, not only a click",
+        "result": "resolved",
+        "note": "Verified: integration-group-form.tsx:219 keeps only the select-all in onFocus and line 220 starts the paste from onClick."
+      },
+      {
+        "commit": "c94a61ef78f2f77342abfad51c8e0d890a97bb44",
+        "findingId": "F1",
+        "title": "Clipboard read on open and every tab focus",
+        "result": "resolved",
+        "note": "Verified: use-clipboard-text.ts has no effect or focus listener; the clipboard is read only in pasteClipboardOnFirstClick (integration-group-form.tsx:162)."
+      },
+      {
+        "commit": "c94a61ef78f2f77342abfad51c8e0d890a97bb44",
+        "findingId": "F2",
+        "title": "Paste fires on any focus, not only a click",
+        "result": "resolved",
+        "note": "Verified: the paste starts at integration-group-form.tsx:220 (onClick)."
+      },
+      {
+        "commit": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "findingId": "F1",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "Still present at integration-group-form.tsx:154."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F7",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "Same issue, still present at integration-group-form.tsx:154."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F1",
+        "title": "Autofill may drop login password into keys",
+        "result": "resolved",
+        "note": "Verified: no autoComplete prop in integration-group-form.tsx."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F2",
+        "title": "Typed keys stay in memory after save",
+        "result": "resolved",
+        "note": "Verified: hooks.ts:64 has gcTime: 0."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F3",
+        "title": "Page list refetched twice per save",
+        "result": "resolved",
+        "note": "Verified: hooks.ts:79 invalidates only the saved-keys queries."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F4",
+        "title": "Unrequested global pagination spacing change",
+        "result": "resolved",
+        "note": "Verified: data-table-pagination.tsx:28 has no mt-2."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F5",
+        "title": "Credentials fetched while fields hidden",
+        "result": "resolved",
+        "note": "Verified: integration-group-form.tsx:128 passes isEnabled ? apiGroupId : null."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F6",
+        "title": "Comments against the AGENTS.md rule",
+        "result": "resolved",
+        "note": "Verified: the form keeps only comments that explain a business reason."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint integration-group-form.tsx",
+        "result": "passed: no errors or warnings"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "gaps": [
+      "No browser test: click, tap and Tab behaviour were read from the code, not tried.",
+      "The code in the checkout is identical to this commit for the file, so the checks ran on the same code."
+    ],
+    "info": [
+      "An earlier chat message said Enter or Space on a focused field would also paste; that was wrong for an input element, since neither produces a click.",
+      "One earlier finding is still open: unreadable keys are recognised by the backend's message text (integration-group-form.tsx:154).",
+      "A field is marked as used before the clipboard is read, so a click made before copying the key uses up that field's one paste, as requested."
+    ]
+  },
+  {
+    "id": "howismycommit-50",
+    "generatedAt": "2026-11-13T17:41:30+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "d616233a634560a7bb7925abf4f3926d16c326a6"
+    },
+    "files": {
+      "changed": 2,
+      "added": 0,
+      "modified": 2,
+      "deleted": 0,
+      "insertions": 34,
+      "deletions": 55
+    },
+    "changeType": [
+      "feature",
+      "refactor",
+      "ui"
+    ],
+    "verdict": "looks-good",
+    "score": 95,
+    "commitScore": 91,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 3,
+      "info": 4
+    },
+    "before": "Each API key field had a Paste button that appeared when the clipboard held text, and the form read the clipboard when the fields appeared and on every tab focus.",
+    "after": "The Paste button and those early clipboard reads are gone. An empty key field with no saved key now fills itself from the clipboard once, the first time it is used; as committed this ran on focus, and the next commit moved it to a click.",
+    "effects": [
+      "The clipboard is read only after the user interacts with a key field, so Chrome's permission prompt no longer appears when the modal opens.",
+      "The hook use-clipboard-text.ts shrinks to a single readText helper used only by the External APIs form.",
+      "A field that already has a saved key never pastes, and each field pastes at most once per modal."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "F1 resolved"
+      },
+      {
+        "path": "src/hooks/use-clipboard-text.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Paste fires on any focus, not only a click",
+        "location": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:221",
+        "problem": "The paste ran from the input's onFocus handler, which also runs when the field gets focus from the Tab key, not only from a mouse click.",
+        "impact": "A keyboard user tabbing into the first empty key field got the clipboard filled in without clicking, and that field was then marked as used, so a real click would not paste.",
+        "fix": "Start the paste from onClick instead of onFocus.",
+        "evidence": "void pasteClipboardOnFirstClick(index, key)",
+        "status": "resolved",
+        "resolvedIn": "32b53099b094720fa2c5a72ca5f615d668ef568d",
+        "resolvedAt": "2026-11-13T12:11:30Z",
+        "resolvedNote": "integration-group-form.tsx:219 keeps only the select-all in onFocus and line 220 starts the paste from onClick.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "c94a61ef78f2f77342abfad51c8e0d890a97bb44",
+        "findingId": "F1",
+        "title": "Clipboard read on open and every tab focus",
+        "result": "resolved",
+        "note": "Verified: use-clipboard-text.ts has no effect or focus listener; the clipboard is read only in pasteClipboardOnFirstClick (integration-group-form.tsx:162)."
+      },
+      {
+        "commit": "c94a61ef78f2f77342abfad51c8e0d890a97bb44",
+        "findingId": "F2",
+        "title": "Paste fires on any focus, not only a click",
+        "result": "resolved",
+        "note": "Verified: the paste starts at integration-group-form.tsx:220 (onClick), not in onFocus."
+      },
+      {
+        "commit": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "findingId": "F1",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "Still present at integration-group-form.tsx:154."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F7",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "Same issue, still present at integration-group-form.tsx:154."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F1",
+        "title": "Autofill may drop login password into keys",
+        "result": "resolved",
+        "note": "Verified: no autoComplete prop in integration-group-form.tsx."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F2",
+        "title": "Typed keys stay in memory after save",
+        "result": "resolved",
+        "note": "Verified: hooks.ts:64 has gcTime: 0."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F3",
+        "title": "Page list refetched twice per save",
+        "result": "resolved",
+        "note": "Verified: hooks.ts:79 invalidates only the saved-keys queries."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F4",
+        "title": "Unrequested global pagination spacing change",
+        "result": "resolved",
+        "note": "Verified: data-table-pagination.tsx:28 has no mt-2."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F5",
+        "title": "Credentials fetched while fields hidden",
+        "result": "resolved",
+        "note": "Verified: integration-group-form.tsx:128 passes isEnabled ? apiGroupId : null."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F6",
+        "title": "Comments against the AGENTS.md rule",
+        "result": "resolved",
+        "note": "Verified: the form keeps only comments that explain a business reason."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F1",
+        "title": "Page restyle changed shared Badge and TableRow for the whole app",
+        "result": "uncertain",
+        "note": "Marked resolved by hand; the change is still in place because you said it is intended, so nothing was changed."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F2",
+        "title": "Comments against the AGENTS.md rule",
+        "result": "resolved",
+        "note": "Verified: page.tsx has no comment lines."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F3",
+        "title": "Edit button shown without the edit right",
+        "result": "resolved",
+        "note": "Verified: page.tsx:108 adds the Actions column only when canEdit is true."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F4",
+        "title": "Empty Actions column without edit right",
+        "result": "resolved",
+        "note": "Verified: page.tsx:108 adds the column only when canEdit is true."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed (current code)"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint integration-group-form.tsx use-clipboard-text.ts",
+        "result": "passed: no errors or warnings (current code)"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "gaps": [
+      "The working tree has moved on (later commit 32b53099b094720fa2c5a72ca5f615d668ef568d changed the form), so the score and verdict describe the current code; commitScore keeps the score as committed.",
+      "No browser test: the first-click paste, the Chrome permission prompt and the saved-key skip were read from the code, not tried.",
+      "Clipboard reading differs by browser (Chrome asks once, Firefox does not allow it); only the code path was checked."
+    ],
+    "info": [
+      "A field is marked as used before the clipboard is read, so a click made before copying the key uses up that field's one paste, as the request specified.",
+      "One earlier finding is still open: unreadable keys are recognised by the backend's message text (integration-group-form.tsx:154).",
+      "Pasted text is trimmed at both ends, and anything on the clipboard is accepted; nothing is saved until the user presses Save Changes.",
+      "If the keys were switched while the clipboard permission prompt was open, the paste could land in another field; this is unlikely and not reproduced."
+    ]
+  },
+  {
+    "id": "howismycommit-49",
+    "generatedAt": "2026-11-13T16:57:46+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "c94a61ef78f2f77342abfad51c8e0d890a97bb44"
+    },
+    "files": {
+      "changed": 2,
+      "added": 1,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 70,
+      "deletions": 17
+    },
+    "changeType": [
+      "feature",
+      "ui"
+    ],
+    "verdict": "review-with-caution",
+    "score": 91,
+    "commitScore": 87,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 1,
+      "green": 3,
+      "info": 4
+    },
+    "before": "The API key fields in the External APIs modal could only be typed into.",
+    "after": "As committed, each key field showed a Paste button at the top right whenever the clipboard held text, and clicking it filled the field. In the current code (a later commit) the button is gone and the field fills itself from the clipboard on the first click into an empty field.",
+    "effects": [
+      "The modal now reads the clipboard through navigator.clipboard.readText, which makes Chrome ask for permission and does not work in Firefox.",
+      "A new shared hook file, src/hooks/use-clipboard-text.ts, is added; only the External APIs form uses it.",
+      "Only the External APIs modal is affected; no other screen changed."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F2"
+      },
+      {
+        "path": "src/hooks/use-clipboard-text.ts",
+        "change": "added",
+        "status": "green",
+        "note": "F1 resolved"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Clipboard read on open and every tab focus",
+        "location": "src/hooks/use-clipboard-text.ts:21",
+        "problem": "To decide whether to show the Paste button, the hook read the clipboard as soon as the key fields appeared and again every time the browser tab regained focus.",
+        "impact": "Chrome showed its clipboard permission prompt before the user did anything, and whatever the user had copied (including unrelated passwords) was read silently on each tab switch just to check it was not empty.",
+        "fix": "Read the clipboard only after a user action, such as clicking the field.",
+        "evidence": "window.addEventListener(\"focus\", refresh)",
+        "status": "resolved",
+        "resolvedIn": "d616233a634560a7bb7925abf4f3926d16c326a6",
+        "resolvedAt": "2026-11-13T11:27:46Z",
+        "resolvedNote": "src/hooks/use-clipboard-text.ts no longer has an effect or focus listener; the form reads the clipboard only inside pasteClipboardOnFirstClick (integration-group-form.tsx:162).",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F2",
+        "severity": "P3",
+        "title": "Paste fires on any focus, not only a click",
+        "location": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:221",
+        "problem": "A later change in this file starts the paste from the input's onFocus handler, which also runs when the field gets focus from the Tab key, not only from a mouse click.",
+        "impact": "A keyboard user tabbing from Active API into the first empty key field gets whatever is on the clipboard filled in without clicking, and that field is then marked as used, so it will not paste again on a real click.",
+        "fix": "Start the paste from onClick or onPointerDown on the input instead of onFocus.",
+        "evidence": "void pasteClipboardOnFirstClick(index, key)",
+        "status": "resolved",
+        "resolvedIn": null,
+        "resolvedAt": "2026-11-13T12:09:54.791Z",
+        "resolvedNote": "Marked resolved manually",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "findingId": "F1",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "Still present at integration-group-form.tsx:154."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F7",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "Same issue, still present at integration-group-form.tsx:154."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F1",
+        "title": "Autofill may drop login password into keys",
+        "result": "resolved",
+        "note": "Verified: no autoComplete prop in integration-group-form.tsx."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F2",
+        "title": "Typed keys stay in memory after save",
+        "result": "resolved",
+        "note": "Verified: hooks.ts:64 has gcTime: 0."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F3",
+        "title": "Page list refetched twice per save",
+        "result": "resolved",
+        "note": "Verified: hooks.ts:79 invalidates only the saved-keys queries."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F4",
+        "title": "Unrequested global pagination spacing change",
+        "result": "resolved",
+        "note": "Verified: data-table-pagination.tsx:28 has no mt-2."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F5",
+        "title": "Credentials fetched while fields hidden",
+        "result": "resolved",
+        "note": "Verified: integration-group-form.tsx:128 passes isEnabled ? apiGroupId : null."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F6",
+        "title": "Comments against the AGENTS.md rule",
+        "result": "resolved",
+        "note": "Verified: the form keeps only comments that explain a business reason."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F1",
+        "title": "Page restyle changed shared Badge and TableRow for the whole app",
+        "result": "uncertain",
+        "note": "Marked resolved by hand; the change is still in place because you said it is intended, so nothing was changed."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F2",
+        "title": "Comments against the AGENTS.md rule",
+        "result": "resolved",
+        "note": "Verified: page.tsx has no comment lines."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F3",
+        "title": "Edit button shown without the edit right",
+        "result": "resolved",
+        "note": "Verified: page.tsx:108 adds the Actions column only when canEdit is true."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F4",
+        "title": "Empty Actions column without edit right",
+        "result": "resolved",
+        "note": "Verified: page.tsx:108 adds the column only when canEdit is true."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed (current code)"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint integration-group-form.tsx use-clipboard-text.ts",
+        "result": "passed: no errors or warnings (current code)"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "gaps": [
+      "The working tree has moved on (later commit d616233a634560a7bb7925abf4f3926d16c326a6 changed both files), so the score and verdict describe the current code; commitScore keeps the score as committed.",
+      "No browser test: the clipboard permission prompt, the Paste button and the paste-on-click behaviour were read from the code, not tried.",
+      "Clipboard reading differs by browser (Chrome asks once, Firefox does not allow it), and only the code path was checked."
+    ],
+    "info": [
+      "The paste-on-click rule marks a field as used before it reads the clipboard, so a click made before copying the key uses up that field's one chance.",
+      "One earlier finding is still open: unreadable keys are recognised by the backend's message text (integration-group-form.tsx:154).",
+      "Pasted text is trimmed at both ends, so a trailing line break from a copied key does not reach the backend.",
+      "Anything on the clipboard is accepted, including text that is not a key; the field is masked and nothing is saved until the user presses Save Changes."
+    ]
+  },
+  {
+    "id": "howismycommit-48",
+    "generatedAt": "2026-11-13T16:53:56+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "82a49cb765c4c2d512aa14070c5fbcbb459f4870"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 58,
+      "deletions": 63
+    },
+    "changeType": [
+      "refactor",
+      "ui"
+    ],
+    "verdict": "looks-good",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 3,
+      "info": 3
+    },
+    "before": "The External APIs table always had an Actions column; for users without the edit right its cells were empty. The page also carried four explanatory comments.",
+    "after": "The Actions column is built only when the user has the page's edit right, so view-only users see no empty column. The four comments are removed.",
+    "effects": [
+      "View-only users see five columns; users with the edit right see six, including the edit button.",
+      "The table-body click handler is still attached for view-only users, but without the Actions column no cell carries the tag it looks for, so it never opens the modal.",
+      "Only page.tsx changed; nothing else imports from it."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/page.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "findingId": "F1",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "Still present at src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:154."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F7",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "Same issue as above, still present at integration-group-form.tsx:154."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F1",
+        "title": "Autofill may drop login password into keys",
+        "result": "resolved",
+        "note": "Verified: no autoComplete prop remains in integration-group-form.tsx."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F2",
+        "title": "Typed keys stay in memory after save",
+        "result": "resolved",
+        "note": "Verified: hooks.ts:64 has gcTime: 0 on the keys mutation."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F3",
+        "title": "Page list refetched twice per save",
+        "result": "resolved",
+        "note": "Verified: hooks.ts:79 invalidates only the saved-keys queries."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F4",
+        "title": "Unrequested global pagination spacing change",
+        "result": "resolved",
+        "note": "Verified: data-table-pagination.tsx:28 has no mt-2."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F5",
+        "title": "Credentials fetched while fields hidden",
+        "result": "resolved",
+        "note": "Verified: integration-group-form.tsx:126 passes isEnabled ? apiGroupId : null."
+      },
+      {
+        "commit": "6b160d560971a47f5d2248e7878722196d8137eb",
+        "findingId": "F6",
+        "title": "Comments against the AGENTS.md rule",
+        "result": "resolved",
+        "note": "Verified: the form keeps only comments that explain a business reason."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F1",
+        "title": "Page restyle changed shared Badge and TableRow for the whole app",
+        "result": "uncertain",
+        "note": "Marked resolved by hand; the change is still in place (badge.tsx:9 is rounded-md, table.tsx has no focus outline) because you said in chat it is intended, so nothing was changed."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F2",
+        "title": "Comments against the AGENTS.md rule",
+        "result": "resolved",
+        "note": "Verified: page.tsx has no comment lines left."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F3",
+        "title": "Edit button shown without the edit right",
+        "result": "resolved",
+        "note": "Verified: page.tsx:108 adds the Actions column only when canEdit is true."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F4",
+        "title": "Empty Actions column without edit right",
+        "result": "resolved",
+        "note": "Verified: page.tsx:108 adds the column only when canEdit is true, so none is left empty."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed (current code, which still matches the commit for this file)"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint page.tsx",
+        "result": "passed: no errors or warnings"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "gaps": [
+      "No browser test: the view-only case (five columns) and the editor case (six columns with a working edit button) were read from the code, not tried.",
+      "The checkout is now at d616233a; this commit's file has no changes since, so the checks ran on the same code.",
+      "I checked that rights are loaded before the page renders (PermissionGuard uses the same rights query), so the Actions column should not pop in late, but I did not watch it load."
+    ],
+    "info": [
+      "One earlier finding is still open: the form recognises unreadable saved keys by the backend's message text (integration-group-form.tsx:154).",
+      "The earlier shared Badge and table-row styling change was kept on purpose.",
+      "The click handler on the table body does nothing for view-only users, since no cell has the edit tag."
+    ]
+  },
+  {
+    "id": "howismycommit-47",
+    "generatedAt": "2026-11-13T14:51:57+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "687f0683b496f5b86359bb799905c4cf6d706cf7"
+    },
+    "files": {
+      "changed": 4,
+      "added": 0,
+      "modified": 4,
+      "deleted": 0,
+      "insertions": 70,
+      "deletions": 33
+    },
+    "changeType": [
+      "bug fix",
+      "UI",
+      "security"
+    ],
+    "verdict": "review-with-caution",
+    "score": 91,
+    "commitScore": 91,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 1,
+      "green": 2,
+      "info": 3
+    },
+    "before": "The API key modal always fetched saved keys, set autoComplete off on the key inputs, showed a read error under the fields, and required keys only for providers with nothing saved. The page showed the edit button to every viewer, and every save invalidated the whole page list.",
+    "after": "Keys are fetched only while the integration is on, and key fields are required whenever it is on. A saved row that cannot be read keeps the form usable, while other load errors show a Retry box and disable Save. The edit button needs the edit right and has a name, the key save drops its variables from the cache, and the pagination margin added earlier is gone.",
+    "effects": [
+      "Switching an integration off now skips the key request and the key validation",
+      "A failed key load (403, 404, 500 other than the unreadable-row message) blocks Save until Retry works or the integration is switched off",
+      "Only the credentials queries are refreshed after the key save; the final selection save still refreshes the page list",
+      "Users without the edit right no longer see the edit button, and the Actions column stays empty for them"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/page.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues in this commit"
+      },
+      {
+        "path": "src/features/configurations/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/components/data-table/data-table-pagination.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Unreadable keys detected by message text",
+        "location": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:152",
+        "problem": "The form decides the saved keys are unreadable by comparing the error message to a fixed sentence. If the backend wording changes, the error looks like any other load failure.",
+        "impact": "The Retry box shows and Save is disabled, so the user cannot enter new keys to replace the broken row. The only way out is to switch the integration off.",
+        "fix": "Match on a status or error code from the backend instead of the sentence, or have the backend send a stable code.",
+        "evidence": "credentialsQuery.isError && credentialsQuery.error.message === UNREADABLE_SAVED_KEYS_MESSAGE",
+        "status": "resolved",
+        "resolvedIn": "f17bc85dc5248b877ce13b335fdfb995a4257323",
+        "resolvedAt": "2026-11-23T05:06:35.474Z",
+        "resolvedNote": "Resolved: the form checks errorCode CREDENTIALS_UNREADABLE first (src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:55\n57), and the backend now sends that code with 422 (external-apis.service.ts:475), so rewording the message no longer breaks it.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null,
+        "future": true
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "6b160d56",
+        "findingId": "F1",
+        "title": "Autofill may drop login password into keys",
+        "result": "resolved",
+        "note": "No autoComplete prop remains in integration-group-form.tsx, and src/components/form/form-password-input.tsx:32 sets autoComplete new-password."
+      },
+      {
+        "commit": "6b160d56",
+        "findingId": "F2",
+        "title": "Typed keys stay in memory after save",
+        "result": "resolved",
+        "note": "src/features/configurations/external-apis/hooks.ts:64 sets gcTime: 0."
+      },
+      {
+        "commit": "6b160d56",
+        "findingId": "F3",
+        "title": "Page list refetched twice per save",
+        "result": "resolved",
+        "note": "src/features/configurations/external-apis/hooks.ts:79 invalidates only the credentials queries."
+      },
+      {
+        "commit": "6b160d56",
+        "findingId": "F4",
+        "title": "Unrequested global pagination spacing change",
+        "result": "resolved",
+        "note": "src/components/data-table/data-table-pagination.tsx:28 no longer has mt-2."
+      },
+      {
+        "commit": "6b160d56",
+        "findingId": "F5",
+        "title": "Credentials fetched while fields hidden",
+        "result": "resolved",
+        "note": "integration-group-form.tsx:126 passes the group id only when the integration is on."
+      },
+      {
+        "commit": "6b160d56",
+        "findingId": "F6",
+        "title": "Comments against the AGENTS.md rule",
+        "result": "resolved",
+        "note": "The old describing comments are gone from integration-group-form.tsx."
+      },
+      {
+        "commit": "6b160d56",
+        "findingId": "F7",
+        "title": "Unreadable keys detected by message text",
+        "result": "open",
+        "note": "integration-group-form.tsx:152 still compares the error message to a fixed sentence (now F1 here)."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F1",
+        "title": "Page restyle changed shared Badge and TableRow for the whole app",
+        "result": "open",
+        "note": "src/components/ui/badge.tsx:9 still has rounded-md and the TableRow focus classes are still removed."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F2",
+        "title": "Comments against the AGENTS.md rule",
+        "result": "open",
+        "note": "page.tsx:49 and three more describing comments are still there."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F3",
+        "title": "Edit button shown without the edit right",
+        "result": "resolved",
+        "note": "page.tsx:100 shows the button only with canEdit and adds an aria-label."
+      },
+      {
+        "commit": "c18c79f7696856db2d1882717b51c48b94511101",
+        "findingId": "F4",
+        "title": "Empty Actions column without edit right",
+        "result": "open",
+        "note": "page.tsx:100 still renders null in an always-present Actions column."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit (FINNAUX2.0-UI)",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx eslint external-apis page, hooks, form and pagination",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "No test command is configured in the UI repo, so the form and page behaviour was read, not run.",
+      "The modal was not opened in a browser; the unreadable-keys path was traced from the backend message, not triggered.",
+      "This commit is in the FINNAUX2.0-UI repo; the report is saved under the frontend repo."
+    ],
+    "info": [
+      "This commit is the fix commit for six findings from the review of 6b160d56 (F1 to F6); all six are verified fixed in the current tree.",
+      "A provider whose endpoints list no keys gets a single required apiKey field; no active endpoint in the local database is in that state.",
+      "The working tree matches this commit, so the current score equals the commit score."
+    ]
+  },
+  {
+    "id": "howismycommit-46",
+    "generatedAt": "2026-11-13T14:49:59+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "c18c79f7696856db2d1882717b51c48b94511101"
+    },
+    "files": {
+      "changed": 3,
+      "added": 0,
+      "modified": 3,
+      "deleted": 0,
+      "insertions": 101,
+      "deletions": 70
+    },
+    "changeType": [
+      "feature",
+      "UI"
+    ],
+    "verdict": "review-with-caution",
+    "score": 83,
+    "commitScore": 79,
+    "quality": "good",
+    "summary": {
+      "red": 0,
+      "amber": 3,
+      "green": 2,
+      "info": 3
+    },
+    "before": "The External APIs page showed integrations as a grid of cards, each with its own edit button and its own Edit Integration dialog.",
+    "after": "The page shows integrations in a data table with pagination and one shared Edit Integration dialog. A click on the Actions cell is caught on the table body and opens the dialog for that row. The shared Badge became rounded-md and TableRow lost its focus outline classes.",
+    "effects": [
+      "Every Badge in the app (211 files use it) changes from pill to rounded-md",
+      "Every table using TableRow loses its focus outline styling",
+      "Edit opens only from the Actions cell, through a data attribute lookup on the table body",
+      "Enabled and Disabled tabs both render the same table component"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/page.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F2, F3, F4"
+      },
+      {
+        "path": "src/components/ui/badge.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/components/ui/table.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F1"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Page restyle changed shared Badge and TableRow for the whole app",
+        "location": "src/components/ui/badge.tsx:9",
+        "problem": "To restyle one page, the commit changed rounded-full to rounded-md in the shared Badge and removed focus:outline-primary and last:first:focus:!outline-none from the shared TableRow.",
+        "impact": "All Badge pills across the app turn square-cornered, and every table row loses its focus outline, a keyboard and click focus indicator.",
+        "fix": "Revert both shared components and pass className overrides from the External APIs page, or agree the app-wide change separately.",
+        "evidence": "\"inline-flex items-center justify-center rounded-md px-2.5 py-0.5 text-xs font-semibold",
+        "status": "resolved",
+        "resolvedIn": null,
+        "resolvedAt": "2026-11-13T10:05:06.117Z",
+        "resolvedNote": "Marked resolved manually",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null,
+        "future": false
+      },
+      {
+        "id": "F2",
+        "severity": "P3",
+        "title": "Comments against the AGENTS.md rule",
+        "location": "src/app/(app)/(main)/configuration/external-apis/page.tsx:49",
+        "problem": "Four comments describe how the code works, not a business reason. AGENTS.md says not to add comments unless they explain a non-obvious business reason.",
+        "impact": "Noise that drifts from the code; breaks the repo's stated rule.",
+        "fix": "Delete the four comments.",
+        "evidence": "// Remembers which integration the user is editing; null means the modal stays closed.",
+        "status": "resolved",
+        "resolvedIn": null,
+        "resolvedAt": "2026-11-13T10:05:07.512Z",
+        "resolvedNote": "Marked resolved manually",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F3",
+        "severity": "P3",
+        "title": "Edit button shown without the edit right",
+        "location": "src/app/(app)/(main)/configuration/external-apis/page.tsx:100",
+        "problem": "At commit time every user who could view the page saw the edit button, and the icon-only button had no accessible name. The backend now needs canEdit to save, so a view-only user would open the dialog and get a 403 on save.",
+        "impact": "View-only users get a dialog they cannot use; screen readers read an unnamed button.",
+        "fix": "Show the button only with canEdit and add an aria-label.",
+        "evidence": "<Button size=\"sm\" variant=\"ghost\" isIcon data-edit-group-id={row.original.id}>",
+        "status": "resolved",
+        "resolvedIn": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "resolvedAt": "2026-11-13T00:00:00.000Z",
+        "resolvedNote": "page.tsx:100 shows the button only when canEdit is true and page.tsx:106 adds an aria-label.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F4",
+        "severity": "P3",
+        "title": "Empty Actions column without edit right",
+        "location": "src/app/(app)/(main)/configuration/external-apis/page.tsx:100",
+        "problem": "The Actions column is always added. When the user has no edit right, the cell renders null, so a column with a header and no content stays in the table. This came from the later gating change.",
+        "impact": "A view-only user sees an empty Actions column.",
+        "fix": "Build the columns array without the Actions column when canEdit is false.",
+        "evidence": "canEdit ? (\n              <Button",
+        "status": "resolved",
+        "resolvedIn": null,
+        "resolvedAt": "2026-11-13T10:05:09.943Z",
+        "resolvedNote": "Marked resolved manually",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "67aee43b03f4032b2efbd822756123d791a5e7b7",
+        "findingId": "F1",
+        "title": "Explicit null field overrides fallback",
+        "result": "resolved",
+        "note": "src/lib/placeholder-data.ts:13 filters out null values before merging."
+      },
+      {
+        "commit": "67aee43b03f4032b2efbd822756123d791a5e7b7",
+        "findingId": "F2",
+        "title": "Money fallback computed with floats",
+        "result": "resolved",
+        "note": "src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/risk-analysis.tab.tsx:104 now uses PLACEHOLDER_TEXT instead of a computed amount."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit (FINNAUX2.0-UI)",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx eslint page.tsx badge.tsx table.tsx",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "No test command is configured in the UI repo, so the new table and dialog behaviour was not run.",
+      "The page was not opened in a browser; the click handling on the table body was read, not exercised.",
+      "This commit is in the FINNAUX2.0-UI repo; the report is saved under the frontend repo."
+    ],
+    "info": [
+      "Edit opens from any click inside the Actions cell, found by a data attribute on the table body, not by a handler on the button.",
+      "Search ignores apiGroups and the empty list shows NoDataView.",
+      "The working tree has moved on: commits 6b160d56 and 687f0683 follow this one and were reviewed separately."
+    ]
+  },
+  {
+    "id": "howismycommit-45",
+    "generatedAt": "2026-11-13T14:46:40+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "6b160d560971a47f5d2248e7878722196d8137eb"
+    },
+    "files": {
+      "changed": 4,
+      "added": 0,
+      "modified": 4,
+      "deleted": 0,
+      "insertions": 199,
+      "deletions": 17
+    },
+    "changeType": [
+      "feature",
+      "ui",
+      "api"
+    ],
+    "verdict": "review-with-caution",
+    "score": 91,
+    "commitScore": 61,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 1,
+      "green": 3,
+      "info": 3
+    },
+    "before": "The Edit Integration modal only saved the enabled switch and the Active API; there was no way to see or save API keys.",
+    "after": "The modal shows one password field per key, filled with the masked saved value, saves only the keys the user typed (keys first, then the selection), and has hooks and types for reading and saving credentials. This commit also let the saved keys load for switched-off integrations and kept typed keys in the mutation cache.",
+    "effects": [
+      "External APIs modal now calls GET and PUT .../api-groups/:apiGroupId/credentials.",
+      "Every table's pagination gets an extra mt-2 gap.",
+      "Saving keys refreshes the whole page list, and the selection save refreshes it again."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F7"
+      },
+      {
+        "path": "src/features/configurations/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no open issues"
+      },
+      {
+        "path": "src/features/configurations/external-apis/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/components/data-table/data-table-pagination.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no open issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P2",
+        "title": "Autofill may drop login password into keys",
+        "location": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:203",
+        "problem": "The key inputs set autoComplete off, which replaces the new-password value the password input sets for itself, so browsers can autofill the saved login password into an API key field.",
+        "impact": "A user could save their own login password as an API key without noticing.",
+        "fix": "Remove the autoComplete prop so the input keeps new-password.",
+        "evidence": "autoComplete=\"off\"",
+        "status": "resolved",
+        "resolvedIn": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "resolvedAt": "2026-11-13T09:16:40Z",
+        "resolvedNote": "No autoComplete prop remains in integration-group-form.tsx; the key fields use the default new-password.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F2",
+        "severity": "P3",
+        "title": "Typed keys stay in memory after save",
+        "location": "src/features/configurations/external-apis/hooks.ts:60",
+        "problem": "The save-keys mutation keeps its variables, including the plain-text keys, in the mutation cache for the default 5 minutes.",
+        "impact": "Plain-text keys stay inspectable in memory (for example in devtools) after the modal closes.",
+        "fix": "Set gcTime to 0 on the mutation.",
+        "evidence": "return useMutation({\n    mutationFn: async ({\n      apiGroupId,",
+        "status": "resolved",
+        "resolvedIn": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "resolvedAt": "2026-11-13T09:16:40Z",
+        "resolvedNote": "hooks.ts:64 sets gcTime: 0 on useUpsertApiGroupCredentials.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F3",
+        "severity": "P3",
+        "title": "Page list refetched twice per save",
+        "location": "src/features/configurations/external-apis/hooks.ts:78",
+        "problem": "Both the keys save and the selection save invalidate the whole external-apis list.",
+        "impact": "Two list requests per save for no extra information.",
+        "fix": "Invalidate only the saved-keys data after the keys save.",
+        "evidence": "queryClient.invalidateQueries({ queryKey: EXTERNAL_APIS_KEY })",
+        "status": "resolved",
+        "resolvedIn": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "resolvedAt": "2026-11-13T09:16:40Z",
+        "resolvedNote": "hooks.ts:79 now invalidates only the api-group-credentials queries after the keys save.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F4",
+        "severity": "P3",
+        "title": "Unrequested global pagination spacing change",
+        "location": "src/components/data-table/data-table-pagination.tsx:28",
+        "problem": "An mt-2 was added to the shared pagination, changing the spacing of every table in the app.",
+        "impact": "Unplanned visual shift on all tables.",
+        "fix": "Remove the mt-2.",
+        "evidence": "<div className=\"mt-2 flex w-full flex-shrink-0 items-center justify-end\">",
+        "status": "resolved",
+        "resolvedIn": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "resolvedAt": "2026-11-13T09:16:40Z",
+        "resolvedNote": "data-table-pagination.tsx:28 no longer has mt-2.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F5",
+        "severity": "P3",
+        "title": "Credentials fetched while fields hidden",
+        "location": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:125",
+        "problem": "The saved-keys request ran as soon as a provider was selected, even when the integration was switched off.",
+        "impact": "A wasted request on every open of a disabled integration, and a visible 403 for users without rights.",
+        "fix": "Pass the API group id only when the integration is on.",
+        "evidence": "const credentialsQuery = useApiGroupCredentials(apiGroupId ?? null)",
+        "status": "resolved",
+        "resolvedIn": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "resolvedAt": "2026-11-13T09:16:40Z",
+        "resolvedNote": "integration-group-form.tsx:126 passes isEnabled ? apiGroupId : null.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F6",
+        "severity": "P3",
+        "title": "Comments against the AGENTS.md rule",
+        "location": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:40",
+        "problem": "Many comments only described what the code does, but AGENTS.md allows comments only for a non-obvious business reason.",
+        "impact": "Noise that drifts out of date.",
+        "fix": "Keep only comments that explain a business reason.",
+        "evidence": "// Refill the key inputs whenever the user picks another provider or its saved keys arrive.",
+        "status": "resolved",
+        "resolvedIn": "687f0683b496f5b86359bb799905c4cf6d706cf7",
+        "resolvedAt": "2026-11-13T09:16:40Z",
+        "resolvedNote": "integration-group-form.tsx now keeps only comments on the unreadable-keys message, the changed-keys rule and the save order.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F7",
+        "severity": "P3",
+        "title": "Unreadable keys detected by message text",
+        "location": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:152",
+        "problem": "A later change in this file decides the saved keys are unreadable by comparing the error message to a fixed sentence.",
+        "impact": "If the backend rewords that message, a user with broken saved keys sees the blocking Retry box and cannot save new keys.",
+        "fix": "Match on a status or error code from the backend instead of the sentence, or have the backend send a stable code.",
+        "evidence": "credentialsQuery.isError && credentialsQuery.error.message === UNREADABLE_SAVED_KEYS_MESSAGE",
+        "status": "resolved",
+        "resolvedIn": "f17bc85dc5248b877ce13b335fdfb995a4257323",
+        "resolvedAt": "2026-11-23T05:06:35.474Z",
+        "resolvedNote": "Resolved: the form checks errorCode CREDENTIALS_UNREADABLE first (src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx:55\n57), and the backend now sends that code with 422 (external-apis.service.ts:475), so rewording the message no longer breaks it.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null,
+        "future": true
+      }
+    ],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed (current code)"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <the 4 files of the commit>",
+        "result": "passed: no errors or warnings (current code)"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "gaps": [
+      "The working tree has moved on since this commit (later commit 687f0683b496f5b86359bb799905c4cf6d706cf7 changed 3 of its files), so the score and verdict describe the current code; commitScore keeps the score as committed.",
+      "The 7 findings were found by reading the diff and the current files, not by running the page; no browser or backend test was done.",
+      "The earlier reports of the 5 commits before this one had no findings left open on these files, so nothing was carried over."
+    ],
+    "info": [
+      "Six of the seven findings are fixed in the current code; only F7 is open, and it comes from a later change in the same file.",
+      "The query key text api-group-credentials is written in two places in hooks.ts.",
+      "The commit's behaviour matches the backend contract for reading and saving keys."
+    ]
+  },
+  {
+    "id": "howismycommit-44",
+    "generatedAt": "2026-11-13T14:42:10+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "a79d9545e7eff3a7dc007946c77fbd1b38eca06a"
+    },
+    "files": {
+      "changed": 4,
+      "added": 0,
+      "modified": 4,
+      "deleted": 0,
+      "insertions": 70,
+      "deletions": 33
+    },
+    "changeType": [
+      "feature",
+      "bug fix",
+      "ui"
+    ],
+    "verdict": "review-with-caution",
+    "score": 91,
+    "commitScore": 91,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 1,
+      "green": 3,
+      "info": 3
+    },
+    "before": "The External APIs modal fetched saved keys even for switched-off integrations, kept typed keys in the mutation cache, refetched the page list twice per save, let browsers autofill into the key fields, and showed the edit button to everyone.",
+    "after": "The modal fetches saved keys only when the integration is on, blocks Save with a Retry box when loading them fails (but stays usable when saved keys are unreadable), and no longer overrides the password input's autofill setting. The edit button has a label and shows only with the page's edit right, keys are not kept after saving, and saving keys refreshes only the saved-keys data.",
+    "effects": [
+      "External APIs page: the Actions column is empty for users without the edit right, and they cannot open the modal.",
+      "Every table's pagination loses the mt-2 gap, which restores what dev had before this branch.",
+      "Backend is unchanged: the integration-group PUT route still has no page-rights check, so hiding the button is UI only.",
+      "This commit was later amended: the same tree is now be035c72 on feat/external-apis with a new message; a79d9545 is no longer on any branch."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/page.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/app/(app)/(main)/configuration/external-apis/_components/integration-group-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/configurations/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/components/data-table/data-table-pagination.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Empty Actions column without edit right",
+        "location": "src/app/(app)/(main)/configuration/external-apis/page.tsx:95",
+        "problem": "When the user lacks the edit right, the edit button is not rendered but the Actions column and its header stay, so every row shows an empty cell.",
+        "impact": "View-only users see a column titled Actions that does nothing, which looks broken.",
+        "fix": "Add the Actions column to the columns array only when canEdit is true.",
+        "evidence": "cell: ({ row }) =>\n            canEdit ? (",
+        "status": "resolved",
+        "resolvedIn": null,
+        "resolvedAt": "2026-11-13T10:05:19.900Z",
+        "resolvedNote": "Marked resolved manually",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <4 files of the commit>",
+        "result": "passed: no errors or warnings"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "gaps": [
+      "The checkout now holds the amended commit be035c72, which has the same tree as a79d9545 (git diff shows no change), so the checks ran on identical code.",
+      "No page was opened in a browser, so the modal, the Retry box and the hidden edit button were not tried.",
+      "Nothing was tested against the live backend routes."
+    ],
+    "info": [
+      "Hiding the edit button is not access control: the integration-group PUT route needs only a login, per the backend contract.",
+      "The query key string api-group-credentials is written in two places in hooks.ts; a rename in one would stop the invalidation.",
+      "The unreadable-keys case is recognised by matching the backend's message text, so rewording it would block Save."
+    ]
+  },
+  {
+    "id": "howismycommit-43",
+    "generatedAt": "2026-11-12T18:27:13+05:30",
+    "author": "Dhruv",
+    "branch": "feat/dashboard",
+    "target": {
+      "kind": "commit",
+      "commit": "804625ce2d7a2d372fd72ea313e6c79e97290bcc"
+    },
+    "files": {
+      "changed": 4,
+      "added": 0,
+      "modified": 4,
+      "deleted": 0,
+      "insertions": 12,
+      "deletions": 10
+    },
+    "changeType": [
+      "bug fix",
+      "refactor"
+    ],
+    "verdict": "looks-good",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 3,
+      "info": 3
+    },
+    "before": "The Collections and Sales Advanced hooks mixed the API answer over the placeholder data, so a field sent as null erased its placeholder. The Sales Risk tab worked out the average loan amount in the browser when the backend text was missing.",
+    "after": "One shared withFallback helper drops null fields before mixing, so placeholders survive them, and both hook files use it. The average loan amount card shows only the backend text, or ABC when it is missing.",
+    "effects": [
+      "All 8 Collections hooks and the Sales Advanced hook now ignore null fields from the backend.",
+      "Sales Risk tab: Avg Loan Amount shows ABC whenever avgLoanAmountDisplay is not sent; the local API checkout sends it (nbfc-dashboard.service.ts:3547), the deployed backend was not checked.",
+      "src/lib/placeholder-data.ts gains one exported helper; nothing outside the dashboard uses it."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/lib/placeholder-data.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/collections-dashboard/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/nbfc-dashboard/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/risk-analysis.tab.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "67aee43b03f4032b2efbd822756123d791a5e7b7",
+        "findingId": "F1",
+        "title": "Explicit null field overrides fallback",
+        "result": "resolved",
+        "note": "src/lib/placeholder-data.ts:11 now drops null fields before spreading, used by both hooks files."
+      },
+      {
+        "commit": "67aee43b03f4032b2efbd822756123d791a5e7b7",
+        "findingId": "F2",
+        "title": "Money fallback computed with floats",
+        "result": "resolved",
+        "note": "risk-analysis.tab.tsx:104 shows avgLoanAmountDisplay ?? PLACEHOLDER_TEXT with no float maths."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <4 changed files>",
+        "result": "passed: no errors or warnings"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "gaps": [
+      "Nothing was tried against a live backend and no page was opened in a browser.",
+      "Whether the deployed backend already sends avgLoanAmountDisplay was not verified; only the local API checkout was read."
+    ],
+    "info": [
+      "withFallback only checks the top level: a null or missing field inside an object (for example one of the insights numbers) or inside a list item is not replaced.",
+      "An answer that is a plain array or non-object would be spread by index; the types say it is an object, so this is theoretical.",
+      "The commit has no tests and the project has no test script."
+    ]
+  },
+  {
+    "id": "howismycommit-42",
+    "generatedAt": "2026-11-12T15:02:26+05:30",
+    "author": "Dhruv",
+    "branch": "feat/dashboard",
+    "target": {
+      "kind": "commit",
+      "commit": "e921ffc6517a9a2eb8e98a7a1382204518db747f"
+    },
+    "files": {
+      "changed": 40,
+      "added": 0,
+      "modified": 0,
+      "deleted": 0,
+      "insertions": 2230,
+      "deletions": 69
+    },
+    "changeType": [
+      "feature",
+      "refactor",
+      "config"
+    ],
+    "verdict": "looks-good",
+    "score": 95,
+    "commitScore": 95,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 3,
+      "info": 3
+    },
+    "before": "feat/dashboard had the dashboard work from commit 67aee43b but was behind the dev branch (merged to main as e1040a41).",
+    "after": "feat/dashboard now also holds everything from dev (two-factor login, audit logs, CRM management, company logo, locations paging, and more) merged with no conflicts; the dashboard files are unchanged by the merge.",
+    "effects": [
+      "The merge result equals dev plus the dashboard commit only: a diff against e1040a41 touches 25 dashboard and placeholder files and nothing else, so no dev code was altered or dropped.",
+      "package.json and package-lock.json now carry the dependencies that dev added.",
+      "Login page, navbar, settings panel, configuration pages, CRM, customers and the data-table hooks come from dev and were not reviewed line by line here."
+    ],
+    "filesReviewed": [
+      {
+        "path": "merge result vs dev (25 dashboard and placeholder files)",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues; already covered by howismycommit-41"
+      },
+      {
+        "path": "files that came from dev (about 40 files, 2230 insertions)",
+        "change": "added",
+        "status": "green",
+        "note": "no issues found in merge mechanics; contents not reviewed line by line"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [
+      {
+        "commit": "67aee43b03f4032b2efbd822756123d791a5e7b7",
+        "findingId": "F1",
+        "title": "Explicit null field overrides fallback",
+        "result": "open",
+        "note": "Still present at src/features/collections-dashboard/hooks.ts:17 (`{ ...fallback, ...row }`)."
+      },
+      {
+        "commit": "67aee43b03f4032b2efbd822756123d791a5e7b7",
+        "findingId": "F2",
+        "title": "Money fallback computed with floats",
+        "result": "open",
+        "note": "Still present at src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/risk-analysis.tab.tsx:104."
+      },
+      {
+        "commit": "33d2e2a4d37d356cd36316d1e2ebe425e2e8abdf",
+        "findingId": "F1",
+        "title": "Export totals cover the whole report, rows only the search",
+        "result": "uncertain",
+        "note": "Marked resolved earlier; the original call is still at src/app/(app)/(main)/reports-user/_shared/visible-file-actions.tsx:31 and the fix may live elsewhere, so it could not be confirmed."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <38 .ts/.tsx files changed by the merge against the first parent>",
+        "result": "passed: no errors or warnings"
+      },
+      {
+        "status": "green",
+        "command": "git grep conflict markers in src at the commit",
+        "result": "none found"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "gaps": [
+      "Code that came from dev was not reviewed line by line; it was reviewed upstream.",
+      "No page was opened in a browser, so login, audit logs and CRM screens were not tried after the merge.",
+      "npm install was not run, so the package.json and lock file changes were not checked against a fresh install."
+    ],
+    "info": [
+      "This is a merge commit: parents are 67aee43b (feat/dashboard) and e1040a41 (main).",
+      "The two Low findings from the dashboard commit are still open in the current code.",
+      "No tests exist for the merged code; none are configured in the project."
+    ]
+  },
+  {
+    "id": "howismycommit-41",
+    "generatedAt": "2026-11-12T14:56:30+05:30",
+    "author": "Dhruv",
+    "branch": "feat/dashboard",
+    "target": {
+      "kind": "commit",
+      "commit": "67aee43b03f4032b2efbd822756123d791a5e7b7"
+    },
+    "files": {
+      "changed": 25,
+      "added": 6,
+      "modified": 17,
+      "deleted": 2,
+      "insertions": 666,
+      "deletions": 438
+    },
+    "changeType": [
+      "feature",
+      "refactor",
+      "ui"
+    ],
+    "verdict": "review-with-caution",
+    "score": 92,
+    "commitScore": 92,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 2,
+      "green": 1,
+      "info": 3
+    },
+    "before": "Collections and Sales dashboard tabs and sidebars drew their numbers and dropdown options from two local mock-data files and hardcoded literals.",
+    "after": "Collections KPI cards and 7 tabs, plus the Sales Advanced tab, read from new typed API hooks and show placeholder values (0, ABC) until the backend answers or if the call fails; sidebar branch, product and agent options come from the API.",
+    "effects": [
+      "Collections dashboard now calls 8 new /nbfc-dashboard/collections/* endpoints and the Sales Advanced tab calls /nbfc-dashboard/sales/advanced; none exist in the backend yet, so each fails and keeps placeholders.",
+      "The two mock-data.ts files are deleted; no other file imports them (tsc passed on the pre-commit tree).",
+      "New shared helper src/lib/placeholder-data.ts is used only by dashboard code.",
+      "Sidebar filter choices are local state only and are not sent to any API."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/collections-dashboard/hooks.ts",
+        "change": "added",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/risk-analysis.tab.tsx",
+        "change": "modified",
+        "status": "amber",
+        "note": "F2"
+      },
+      {
+        "path": "src/features/nbfc-dashboard/hooks.ts",
+        "change": "modified",
+        "status": "amber",
+        "note": "F1"
+      },
+      {
+        "path": "src/features/collections-dashboard/api.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/collections-dashboard/fallback.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/collections-dashboard/queries.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/collections-dashboard/types.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/nbfc-dashboard/fallback.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/lib/placeholder-data.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/dashboard/dashboard-collections/page.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/dashboard/dashboard-collections/_components/filter-sidebar.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/dashboard/dashboard-collections/_components/tabs/*.tab.tsx (7 files)",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/dashboard/dashboard-sales/_components/filter-sidebar.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/advanced.tab.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/nbfc-dashboard/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/nbfc-dashboard/queries.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/nbfc-dashboard/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/dashboard/dashboard-collections/mock-data.ts",
+        "change": "deleted",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/dashboard/dashboard-sales/mock-data.ts",
+        "change": "deleted",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F1",
+        "severity": "P3",
+        "title": "Explicit null field overrides fallback",
+        "location": "src/features/collections-dashboard/hooks.ts:16",
+        "problem": "The merge `{ ...fallback, ...row }` fills missing keys, but a key the backend sends as null (for example monthlyTrend: null) replaces the fallback array with null. The tabs then call .map or read fields on null.",
+        "impact": "One Collections tab, or the KPI cards on the page, would crash once the backend returns a row with a null field. The same pattern is in nbfc-dashboard/hooks.ts for Sales Advanced.",
+        "fix": "Merge per field and keep the fallback when a value is null, e.g. drop null entries from row before spreading.",
+        "evidence": "(row: T | null | undefined): T => ({ ...fallback, ...row })",
+        "status": "resolved",
+        "resolvedIn": "804625ce2d7a2d372fd72ea313e6c79e97290bcc",
+        "resolvedAt": "2026-11-12T12:57:13.427Z",
+        "resolvedNote": "src/lib/placeholder-data.ts:11 drops null fields before spreading, and both hooks now use it (collections-dashboard/hooks.ts:17, nbfc-dashboard/hooks.ts:7).",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      },
+      {
+        "id": "F2",
+        "severity": "P3",
+        "title": "Money fallback computed with floats",
+        "location": "src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/risk-analysis.tab.tsx:103",
+        "problem": "When avgLoanAmountDisplay is not sent, the card formats avgLoanAmount in the browser with division and toFixed, which the project rules forbid for money.",
+        "impact": "Average loan amount can show a rounded or inconsistent figure compared with other money on the dashboard until the backend sends the formatted string.",
+        "fix": "Show the API string only, with the placeholder text when it is missing, once the backend sends avgLoanAmountDisplay.",
+        "evidence": "{riskAnalysis.avgLoanAmountDisplay ??\n                    `₹${(riskAnalysis.avgLoanAmount / 100000).toFixed(1)}L`}",
+        "status": "resolved",
+        "resolvedIn": "804625ce2d7a2d372fd72ea313e6c79e97290bcc",
+        "resolvedAt": "2026-11-12T12:57:13.427Z",
+        "resolvedNote": "src/app/(app)/(main)/dashboard/dashboard-sales/_components/tabs/risk-analysis.tab.tsx:104 now shows avgLoanAmountDisplay ?? PLACEHOLDER_TEXT, with no division or toFixed.",
+        "needsAttention": false,
+        "attentionNote": null,
+        "confirmed": false,
+        "confirmedNote": null
+      }
+    ],
+    "previousFindings": [
+      {
+        "commit": "33d2e2a4d37d356cd36316d1e2ebe425e2e8abdf",
+        "findingId": "F1",
+        "title": "Export totals cover the whole report, rows only the search",
+        "result": "uncertain",
+        "note": "Report code is not in the dashboard commit and the checkout is now on main, so the current code could not be compared."
+      },
+      {
+        "commit": "46a31b163d25e0355a0a919b662e0ac27f23acd4",
+        "findingId": "F1",
+        "title": "Settings drawer title is empty",
+        "result": "uncertain",
+        "note": "Unrelated to the dashboard files and the checkout is now on main, so the current code could not be compared."
+      }
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed on the same code before the commit (uncommitted tree, 0 errors)"
+      },
+      {
+        "status": "grey",
+        "command": "npx eslint <commit files>",
+        "result": "not run on the commit: the checkout switched to main during the review, so the files are absent; the same code passed eslint with no errors earlier"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test script configured"
+      }
+    ],
+    "gaps": [
+      "The checkout moved from feat/dashboard to main while this review ran, so tsc and eslint were not re-run on the commit itself.",
+      "Nothing was tested against a live backend; the 9 new endpoints do not exist in the API yet.",
+      "No UI was opened in a browser during this review."
+    ],
+    "info": [
+      "Sidebar filters are local state and never sent to the API (hooks are called without filters).",
+      "Missing endpoints fail and retry per query, so every dashboard load makes several failing requests.",
+      "The Region and Process Stage dropdowns include a selectable 'ABC' placeholder option."
+    ]
+  },
+  {
     "id": "howismycommit-40",
     "generatedAt": "2026-11-05T15:36:26+05:30",
     "author": "Dhruv",
@@ -1128,7 +5936,7 @@
         "attentionNote": null,
         "confirmed": false,
         "confirmedNote": null,
-        "optional": false
+        "future": false
       },
       {
         "id": "F2",
@@ -1515,7 +6323,7 @@
         "attentionNote": null,
         "confirmed": true,
         "confirmedNote": "Created the API endpoint",
-        "optional": false
+        "future": false
       }
     ],
     "previousFindings": [
@@ -1743,7 +6551,7 @@
         "attentionNote": null,
         "confirmed": false,
         "confirmedNote": null,
-        "optional": false
+        "future": false
       },
       {
         "id": "F2",
@@ -2802,7 +7610,7 @@
         "attentionNote": null,
         "confirmed": false,
         "confirmedNote": null,
-        "optional": false
+        "future": false
       },
       {
         "id": "F2",
@@ -3182,7 +7990,7 @@
         "attentionNote": null,
         "confirmed": true,
         "confirmedNote": "Created the API endpoint",
-        "optional": false
+        "future": false
       }
     ],
     "previousFindings": [

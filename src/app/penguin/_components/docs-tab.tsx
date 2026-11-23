@@ -1,5 +1,6 @@
 "use client"
 
+import { LoadingIndicatorView } from "@/components/loading-indicator-view"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -10,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 import { useQuery } from "@tanstack/react-query"
 import {
@@ -133,7 +133,7 @@ function DocViewer({
               ))}
               {parentFiles.length > 0 && (
                 <>
-                  <DropdownMenuSeparator className="bg-black/20"/>
+                  <DropdownMenuSeparator className="bg-black/20" />
                   <DropdownMenuLabel className="text-xl text-black dark:text-white">
                     /{parentDir.split("/").pop()}
                   </DropdownMenuLabel>
@@ -203,12 +203,7 @@ function DocViewer({
       </div>
 
       {query.isLoading ? (
-        <div className="space-y-2">
-          <Skeleton className="h-8 w-1/2" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-5/6" />
-          <Skeleton className="h-32 w-full" />
-        </div>
+        <LoadingIndicatorView className="min-h-[60vh]" />
       ) : query.isError ? (
         <div className="flex items-center justify-between gap-2 rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
           <span>{query.error.message}</span>
@@ -326,35 +321,35 @@ export function DocsTab({ groups }: { groups: DocGroup[] }) {
   return (
     <div className={cn("grid gap-4", listVisible && "md:grid-cols-[20rem_1fr]")}>
       {listVisible && (
-      <aside className="space-y-1 md:sticky border-r pr-4 md:top-2 md:max-h-[calc(100dvh-1rem)] md:self-start md:overflow-y-auto">
-        <SearchBox value={keyword} onChange={setKeyword} placeholder="Search documents" />
-        <SearchHighlightProvider query={keyword}>
-        {shownGroups.length === 0 && (
-          <p className="p-4 text-center text-xs text-muted-foreground">No documents match.</p>
-        )}
-        {REPOS.filter((repo) => shownGroups.some((g) => g.repo === repo)).map((repo) => (
-          <div key={repo} className="space-y-1 pb-2">
-            <p className="flex items-center justify-between px-2 pb-1 pt-2 text-xs font-semibold uppercase text-black/50 dark:text-white/50">
-              {REPO_LABEL[repo]}
-              <span className="font-normal normal-case">
-                {shownGroups.filter((g) => g.repo === repo).reduce((sum, g) => sum + g.files.length, 0)}
-              </span>
-            </p>
-            {shownGroups
-              .filter((group) => group.repo === repo)
-              .map((group) => (
-                <GroupSection
-                  key={group.key}
-                  group={group}
-                  selectedPath={file.path}
-                  searching={!!keyword.trim()}
-                  onSelect={setSelected}
-                />
-              ))}
-          </div>
-        ))}
-        </SearchHighlightProvider>
-      </aside>
+        <aside className="space-y-1 md:sticky border-r pr-4 md:top-2 md:max-h-[calc(100dvh-1rem)] md:self-start md:overflow-y-auto">
+          <SearchBox value={keyword} onChange={setKeyword} placeholder="Search documents" />
+          <SearchHighlightProvider query={keyword}>
+            {shownGroups.length === 0 && (
+              <p className="p-4 text-center text-xs text-muted-foreground">No documents match.</p>
+            )}
+            {REPOS.filter((repo) => shownGroups.some((g) => g.repo === repo)).map((repo) => (
+              <div key={repo} className="space-y-1 pb-2">
+                <p className="flex items-center justify-between px-2 pb-1 pt-2 text-xs font-semibold uppercase text-black/50 dark:text-white/50">
+                  {REPO_LABEL[repo]}
+                  <span className="font-normal normal-case">
+                    {shownGroups.filter((g) => g.repo === repo).reduce((sum, g) => sum + g.files.length, 0)}
+                  </span>
+                </p>
+                {shownGroups
+                  .filter((group) => group.repo === repo)
+                  .map((group) => (
+                    <GroupSection
+                      key={group.key}
+                      group={group}
+                      selectedPath={file.path}
+                      searching={!!keyword.trim()}
+                      onSelect={setSelected}
+                    />
+                  ))}
+              </div>
+            ))}
+          </SearchHighlightProvider>
+        </aside>
       )}
 
       <DocViewer

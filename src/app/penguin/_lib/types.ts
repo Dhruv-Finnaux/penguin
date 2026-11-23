@@ -67,7 +67,7 @@ export interface ReviewFinding {
   confirmed: boolean
   confirmedNote: string | null
   /** Marked by hand as not needing a fix: later reviews and summaries leave it out. */
-  optional: boolean
+  future: boolean
 }
 
 export interface CommitTime {
@@ -170,6 +170,8 @@ export interface CommitInfo {
   review: Review | null
   /** Every review of this commit, newest first. */
   history: ReviewRunSummary[]
+  /** Branches that contain this commit, local and remote merged. Set on the commit history pages. */
+  branches?: string[]
 }
 
 export interface ReviewRunSummary {
@@ -383,4 +385,44 @@ export interface FileActivity {
   /** Newest day first. */
   days: FileDay[]
   truncated: boolean
+}
+
+export type DbBackupAction = "backup" | "restore"
+
+/** "current": the backup file on disk is this exact backup. "replaced": a newer backup
+ * overwrote it. "deleted": the file is gone. Restores keep the status of the backup they used. */
+export type DbBackupFileStatus = "current" | "replaced" | "deleted"
+
+export interface DbBackupRun {
+  /** `<repo>/<entry id>`. Named fileName so RunTimeline can key on it. */
+  fileName: string
+  repo: RepoKey
+  author: string
+  generatedAt: string
+  action: DbBackupAction
+  /** The local database that was backed up or replaced. */
+  database: string
+  /** The backup file that was written (backup) or loaded (restore). */
+  file: string
+  /** Name of the backup that was loaded, restores only. */
+  backupName: string
+  sizeBytes: number
+  tables: number | null
+  migrations: number | null
+  /** When the backup file was written. */
+  fileModifiedAt: string
+  fileStatus: DbBackupFileStatus
+}
+
+export interface DbBackupFile {
+  name: string
+  path: string
+  sizeBytes: number
+  modifiedAt: string
+}
+
+export interface DbBackupData {
+  dir: string
+  runs: DbBackupRun[]
+  files: DbBackupFile[]
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { LoadingIndicatorView } from "@/components/loading-indicator-view"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
@@ -11,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 import { useInfiniteQuery, useQuery, type UseQueryResult } from "@tanstack/react-query"
 import { format } from "date-fns"
@@ -222,12 +222,14 @@ function VerboseHistory({
   reviews,
   keyword,
   authors,
+  colors,
 }: {
   repo: RepoKey
   branch: string
   reviews: Review[]
   keyword: string
   authors: string[]
+  colors: Map<string, string>
 }) {
   const [openHash, setOpenHash] = useState<string | null>(null)
 
@@ -276,13 +278,7 @@ function VerboseHistory({
   }, [commits, keyword])
 
   if (query.isLoading) {
-    return (
-      <div className="space-y-3">
-        <Skeleton className="h-11 w-full" />
-        <Skeleton className="h-11 w-full" />
-        <Skeleton className="h-11 w-full" />
-      </div>
-    )
+    return <LoadingIndicatorView className="min-h-[60vh]" />
   }
   if (query.isError) return <ErrorBox message={query.error.message} onRetry={() => query.refetch()} />
 
@@ -296,6 +292,7 @@ function VerboseHistory({
         <CommitTimeline
           commits={matching}
           openHash={openHash}
+          colors={colors}
           onToggle={(hash) => setOpenHash((current) => (current === hash ? null : hash))}
         />
       )}
@@ -380,7 +377,7 @@ function FlowHistory({
   const firstMatch = matches && matches.size > 0 ? Math.min(...matches) : 0
   const shown = Math.max(FLOW_STEP, firstMatch + 50) + more
 
-  if (query.isLoading) return <Skeleton className="h-96 w-full" />
+  if (query.isLoading) return <LoadingIndicatorView className="min-h-[60vh]" />
   if (query.isError) return <ErrorBox message={query.error.message} onRetry={() => query.refetch()} />
   if (!layout || layout.rows.length === 0) {
     return (
@@ -558,9 +555,9 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
           )}
         </div>
         <BranchPicker branches={repo.branches} value={branch} colors={colors} onChange={(next) => {
-            setBranch(next)
-            setPicked(null)
-          }}
+          setBranch(next)
+          setPicked(null)
+        }}
         />
         <ContributorPicker query={contributors} value={authors} onChange={setPicked} />
         <Segmented
@@ -585,7 +582,7 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
               ? "Search contributors"
               : mode === "files"
                 ? "Search changed files by path"
-              : "Search branches and commits by hash, message, author or branch"
+                : "Search branches and commits by hash, message, author or branch"
         }
       />
 
@@ -599,6 +596,7 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
               reviews={reviews}
               keyword={keyword}
               authors={authors}
+              colors={colors}
             />
           ) : mode === "files" ? (
             <FileActivityPanel key={branch} repo={repo.key} branch={branch} authors={authors} keyword={keyword} />

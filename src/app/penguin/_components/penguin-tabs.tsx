@@ -16,6 +16,7 @@ import type {
   CommitTime,
   CommitInfo,
   CommittableRun,
+  DbBackupData,
   DocGroup,
   ExplainRun,
   GitGuideRun,
@@ -27,6 +28,7 @@ import type {
 } from "../_lib/types"
 import { RepoTab } from "./repo-tab"
 import { CommittableTab } from "./committable-tab"
+import { DbBackupsTab } from "./db-backups-tab"
 import { DocsTab } from "./docs-tab"
 import { ExplainTab } from "./explain-tab"
 import { GitGuideTab } from "./git-guide-tab"
@@ -93,6 +95,16 @@ const TAB_SOURCES: { tab: string; source: React.ReactNode }[] = [
     ),
   },
   {
+    tab: "DB Backups",
+    source: (
+      <>
+        Run <code>db backup</code> or <code>db restore</code> in the backend. Each one is recorded in{" "}
+        <code>.penguin/data/backend/dbbackups.json</code>; the backup files are read live from the
+        backup folder.
+      </>
+    ),
+  },
+  {
     tab: "Questions",
     source: (
       <>
@@ -146,6 +158,7 @@ export function PenguinTabs({
   frontendQuestions,
   backendQuestions,
   repos,
+  dbBackups,
   loadedAt,
 }: {
   reviews: Review[]
@@ -158,6 +171,7 @@ export function PenguinTabs({
   frontendQuestions: QuestionItem[]
   backendQuestions: QuestionItem[]
   repos: Record<RepoKey, RepoInfo>
+  dbBackups: DbBackupData
   loadedAt: string
 }) {
   const router = useRouter()
@@ -244,6 +258,11 @@ export function PenguinTabs({
             value: "documents",
             label: "Documents",
             component: <DocsTab groups={docGroups} />,
+          },
+          {
+            value: "db-backups",
+            label: "DB Backups",
+            component: <DbBackupsTab {...dbBackups} />,
           },
           {
             value: "todos",
@@ -381,7 +400,7 @@ export const NextTabs = ({
           key={tab.value}
           value={tab.value}
           className={cn("mt-3 flex flex-1 flex-col outline-none", tabsClassNames?.panel)}>
-          <React.Suspense fallback={<LoadingIndicatorView message="Please Wait" />}>
+          <React.Suspense fallback={<LoadingIndicatorView />}>
             {initialTabChanged && delayTabs ? (
               <DelayTab delay={tab.delay ?? 250}>
                 {typeof tab.component === "function" ? <tab.component /> : tab.component}

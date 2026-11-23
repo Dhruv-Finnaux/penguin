@@ -37,7 +37,7 @@ export function priorityOf(severity: Severity): Priority {
 }
 
 export const isResolved = (finding: ReviewFinding) => finding.status === "resolved"
-export const isOptional = (finding: ReviewFinding) => finding.optional
+export const isFuture = (finding: ReviewFinding) => finding.future
 
 export function topPriority(findings: ReviewFinding[]): Priority | null {
   const open = findings.filter((f) => !isResolved(f))
@@ -70,7 +70,7 @@ export function sortFindings(findings: ReviewFinding[]) {
 export function countByPriority(findings: ReviewFinding[]) {
   const counts: Record<Priority, number> = { high: 0, medium: 0, low: 0 }
   for (const finding of findings) {
-    if (!isResolved(finding) && !isOptional(finding)) counts[priorityOf(finding.severity)]++
+    if (!isResolved(finding) && !isFuture(finding)) counts[priorityOf(finding.severity)]++
   }
   return counts
 }
@@ -103,9 +103,9 @@ export function countAttention(findings: ReviewFinding[]) {
   return findings.filter(needsAttention).length
 }
 
-// Optional findings still waiting; a resolved one is already counted as resolved.
-export function countOptional(findings: ReviewFinding[]) {
-  return findings.filter((finding) => isOptional(finding) && !isResolved(finding)).length
+// Future findings still waiting; a resolved one is already counted as resolved.
+export function countFuture(findings: ReviewFinding[]) {
+  return findings.filter((finding) => isFuture(finding) && !isResolved(finding)).length
 }
 
 export function countResolved(findings: ReviewFinding[]) {
@@ -135,12 +135,12 @@ export function PriorityCounts({
   counts,
   resolved = 0,
   attention = 0,
-  optional = 0,
+  future = 0,
 }: {
   counts: Record<Priority, number>
   resolved?: number
   attention?: number
-  optional?: number
+  future?: number
 }) {
   return (
     <span className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
@@ -159,13 +159,13 @@ export function PriorityCounts({
           <span className="text-muted-foreground">Resolved</span>
         </span>
       )}
-      {optional > 0 && (
+      {future > 0 && (
         <span className="flex items-center gap-1.5">
           <span className="flex size-4 items-center justify-center rounded-full bg-blue-600 text-white">
             <MinusIcon className="size-3" strokeWidth={3} />
           </span>
-          <span className="font-medium">{optional}</span>
-          <span className="text-muted-foreground">Optional</span>
+          <span className="font-medium">{future}</span>
+          <span className="text-muted-foreground">Future</span>
         </span>
       )}
       {attention > 0 && (
@@ -214,17 +214,17 @@ function ConfirmButton({ reviewFile, finding }: { reviewFile: string; finding: R
 }
 
 // Keeps a finding in the list but out of what still has to be fixed.
-function OptionalToggle({ reviewFile, finding }: { reviewFile: string; finding: ReviewFinding }) {
+function FutureToggle({ reviewFile, finding }: { reviewFile: string; finding: ReviewFinding }) {
   const router = useRouter()
   const [isRefreshing, startTransition] = useTransition()
-  const optional = isOptional(finding)
+  const future = isFuture(finding)
 
   const mutation = useMutation({
     mutationFn: async () => {
       const res = await fetch("/penguin/api/finding", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ file: reviewFile, id: finding.id, optional: !optional }),
+        body: JSON.stringify({ file: reviewFile, id: finding.id, future: !future }),
       })
       const body = await res.json().catch(() => null)
       if (!res.ok) throw new Error(body?.message ?? "Could not update the finding")
@@ -236,18 +236,14 @@ function OptionalToggle({ reviewFile, finding }: { reviewFile: string; finding: 
   return (
     <button
       type="button"
-      aria-pressed={optional}
-      title={
-        optional
-          ? "Optional: not needed for future resolution. Click to require it again"
-          : "Make optional for future resolution"
-      }
-      aria-label={optional ? "Make this finding required again" : "Make this finding optional"}
+      aria-pressed={future}
+      title={future ? "Future: delayed for later. Click to move it back to the current list" : "Move to future"}
+      aria-label={future ? "Move this finding back to the current list" : "Move this finding to future"}
       disabled={mutation.isPending || isRefreshing}
       onClick={() => mutation.mutate()}
       className={cn(
         "flex size-6 cursor-pointer items-center justify-center rounded-md hover:bg-accent disabled:opacity-50",
-        optional
+        future
           ? "bg-accent text-foreground"
           : "text-black/40 hover:text-black dark:text-white/40 dark:hover:text-white",
       )}>
@@ -260,7 +256,7 @@ function ResolveToggle({ reviewFile, finding }: { reviewFile: string; finding: R
   const router = useRouter()
   const [isRefreshing, startTransition] = useTransition()
   const resolved = isResolved(finding)
-  const optional = isOptional(finding)
+  const future = isFuture(finding)
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -284,21 +280,21 @@ function ResolveToggle({ reviewFile, finding }: { reviewFile: string; finding: R
       role="checkbox"
       aria-checked={resolved}
       aria-label={resolved ? "Mark as open" : "Mark as resolved"}
-      title={optional ? "Optional: not needed for future resolution" : undefined}
+      title={future ? "Future: delayed for later" : undefined}
       disabled={busy}
       onClick={() => mutation.mutate()}
       className={cn(
         "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-200 disabled:opacity-50",
         resolved
           ? "border-green-600 bg-green-600 text-white"
-          : optional
+          : future
             ? "border-blue-600 bg-blue-600 text-white"
             : "border-muted-foreground/40 hover:border-green-600",
       )}>
       {resolved ? (
         <CheckIcon className="size-3" strokeWidth={3} />
       ) : (
-        optional && <MinusIcon className="size-3" strokeWidth={3} />
+        future && <MinusIcon className="size-3" strokeWidth={3} />
       )}
     </button>
   )
@@ -363,7 +359,7 @@ function FindingCopy({ finding, reviewFile }: { finding: ReviewFinding; reviewFi
         onClick={() => void copy(findingText(finding), "text")}>
         <FileTextIcon className="size-3.5" />
       </button>
-      <OptionalToggle reviewFile={reviewFile} finding={finding} />
+      <FutureToggle reviewFile={reviewFile} finding={finding} />
     </div>
   )
 }

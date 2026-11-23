@@ -1,5 +1,6 @@
 "use client"
 
+import { LoadingIndicatorView } from "@/components/loading-indicator-view"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
@@ -185,6 +186,9 @@ export function TodosTab() {
   const [status, setStatus] = useState<TodoStatus>("todo")
   const query = useQuery({
     queryKey: ["todos"],
+    // Todos are also added from the CLI, so re-read them on focus and every 10 seconds.
+    refetchOnWindowFocus: true,
+    refetchInterval: 10_000,
     queryFn: async (): Promise<TodoItem[]> => (await (await fetch("/penguin/api/todos")).json()).todos,
   })
   const mutation = useMutation({
@@ -262,13 +266,11 @@ export function TodosTab() {
           </div>
         </div>
 
-        {days.length === 0 ? (
+        {query.isLoading ? (
+          <LoadingIndicatorView className="min-h-[40vh]" />
+        ) : days.length === 0 ? (
           <div className="p-20 text-center text-sm text-muted-foreground">
-            {query.isLoading
-              ? "Loading"
-              : keyword.trim() || filter !== "all"
-                ? "No todos match."
-                : "No todos yet. Add one above."}
+            {keyword.trim() || filter !== "all" ? "No todos match." : "No todos yet. Add one above."}
           </div>
         ) : (
           <ol>

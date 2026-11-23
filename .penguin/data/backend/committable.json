@@ -1,5 +1,798 @@
 [
   {
+    "id": "committable-26",
+    "generatedAt": "2026-11-21T12:22:59+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 15,
+      "staged": 0,
+      "unstaged": 13,
+      "untracked": 2
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/drizzle/schema/loan-applications.schema.ts",
+        "line": 1726,
+        "priority": "medium",
+        "issue": "Schema change without its migration",
+        "fix": "Apply stash@{0} (drizzle/0011_finnaux_esign.sql, snapshot, journal, seed) and push it together with this code."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/dto/update-loan-document.dto.ts",
+      "apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/loan-documents.module.ts",
+      "apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/loan-documents.service.ts",
+      "apps/finnaux-api/src/configurations/templates/templates.module.ts",
+      "apps/finnaux-api/src/configurations/templates/templates.service.ts",
+      "apps/finnaux-api/src/drizzle/schema/enum-map.ts",
+      "apps/finnaux-api/src/drizzle/schema/enums.ts",
+      "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+      "apps/finnaux-api/src/los/loan-application/documents/document.service.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/dto/index.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/esign.controller.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/esign.service.ts",
+      "apps/finnaux-api/src/external/finnaux/finnaux-esign-audit-trail.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/dto/get-esign-audit-trail.dto.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ],
+    "advice": [
+      "honest take: applied as a strict review; no items lowered"
+    ]
+  },
+  {
+    "id": "committable-25",
+    "generatedAt": "2026-11-20T16:50:15+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 21,
+      "staged": 0,
+      "unstaged": 19,
+      "untracked": 2
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/loan-documents.service.ts",
+        "line": 27,
+        "priority": "medium",
+        "issue": "Blocks saving an existing product",
+        "fix": "Product 01M5YAN7CTDQ6NMNH1V9P8B85P has eSign on with non-print template 'Agreement Letter My Demo'; its documents page now fails to save until that template is made print friendly or eSign is turned off there."
+      },
+      {
+        "path": "apps/finnaux-api/src/los/loan-application/templates/templates.service.ts",
+        "line": 104,
+        "priority": "medium",
+        "issue": "Existing template preview PDF changes",
+        "fix": "The shared /pdf preview route was Letter size with no backgrounds; it is now A4 with backgrounds and waits for network idle, so every template preview looks different and may load slower."
+      },
+      {
+        "path": "apps/finnaux-api/src/drizzle/schema/templates.schema.ts",
+        "line": 49,
+        "priority": "low",
+        "issue": "Deploy needs eSign columns first",
+        "fix": "Local DB has the columns; any other DB without them breaks templates, notification templates and loan documents reads until the SQL or migration runs."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/dto/update-loan-document.dto.ts",
+      "apps/finnaux-api/src/configurations/templates/dto/create-template.dto.ts",
+      "apps/finnaux-api/src/configurations/templates/dto/index.ts",
+      "apps/finnaux-api/src/configurations/templates/templates.service.ts",
+      "apps/finnaux-api/src/drizzle/schema/enum-map.ts",
+      "apps/finnaux-api/src/drizzle/schema/enums.ts",
+      "apps/finnaux-api/src/drizzle/schema/loan-applications.schema.ts",
+      "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/los/loan-application/documents/document.service.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/dto/create-esign-request.dto.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/dto/index.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/esign.controller.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/esign.module.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/esign.service.ts",
+      "apps/finnaux-api/src/los/loan-application/templates/templates.controller.ts",
+      "apps/finnaux-api/src/configurations/templates/dto/template-esign-signer.dto.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/dto/run-esign-action.dto.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <21 changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in CLAUDE.md"
+      }
+    ],
+    "advice": [
+      "make sure nothing that worked stops working: checked every changed file against other callers and the local DB; 2 medium and 1 low regression risks listed",
+      "changes must stay inside eSign only: 2 changes reach beyond eSign (shared template PDF preview, loan product documents save validation); listed; Finnaux client logging change is opt-in and leaves Aadhaar, PAN, DL and RC calls unchanged",
+      "not catastrophic: no data deletion, no change to Digio, KYC, RC or notification flows beyond additive response fields; Digio receivers fallback only runs if Digio is reselected"
+    ]
+  },
+  {
+    "id": "committable-24",
+    "generatedAt": "2026-11-20T16:43:47+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 21,
+      "staged": 0,
+      "unstaged": 19,
+      "untracked": 2
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/los/loan-application/esign/esign.service.ts",
+        "line": 770,
+        "priority": "medium",
+        "issue": "New date normalizer helper added",
+        "fix": "AGENTS.md bans date normalizer helpers; confirm this third-party ingestion exception or reuse an existing origin parser."
+      },
+      {
+        "path": "apps/finnaux-api/src/drizzle/schema/templates.schema.ts",
+        "line": null,
+        "priority": "low",
+        "issue": "Schema change without migration",
+        "fix": "Migration is deferred by choice; add it to drizzle/ before opening the PR."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/dto/update-loan-document.dto.ts",
+      "apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/loan-documents.service.ts",
+      "apps/finnaux-api/src/configurations/templates/dto/create-template.dto.ts",
+      "apps/finnaux-api/src/configurations/templates/dto/index.ts",
+      "apps/finnaux-api/src/configurations/templates/templates.service.ts",
+      "apps/finnaux-api/src/drizzle/schema/enum-map.ts",
+      "apps/finnaux-api/src/drizzle/schema/enums.ts",
+      "apps/finnaux-api/src/drizzle/schema/loan-applications.schema.ts",
+      "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/los/loan-application/documents/document.service.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/dto/create-esign-request.dto.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/dto/index.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/esign.controller.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/esign.module.ts",
+      "apps/finnaux-api/src/los/loan-application/templates/templates.controller.ts",
+      "apps/finnaux-api/src/los/loan-application/templates/templates.service.ts",
+      "apps/finnaux-api/src/configurations/templates/dto/template-esign-signer.dto.ts",
+      "apps/finnaux-api/src/los/loan-application/esign/dto/run-esign-action.dto.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <21 changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured in CLAUDE.md"
+      }
+    ],
+    "advice": [
+      "honest review: no specific item to match; strict scan applied, nothing suppressed"
+    ]
+  },
+  {
+    "id": "committable-23",
+    "generatedAt": "2026-11-17T12:26:52+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "committable",
+    "files": {
+      "total": 1,
+      "staged": 0,
+      "unstaged": 1,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "apps/finnaux-api/src/external/finnaux/finnaux.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint apps/finnaux-api/src/external/finnaux",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ],
+    "advice": [
+      "honest review: no conditions to apply; scanned honestly, the debug console.log lines and the cache bypass are gone from the diff, nothing found."
+    ]
+  },
+  {
+    "id": "committable-22",
+    "generatedAt": "2026-11-17T12:24:30+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 1,
+      "staged": 0,
+      "unstaged": 1,
+      "untracked": 0
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "line": 317,
+        "priority": "medium",
+        "issue": "console.log prints Aadhaar response",
+        "fix": "Remove this debug log before committing; it writes personal data to the server logs."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "line": 460,
+        "priority": "medium",
+        "issue": "console.log prints PAN response",
+        "fix": "Remove this debug log before committing; it writes personal data to the server logs."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "line": 179,
+        "priority": "low",
+        "issue": "Cache bypass commented out (Aadhaar)",
+        "fix": "Restore the cache read before committing, or every verify call is charged and inserts duplicate rows."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "line": 364,
+        "priority": "low",
+        "issue": "Cache bypass commented out (PAN)",
+        "fix": "Restore the cache read before committing, or every verify call is charged and inserts duplicate rows."
+      }
+    ],
+    "safeFiles": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ],
+    "advice": [
+      "honest review: no conditions to apply; reported the temporary debug logs and cache bypass as they are, even though you planned to remove them."
+    ]
+  },
+  {
+    "id": "committable-21",
+    "generatedAt": "2026-11-16T15:40:23+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "committable",
+    "files": {
+      "total": 1,
+      "staged": 0,
+      "unstaged": 1,
+      "untracked": 0
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.controller.ts",
+        "line": 13,
+        "priority": "low",
+        "issue": "Paid routes need login only",
+        "fix": "Deferred by the user: add a permission guard and a throttle later."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/external/finnaux/finnaux.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ],
+    "advice": []
+  },
+  {
+    "id": "committable-20",
+    "generatedAt": "2026-11-16T15:36:46+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "committable",
+    "files": {
+      "total": 1,
+      "staged": 0,
+      "unstaged": 1,
+      "untracked": 0
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.controller.ts",
+        "line": 13,
+        "priority": "low",
+        "issue": "Paid routes need login only",
+        "fix": "Deferred by the user: add a permission guard and a throttle later (last-commit finding F4)."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "line": 296,
+        "priority": "low",
+        "issue": "raw now null, frontend unconfirmed",
+        "fix": "Confirm with the frontend team that nothing reads the raw field."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/external/finnaux/finnaux.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ],
+    "advice": [
+      "Check current changes against last-commit findings F1-F5: F1, F2, F3 and F5 are fixed in finnaux.service.ts; F4 is deferred by the user and listed as a low note; nothing else remains to solve.",
+      "Write a message for the frontend team: written in the chat reply."
+    ]
+  },
+  {
+    "id": "committable-19",
+    "generatedAt": "2026-11-16T13:47:36+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 13,
+      "staged": 0,
+      "unstaged": 6,
+      "untracked": 7
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "line": 111,
+        "priority": "medium",
+        "issue": "Raw error text returned to client",
+        "fix": "Return a fixed message for non-provider errors; the catch also returns database error text (query and parameters)."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/shared/external-api-auth.utils.ts",
+        "line": 6,
+        "priority": "medium",
+        "issue": "Mask exposes part of secret keys",
+        "fix": "Show no characters of apiSecret and encryptionKey in the masked GET, since the 10% rule shows about 48 of 256 key bits."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "line": 158,
+        "priority": "low",
+        "issue": "Database errors become 400 messages",
+        "fix": "Only wrap provider errors in BadRequestException; let other errors reach the global filter."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "line": 133,
+        "priority": "low",
+        "issue": "Cached result skips OTP check",
+        "fix": "Tie the cache key to the employee id so only the user who verified can replay the session."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.service.ts",
+        "line": 274,
+        "priority": "low",
+        "issue": "Raw response with photo returned",
+        "fix": "Drop the base64 photo from raw before returning, caching and logging it."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/finnaux/finnaux.controller.ts",
+        "line": 15,
+        "priority": "low",
+        "issue": "Paid calls need only login",
+        "fix": "Add a page-right check or a throttle, since each call spends Finnaux wallet balance."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+      "apps/finnaux-api/src/external/external.module.ts",
+      "apps/finnaux-api/src/external/shared/external-api-runtime.service.ts",
+      "apps/finnaux-api/src/fixed-cuids.ts",
+      "apps/finnaux-api/src/lms/customer/kyc/kyc-document-verification-channelizer.ts",
+      "apps/finnaux-api/src/external/finnaux/dto/generate-aadhaar-otp.dto.ts",
+      "apps/finnaux-api/src/external/finnaux/dto/index.ts",
+      "apps/finnaux-api/src/external/finnaux/dto/verify-aadhaar-otp.dto.ts",
+      "apps/finnaux-api/src/external/finnaux/finnaux-api.client.ts",
+      "apps/finnaux-api/src/external/finnaux/finnaux.module.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <13 changed .ts files>",
+        "result": "passed"
+      },
+      {
+        "status": "grey",
+        "command": "tests",
+        "result": "not run: no test command configured"
+      }
+    ],
+    "advice": [
+      "devil's advocate check for leaks and errors: applied, with extra scrutiny on error text, stored data, key exposure and abuse of paid calls"
+    ]
+  },
+  {
+    "id": "committable-18",
+    "generatedAt": "2026-11-13T14:11:26+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "committable",
+    "files": {
+      "total": 3,
+      "staged": 0,
+      "unstaged": 3,
+      "untracked": 0
+    },
+    "attention": [],
+    "safeFiles": [
+      "apps/finnaux-api/src/configurations/external-apis/external-apis.controller.ts",
+      "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+      "apps/finnaux-api/src/external/shared/external-api-runtime.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <3 changed files>",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bun run build",
+        "result": "passed"
+      }
+    ],
+    "advice": [
+      "default 'bearer' is wanted: not listed; contract updated to bearer",
+      "no group without endpoint: schema route mismatch not listed",
+      "first save without lock: fixed by locking the apiGroups row (FOR UPDATE OF apiGroups) inside the save transaction",
+      "two connections per save: fixed by passing tx into getApiGroupAuthContext"
+    ]
+  },
+  {
+    "id": "committable-17",
+    "generatedAt": "2026-11-13T13:45:39+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "committable",
+    "files": {
+      "total": 3,
+      "staged": 0,
+      "unstaged": 3,
+      "untracked": 0
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/external/shared/external-api-runtime.service.ts",
+        "line": 62,
+        "priority": "low",
+        "issue": "Default 'bearer' differs from contract",
+        "fix": "The default is now 'bearer' (matches lowercase DB values) but docs/external-apis/frontend-contract.md:156 and the v2 spec say API_KEY; update the contract so the frontend sees the same value."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/shared/external-api-runtime.service.ts",
+        "line": 62,
+        "priority": "low",
+        "issue": "Schema route disagrees with PUT",
+        "fix": "For a group with no endpoint the schema route returns an empty 'bearer' schema while PUT requires apiKey; return apiKey in the schema too, or tell the frontend not to use that route."
+      },
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 384,
+        "priority": "low",
+        "issue": "First save has no row lock",
+        "fix": "The lock covers only an existing row; two first saves at once both insert and the later wins. Rare; accept or lock the apiGroups row."
+      },
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 382,
+        "priority": "low",
+        "issue": "Each save holds two connections",
+        "fix": "getApiGroupAuthContext runs on the pool while the transaction holds another connection; fine at this traffic, or pass tx into it if the pool is small."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/configurations/external-apis/external-apis.controller.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <3 changed files>",
+        "result": "passed"
+      }
+    ],
+    "advice": [
+      "check all previous changes, leaks and problems: full diff re-read; no decrypted value in any response or log, no secret in code, mask guard and 10% mask intact; 4 low notes",
+      "check these changes: the new 'bearer' default reviewed and listed against the contract"
+    ]
+  },
+  {
+    "id": "committable-16",
+    "generatedAt": "2026-11-13T13:18:37+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "committable",
+    "files": {
+      "total": 3,
+      "staged": 0,
+      "unstaged": 3,
+      "untracked": 0
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 384,
+        "priority": "low",
+        "issue": "First save has no row lock",
+        "fix": "The lock only covers an existing row; two first saves at once both insert and the later one wins through onConflictDoUpdate. Rare; accept or lock the apiGroups row instead."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/configurations/external-apis/external-apis.controller.ts",
+      "apps/finnaux-api/src/external/shared/external-api-runtime.service.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <3 changed files>",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bun run build",
+        "result": "passed"
+      }
+    ],
+    "advice": []
+  },
+  {
+    "id": "committable-15",
+    "generatedAt": "2026-11-13T13:01:34+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 3,
+      "staged": 0,
+      "unstaged": 3,
+      "untracked": 0
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 468,
+        "priority": "medium",
+        "issue": "Mask shows too much of short keys",
+        "fix": "A 13-char key shows 12 real chars; options: show 4+4 chars, show only last 4, or a fixed 8 X mask."
+      },
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 378,
+        "priority": "medium",
+        "issue": "Broken saved key blocks every save",
+        "fix": "If decrypt fails, treat the group as not configured so a full set of keys replaces the broken row."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/shared/external-api-runtime.service.ts",
+        "line": 46,
+        "priority": "medium",
+        "issue": "Random endpoint decides key fields",
+        "fix": "Add orderBy(provider, name) like findAll, or merge keys from all endpoints of the group."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/shared/external-api-runtime.service.ts",
+        "line": 36,
+        "priority": "low",
+        "issue": "Keys saveable for disabled integrations",
+        "fix": "Keep (the v2 spec asked for it) or add back the integration-group active join."
+      },
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 378,
+        "priority": "low",
+        "issue": "Two saves at once lose one",
+        "fix": "Run read and upsert in one transaction with select for update, or accept last-write-wins."
+      },
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 351,
+        "priority": "low",
+        "issue": "Two queries run one by one",
+        "fix": "Run getApiGroupAuthContext and getStoredCredentials with Promise.all."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/configurations/external-apis/external-apis.controller.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <3 changed files>",
+        "result": "passed"
+      }
+    ],
+    "advice": [
+      "1-6: the six items from committable-14 re-listed with their stated priorities; still present in the code",
+      "make these simple with solution range and example cases: issue and fix text simplified, examples given in chat"
+    ]
+  },
+  {
+    "id": "committable-14",
+    "generatedAt": "2026-11-13T12:47:01+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "verdict": "needs-attention",
+    "files": {
+      "total": 3,
+      "staged": 0,
+      "unstaged": 3,
+      "untracked": 0
+    },
+    "attention": [
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 468,
+        "priority": "medium",
+        "issue": "Mask leaks most of short keys",
+        "fix": "A 13-character key shows 12 real characters and every mask shows the exact length; hide more for short values, for example show at most a quarter, and confirm the spec change with the frontend."
+      },
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 378,
+        "priority": "medium",
+        "issue": "Corrupt stored row blocks every save",
+        "fix": "PUT always decrypts the stored row, so a bad row or rotated encryption key returns 500 forever; when decrypt fails, fall back to the first-save rule so a full set of keys can replace it."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/shared/external-api-runtime.service.ts",
+        "line": 46,
+        "priority": "medium",
+        "issue": "Endpoint picked without order",
+        "fix": "limit(1) without orderBy can pick a different endpoint per call, so requiredCredentialKeys can change; order like findAll (provider, name) so both agree."
+      },
+      {
+        "path": "apps/finnaux-api/src/external/shared/external-api-runtime.service.ts",
+        "line": 36,
+        "priority": "low",
+        "issue": "Inactive integration groups now writable",
+        "fix": "The integration-group active check was dropped as the v2 spec asked; keys can now be saved for groups under an inactive integration. Keep it if that is wanted."
+      },
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 378,
+        "priority": "low",
+        "issue": "Read-merge-write without transaction",
+        "fix": "Two partial PUTs at the same time can each overwrite the other's key; lock the row or run read and upsert in one transaction."
+      },
+      {
+        "path": "apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts",
+        "line": 351,
+        "priority": "low",
+        "issue": "Two sequential queries per request",
+        "fix": "getApiGroupAuthContext and getStoredCredentials are independent; run them with Promise.all in both credentials routes."
+      }
+    ],
+    "safeFiles": [
+      "apps/finnaux-api/src/configurations/external-apis/external-apis.controller.ts"
+    ],
+    "checks": [
+      {
+        "status": "green",
+        "command": "bunx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "bunx oxlint <3 changed files>",
+        "result": "passed"
+      }
+    ],
+    "advice": [
+      "devil's advocate, no false praise: applied; reported design-level leaks and races beyond the usual rule scan",
+      "look for leaks: mask length leak and mask threshold listed; no decrypted value in any response or log found",
+      "look for optimisations: parallel queries listed"
+    ]
+  },
+  {
     "id": "committable-13",
     "generatedAt": "2026-10-30T14:43:57+05:30",
     "author": "Dhruv",

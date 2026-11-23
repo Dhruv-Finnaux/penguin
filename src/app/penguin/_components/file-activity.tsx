@@ -1,6 +1,6 @@
 "use client"
 
-import { Skeleton } from "@/components/ui/skeleton"
+import { LoadingIndicatorView } from "@/components/loading-indicator-view"
 import { cn } from "@/lib/utils"
 import { useQuery } from "@tanstack/react-query"
 import { format } from "date-fns"
@@ -115,7 +115,7 @@ export function FileActivityPanel({
       {invalid ? (
         <div className="p-20 text-center text-sm text-muted-foreground">The start date is after the end date.</div>
       ) : query.isLoading ? (
-        <Skeleton className="h-48 w-full" />
+        <LoadingIndicatorView className="min-h-[60vh]" />
       ) : query.isError ? (
         <div className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
           {query.error.message}
@@ -130,7 +130,7 @@ export function FileActivityPanel({
               className={cn(
                 "relative grid gap-x-4 md:grid-cols-[9rem_minmax(0,1fr)]",
                 i > 0 &&
-                  "before:absolute before:inset-x-0 before:-top-3 before:border-t before:border-dashed before:border-border dark:before:border-white/50",
+                "before:absolute before:inset-x-0 before:-top-3 before:border-t before:border-dashed before:border-border dark:before:border-white/50",
               )}
             >
               <div className="pb-2 md:sticky md:top-2 md:self-start md:pb-0 md:pt-2.5 md:text-right">

@@ -19,6 +19,7 @@ const TITLES = {
   promptify: "Promptify",
   talktomegit: "Talk To Me Git",
   questions: "Questions",
+  dbbackups: "DB Backups",
 };
 
 const REPO_LABELS = { frontend: "Frontend", backend: "Backend" };

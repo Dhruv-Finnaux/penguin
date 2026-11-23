@@ -6,14 +6,10 @@ import { Transition } from "@headlessui/react"
 import { useEffect, useState } from "react"
 
 export function LoadingIndicatorView({
-  message,
   className,
-  spinnerProps,
-  messageClassName,
+  spinnerProps
 }: {
-  message?: string
   className?: string
-  messageClassName?: string
   spinnerProps?: SpinnerProps
 }) {
   const [show, setShow] = useState(false)
@@ -37,9 +33,6 @@ export function LoadingIndicatorView({
         leaveFrom="transform opacity-100"
         leaveTo="transform opacity-0">
         <div className="flex items-center gap-x-3">
-          {message && (
-            <h1 className={cn("font-medium tracking-tight", messageClassName)}>{message}</h1>
-          )}
           <Spinner {...spinnerProps} />
         </div>
       </Transition>

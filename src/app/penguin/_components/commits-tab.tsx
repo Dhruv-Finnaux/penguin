@@ -1,8 +1,8 @@
 "use client"
 
+import { LoadingIndicatorView } from "@/components/loading-indicator-view"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 import { dayLabel } from "../_lib/day-label"
 import { TimeLabel } from "./time-label"
@@ -10,11 +10,11 @@ import { useQuery } from "@tanstack/react-query"
 import { useMemo, useState } from "react"
 import type { CommitFile, CommitInfo, DiffFile, RepoKey, Review, ReviewRunSummary } from "../_lib/types"
 import { DiffView } from "./diff-view"
-import { ChangeBadge, ScoreBadge, VERDICT_LABEL, verdictStatus, STATUS_SURFACE } from "./status"
+import { ChangeBadge, ScoreBadge, VERDICT_LABEL, scoreStatus, STATUS_SURFACE } from "./status"
 import {
   countByPriority,
   countAttention,
-  countOptional,
+  countFuture,
   countResolved,
   PriorityCounts,
   sortFindings,
@@ -26,7 +26,8 @@ import { CopyPath } from "./copy-path"
 import { Highlight } from "./highlight"
 import { AuthorTag } from "./author-tag"
 import { CopyHash } from "./copy-hash"
-import { BadgeAlertIcon, ChevronRightIcon } from "lucide-react"
+import { UNNAMED_COLOR } from "../_lib/graph-layout"
+import { ArrowRightIcon, BadgeAlertIcon, ChevronRightIcon, GitBranchIcon, GitMergeIcon } from "lucide-react"
 
 async function fetchDiff(repo: RepoKey, hash: string): Promise<DiffFile[]> {
   const res = await fetch(`/penguin/api/diff?repo=${repo}&hash=${hash}`)
@@ -42,7 +43,7 @@ function CommitDiff({ repo, hash, stats }: { repo: RepoKey; hash: string; stats:
   })
   const [openFile, setOpenFile] = useState<string | null>(null)
 
-  if (query.isLoading) return <Skeleton className="h-24 w-full" />
+  if (query.isLoading) return <LoadingIndicatorView className="min-h-24" />
   if (query.isError) {
     return (
       <div className="flex items-center justify-between gap-2 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
@@ -158,7 +159,7 @@ function CommitReview({ review, history }: { review: Review; history: ReviewRunS
       <div
         className={cn(
           "flex flex-wrap items-center gap-4 rounded-xl p-3",
-          STATUS_SURFACE[verdictStatus(review.verdict)],
+          STATUS_SURFACE[scoreStatus(review.score)],
         )}>
         <ScoreBadge score={review.score} quality={review.quality} verdict={review.verdict} size="lg" />
         <div className="text-sm">
@@ -200,7 +201,7 @@ function CommitReview({ review, history }: { review: Review; history: ReviewRunS
           <PriorityCounts
             counts={countByPriority(findings)}
             resolved={countResolved(findings)}
-            optional={countOptional(findings)}
+            future={countFuture(findings)}
             attention={countAttention(findings)}
           />
         </div>
@@ -216,15 +217,83 @@ function CommitReview({ review, history }: { review: Review; history: ReviewRunS
   )
 }
 
+const BRANCHES_SHOWN = 3
+
+function BranchTags({ branches, colors }: { branches?: string[]; colors?: Map<string, string> }) {
+  if (!branches || branches.length === 0) return null
+  const shown = branches.slice(0, BRANCHES_SHOWN)
+  const rest = branches.length - shown.length
+  return (
+    <span className="flex min-w-0 max-w-[28rem] items-center gap-1" title={branches.join(", ")}>
+      {shown.map((name) => (
+        <code
+          key={name}
+          style={{ color: colors?.get(name) ?? UNNAMED_COLOR, background: `${colors?.get(name) ?? UNNAMED_COLOR}1f` }}
+          className="flex min-w-0 max-w-40 shrink items-center gap-1 rounded-sm px-1 py-0.5 font-mono text-xs">
+          <GitBranchIcon className="size-3 shrink-0" />
+          <span className="truncate">{name}</span>
+        </code>
+      ))}
+      {rest > 0 && <span className="shrink-0 text-xs text-muted-foreground">+{rest}</span>}
+    </span>
+  )
+}
+
+function parseMerge(subject: string): { from: string; into: string | null; pr: string | null } {
+  const pr = subject.match(/^Merge pull request (#\d+) from \S+?\/(\S+)/)
+  if (pr) return { from: pr[2], into: null, pr: pr[1] }
+  const m = subject.match(/^Merge (?:remote-tracking )?(?:branch|branches|tag) (.+?)(?: into (\S+))?$/)
+  const from = (m?.[1] ?? subject.replace(/^Merge\s+/, "")).replace(/['"]/g, "").replace(/^origin\//, "")
+  return { from, into: m?.[2] ?? null, pr: null }
+}
+
+function MergeChip({ name, colors }: { name: string; colors?: Map<string, string> }) {
+  const color = colors?.get(name) ?? UNNAMED_COLOR
+  return (
+    <code
+      title={name}
+      style={{ color, background: `${color}1f` }}
+      className="flex min-w-0 max-w-48 items-center gap-1 rounded-sm px-1 py-0.5 font-mono text-xs">
+      <GitBranchIcon className="size-3 shrink-0" />
+      <span className="truncate">{name}</span>
+    </code>
+  )
+}
+
+function MergeFlow({ subject, author, colors }: { subject: string; author: string; colors?: Map<string, string> }) {
+  const { from, into, pr } = parseMerge(subject)
+  return (
+    <span className="flex min-w-0 flex-1 items-center gap-2">
+      <AuthorTag name={author} />
+      <span className="!h-4 !w-px bg-black/25" />
+      {pr && <span className="shrink-0 font-mono">{pr}</span>}
+      <MergeChip name={from} colors={colors} />
+      <ArrowRightIcon className="size-3.5 shrink-0" />
+      {into ? <MergeChip name={into} colors={colors} /> : <span className="shrink-0">default branch</span>}
+    </span>
+  )
+}
+
 function CommitCard({
   commit,
   open,
   onToggle,
+  colors,
 }: {
   commit: CommitInfo
   open: boolean
   onToggle: () => void
+  colors?: Map<string, string>
 }) {
+  if (/^Merge\b/.test(commit.subject)) {
+    return (
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-1 pl-3 text-xs text-muted-foreground">
+        <GitMergeIcon className="size-4 shrink-0" />
+        <TimeLabel iso={commit.date} />
+        <MergeFlow subject={commit.subject} author={commit.author} colors={colors} />
+      </div>
+    )
+  }
 
   return (
     <div className="overflow-hidden rounded-xl border bg-card">
@@ -244,6 +313,7 @@ function CommitCard({
           label={<Highlight text={commit.shortHash} />}
           className="shrink-0 rounded-md bg-blue-600/10 p-1 text-xs font-medium text-blue-600 dark:bg-blue-400/15 dark:text-blue-400"
         />
+        <BranchTags branches={commit.branches} colors={colors} />
         <AuthorTag name={commit.author} />
         <code className="min-w-72 flex-1 truncate text-xs">
           <Highlight text={commit.subject} />
@@ -294,10 +364,12 @@ export function CommitTimeline({
   commits,
   openHash,
   onToggle,
+  colors,
 }: {
   commits: CommitInfo[]
   openHash: string | null
   onToggle: (hash: string) => void
+  colors?: Map<string, string>
 }) {
   const groups = useMemo(() => {
     const byDay = new Map<string, CommitInfo[]>()
@@ -349,16 +421,19 @@ export function CommitTimeline({
                         )}
                       />
                     )}
-                    <span
-                      className={cn(
-                        "absolute left-[6.75px] top-4 size-2.5 rounded-full border border-white p-1 dark:border-background",
-                        timelineDot(commit.review?.findings ?? null),
-                      )}
-                    />
+                    {commit.subject.includes("Merge") || (
+                      <span
+                        className={cn(
+                          "absolute left-[6.75px] top-4 size-2.5 rounded-full border border-white p-1 dark:border-background",
+                          timelineDot(commit.review?.findings ?? null),
+                        )}
+                      />
+                    )}
                     <CommitCard
                       commit={commit}
                       open={openHash === commit.hash}
                       onToggle={() => onToggle(commit.hash)}
+                      colors={colors}
                     />
                   </li>
                 )

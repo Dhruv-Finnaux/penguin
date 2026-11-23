@@ -1,5 +1,145 @@
 [
   {
+    "id": "todo-30",
+    "text": "Right now, every charge ID is deletable, which will have a cascade effect and delete all the vouchers in our entry. I don't know if it is good, because a mistake can happen. Though we have snapshots of databases continuously taken, consult with the manager and tell them that at least we should have a restrict, so no.",
+    "status": "todo",
+    "createdAt": "2026-11-20T10:19:18.801Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-29",
+    "text": "Ask Finnaux (eSign 5/5): What are the allowed signature positions?",
+    "status": "todo",
+    "createdAt": "2026-11-19T08:52:44.954Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-28",
+    "text": "Ask Finnaux (eSign 4/5): What is the full status list, and how does the signed PDF come back?",
+    "status": "todo",
+    "createdAt": "2026-11-19T08:52:44.954Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-27",
+    "text": "Ask Finnaux (eSign 3/5): Does Finnaux send the signing link to the signers itself?",
+    "status": "todo",
+    "createdAt": "2026-11-19T08:52:44.954Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-26",
+    "text": "Ask Finnaux (eSign 2/5): Should the PDF be sent as base64 or as a URL, and what is the size limit?",
+    "status": "todo",
+    "createdAt": "2026-11-19T08:52:44.954Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-25",
+    "text": "Ask Finnaux (eSign 1/5): What is the multi-signer request format, and do they charge per request or per signer?",
+    "status": "todo",
+    "createdAt": "2026-11-19T08:52:44.954Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-24",
+    "text": "Which Address is RC Address? Permanent Address, Current Address or RegisteredAt?",
+    "status": "done",
+    "createdAt": "2026-11-18T10:45:33.292Z",
+    "doneAt": "2026-11-19T09:25:42.224Z"
+  },
+  {
+    "id": "todo-23",
+    "text": "Finnaux migration batch (1/5): Don't merge feat/external-apis into dev or deploy it until the Finnaux migration + seed commit is in.",
+    "status": "done",
+    "createdAt": "2026-11-18T08:37:04.952Z",
+    "doneAt": "2026-11-19T09:25:50.621Z"
+  },
+  {
+    "id": "todo-22",
+    "text": "Finnaux migration batch (2/5): Use fixed-cuids.ts as the checklist. Every id under EXTERNAL_API_ENDPOINT.FINNAUX must have a row in the migration and a line in seed/data/apiEndpoints.json. Compare both lists before writing the migration.",
+    "status": "done",
+    "createdAt": "2026-11-18T08:37:04.951Z",
+    "doneAt": "2026-11-19T09:25:55.203Z"
+  },
+  {
+    "id": "todo-21",
+    "text": "Finnaux migration batch (3/5): Write the migration as an upsert (ON CONFLICT (\"id\") DO UPDATE), not DO NOTHING, so the hand-inserted local rows get brought in line.",
+    "status": "done",
+    "createdAt": "2026-11-18T08:37:04.950Z",
+    "doneAt": "2026-11-19T09:25:59.250Z"
+  },
+  {
+    "id": "todo-20",
+    "text": "Finnaux migration batch (4/5): Fix the '...' / '{...}' placeholders in drizzle/0008_finnaux_kyc_endpoints.sql in the same commit, using the real description and metadata from the seed file. '{...}'::jsonb breaks migrate on DBs that already have the Finnaux groups.",
+    "status": "todo",
+    "createdAt": "2026-11-18T08:37:04.949Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-19",
+    "text": "Finnaux migration batch (5/5): Before committing, run migrate on a DB without the hand-run rows (a copy, or a fresh DB + seed) and confirm every Finnaux endpoint appears.",
+    "status": "todo",
+    "createdAt": "2026-11-18T08:37:04.947Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-18",
+    "text": "Implement ESign",
+    "status": "todo",
+    "createdAt": "2026-11-18T04:36:25.899Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-17",
+    "text": "Implement Vehicle RC",
+    "status": "todo",
+    "createdAt": "2026-11-18T04:36:17.251Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-16",
+    "text": "Enum KycVerificationProviderEnum will have one new value in enum as \"FINNAUX\"",
+    "status": "done",
+    "createdAt": "2026-11-16T11:50:01.583Z",
+    "doneAt": "2026-11-18T04:36:54.615Z"
+  },
+  {
+    "id": "todo-15",
+    "text": "Remove /audit-logs route",
+    "status": "todo",
+    "createdAt": "2026-11-13T06:11:18.635Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-14",
+    "text": "Sidebar filters never sent to API (Tabs call hooks with no filters, so filter choices will not change live data; pass filter state when the backend supports it) (src/features/collections-dashboard/hooks.ts:22)",
+    "status": "todo",
+    "createdAt": "2026-11-12T09:21:37.735Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-13",
+    "text": "merge and sync dev and main to all local branches.",
+    "status": "done",
+    "createdAt": "2026-11-12T08:39:25.474Z",
+    "doneAt": "2026-11-18T04:37:43.894Z"
+  },
+  {
+    "id": "todo-12",
+    "text": "Figure out the dashboard data emptiness and populate.",
+    "status": "todo",
+    "createdAt": "2026-11-12T04:32:14.728Z",
+    "doneAt": null
+  },
+  {
+    "id": "todo-11",
+    "text": "Integrate the working vendor APIs.",
+    "status": "todo",
+    "createdAt": "2026-11-12T04:31:49.653Z",
+    "doneAt": null
+  },
+  {
     "id": "todo-10",
     "text": "Traced Aadhaar and PAN verification and saved the guide in Explanations",
     "status": "done",
@@ -51,9 +191,9 @@
   {
     "id": "todo-3",
     "text": "Put the report name and a date line above My Reports and Report Builder",
-    "status": "future",
+    "status": "done",
     "createdAt": "2026-11-05T12:21:34.482Z",
-    "doneAt": null
+    "doneAt": "2026-11-18T04:38:22.956Z"
   },
   {
     "id": "todo-2",

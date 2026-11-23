@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { confirmFinding, isLocalOnly, setFindingOptional, setFindingResolved } from "../../_lib/penguin.server"
+import { confirmFinding, isLocalOnly, setFindingFuture, setFindingResolved } from "../../_lib/penguin.server"
 
 export async function PATCH(request: Request) {
   if (!isLocalOnly()) return new NextResponse(null, { status: 404 })
@@ -14,9 +14,9 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ message }, { status: 400 })
     }
   }
-  if (typeof body?.file === "string" && typeof body?.id === "string" && typeof body?.optional === "boolean") {
+  if (typeof body?.file === "string" && typeof body?.id === "string" && typeof body?.future === "boolean") {
     try {
-      await setFindingOptional(body.file, body.id, body.optional)
+      await setFindingFuture(body.file, body.id, body.future)
       return NextResponse.json({ ok: true })
     } catch (error) {
       const message = error instanceof Error ? error.message : "Could not update the finding"
