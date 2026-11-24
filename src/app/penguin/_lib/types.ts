@@ -172,6 +172,8 @@ export interface CommitInfo {
   history: ReviewRunSummary[]
   /** Branches that contain this commit, local and remote merged. Set on the commit history pages. */
   branches?: string[]
+  /** Pull request merges only: the branches that have this merge on their first-parent line. */
+  mergedInto?: string[]
 }
 
 export interface ReviewRunSummary {

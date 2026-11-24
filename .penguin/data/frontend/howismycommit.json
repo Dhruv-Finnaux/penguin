@@ -1,5 +1,69 @@
 [
   {
+    "id": "howismycommit-90",
+    "generatedAt": "2026-11-24T16:20:33+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "3ef31703b18e086df9a2903e77375604267cfe34"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 13,
+      "deletions": 0
+    },
+    "changeType": [
+      "UI"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 1
+    },
+    "before": "In the Finnaux PAN dialog, Verify Now only showed a loading state on the button while the request ran.",
+    "after": "While the verify request is pending, the dialog shows a spinner with 'Verifying PAN'; on error it returns to the form with the typed name kept and an error toast.",
+    "effects": [
+      "Only the Finnaux PAN flow changes. The Surepass flow and shared DirectVerificationFlow are untouched."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/components/pan-verify/flows/finnaux-pan-flow.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint src/features/external-apis/components/pan-verify/flows/finnaux-pan-flow.tsx",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not exercised in a browser; the pending-to-error return to the form was verified by reading the code only."
+    ],
+    "info": [
+      "The earlier reports of the previous five commits have no findings, so there was nothing to re-check. The pending view has no Cancel button; the dialog close button still works."
+    ]
+  },
+  {
     "id": "howismycommit-89",
     "generatedAt": "2026-11-24T11:38:49+05:30",
     "author": "Dhruv",

@@ -135,7 +135,7 @@ function FindingGroupCard({ group }: { group: FindingGroup }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-card">
+    <div className={cn("overflow-hidden rounded-xl border bg-card", !group.hash && "border-dashed")}>
       <button
         type="button"
         aria-expanded={open}
@@ -154,7 +154,7 @@ function FindingGroupCard({ group }: { group: FindingGroup }) {
           />
         )}
         <code className="min-w-72 flex-1 truncate text-xs">
-          <Highlight text={group.subject} />s
+          <Highlight text={group.subject} />
         </code>
         <ScoreBadge score={group.score} quality={group.quality} verdict={group.verdict} />
         <PriorityCounts

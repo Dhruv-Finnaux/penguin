@@ -266,8 +266,14 @@ function MergeChip({ name }: { name: string }) {
   )
 }
 
-function MergeFlow({ subject, author }: { subject: string; author: string }) {
-  const { from, into, pr } = parseMerge(subject)
+// Several branches can carry the same merge (dev, and the feature branches that later took dev in).
+// Prefer the trunk-like one: main, then dev, then the first.
+const pickTarget = (names?: string[]) =>
+  names && names.length > 0 ? (["main", "master", "dev", "develop"].find((n) => names.includes(n)) ?? names[0]) : null
+
+function MergeFlow({ subject, author, mergedInto }: { subject: string; author: string; mergedInto?: string[] }) {
+  const { from, pr } = parseMerge(subject)
+  const into = parseMerge(subject).into ?? pickTarget(mergedInto)
   return (
     <span className="flex min-w-0 flex-1 items-center gap-2">
       <AuthorTag name={author} />
@@ -294,7 +300,7 @@ function CommitCard({
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-1 pl-3 text-xs text-muted-foreground">
         <GitMergeIcon className="size-4 shrink-0" />
         <TimeLabel iso={commit.date} />
-        <MergeFlow subject={commit.subject} author={commit.author} />
+        <MergeFlow subject={commit.subject} author={commit.author} mergedInto={commit.mergedInto} />
       </div>
     )
   }

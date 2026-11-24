@@ -394,6 +394,29 @@ const authorPattern = (name: string) => `^${name.replace(/[\\.[*^$]/g, "\\$&")} 
 const TRUNK_FIRST = ["main", "master", "dev", "develop"]
 const membershipCache = new Map<string, { key: string; byCommit: Map<string, string[]> }>()
 
+const firstParentCache = new Map<string, { key: string; lines: Map<string, Set<string>> }>()
+
+// For each branch, the commits on its first-parent line: the ones merged or committed straight onto it.
+async function getFirstParentLines(repo: RepoKey): Promise<Map<string, Set<string>>> {
+  const branches = await getBranches(repo)
+  const key = branches.map((b) => `${b.name}@${b.hash}`).join("|")
+  const cached = firstParentCache.get(repo)
+  if (cached?.key === key) return cached.lines
+  const lines = new Map<string, Set<string>>()
+  await Promise.all(
+    branches.map(async (branch) => {
+      const name = branch.remote ? branch.name.replace(/^origin\//, "") : branch.name
+      const ref = branch.remote ? `refs/remotes/${branch.name}` : `refs/heads/${branch.name}`
+      const out = await git(repo, ["rev-list", "--first-parent", ref, "--"])
+      const set = lines.get(name) ?? new Set<string>()
+      for (const hash of out.split("\n")) if (hash) set.add(hash)
+      lines.set(name, set)
+    }),
+  )
+  firstParentCache.set(repo, { key, lines })
+  return lines
+}
+
 // Which branches contain each commit. One rev-list per branch, cached until a branch tip moves.
 async function getMembership(repo: RepoKey): Promise<Map<string, string[]>> {
   const branches = await getBranches(repo)
@@ -453,6 +476,15 @@ export async function getCommitPage(
   const commits = parseLog(out, repo, reviewsByCommit(reviews, repo))
   const membership = await getMembership(repo)
   for (const commit of commits) commit.branches = membership.get(commit.hash) ?? []
+  // A GitHub pull request merge names only the branch it came from. The branch it went into is the one
+  // that has the merge on its own first-parent line.
+  const pullRequests = commits.filter((c) => /^Merge pull request #\d+ from /.test(c.subject))
+  if (pullRequests.length > 0) {
+    const onLine = await getFirstParentLines(repo)
+    for (const commit of pullRequests) {
+      commit.mergedInto = [...onLine.entries()].filter(([, hashes]) => hashes.has(commit.hash)).map(([name]) => name)
+    }
+  }
   return { commits: commits.slice(0, take), hasMore: commits.length > take }
 }
 

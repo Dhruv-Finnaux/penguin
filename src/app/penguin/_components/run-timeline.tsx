@@ -101,7 +101,7 @@ export function RunTimeline<T extends { fileName: string; generatedAt: string }>
           <div className="pb-2 md:sticky md:top-2 md:self-start md:pb-0 md:pt-2.5 md:text-right">
             <h2 className="text-xs font-semibold text-black/50 dark:text-white/50">{day.day}</h2>
             <p className="text-xs text-muted-foreground">
-              {day.runs.length} {day.runs.length === 1 ? noun : `${noun}s`}
+              {day.runs.length} {day.runs.length === 1 ? noun : `${noun}`}
             </p>
           </div>
           <div className="relative pb-6">

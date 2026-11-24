@@ -1,6 +1,228 @@
 # 🐧 How Is My Commit · Backend
 
-> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 57 entries, newest first.
+> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 58 entries, newest first.
+
+## howismycommit-58
+
+| Field | Value |
+|---|---|
+| id | howismycommit-58 |
+| generatedAt | 2026-11-24T16:16:37+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 07f82b0a03599091e857955f0e63a25b26cacb1c |
+| files.changed | 122 |
+| files.added | 33 |
+| files.modified | 82 |
+| files.deleted | 7 |
+| files.insertions | 10503 |
+| files.deletions | 1290 |
+| verdict | review-with-caution |
+| score | 92 |
+| commitScore | 72 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 2 |
+| summary.green | 3 |
+| summary.info | 0 |
+| before | Before 07f82b0a, SurePass, Digio, CRIF, DigiPehchan, KVB and the credit bureaus each had working verification, eSign and bureau flows using credentials saved per API group. |
+| after | All of those provider flows are still present; this branch only added Finnaux alongside them, plus small additive changes to SurePass RC, Digio eSign input validation and credential saving. |
+
+### changeType (2)
+
+- refactor
+- feature
+
+### effects (1)
+
+- Provider checks on 07f82b0a^..27d063dc (apps only): SurePass, Digio, CRIF, DigiPehchan, KVB, credit bureaus, shared external API runtime and credential saving.
+
+### filesReviewed (8)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/digio | modified | green | no issues: identical to 07f82b0a^, no commit in range touched it |
+| apps/finnaux-api/src/external/surepass/surepass.service.ts | modified | green | no issues: additive (permanentAddress) |
+| apps/finnaux-api/src/external/crif-high-mark | modified | green | no issues: unchanged |
+| apps/finnaux-api/src/external/digipehchan | modified | green | no issues: unchanged |
+| apps/finnaux-api/src/los/loan-application/asset-vehicles/asset-vehicles.service.ts | modified | green | no issues: SurePass RC still default unless Finnaux RC is selected |
+| apps/finnaux-api/src/los/loan-application/esign/esign.service.ts | modified | green | no issues: Digio eSign branch kept |
+| apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts | modified | green | no issues: full credential save still works |
+| apps/finnaux-api/src/external/shared/external-api-runtime.service.ts | modified | green | no issues: only used by credential config, not provider calls |
+
+### findings (7)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | SurePass RC number now has spaces removed (Dhruv) |
+| location | apps/finnaux-api/src/los/loan-application/asset-vehicles/asset-vehicles.service.ts:497 |
+| problem | Since 4d5e1f5d/525ecdf4 the RC number sent to SurePass has spaces stripped, e.g. MH 12 AB 1234 becomes MH12AB1234. Before 07f82b0a it was sent as typed (SurePass only trimmed and upper-cased it). |
+| impact | Behaviour change for the old SurePass flow; not a defect. |
+| fix | None needed if SurePass verifies compact numbers as before. |
+| evidence | rcNumber: assetVehicle.registrationNumber<br>        .replaceAll(' ', '') |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T11:42:08.058Z |
+| resolvedNote | Intended behaviour: RC spaces are removed on purpose (asset-vehicles.service.ts:497). |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[2] · F2
+
+| Field | Value |
+|---|---|
+| id | F2 |
+| severity | P3 |
+| title | Digio eSign document URL check moved to the service (Dhruv) |
+| location | apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:201 |
+| problem | Since 4c4198f4/3a5bf969 documentUrl is optional in the DTO; the Digio branch now rejects a missing URL in the service. Before 07f82b0a the DTO required it. |
+| impact | Same 400 error for Digio, different message text; not a defect. |
+| fix | None needed. |
+| evidence | if (!input.documentUrl) {<br>      throw new BadRequestException('documentUrl is required') |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T11:42:08.058Z |
+| resolvedNote | Message is clear: Digio path returns 400 "documentUrl is required" (esign.service.ts:201-203). |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[3] · F3
+
+| Field | Value |
+|---|---|
+| id | F3 |
+| severity | P3 |
+| title | Credential save rewritten for every provider (Dhruv) |
+| location | apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts:380 |
+| problem | Since 07f82b0a (and 14530eec, 3dbd8880, 06be55ad) saving credentials merges single keys with stored ones, adds a masked read, and groups without keys default to API_KEY. |
+| impact | Affects SurePass, Digio, CRIF and others when credentials are saved; full-key saves work as before. Not a defect. |
+| fix | None needed. |
+| evidence | mergeCredentials(<br>                storedCredentials,<br>                input.credentials, |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T12:28:18.880Z |
+| resolvedNote | Marked resolved manually |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[4] · F4
+
+| Field | Value |
+|---|---|
+| id | F4 |
+| severity | P3 |
+| title | FINNAUX added to provider enums (Dhruv) |
+| location | apps/finnaux-api/src/drizzle/schema/enums.ts:868 |
+| problem | Provider enums gained FINNAUX; SUREPASS, DIGIO and INTERNAL are kept. |
+| impact | Nothing removed; the matching DB migration must ship with it. |
+| fix | Commit the stashed migration before deploy. |
+| evidence | values: ['SUREPASS', 'DIGIO', 'FINNAUX'] |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T12:09:26.876Z |
+| resolvedNote | Marked resolved manually |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+| future | true |
+
+#### findings[5] · F5
+
+| Field | Value |
+|---|---|
+| id | F5 |
+| severity | P3 |
+| title | Redis activity-log code deleted (shekhar, via dev) |
+| location | apps/finnaux-api/src/los/loan-application/logger |
+| problem | beed0a64 and ce3a0b85 removed the Redis log queue, interceptor and inspector. Came in through dev merges, not this branch. |
+| impact | Loan application logs are now written directly; planned refactor, not a defect. |
+| fix | None for this branch. |
+| evidence | refactor(audit-logs): write loan application logs directly and remove redis queue |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T11:01:34.774Z |
+| resolvedNote | Marked resolved manually |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[6] · F6
+
+| Field | Value |
+|---|---|
+| id | F6 |
+| severity | P3 |
+| title | Fintech onboarding routes and exceptions filter changed (shekhar, via dev) |
+| location | apps/finnaux-api/src/fintech/fintech.controller.ts |
+| problem | d6cc8b75 removed anonymous onboarding routes; 5e51e946 and 227986e2 reworked the exceptions filter (committed on dev before 07f82b0a, merged later). |
+| impact | Planned refactor, not from this branch. |
+| fix | None for this branch. |
+| evidence | fix(fintech): remove anonymous onboarding routes |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T11:01:50.080Z |
+| resolvedNote | Marked resolved manually |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[7] · F7
+
+| Field | Value |
+|---|---|
+| id | F7 |
+| severity | P3 |
+| title | Duplicate HRMS attendance values removed (shekhar, via dev) |
+| location | apps/finnaux-api/src/drizzle/schema/enums.ts:1669 |
+| problem | 25a5304b removed duplicate WEEK_OFF/MISPUNCH values. Came in through dev. |
+| impact | Planned cleanup, not from this branch. |
+| fix | None for this branch. |
+| evidence | fix(hrms): remove duplicate WEEK_OFF attendance status |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T11:02:00.611Z |
+| resolvedNote | Marked resolved manually |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | git diff 07f82b0a^ -- apps/finnaux-api/src/external/digio | passed: no differences, Digio fully restored |
+| green | git diff 07f82b0a^ HEAD -- external/crif-high-mark external/digipehchan integrations lms/customer/kyc credit-bureaus | passed: no removed lines |
+| green | git diff --numstat dev HEAD -- apps | passed: every other deleted line already exists in dev, so it came from dev merges |
+
+### gaps (2)
+
+- Code comparison only; no provider was called live to prove it still works.
+- Signcare has no code in the backend (it only hosts the Finnaux docs), so there was nothing to compare.
+
+### info (0)
+
+_Empty._
+
+---
 
 ## howismycommit-57
 

@@ -1,6 +1,72 @@
 # 🐧 How Is My Commit · Frontend
 
-> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 89 entries, newest first.
+> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 90 entries, newest first.
+
+## howismycommit-90
+
+| Field | Value |
+|---|---|
+| id | howismycommit-90 |
+| generatedAt | 2026-11-24T16:20:33+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 3ef31703b18e086df9a2903e77375604267cfe34 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 13 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 1 |
+| before | In the Finnaux PAN dialog, Verify Now only showed a loading state on the button while the request ran. |
+| after | While the verify request is pending, the dialog shows a spinner with 'Verifying PAN'; on error it returns to the form with the typed name kept and an error toast. |
+
+### changeType (1)
+
+- UI
+
+### effects (1)
+
+- Only the Finnaux PAN flow changes. The Surepass flow and shared DirectVerificationFlow are untouched.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/external-apis/components/pan-verify/flows/finnaux-pan-flow.tsx | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint src/features/external-apis/components/pan-verify/flows/finnaux-pan-flow.tsx | passed |
+
+### gaps (1)
+
+- Not exercised in a browser; the pending-to-error return to the form was verified by reading the code only.
+
+### info (1)
+
+- The earlier reports of the previous five commits have no findings, so there was nothing to re-check. The pending view has no Cancel button; the dialog close button still works.
+
+---
 
 ## howismycommit-89
 
