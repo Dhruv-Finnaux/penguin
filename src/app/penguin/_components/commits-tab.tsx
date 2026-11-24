@@ -25,7 +25,7 @@ import { Collapse } from "./collapse"
 import { CopyPath } from "./copy-path"
 import { Highlight } from "./highlight"
 import { AuthorTag } from "./author-tag"
-import { CopyHash } from "./copy-hash"
+import { HashButton } from "./hash-button"
 import { colorForBranch } from "../_lib/graph-layout"
 import { ArrowRightIcon, BadgeAlertIcon, ChevronRightIcon, GitBranchIcon, GitMergeIcon } from "lucide-react"
 
@@ -318,6 +318,7 @@ function CommitCard({
         <code className="shrink-0 text-xs font-medium">
           <TimeLabel iso={commit.date} />
         </code>
+        <HashButton hash={commit.hash} />
         <BranchTags branches={commit.branches} />
         <AuthorTag name={commit.author} />
         <code className="min-w-72 flex-1 truncate text-xs">
@@ -328,11 +329,6 @@ function CommitCard({
           <span className="bg-green-600/10 text-green-600 px-1 py-0.5 rounded-sm text-success">+{commit.insertions}</span>
           <span className="bg-red-600/10 text-red-600 px-1 py-0.5 rounded-sm text-destructive">-{commit.deletions}</span>
         </span>
-        <CopyHash
-          hash={commit.hash}
-          label={<Highlight text={commit.shortHash} />}
-          className="shrink-0 rounded-md bg-blue-600/10 p-1 text-xs font-medium text-blue-600 dark:bg-blue-400/15 dark:text-blue-400"
-        />
         {commit.review ? (
           <span className="flex shrink-0 items-center gap-2">
             <ScoreBadge score={commit.review.score} quality={commit.review.quality} verdict={commit.review.verdict} />

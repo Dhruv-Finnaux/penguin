@@ -8,7 +8,7 @@ import type { CommitInfo, Review, ReviewFinding } from "../_lib/types"
 import { Collapse } from "./collapse"
 import { Highlight, SearchHighlightProvider } from "./highlight"
 import { matchesQuery } from "../_lib/fuzzy"
-import { CopyHash } from "./copy-hash"
+import { HashButton } from "./hash-button"
 import { SearchBox } from "./search-box"
 import { ScoreBadge } from "./status"
 import { NextTabs } from "./penguin-tabs"
@@ -146,13 +146,7 @@ function FindingGroupCard({ group }: { group: FindingGroup }) {
           <TimeLabel iso={group.date} />
         </code>
         <RepoBadge repo={group.repo} />
-        {group.hash && (
-          <CopyHash
-            hash={group.hash}
-            label={<Highlight text={group.hash.slice(0, 7)} />}
-            className="shrink-0 rounded-md bg-blue-600/10 p-1 text-xs font-medium text-blue-600 dark:bg-blue-400/15 dark:text-blue-400"
-          />
-        )}
+        {group.hash && <HashButton hash={group.hash} />}
         <code className="min-w-72 flex-1 truncate text-xs">
           <Highlight text={group.subject} />
         </code>
