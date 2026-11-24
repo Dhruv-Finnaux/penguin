@@ -13,21 +13,21 @@ import { CopyData, tableMarkdown } from "./copy-data"
 import { CopyPath } from "./copy-path"
 import { Highlight, SearchHighlightProvider } from "./highlight"
 import { SearchBox } from "./search-box"
-import { PRIORITY_ORDER, PriorityLabel, statusDot } from "./findings"
+import { PRIORITY_ORDER, PriorityLabel, priorityDot } from "./findings"
 import { countByRepo, filterByRepo, RepoBadge, RepoFilter, type RepoFilterValue } from "./repo"
 
-const dotClass = (run: CommittableRun) => statusDot(run.attention.map((item) => item.priority))
+const dotClass = (run: CommittableRun) => priorityDot(run.attention.map((item) => item.priority))
 
-// Full class names, so Tailwind generates them. Keyed by the dot colour statusDot() returns.
+// Full class names, so Tailwind generates them. Keyed by the dot colour priorityDot() returns.
 const BADGE_FILL: Record<string, string> = {
   "bg-red-500": "fill-red-500",
-  "bg-amber-500": "fill-amber-500",
+  "bg-orange-500": "fill-orange-500",
+  "bg-amber-400": "fill-amber-400",
   "bg-green-600": "fill-green-600",
-  "bg-blue-600": "fill-blue-600",
 }
 
 function VerdictBadge({ run }: { run: CommittableRun }) {
-  const fill = BADGE_FILL[dotClass(run)] ?? "fill-blue-600"
+  const fill = BADGE_FILL[dotClass(run)] ?? "fill-green-600"
   const Icon = run.verdict === "committable" ? BadgeCheckIcon : BadgeAlertIcon
   return <Icon className={cn("size-6 text-white dark:text-black", fill)} />
 }

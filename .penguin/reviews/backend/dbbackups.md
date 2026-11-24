@@ -1,6 +1,41 @@
 # 🐧 DB Backups · Backend
 
-> Generated from `data/backend/dbbackups.json`. Edit the JSON, not this file. 4 entries, newest first.
+> Generated from `data/backend/dbbackups.json`. Edit the JSON, not this file. 6 entries, newest first.
+
+## dbbackups-6
+
+| Field | Value |
+|---|---|
+| id | dbbackups-6 |
+| generatedAt | 2026-11-24T14:59:08+05:30 |
+| author | Dhruv |
+| action | backup |
+| database | finnaux_dev |
+| file | /Users/kunaljain/Desktop/Work/db-backups/finnaux_dev.dump |
+| sizeBytes | 11523421 |
+| fileModifiedAt | 2026-11-24T09:29:08.755Z |
+| tables | 370 |
+| migrations | 18 |
+
+---
+
+## dbbackups-5
+
+| Field | Value |
+|---|---|
+| id | dbbackups-5 |
+| generatedAt | 2026-11-24T12:18:08+05:30 |
+| author | Dhruv |
+| action | restore |
+| database | finnaux_dev |
+| file | /Users/kunaljain/Desktop/Work/db-backups/finnaux_dev.dump |
+| sizeBytes | 11518373 |
+| fileModifiedAt | 2026-11-23T05:36:09.273Z |
+| tables | 370 |
+| migrations | 12 |
+| backupName | finnaux_dev |
+
+---
 
 ## dbbackups-4
 

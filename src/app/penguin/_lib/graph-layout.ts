@@ -15,16 +15,19 @@ function hslToHex(h: number, s: number, l: number) {
   return `#${channel(0)}${channel(8)}${channel(4)}`
 }
 
-// Hues at least 30 degrees apart, so two branches never get neighbouring shades (no green next to
-// lime). Yellow is darker so it still reads on a light background.
+// main is green and dev is blue. Every other branch hashes to one of these, which leave out green and
+// blue (and the teal and indigo next to them), so no branch looks like main or dev.
+const FIXED: Record<string, [number, number]> = {
+  main: [140, 0.38],
+  master: [140, 0.38],
+  dev: [214, 0.46],
+  develop: [214, 0.46],
+}
+
 const HUES: [number, number][] = [
   [0, 0.45], // red
   [28, 0.45], // orange
   [48, 0.4], // yellow
-  [140, 0.38], // green
-  [178, 0.36], // teal
-  [214, 0.46], // blue
-  [245, 0.5], // indigo
   [275, 0.5], // purple
   [305, 0.45], // fuchsia
   [335, 0.46], // pink
@@ -38,7 +41,7 @@ export function colorForBranch(name: string) {
   if (!color) {
     let hash = 2166136261
     for (const char of key) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619) >>> 0
-    const [hue, lightness] = HUES[hash % HUES.length]
+    const [hue, lightness] = FIXED[key] ?? HUES[hash % HUES.length]
     color = hslToHex(hue, 0.68, lightness)
     colorCache.set(key, color)
   }

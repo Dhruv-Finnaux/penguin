@@ -1,5 +1,220 @@
 [
   {
+    "id": "howismycommit-89",
+    "generatedAt": "2026-11-24T11:38:49+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "0b054e12d9c0fccdc581340732c14ba198238d76"
+    },
+    "files": {
+      "changed": 3,
+      "added": 1,
+      "modified": 2,
+      "deleted": 0,
+      "insertions": 28,
+      "deletions": 2
+    },
+    "changeType": [
+      "feature",
+      "UI"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "The bank forms did not pass the account holder name to verification, kept the IFSC as typed after verifying, and showed nothing about the name match.",
+    "after": "The bank modal and the customer bank tab pass the holder name into verification. After a successful verification the form copies the returned IFSC so it matches the stored verification, shows 'Name match score: N' as small text under the holder name, and adds a 'Name match score' row to the details dialog; nothing is shown when the score is null and there is no warning or Matched flag.",
+    "effects": [
+      "Add or edit bank modal and the customer bank tab",
+      "The IFSC copy applies to Surepass too, where the returned IFSC equals the typed one, so it changes nothing"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/customers/components/bank-modal.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/view-edit-customer/_components/bank-details.tab.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/bank-name-match.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <files of both commits>",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser by me; the user tested the Finnaux save end to end."
+    ],
+    "info": [
+      "The customer bank tab verifies but the saved bank is only updated by the backend (lastVerifiedAt), as before.",
+      "Surepass returns the IFSC it was given (ifscCode: input.ifsc in the backend), so copying it back leaves the Surepass form unchanged.",
+      "isNameMatch stays in the response type but no screen reads it, on purpose, because Finnaux has returned false with score 100."
+    ]
+  },
+  {
+    "id": "howismycommit-88",
+    "generatedAt": "2026-11-24T11:38:49+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "39f5fbe6d7f80c9155ec951193f58680f016e4e3"
+    },
+    "files": {
+      "changed": 12,
+      "added": 3,
+      "modified": 9,
+      "deleted": 0,
+      "insertions": 180,
+      "deletions": 2
+    },
+    "changeType": [
+      "feature",
+      "API",
+      "UI"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "Bank account verification only had Surepass flows, so with a Finnaux provider selected the Verify Bank dialog was empty.",
+    "after": "When the Bank Account group's provider is finnaux, both bank flows (the one used by the bank forms and the plain one) open a shared dialog that shows the account number and IFSC read-only, asks for the account holder name, checks the account number is 9 to 18 digits, and calls POST /external/finnaux/bank/verify. Errors toast and keep the dialog open; success passes the row to the existing success handler.",
+    "effects": [
+      "Add or edit bank modal and the customer bank tab, through the shared Verify trigger (already hidden for users without the 12 page rights when the provider is finnaux)",
+      "Surepass bank verification is unchanged"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/components/common/finnaux-bank-verify-dialog.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/bank-customer-verify/flows/finnaux-bank-customer-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/bank-verify/flows/finnaux-bank-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/bank-customer-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/bank-customer-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/bank-customer-verify/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/bank-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/bank-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/bank-verify/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <files of both commits>",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser by me; the user tested Add bank, Check, Verify Bank, Save with the real backend and it worked."
+    ],
+    "info": [
+      "The plain bank-verify module (BankVerifyProvider) is not used by any screen today; its Finnaux flow is added for consistency and is untested.",
+      "Account numbers with letters or separators are blocked by the 9 to 18 digit check; the backend rule is the same.",
+      "The 400 validation messages from the backend are arrays; the app shows only the first item, which the dialog's own checks mostly prevent."
+    ]
+  },
+  {
     "id": "howismycommit-87",
     "generatedAt": "2026-11-24T10:02:02+05:30",
     "author": "Dhruv",

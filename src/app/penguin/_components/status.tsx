@@ -79,18 +79,41 @@ export function ScoreBadge({
   size?: "sm" | "lg"
 }) {
   const large = size === "lg"
+  if (large) {
+    // Half-circle gauge: the arc fills in proportion to the score, the number sits in the opening.
+    const arc = "M10,60 A50,50 0 0 1 110,60"
+    return (
+      <span
+        title={`Review score ${score} out of 100: ${QUALITY_LABEL[quality]}`}
+        className="relative inline-flex h-[4.5rem] w-32 shrink-0 flex-col items-center justify-end"
+      >
+        <svg viewBox="0 0 120 64" className="absolute inset-x-0 top-0 w-full overflow-visible" aria-hidden>
+          <path d={arc} pathLength={100} fill="none" stroke="currentColor" strokeOpacity={0.18} strokeWidth={16} />
+          <path
+            d={arc}
+            pathLength={100}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={16}
+            strokeDasharray={`${Math.max(0, Math.min(100, score))} 100`}
+          />
+        </svg>
+        <span className="relative text-3xl font-semibold leading-none tabular-nums text-foreground">{score}</span>
+        <span className="relative text-[10px] font-medium leading-tight">{QUALITY_LABEL[quality]}</span>
+      </span>
+    )
+  }
   return (
     <span
       title={`Review score ${score} out of 100: ${QUALITY_LABEL[quality]}`}
       className={cn(
         "inline-flex shrink-0 items-baseline gap-1 rounded-lg font-semibold tabular-nums",
-        large ? "px-3 py-1.5" : "px-2 py-0.5",
-        large || STATUS_SURFACE[scoreStatus(score)],
-      )}>
-      <span className={large ? "text-3xl leading-none" : "text-sm"}>{score}</span>
-      <span className={cn("font-medium", large ? "text-xl" : "text-[10px]")}>
-        {QUALITY_LABEL[quality]}
-      </span>
+        "px-2 py-0.5",
+        STATUS_SURFACE[scoreStatus(score)],
+      )}
+    >
+      <span className="text-sm">{score}</span>
+      <span className="text-[10px] font-medium">{QUALITY_LABEL[quality]}</span>
     </span>
   )
 }

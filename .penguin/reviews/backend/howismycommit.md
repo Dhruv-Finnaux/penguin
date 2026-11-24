@@ -1,6 +1,521 @@
 # 🐧 How Is My Commit · Backend
 
-> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 51 entries, newest first.
+> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 57 entries, newest first.
+
+## howismycommit-57
+
+| Field | Value |
+|---|---|
+| id | howismycommit-57 |
+| generatedAt | 2026-11-24T14:05:57+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 50699b440162e0b5651e2e5300b2c46187839d3f |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 45 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 5 |
+| summary.info | 3 |
+| before | Adding a bank to an existing customer (POST lms/customer/:customerId/bank) never looked at bank verifications, so a verified account stayed PENDING and the new bank had no lastVerifiedAt. |
+| after | When no lastVerifiedAt is passed, create looks for a valid unused PENDING verification with the same account number and IFSC. If one exists, the new bank gets lastVerifiedAt from it, and the verification is linked to the customer and bank and marked EXPIRED. Without one the bank saves as before. |
+
+### changeType (2)
+
+- bug-fix
+- api
+
+### effects (3)
+
+- Add bank to an existing customer, and the customer create path at customer.service.ts:165 that calls create without lastVerifiedAt
+- The new-customer path that passes its own lastVerifiedAt is left alone
+- The bank verification trail shows linked verifications as used
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/lms/customer/bank/bank.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 877184fc030a8791fc04f112319343bf8be86dd6 | F1 | Schema enum value ships without its migration | open | Still open: migration 0018 is only in stash@{0}. |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit, also on this commit alone in a temporary copy | passed |
+| green | bunx oxlint (customers bank) | passed |
+| green | script (rolled-back transaction on finnaux_dev): add a bank to an existing customer with a waiting verification, and a never-verified bank | passed: lastVerifiedAt set and the verification EXPIRED and linked; the never-verified bank saves with an empty lastVerifiedAt; 0 test rows left |
+| green | script (earlier in this session): create called with lastVerifiedAt, the new-customer path | passed: the verification is left PENDING for the caller to expire |
+| green | bun run build | passed (run before the commits, code unchanged since) |
+
+### gaps (2)
+
+- The lookup uses an exact account number and IFSC match, like the new-customer path, so a differently cased IFSC from a client would not link
+- No automated test covers the link
+
+### info (3)
+
+- This only adds behaviour when a matching unused verification exists; adding an unverified bank is unchanged
+- The extra lookup runs on every add-bank call that has no lastVerifiedAt, one small query
+- Surepass verifications are saved as EXPIRED, so they never match here
+
+---
+
+## howismycommit-56
+
+| Field | Value |
+|---|---|
+| id | howismycommit-56 |
+| generatedAt | 2026-11-24T14:05:57+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 82b3b8c413b1fc081afa83244625a09c705fe616 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 82 |
+| files.deletions | 13 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 5 |
+| summary.info | 4 |
+| before | Every Finnaux bank verify call, including cache hits, saved a new PENDING verification row, and verifying an already saved bank left an unused PENDING row. |
+| after | A verified account has one valid PENDING row per account and IFSC: older timed-out rows are marked EXPIRED, and repeats add nothing. Verifying an account that is already a saved bank updates its lastVerifiedAt and, on a fresh call, records one EXPIRED row linked to that bank and customer. |
+
+### changeType (2)
+
+- bug-fix
+- api
+
+### effects (3)
+
+- bankAccountVerifications: fewer rows, and the bank verification trail no longer lists duplicates
+- bankDetails.lastVerifiedAt is updated when a saved bank is verified
+- Cache hits no longer write rows, except to restore a missing valid PENDING row
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 877184fc030a8791fc04f112319343bf8be86dd6 | F1 | Schema enum value ships without its migration | open | Still open: migration 0018 is only in stash@{0}; without the enum value the row insert fails with an enum error after the billed call. |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit, also on this commit alone in a temporary copy | passed |
+| green | bunx oxlint (finnaux, customers bank) | passed |
+| green | script (rolled-back transaction on finnaux_dev): verify and 3 repeats, verify a saved bank and a repeat | passed: one PENDING row after the repeats; the saved bank gets one EXPIRED row linked to it; 0 test rows left |
+| green | script (earlier in this session): a timed-out row then a repeat | passed: old row EXPIRED, one new PENDING |
+| green | bun run build | passed (run before the commits, code unchanged since) |
+
+### gaps (2)
+
+- Two simultaneous first-time verifications of the same account could each insert a PENDING row; the frontend disables the button, so this was not tested
+- No automated test covers the verification rows
+
+### info (4)
+
+- For an account that is already a saved bank of another customer, verifying it for a new customer now ends with 'verification could not be completed' at save instead of 'Account already exists'; the Surepass flow already behaves this way
+- Any user's valid PENDING row for an account is reused by whoever verifies it next, the same as before
+- A real call with the enum value missing still bills Finnaux and then fails on the row insert (seen once on finnaux_dev)
+- Needs the FINNAUX enum value in the database before it runs (migration 0018 in the stash)
+
+---
+
+## howismycommit-55
+
+| Field | Value |
+|---|---|
+| id | howismycommit-55 |
+| generatedAt | 2026-11-24T14:05:57+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 5c7dfd74ce9c2621c113337f7e25ec7c253c789f |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 11 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 5 |
+| summary.info | 4 |
+| before | A Finnaux bank verification with a verified status passed whatever the name match score was, so an account could be verified under someone else's name. |
+| after | A name match score below 90, or a missing or non-text score, fails with 400 'Account holder name does not match the bank record'. Nothing is cached or saved, and the error shows neither the real holder's name nor the score. |
+
+### changeType (2)
+
+- feature
+- api
+
+### effects (3)
+
+- Finnaux bank verify route (add and edit bank, customer bank tab)
+- Frontend: a mismatch is now an error toast instead of a warning
+- Only verified results with a score of 90 or more are cached or saved
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 877184fc030a8791fc04f112319343bf8be86dd6 | F1 | Schema enum value ships without its migration | open | Still open: the FINNAUX enum value is in enums.ts and migration 0018 is only in stash@{0}. |
+| d15e3483aa2003e111f72d4e376ef622aa8753fa | F1 | Commit mixes the name match rule with the duplicate verification fix | resolved | Fixed by this commit: the name rule is now alone in 5c7dfd74 and the mixed commit is on no branch. |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit, also on this commit alone in a temporary copy | passed |
+| green | bunx oxlint (finnaux, customers bank) and oxfmt --check on this commit's file | passed |
+| green | script: scores 100, 90, 89.99, 40 and a missing score (rolled-back, stubbed Finnaux reply) | passed: 100 and 90 pass and save; 89.99, 40 and missing fail 400 and save nothing |
+| green | real calls through the route on finnaux_dev (by the user) | passed: real holder name verified; other names scored 40 and 25 |
+| green | bun run build | passed (run before the commits, code unchanged since) |
+
+### gaps (2)
+
+- The threshold 90 comes from three real calls (100, 40, 25); names with initials or a missing middle name may be wrongly rejected
+- A score that Finnaux sends as a number, not text, would be read as missing and reject every verification; the docs and real replies use text
+
+### info (4)
+
+- A rejected name is still a billed Finnaux call, and the route has no rate limit
+- The check uses only the score; is_name_match is ignored because it returned false even at 100
+- No automated test covers the rule
+- The enum migration must be committed before pushing (howismycommit-52 F1)
+
+---
+
+## howismycommit-54
+
+| Field | Value |
+|---|---|
+| id | howismycommit-54 |
+| generatedAt | 2026-11-24T13:05:31+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | f7e8b9571d5d659eab2546bd794208318bd86156 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 45 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 5 |
+| summary.info | 3 |
+| before | Adding a bank to an existing customer (POST lms/customer/:customerId/bank) never looked at bank verifications, so a verified account stayed PENDING and the new bank had no lastVerifiedAt. |
+| after | When no lastVerifiedAt is passed, create looks for a valid unused PENDING verification with the same account number and IFSC. If one exists, the new bank gets lastVerifiedAt from it, and the verification is linked to the customer and bank and marked EXPIRED. Without one the bank saves as before. |
+
+### changeType (2)
+
+- bug-fix
+- api
+
+### effects (3)
+
+- Add bank to an existing customer and the customer create path that calls create without lastVerifiedAt (customer.service.ts:165)
+- The new-customer path that passes its own lastVerifiedAt is left alone
+- bankAccountVerifications rows are linked and expired, so the bank verification trail shows them as used
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/lms/customer/bank/bank.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 877184fc030a8791fc04f112319343bf8be86dd6 | F1 | Schema enum value ships without its migration | open | Still open: migration 0018 is only in stash@{0}. |
+| d15e3483aa2003e111f72d4e376ef622aa8753fa | F1 | Commit mixes the name match rule with the duplicate verification fix | open | Still open: the name rule is in d15e3483 (finnaux.service.ts:111). |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint (customers bank) | passed |
+| green | script: add bank to an existing customer with a waiting verification, and a never-verified bank (rolled-back transaction on finnaux_dev) | passed: lastVerifiedAt set, verification EXPIRED and linked to the customer and the bank; never-verified bank saves with an empty lastVerifiedAt; 0 test rows left |
+| green | script: a create call that already carries lastVerifiedAt (the new-customer path) | passed: the verification is left PENDING for that caller to expire (run earlier in this session) |
+| green | bun run build (before the commit) | passed |
+
+### gaps (2)
+
+- The lookup uses an exact account number and IFSC match, like the new-customer path, so a differently cased IFSC from a client would not link
+- No automated test covers the link
+
+### info (3)
+
+- This only adds behaviour when a matching unused verification exists; adding an unverified bank is unchanged
+- The extra lookup runs on every add-bank call that has no lastVerifiedAt, one small indexed-by-account query
+- Surepass verifications are saved as EXPIRED, so they never match here
+
+---
+
+## howismycommit-53
+
+| Field | Value |
+|---|---|
+| id | howismycommit-53 |
+| generatedAt | 2026-11-24T13:05:31+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | d15e3483aa2003e111f72d4e376ef622aa8753fa |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 93 |
+| files.deletions | 13 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 96 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 5 |
+| summary.info | 5 |
+| before | Every Finnaux bank verify call, including cache hits, saved a new PENDING verification row, a verification done on an already saved bank left an unused PENDING row, and a name match mismatch did not block anything. |
+| after | A verified account has one valid PENDING row per account and IFSC (older timed-out rows are marked EXPIRED, repeats add nothing). Verifying an account that is already a saved bank updates its lastVerifiedAt and records one EXPIRED row linked to it on a fresh call. A name match score below 90, or a missing score, fails with 400 'Account holder name does not match the bank record' and nothing is cached or saved. |
+
+### changeType (3)
+
+- bug-fix
+- feature
+- api
+
+### effects (4)
+
+- Finnaux bank verify route: bank form and customer bank tab
+- bankAccountVerifications: fewer rows, and the bank verification trail no longer lists duplicates
+- bankDetails.lastVerifiedAt is updated when a saved bank is verified
+- Frontend: a name mismatch is now an error toast, not a warning with a score
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | amber | F1 |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Commit mixes the name match rule with the duplicate verification fix |
+| location | apps/finnaux-api/src/external/finnaux/finnaux.service.ts:111 |
+| problem | The name match rule (score below 90 is rejected) was meant to be its own commit. Its pre-commit hook failed when only those hunks were staged, and the next commit staged the whole file, so this commit carries two logical changes under a message that names only the duplicate verification fix. |
+| impact | CONTRIBUTING.md asks for one logical change per commit. Someone reading the history, or reverting this commit, would not expect it to also remove the 'name mismatch does not block' behaviour that the frontend relies on. |
+| fix | While the commits are unpushed, redo them: reset the branch softly to 877184fc, stage the name rule alone and commit it, then commit the rest. Or keep it and accept that the name rule is documented only here. |
+| evidence | const FINNAUX_BANK_NAME_MATCH_MIN_SCORE = 90 |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T08:16:20.931Z |
+| resolvedNote | Marked resolved manually |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 877184fc030a8791fc04f112319343bf8be86dd6 | F1 | Schema enum value ships without its migration | open | The FINNAUX enum value is still in enums.ts and migration 0018 is still only in stash@{0}; the latest committed migration is 0017. |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint (finnaux, customers bank) | passed |
+| green | script: verify and 3 repeats, add bank to an existing customer, add a never-verified bank, verify a saved bank and a repeat, score 40 (rolled-back transaction on finnaux_dev) | passed: one PENDING row; EXPIRED and linked after the add; never-verified bank saves with an empty lastVerifiedAt; saved bank gets one EXPIRED row linked; score 40 fails 400 and saves nothing; 0 test rows left |
+| green | real calls through the route on finnaux_dev (by the user, earlier today) | passed: the four checks were reported working |
+| green | bun run build (before the commit) | passed |
+
+### gaps (2)
+
+- The name score of 90 is a hard-coded guess from three real calls (100, 40, 25); names with initials or a missing middle name may be wrongly rejected
+- Two simultaneous first-time verifications of the same account could each insert a PENDING row; the frontend disables the button, so this was not tested
+
+### info (5)
+
+- A rejected name is still a billed Finnaux call, and the route has no rate limit
+- The error does not reveal the real holder's name or the score
+- For an account that is already a saved bank of another customer, verifying it for a new customer now ends with 'verification could not be completed' at save instead of 'Account already exists'; the Surepass flow already behaves this way
+- No automated test covers the verification rows or the name rule
+- Run order: this commit and f7e8b957 are not pushed, and the FINNAUX enum migration must be committed before the push
+
+---
+
+## howismycommit-52
+
+| Field | Value |
+|---|---|
+| id | howismycommit-52 |
+| generatedAt | 2026-11-24T11:39:10+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 877184fc030a8791fc04f112319343bf8be86dd6 |
+| files.changed | 6 |
+| files.added | 1 |
+| files.modified | 5 |
+| files.deleted | 0 |
+| files.insertions | 194 |
+| files.deletions | 1 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 96 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 5 |
+| summary.info | 5 |
+| before | Bank accounts could only be verified through Surepass; when the Bank Account integration group had Finnaux selected there was no Finnaux route, and the provider enum for saved bank verifications had no FINNAUX value. |
+| after | POST /v1/external/finnaux/bank/verify takes account number (9 to 18 digits), IFSC and the typed holder name, sends them to Finnaux with consent Y and isPennyDrop false, and returns the Surepass-shaped row plus verificationStatus, isNameMatch and nameMatchScore. Anything but status SUCCESS and verification_status VERIFIED fails with 400; a name mismatch does not. A verified account is cached for 60 minutes and saved as a PENDING FINNAUX verification so the bank save can link it. |
+
+### changeType (3)
+
+- feature
+- api
+- schema
+
+### effects (4)
+
+- Add and edit bank modal and the customer bank tab call this route when Finnaux is the Bank Account provider
+- Writes bankAccountVerifications rows with provider FINNAUX and updates bankDetails.lastVerifiedAt for a matching saved bank
+- The Surepass bank route is unchanged
+- Needs migration 0018 (enum value and endpoint row), which is in stash@{0}, not in this commit
+
+### filesReviewed (6)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/drizzle/schema/enums.ts | modified | amber | F1 |
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/verify-bank-account.dto.ts | added | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/index.ts | modified | green | no issues |
+| apps/finnaux-api/src/fixed-cuids.ts | modified | green | no issues |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Schema enum value ships without its migration |
+| location | apps/finnaux-api/src/drizzle/schema/enums.ts:869 |
+| problem | The commit adds FINNAUX to BankAccountVerificationProviderEnum, but migration 0018 (ALTER TYPE ... ADD VALUE 'FINNAUX' and the endpoint row) is kept in stash@{0}. DATABASE.md asks for every schema change to ship with its migration. |
+| impact | If this commit is pushed or deployed alone, a database that never ran the SQL by hand has no FINNAUX enum value and no endpoint row: the route fails, and if the endpoint exists, the billed Finnaux call succeeds before the insert of provider FINNAUX fails with a 500. |
+| fix | Apply stash@{0} and commit migration 0018, its snapshot, the journal entry and the seed row next, before pushing or opening a PR. |
+| evidence |   values: ['SUREPASS', 'DIGIO', 'FINNAUX'] |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T06:09:37.583Z |
+| resolvedNote | Marked resolved manually |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint (finnaux, drizzle schema, fixed-cuids) | passed |
+| green | script: verifyBankAccount on the real reply shape, a non-VERIFIED status and a top-level FAILED | passed: VERIFIED maps and saves a PENDING FINNAUX row; the other two fail with 400 and write nothing |
+| green | real call through the route on finnaux_dev (earlier in this session) | passed: 200, VERIFIED, request logged with only the last 4 account digits, PENDING FINNAUX verification saved with an uppercase IFSC |
+| green | bun run build (before the commit) | passed |
+
+### gaps (2)
+
+- The full save path (customer or bank save that links the verification) was not confirmed: no bank row reached the database during the frontend test
+- is_name_match and name_match_score have no definition in the provider docs; real calls returned false with score 100
+
+### info (5)
+
+- The 5 commits before this one have no open findings (only howismycommit-51, which had none)
+- No rate limit on this billed route, unlike Aadhaar OTP; only the 12-page right guards it
+- Every cached repeat call saves another PENDING verification row, as the Surepass code does
+- The request log keeps the full Finnaux reply, including the beneficiary name, as the other Finnaux routes do
+- The Surepass code saves its bank verifications as EXPIRED, so they can never be linked; that existing behaviour was not changed
+
+---
 
 ## howismycommit-51
 
@@ -2984,9 +3499,9 @@ _Empty._
 | fix | Put the real description text and valid JSON metadata (the same values as seed/data/apiEndpoints.json) into the VALUES rows. |
 | evidence | ('01M7J019D17192EZB6TSEM1E4M', '01M77M7TG461FHCQ6QRRGV3W46', 'Verify PAN Pro', '...', '/PAN_PRO',        ARRAY['kyc','pan','verification'], '{...}'), |
 | status | resolved |
-| resolvedIn | f5a82b7e1c73b3e514d20f0806b1ec6837f15647 |
-| resolvedAt | 2026-11-18T13:05:39Z |
-| resolvedNote | drizzle/0008_finnaux_kyc_endpoints.sql:13-15 now hold the real descriptions and valid JSON metadata matching the seed (fix arrived through the dev merge f652cdc3). |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T08:44:13.308Z |
+| resolvedNote | Marked resolved manually |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -3087,7 +3602,7 @@ _Empty._
 | evidence | values: ['SUREPASS', 'DIGIO', 'INTERNAL', 'FINNAUX'] |
 | status | resolved |
 | resolvedIn | null |
-| resolvedAt | 2026-11-18T12:58:29.817Z |
+| resolvedAt | 2026-11-24T08:44:29.184Z |
 | resolvedNote | Marked resolved manually |
 | needsAttention | false |
 | attentionNote | null |
@@ -3359,9 +3874,9 @@ _Empty._
 | fix | Require status SUCCESS and a returned pan_number or user_full_name, and drop the fallback to the typed PAN number. |
 | evidence | this.getPathValue(response, ['success']) === false \|\|<br>      !this.getRecord(response, ['data']) |
 | status | resolved |
-| resolvedIn | 525ecdf4bf8f5a7680cdbad2b532a61ce260aa80 |
-| resolvedAt | 2026-11-18T13:10:44.307Z |
-| resolvedNote | The PAN check now fails on status other than SUCCESS or success false at apps/finnaux-api/src/external/finnaux/finnaux.service.ts:458, and requires pan_number instead of falling back to the typed number at apps/finnaux-api/src/external/finnaux/finnaux.service.ts:471, committed in 525ecdf4. |
+| resolvedIn | null |
+| resolvedAt | 2026-11-24T08:44:18.560Z |
+| resolvedNote | Marked resolved manually |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |

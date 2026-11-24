@@ -56,9 +56,23 @@ export function statusDot(priorities: Priority[] | null) {
 // A finding marked resolved that a later review found still in the code is not fixed.
 const stillOpen = (finding: ReviewFinding) => !isResolved(finding) || (finding.needsAttention && !finding.confirmed)
 
-export function timelineDot(findings: ReviewFinding[] | null) {
-  return statusDot(findings ? findings.filter(stillOpen).map((f) => priorityOf(f.severity)) : null)
+// Timeline dots: green when every finding is done (or there are none), then amber for low, orange for
+// medium and red for high, by the worst finding still open. No review is grey.
+const TIMELINE_DOT: Record<Priority | "clear", string> = {
+  clear: "bg-green-600",
+  low: "bg-amber-400",
+  medium: "bg-orange-500",
+  high: "bg-red-500",
 }
+
+export function priorityDot(priorities: Priority[] | null) {
+  if (priorities === null) return DOT_UNTOUCHED
+  const top = PRIORITY_ORDER.find((p) => priorities.includes(p))
+  return TIMELINE_DOT[top ?? "clear"]
+}
+
+export const timelineDot = (findings: ReviewFinding[] | null) =>
+  priorityDot(findings ? findings.filter(stillOpen).map((f) => priorityOf(f.severity)) : null)
 
 export function sortFindings(findings: ReviewFinding[]) {
   return [...findings].sort((a, b) => {

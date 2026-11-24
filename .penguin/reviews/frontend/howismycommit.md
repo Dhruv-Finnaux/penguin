@@ -1,6 +1,160 @@
 # 🐧 How Is My Commit · Frontend
 
-> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 87 entries, newest first.
+> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 89 entries, newest first.
+
+## howismycommit-89
+
+| Field | Value |
+|---|---|
+| id | howismycommit-89 |
+| generatedAt | 2026-11-24T11:38:49+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 0b054e12d9c0fccdc581340732c14ba198238d76 |
+| files.changed | 3 |
+| files.added | 1 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 28 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 3 |
+| before | The bank forms did not pass the account holder name to verification, kept the IFSC as typed after verifying, and showed nothing about the name match. |
+| after | The bank modal and the customer bank tab pass the holder name into verification. After a successful verification the form copies the returned IFSC so it matches the stored verification, shows 'Name match score: N' as small text under the holder name, and adds a 'Name match score' row to the details dialog; nothing is shown when the score is null and there is no warning or Matched flag. |
+
+### changeType (2)
+
+- feature
+- UI
+
+### effects (2)
+
+- Add or edit bank modal and the customer bank tab
+- The IFSC copy applies to Surepass too, where the returned IFSC equals the typed one, so it changes nothing
+
+### filesReviewed (3)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/customers/components/bank-modal.tsx | modified | green | no issues |
+| src/features/customers/components/view-edit-customer/_components/bank-details.tab.tsx | modified | green | no issues |
+| src/features/external-apis/bank-name-match.ts | added | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <files of both commits> | passed |
+
+### gaps (1)
+
+- Not run in a browser by me; the user tested the Finnaux save end to end.
+
+### info (3)
+
+- The customer bank tab verifies but the saved bank is only updated by the backend (lastVerifiedAt), as before.
+- Surepass returns the IFSC it was given (ifscCode: input.ifsc in the backend), so copying it back leaves the Surepass form unchanged.
+- isNameMatch stays in the response type but no screen reads it, on purpose, because Finnaux has returned false with score 100.
+
+---
+
+## howismycommit-88
+
+| Field | Value |
+|---|---|
+| id | howismycommit-88 |
+| generatedAt | 2026-11-24T11:38:49+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 39f5fbe6d7f80c9155ec951193f58680f016e4e3 |
+| files.changed | 12 |
+| files.added | 3 |
+| files.modified | 9 |
+| files.deleted | 0 |
+| files.insertions | 180 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 3 |
+| before | Bank account verification only had Surepass flows, so with a Finnaux provider selected the Verify Bank dialog was empty. |
+| after | When the Bank Account group's provider is finnaux, both bank flows (the one used by the bank forms and the plain one) open a shared dialog that shows the account number and IFSC read-only, asks for the account holder name, checks the account number is 9 to 18 digits, and calls POST /external/finnaux/bank/verify. Errors toast and keep the dialog open; success passes the row to the existing success handler. |
+
+### changeType (3)
+
+- feature
+- API
+- UI
+
+### effects (2)
+
+- Add or edit bank modal and the customer bank tab, through the shared Verify trigger (already hidden for users without the 12 page rights when the provider is finnaux)
+- Surepass bank verification is unchanged
+
+### filesReviewed (12)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/external-apis/components/common/finnaux-bank-verify-dialog.tsx | added | green | no issues |
+| src/features/external-apis/components/bank-customer-verify/flows/finnaux-bank-customer-flow.tsx | added | green | no issues |
+| src/features/external-apis/components/bank-verify/flows/finnaux-bank-flow.tsx | added | green | no issues |
+| src/features/external-apis/components/bank-customer-verify/context.tsx | modified | green | no issues |
+| src/features/external-apis/components/bank-customer-verify/dialog-manager.tsx | modified | green | no issues |
+| src/features/external-apis/components/bank-customer-verify/types.ts | modified | green | no issues |
+| src/features/external-apis/components/bank-verify/context.tsx | modified | green | no issues |
+| src/features/external-apis/components/bank-verify/dialog-manager.tsx | modified | green | no issues |
+| src/features/external-apis/components/bank-verify/types.ts | modified | green | no issues |
+| src/features/external-apis/api.ts | modified | green | no issues |
+| src/features/external-apis/hooks.ts | modified | green | no issues |
+| src/features/external-apis/types.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <files of both commits> | passed |
+
+### gaps (1)
+
+- Not run in a browser by me; the user tested Add bank, Check, Verify Bank, Save with the real backend and it worked.
+
+### info (3)
+
+- The plain bank-verify module (BankVerifyProvider) is not used by any screen today; its Finnaux flow is added for consistency and is untested.
+- Account numbers with letters or separators are blocked by the 9 to 18 digit check; the backend rule is the same.
+- The 400 validation messages from the backend are arrays; the app shows only the first item, which the dialog's own checks mostly prevent.
+
+---
 
 ## howismycommit-87
 
