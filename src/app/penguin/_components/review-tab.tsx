@@ -96,6 +96,20 @@ function groupFindings(reviews: Review[], commits: CommitInfo[], keyword: string
   }
 
   groups.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  // The same issue is repeated by every re-review of a commit, so the Future list keeps each one once:
+  // the newest report wins. The key is the repo, the file (without the line number) and the title.
+  if (futureOnly) {
+    const seen = new Set<string>()
+    for (const group of groups) {
+      group.findings = group.findings.filter((f) => {
+        const key = `${group.repo}|${f.location.replace(/:\d+(?::\d+)?$/, "")}|${f.title.trim().toLowerCase()}`
+        if (seen.has(key)) return false
+        seen.add(key)
+        return true
+      })
+    }
+    groups.splice(0, groups.length, ...groups.filter((group) => group.findings.length > 0))
+  }
   let nextIndex = 1
   for (const group of groups) {
     group.startIndex = nextIndex
@@ -169,10 +183,11 @@ export function ReviewTab({ reviews: allReviews, commits }: { reviews: Review[];
 
   const allGroups = groupFindings(allReviews, commits, "")
   const hasAny = allGroups.length > 0
-  const futureCount = allGroups.reduce((sum, group) => sum + countFuture(group.findings), 0)
+  const futureGroups = groupFindings(allReviews, commits, "", true)
+  const futureCount = futureGroups.reduce((sum, group) => sum + group.findings.length, 0)
 
   const findingCounts = { all: 0, frontend: 0, backend: 0 }
-  for (const group of view === "future" ? groupFindings(allReviews, commits, "", true) : allGroups) {
+  for (const group of view === "future" ? futureGroups : allGroups) {
     findingCounts.all += group.findings.length
     findingCounts[group.repo] += group.findings.length
   }

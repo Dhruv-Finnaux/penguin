@@ -18,7 +18,7 @@ import { format } from "date-fns"
 import { CheckIcon, ChevronDownIcon, GitBranchIcon, UsersIcon, XIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 import { matchesQuery } from "../_lib/fuzzy"
-import { branchColors, branchKey, layoutGraph, UNNAMED_COLOR } from "../_lib/graph-layout"
+import { branchColorName, colorForBranch, layoutGraph } from "../_lib/graph-layout"
 import type {
   BranchInfo,
   CommitInfo,
@@ -90,12 +90,10 @@ function Segmented<T extends string>({
 function BranchPicker({
   branches,
   value,
-  colors,
   onChange,
 }: {
   branches: BranchInfo[]
   value: string
-  colors: Map<string, string>
   onChange: (value: string) => void
 }) {
   const local = branches.filter((b) => !b.remote)
@@ -106,10 +104,7 @@ function BranchPicker({
       key={branch.name}
       onSelect={() => onChange(branch.name)}
       className="cursor-pointer gap-2">
-      <span
-        className="size-2.5 shrink-0 rounded-full"
-        style={{ background: colors.get(branchKey(branch)) ?? UNNAMED_COLOR }}
-      />
+      <GitBranchIcon className="size-3.5 shrink-0" style={{ color: colorForBranch(branchColorName(branch)) }} />
       <span className="flex-1 truncate">{branch.name}</span>
       {branch.current && <span className=" bg-green-600/10 dark:bg-green-600/20 px-2 py-1 rounded-md font-medium text-xs text-green-600">Current</span>}
     </DropdownMenuItem>
@@ -222,14 +217,12 @@ function VerboseHistory({
   reviews,
   keyword,
   authors,
-  colors,
 }: {
   repo: RepoKey
   branch: string
   reviews: Review[]
   keyword: string
   authors: string[]
-  colors: Map<string, string>
 }) {
   const [openHash, setOpenHash] = useState<string | null>(null)
 
@@ -292,7 +285,6 @@ function VerboseHistory({
         <CommitTimeline
           commits={matching}
           openHash={openHash}
-          colors={colors}
           onToggle={(hash) => setOpenHash((current) => (current === hash ? null : hash))}
         />
       )}
@@ -336,13 +328,11 @@ function edgePath(fromRow: number, fromCol: number, toRow: number, toCol: number
 function FlowHistory({
   repo,
   branch,
-  colors,
   keyword,
   authors,
 }: {
   repo: RepoKey
   branch: string
-  colors: Map<string, string>
   keyword: string
   authors: string[]
 }) {
@@ -356,8 +346,8 @@ function FlowHistory({
   })
 
   const layout = useMemo(
-    () => (query.data ? layoutGraph(query.data.commits, query.data.branches, colors) : null),
-    [query.data, colors],
+    () => (query.data ? layoutGraph(query.data.commits, query.data.branches) : null),
+    [query.data],
   )
 
   // The graph cannot drop rows without breaking its lines, so a search dims the rest instead.
@@ -483,8 +473,11 @@ function FlowHistory({
                     {row.tips.map((tip) => (
                       <span
                         key={tip.name}
-                        className="shrink-0 rounded-full px-2 py-px text-[11px] font-medium text-white"
-                        style={{ background: colors.get(branchKey(tip)) ?? UNNAMED_COLOR }}>
+                        className="shrink-0 rounded-full px-2 py-px text-[11px] font-medium"
+                        style={{
+                          color: colorForBranch(branchColorName(tip)),
+                          background: `${colorForBranch(branchColorName(tip))}1f`,
+                        }}>
                         <Highlight text={tip.name} />
                       </span>
                     ))}
@@ -533,7 +526,6 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
     () => picked ?? (me && contributors.data?.some((c) => c.name === me) ? [me] : []),
     [picked, me, contributors.data],
   )
-  const colors = useMemo(() => branchColors(repo.branches), [repo.branches])
 
   if (!repo.available) {
     return (
@@ -554,7 +546,7 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
             </span>
           )}
         </div>
-        <BranchPicker branches={repo.branches} value={branch} colors={colors} onChange={(next) => {
+        <BranchPicker branches={repo.branches} value={branch} onChange={(next) => {
           setBranch(next)
           setPicked(null)
         }}
@@ -596,8 +588,7 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
               reviews={reviews}
               keyword={keyword}
               authors={authors}
-              colors={colors}
-            />
+                />
           ) : mode === "files" ? (
             <FileActivityPanel key={branch} repo={repo.key} branch={branch} authors={authors} keyword={keyword} />
           ) : mode === "data" ? (
@@ -607,8 +598,7 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
               key={branch}
               repo={repo.key}
               branch={branch}
-              colors={colors}
-              keyword={keyword}
+                  keyword={keyword}
               authors={authors}
             />
           )}

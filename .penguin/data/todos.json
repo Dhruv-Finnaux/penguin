@@ -1,5 +1,12 @@
 [
   {
+    "id": "todo-31",
+    "text": "Future (backend): The paid Finnaux KYC routes (Aadhaar OTP, PAN, driving licence, vehicle RC) need only login. Add a 10 per minute limit on OTP sending (2 lines, written and tested) and a page-right check per route. Ask the manager which roles may run KYC checks. See backend review howismycommit-50 F1.",
+    "status": "done",
+    "createdAt": "2026-11-23T12:43:54.400Z",
+    "doneAt": "2026-11-24T04:24:11.008Z"
+  },
+  {
     "id": "todo-30",
     "text": "Right now, every charge ID is deletable, which will have a cascade effect and delete all the vouchers in our entry. I don't know if it is good, because a mistake can happen. Though we have snapshots of databases continuously taken, consult with the manager and tell them that at least we should have a restrict, so no.",
     "status": "todo",
@@ -9,37 +16,37 @@
   {
     "id": "todo-29",
     "text": "Ask Finnaux (eSign 5/5): What are the allowed signature positions?",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-19T08:52:44.954Z",
-    "doneAt": null
+    "doneAt": "2026-11-23T10:27:22.582Z"
   },
   {
     "id": "todo-28",
     "text": "Ask Finnaux (eSign 4/5): What is the full status list, and how does the signed PDF come back?",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-19T08:52:44.954Z",
-    "doneAt": null
+    "doneAt": "2026-11-23T10:27:23.839Z"
   },
   {
     "id": "todo-27",
     "text": "Ask Finnaux (eSign 3/5): Does Finnaux send the signing link to the signers itself?",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-19T08:52:44.954Z",
-    "doneAt": null
+    "doneAt": "2026-11-23T10:27:24.840Z"
   },
   {
     "id": "todo-26",
     "text": "Ask Finnaux (eSign 2/5): Should the PDF be sent as base64 or as a URL, and what is the size limit?",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-19T08:52:44.954Z",
-    "doneAt": null
+    "doneAt": "2026-11-23T10:27:25.910Z"
   },
   {
     "id": "todo-25",
     "text": "Ask Finnaux (eSign 1/5): What is the multi-signer request format, and do they charge per request or per signer?",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-19T08:52:44.954Z",
-    "doneAt": null
+    "doneAt": "2026-11-23T10:27:27.173Z"
   },
   {
     "id": "todo-24",

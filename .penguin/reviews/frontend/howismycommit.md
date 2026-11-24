@@ -1,6 +1,762 @@
 # 🐧 How Is My Commit · Frontend
 
-> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 77 entries, newest first.
+> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 87 entries, newest first.
+
+## howismycommit-87
+
+| Field | Value |
+|---|---|
+| id | howismycommit-87 |
+| generatedAt | 2026-11-24T10:02:02+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | b29dbf753888e3700e522568eca7cc399f42e0e5 |
+| files.changed | 4 |
+| files.added | 1 |
+| files.modified | 3 |
+| files.deleted | 0 |
+| files.insertions | 49 |
+| files.deletions | 5 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 3 |
+| before | Verify buttons for Aadhaar, PAN, Driving License and RC always showed when the provider was enabled, so a user without the needed page rights got a 403 from the new backend rights check. |
+| after | For the Finnaux provider the shared trigger hides Verify when the user has none of 12 page rights (the 8 customer and LOS pages plus Vendors, Dealers, Branches and Employees); it stays visible while rights load or fail, and other providers are unaffected. |
+
+### changeType (2)
+
+- feature
+- security
+
+### effects (3)
+
+- Every screen with a verify button: customer add form, customer KYC tab, identification document modal and the vehicle form
+- Up to 12 cached page-rights requests per session, only when the provider is Finnaux, sharing the PermissionGuard cache keys
+- Adds five page ids to the frontend config
+
+### filesReviewed (4)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/config/page-ids.config.ts | modified | green | no issues |
+| src/hooks/useGetPageRightsQuery.tsx | modified | green | no issues |
+| src/features/external-apis/components/common/verification-trigger.tsx | modified | green | no issues |
+| src/features/external-apis/hooks/use-can-run-finnaux-checks.ts | added | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <files of the three commits> | passed |
+
+### gaps (2)
+
+- Not run in a browser; not checked with an Admin user or a user without any of the 12 pages.
+- The 12-page list must stay equal to the backend's KYC_PAGE_RIGHTS; the new ids were compared with the backend's ids by value.
+
+### info (3)
+
+- Fail-open by design: if every rights request errors, Verify stays visible and the backend still enforces the 403.
+- The card Verify RC on a saved vehicle uses the los verify-rc route, not the five checked routes, so it is not hidden.
+- Any user whose designation has none of the 12 pages (about 10 staff locally) loses Verify; the form does not require a verified document to save.
+
+---
+
+## howismycommit-86
+
+| Field | Value |
+|---|---|
+| id | howismycommit-86 |
+| generatedAt | 2026-11-24T10:02:02+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | e2707f0574c87825684b9c90734fc5a8f440ecdd |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 11 |
+| files.deletions | 9 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 2 |
+| before | The customer detail page (/lms/customers/[id]) had no guard and passed add, view, delete, print, export and edit as true to every tab. |
+| after | The page needs view on LMS_CUSTOMERS through PermissionGuard and passes the page's real rights to every tab; it renders nothing until the rights are loaded. |
+
+### changeType (2)
+
+- bug fix
+- security
+
+### effects (2)
+
+- /lms/customers/[id] for every user: view-only users lose edit and add actions, users without LMS_CUSTOMERS are blocked on a direct URL
+- The only link to the page is the LMS customers list, which already needs the same right
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/app/(app)/(main)/lms/customers/[id]/page.tsx | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <files of the three commits> | passed |
+
+### gaps (1)
+
+- Not run in a browser with a view-only user.
+
+### info (2)
+
+- The backend page-rights route returns canView, canAdd, canEdit and canDelete only, so canPrint and canExport are now undefined here; nothing in the customer screens reads them.
+- The rights query shares its cache key with PermissionGuard, so no extra request is made.
+
+---
+
+## howismycommit-85
+
+| Field | Value |
+|---|---|
+| id | howismycommit-85 |
+| generatedAt | 2026-11-24T10:02:02+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | fd673bc23696b48006376f5dbef92623dcc5eb76 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 13 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 2 |
+| before | A failed generate or resend OTP call showed the raw backend message, which for the throttle is 'ThrottlerException: Too Many Requests'. |
+| after | A 429 on generate or resend shows 'Too many OTP requests. Wait a minute and try again.'; other errors keep showing the backend message with the old fallbacks. |
+
+### changeType (2)
+
+- bug fix
+- UI
+
+### effects (1)
+
+- Aadhaar OTP dialog for both Digipehchan and Finnaux (shared flow): generate failure closes the dialog with a toast, resend failure toasts and stays on the OTP step
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/external-apis/components/aadhar-verify/flows/aadhaar-otp-flow.tsx | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <files of the three commits> | passed |
+
+### gaps (1)
+
+- Not run in a browser; a real 429 was not triggered.
+
+### info (2)
+
+- The message reads 'OTP requests' even when the 429 comes from the app-wide limit of 100 requests a minute; that is close enough for this dialog.
+- Verify-OTP errors keep the plain backend message; only generate and resend are throttled by the 10 a minute limit.
+
+---
+
+## howismycommit-84
+
+| Field | Value |
+|---|---|
+| id | howismycommit-84 |
+| generatedAt | 2026-11-23T18:11:51+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | b10f10d2a05b943c06625406ddf81dd2c70806dc |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 8 |
+| files.deletions | 3 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 3 |
+| before | The session loan products query called the HRMS employee products endpoint (/hrms/employees/:id/product) and kept the assigned rows, so a user without the HRMS Employees page right got a 403 and an empty product filter. |
+| after | The query calls the login-only GET /dropdown/session-employee-product and maps its { label, value } rows to the { name, productId } shape every caller already reads, so no caller changed. |
+
+### changeType (2)
+
+- bug fix
+- API
+
+### effects (2)
+
+- useGetSessionLoanProductsQuery has about 12 callers: sales, collections and NBFC dashboard filters, LMS executive assignment, CRM employee assignment tab and form, and the reports filters (collection efficiency, DNBS02, master data, UCRF submission, shared filter options)
+- Needs the backend route session-employee-product to be deployed first
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/session/api.ts | modified | green | no issues |
+| src/features/session/queries.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 54b1a822a558cb270ab3b077c5da59a3661672ec | F1 | Dialog offers Copy link for signed or revoked requests | resolved | Still fixed: Copy link, the expiry line and the footnote are gated on showLinks at src/features/loan-application/components/esign-dialog.tsx:450. |
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint src/features/session/api.ts src/features/session/queries.ts | passed |
+| green | grep of every caller of useGetSessionLoanProductsQuery | passed: all read only name and productId from the data |
+
+### gaps (2)
+
+- Not run against a live backend; the new route was read in the API repo (dropdown.controller.ts and dropdown.service.ts) but not called.
+- Not checked in the browser: product filters on the dashboards and reports screens.
+
+### info (3)
+
+- Deploy the backend route before this commit; until then every product filter above fails to load.
+- The old call listed the manager's products marked per employee; the new route returns the employee's own active assigned products, so a product assigned to the employee but missing from the manager's set now appears. The DNBS02 and UCRF filters preselect every product, so such a product would be preselected there.
+- Resolves howismycommit-34, 26 and 17 F1.
+
+---
+
+## howismycommit-83
+
+| Field | Value |
+|---|---|
+| id | howismycommit-83 |
+| generatedAt | 2026-11-23T17:56:55+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 91d89422ee574831dd798f51214245313744876a |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 2 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 2 |
+| before | Since the External APIs restyle (c18c79f7), every Badge in the app was a rounded rectangle and every table row had lost its keyboard focus outline. |
+| after | Badge is rounded-full again and TableRow has focus:outline-primary and last:first:focus:!outline-none back; both files are identical to their state before c18c79f7. |
+
+### changeType (2)
+
+- bug fix
+- UI
+
+### effects (2)
+
+- Every screen that uses Badge (about 212 files) and every table that uses TableRow
+- The External APIs page badges are pills again
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/components/ui/badge.tsx | modified | green | no issues |
+| src/components/ui/table.tsx | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 54b1a822a558cb270ab3b077c5da59a3661672ec | F1 | Dialog offers Copy link for signed or revoked requests | resolved | Still fixed: gated on showLinks at src/features/loan-application/components/esign-dialog.tsx:450. |
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint src/components/ui/badge.tsx src/components/ui/table.tsx | passed |
+| green | git diff c18c79f7~1 -- badge.tsx table.tsx | passed: empty, both files match their pre-restyle state |
+
+### gaps (2)
+
+- Not run in a browser; badges and table rows were not looked at across screens.
+- Shared components: a visual check of a few screens is advised before the PR.
+
+### info (2)
+
+- No other commit has touched either file since c18c79f7, so nothing built after it depended on the rounded-md badge.
+- Resolves howismycommit-46 F1.
+
+---
+
+## howismycommit-82
+
+| Field | Value |
+|---|---|
+| id | howismycommit-82 |
+| generatedAt | 2026-11-23T17:56:55+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 653eb5bc6202fdd03d6f0e5b5d94098f7d9efac0 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 5 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 2 |
+| before | .gitignore did not list .localtrack.md, /.penguin/ or /src/app/(app)/penguin/ (a merge had dropped them). |
+| after | The three local-tooling paths are ignored again, so the personal change tracker and any recreated penguin folders cannot be committed by accident. |
+
+### changeType (1)
+
+- config
+
+### effects (1)
+
+- Repository ignore rules only; no source code changes
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| .gitignore | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 54b1a822a558cb270ab3b077c5da59a3661672ec | F1 | Dialog offers Copy link for signed or revoked requests | resolved | Still fixed: gated on showLinks at src/features/loan-application/components/esign-dialog.tsx:450. |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | git check-ignore -v .localtrack.md .penguin/x 'src/app/(app)/penguin/x' | passed: all three matched .gitignore lines 62-64 |
+| green | git ls-files .localtrack.md .penguin src/app/(app)/penguin | passed: none of these paths is tracked |
+
+### gaps (1)
+
+- The patterns were checked with git check-ignore, not by creating the folders.
+
+### info (2)
+
+- Ignoring src/app/(app)/penguin/ also hides a future in-repo penguin page; the panel now lives in the separate penguin repo, so this is intended.
+- Fixes the open .gitignore finding from the merge (reviews 36, 25 and 19).
+
+---
+
+## howismycommit-81
+
+| Field | Value |
+|---|---|
+| id | howismycommit-81 |
+| generatedAt | 2026-11-23T17:56:55+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | aecf7b6bee7448f38284baf5264ba45a9fd7da1e |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 11 |
+| files.deletions | 6 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 1 |
+| before | The signer list in the eSign dialog showed Copy link, the expiry line and the 'links expire' footnote for any signer with an unexpired link, even on signed or revoked requests. |
+| after | SignerList takes a showLinks flag (true while the request is pending) and shows those three things only then; names and per-signer status badges still show on every request. |
+
+### changeType (2)
+
+- bug fix
+- UI
+
+### effects (1)
+
+- Loan application eSign dialog, signer list only
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/loan-application/components/esign-dialog.tsx | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 54b1a822a558cb270ab3b077c5da59a3661672ec | F1 | Dialog offers Copy link for signed or revoked requests | resolved | Fixed by this commit: Copy link, the expiry line and the footnote are gated on showLinks at src/features/loan-application/components/esign-dialog.tsx:450, :459 and :480. |
+| 300406bfe7a009beb3a82c0f924fa34d35fce820 | F1 | Box coordinate errors are hidden while the box is collapsed | resolved | Still fixed: showFields = isSelected \|\| hasError at src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx:41. |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <changed .ts/.tsx files> | passed |
+
+### gaps (1)
+
+- Not run in a browser; the dialog was not opened on a signed or revoked document.
+
+### info (1)
+
+- No test command is configured, so the change has no automated test.
+
+---
+
+## howismycommit-80
+
+| Field | Value |
+|---|---|
+| id | howismycommit-80 |
+| generatedAt | 2026-11-23T16:44:08+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | ce6d664dbd3a96e906ce85f3f44af11362b6eba4 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 20 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 1 |
+| before | A signature box's coordinate fields were shown only while the box was selected, so an error on a collapsed box was invisible and Save failed with only a generic toast. |
+| after | A box whose coordinates have an error opens by itself, gets a red border and the note 'Fix the position of this box to save'. |
+
+### changeType (2)
+
+- bug fix
+- UI
+
+### effects (1)
+
+- Configuration > Templates eSign designer, signature box rows only
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 300406bfe7a009beb3a82c0f924fa34d35fce820 | F1 | Box coordinate errors are hidden while the box is collapsed | resolved | Fixed by ce6d664dbd3a96e906ce85f3f44af11362b6eba4: showFields = isSelected \|\| hasError at src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx:41. |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <files of both commits> | passed |
+
+### gaps (1)
+
+- Not run in a browser; the paper-size change that triggers the errors was not reproduced.
+
+### info (1)
+
+- Resolves howismycommit-78 F1.
+
+---
+
+## howismycommit-79
+
+| Field | Value |
+|---|---|
+| id | howismycommit-79 |
+| generatedAt | 2026-11-23T16:44:08+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 54b1a822a558cb270ab3b077c5da59a3661672ec |
+| files.changed | 4 |
+| files.added | 0 |
+| files.modified | 4 |
+| files.deleted | 0 |
+| files.insertions | 43 |
+| files.deletions | 12 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 96 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 2 |
+| summary.info | 2 |
+| before | A failed create or action call left the send panel on the old status (a duplicate send's 409 did not refresh it), a signed document without a file had no retry, and the audit trail and company signer load errors hid the backend's reason. |
+| after | Create and action calls refresh the loan application data after success or error; the panel falls back to the document's signer statuses; a signed document without a file shows Check status and a toast when Finnaux still sent no usable file; the audit trail and company signer errors show the backend message. |
+
+### changeType (2)
+
+- bug fix
+- UI
+
+### effects (2)
+
+- Loan application document cards, eSign dialog and audit trail dialog
+- The Digio upload form also refreshes the data after a failed send
+
+### filesReviewed (4)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/loan-application/components/esign-dialog.tsx | modified | amber | F1 |
+| src/features/loan-application/components/esign-utils.ts | modified | green | no issues |
+| src/features/loan-application/components/loan-documents.tsx | modified | green | no issues |
+| src/features/loan-application/components/esign-audit-trail-dialog.tsx | modified | green | no issues |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Dialog offers Copy link for signed or revoked requests |
+| location | src/features/loan-application/components/esign-dialog.tsx:447 |
+| problem | The signer list now falls back to the document's esignSignerStatuses, so it shows on any document that has them. SignerList shows Copy link and the expiry line whenever a signer has a signingUrl that has not expired, without checking that the request is still pending. |
+| impact | Opening the dialog on a signed document, or one that was revoked, lists signers with Copy link and 'Link expires on ...'; a user can copy a link that no longer works and send it to a customer. |
+| fix | Pass whether the request is pending to SignerList and show Copy link and the expiry line only then, as the document card already does. |
+| evidence |             {signer.signingUrl && !isExpired && ( |
+| status | resolved |
+| resolvedIn | aecf7b6bee7448f38284baf5264ba45a9fd7da1e |
+| resolvedAt | 2026-11-23T11:20:12.617Z |
+| resolvedNote | Fixed in aecf7b6b: SignerList shows Copy link, the expiry line and the footnote only while the request is pending, at src/features/loan-application/components/esign-dialog.tsx:450. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 300406bfe7a009beb3a82c0f924fa34d35fce820 | F1 | Box coordinate errors are hidden while the box is collapsed | resolved | Fixed by ce6d664dbd3a96e906ce85f3f44af11362b6eba4: showFields = isSelected \|\| hasError at src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx:41. |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <files of both commits> | passed |
+
+### gaps (2)
+
+- Not run in a browser; the dialog was not opened on a signed document, the case was found by reading SignerList and the new fallback.
+- Send for eSign was not clicked (billed).
+
+### info (2)
+
+- No test command is configured, so the changed behaviour has no automated test.
+- Backend confirmed STATUS on a signed document retries the file save, which the new Check status button relies on.
+
+---
+
+## howismycommit-78
+
+| Field | Value |
+|---|---|
+| id | howismycommit-78 |
+| generatedAt | 2026-11-23T16:15:06+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 300406bfe7a009beb3a82c0f924fa34d35fce820 |
+| files.changed | 6 |
+| files.added | 0 |
+| files.modified | 6 |
+| files.deleted | 0 |
+| files.insertions | 197 |
+| files.deletions | 138 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 96 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 2 |
+| summary.info | 2 |
+| before | In the template eSign designer each signer card showed all its boxes' five number inputs at all times, with a row of corner buttons and a text list of controls. |
+| after | Boxes are collapsed to a one-line summary and expand to their number fields when selected, corner placement moved into an Add box menu, the toolbar and settings are regrouped, and the designer has a Signers header with an empty state. The commit is already merged to dev (PR #143) and the files are unchanged since. |
+
+### changeType (2)
+
+- UI
+- feature
+
+### effects (2)
+
+- Configuration > Templates > eSign designer only
+- No change to the save payload or validation rules
+
+### filesReviewed (6)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx | modified | amber | F1 |
+| src/app/(app)/(main)/configuration/templates/_components/esign-designer-lib.ts | modified | green | no issues |
+| src/app/(app)/(main)/configuration/templates/_components/esign-designer-toolbar.tsx | modified | green | no issues |
+| src/app/(app)/(main)/configuration/templates/_components/esign-designer.tsx | modified | green | no issues |
+| src/app/(app)/(main)/configuration/templates/_components/esign-settings.tsx | modified | green | no issues |
+| src/app/(app)/(main)/configuration/templates/_components/esign-signer-card.tsx | modified | amber | F1 |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Box coordinate errors are hidden while the box is collapsed |
+| location | src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx:58 |
+| problem | The five coordinate inputs, which carry the field errors (Must be more than x1, Box goes past the page width), now render only for the selected box. The signer card shows just the array-level message, and the old onFocus selection that let the form's focus-on-error open the box was removed. |
+| impact | Draw boxes on A4, switch the paper to A5 or to landscape, and boxes now go past the page; Save is blocked with the generic 'Please fix form errors!' toast, and no box shows what is wrong until the user opens each one. |
+| fix | Open (or mark) a box whose coordinates have an error: for example treat a box with a field error as expanded in EsignBoxFields, or show a red 'Fix position' note on its summary line. |
+| evidence |       {isSelected && (<br>        <div className="space-y-2 border-t p-3"> |
+| status | resolved |
+| resolvedIn | ce6d664dbd3a96e906ce85f3f44af11362b6eba4 |
+| resolvedAt | 2026-11-23T10:57:42.089Z |
+| resolvedNote | Fixed in ce6d664d: a box with a coordinate error is shown expanded with a red border and a note (src/app/(app)/(main)/configuration/templates/_components/esign-box-fields.tsx:41 and :76). |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <6 changed files> | passed |
+
+### gaps (1)
+
+- Not run in a browser; the hidden-error case was found by reading the schema, the signer card and the box fields, not by reproducing it.
+
+### info (2)
+
+- No test command is configured, so the changed behaviour has no automated test.
+- esign-designer-toolbar.tsx uses an arbitrary Tailwind value (sm:grid-cols-[1fr_auto]); AGENTS.md prefers standard classes, but no standard class gives this column split.
+
+---
 
 ## howismycommit-77
 
@@ -19,8 +775,8 @@
 | files.insertions | 210 |
 | files.deletions | 16 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -94,8 +850,8 @@ _Empty._
 | files.insertions | 116 |
 | files.deletions | 21 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -174,8 +930,8 @@ _Empty._
 | files.insertions | 14 |
 | files.deletions | 2 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -314,8 +1070,8 @@ _Empty._
 | files.insertions | 404 |
 | files.deletions | 19 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -390,8 +1146,8 @@ _Empty._
 | files.insertions | 182 |
 | files.deletions | 19 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -484,8 +1240,8 @@ _Empty._
 | files.insertions | 16 |
 | files.deletions | 8 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -558,8 +1314,8 @@ _Empty._
 | files.insertions | 87 |
 | files.deletions | 154 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -635,8 +1391,8 @@ _Empty._
 | files.insertions | 532 |
 | files.deletions | 125 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -734,8 +1490,8 @@ _Empty._
 | files.insertions | 1372 |
 | files.deletions | 25 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1088,8 +1844,8 @@ _Empty._
 | files.insertions | 11 |
 | files.deletions | 1 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1159,8 +1915,8 @@ _Empty._
 | files.insertions | 1 |
 | files.deletions | 3 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1229,8 +1985,8 @@ _Empty._
 | files.insertions | 47 |
 | files.deletions | 10 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1308,8 +2064,8 @@ _Empty._
 | files.insertions | 360 |
 | files.deletions | 55 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 85 |
+| score | 100 |
+| commitScore | 90 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1414,8 +2170,8 @@ _Empty._
 | files.insertions | 311 |
 | files.deletions | 28 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -1519,8 +2275,8 @@ _Empty._
 | files.insertions | 83 |
 | files.deletions | 67 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1603,8 +2359,8 @@ _Empty._
 | files.insertions | 47 |
 | files.deletions | 14 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 91 |
+| score | 100 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1701,8 +2457,8 @@ _Empty._
 | files.insertions | 93 |
 | files.deletions | 1 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1779,8 +2535,8 @@ _Empty._
 | files.insertions | 1 |
 | files.deletions | 1 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1921,8 +2677,8 @@ _Empty._
 | files.insertions | 213 |
 | files.deletions | 5 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -2018,8 +2774,8 @@ _Empty._
 | files.insertions | 11 |
 | files.deletions | 0 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2098,8 +2854,8 @@ _Empty._
 | files.insertions | 1 |
 | files.deletions | 785 |
 | verdict | review-with-caution |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2178,8 +2934,8 @@ _Empty._
 | files.insertions | 2 |
 | files.deletions | 4 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2262,8 +3018,8 @@ _Empty._
 | files.insertions | 34 |
 | files.deletions | 55 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 91 |
+| score | 100 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2373,8 +3129,8 @@ _Empty._
 | files.insertions | 70 |
 | files.deletions | 17 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 87 |
+| score | 96 |
+| commitScore | 92 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -2502,8 +3258,8 @@ _Empty._
 | files.insertions | 58 |
 | files.deletions | 63 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2589,8 +3345,8 @@ _Empty._
 | files.insertions | 70 |
 | files.deletions | 33 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -2699,8 +3455,8 @@ _Empty._
 | files.insertions | 101 |
 | files.deletions | 70 |
 | verdict | review-with-caution |
-| score | 83 |
-| commitScore | 79 |
+| score | 88 |
+| commitScore | 84 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 3 |
@@ -2744,9 +3500,9 @@ _Empty._
 | fix | Revert both shared components and pass className overrides from the External APIs page, or agree the app-wide change separately. |
 | evidence | "inline-flex items-center justify-center rounded-md px-2.5 py-0.5 text-xs font-semibold |
 | status | resolved |
-| resolvedIn | null |
-| resolvedAt | 2026-11-13T10:05:06.117Z |
-| resolvedNote | Marked resolved manually |
+| resolvedIn | 91d89422ee574831dd798f51214245313744876a |
+| resolvedAt | 2026-11-23T12:25:45.662Z |
+| resolvedNote | Fixed in 91d89422: the shared Badge is rounded-full again (src/components/ui/badge.tsx:9) and TableRow has its focus outline back (src/components/ui/table.tsx). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -2861,8 +3617,8 @@ _Empty._
 | files.insertions | 199 |
 | files.deletions | 17 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 61 |
+| score | 96 |
+| commitScore | 66 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -3085,8 +3841,8 @@ _Empty._
 | files.insertions | 70 |
 | files.deletions | 33 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -3183,8 +3939,8 @@ _Empty._
 | files.insertions | 12 |
 | files.deletions | 10 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3262,8 +4018,8 @@ _Empty._
 | files.insertions | 2230 |
 | files.deletions | 69 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3480,8 +4236,8 @@ _Empty._
 | files.insertions | 270 |
 | files.deletions | 68 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 91 |
+| score | 100 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3539,7 +4295,7 @@ _Empty._
 | status | resolved |
 | resolvedIn | null |
 | resolvedAt | 2026-11-05T09:46:17.590Z |
-| resolvedNote | Marked resolved manually |
+| resolvedNote | Verified fixed: tableToFileData leaves the totals out while a search or column filter is active (src/features/reports/reports-builder/file-data.ts footer: isFiltered ? undefined : totalsToFooter). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -3593,8 +4349,8 @@ _Empty._
 | files.insertions | 5 |
 | files.deletions | 1 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3669,8 +4425,8 @@ _Empty._
 | files.insertions | 63 |
 | files.deletions | 20 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3751,8 +4507,8 @@ _Empty._
 | files.insertions | 270 |
 | files.deletions | 68 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -3810,7 +4566,7 @@ _Empty._
 | status | resolved |
 | resolvedIn | null |
 | resolvedAt | 2026-11-05T09:46:17.590Z |
-| resolvedNote | Marked resolved manually |
+| resolvedNote | Verified fixed: tableToFileData leaves the totals out while a search or column filter is active (src/features/reports/reports-builder/file-data.ts footer: isFiltered ? undefined : totalsToFooter). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -3862,8 +4618,8 @@ _Empty._
 | files.insertions | 2575 |
 | files.deletions | 74 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 91 |
+| score | 100 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3950,9 +4706,9 @@ _Empty._
 | fix | Add `.localtrack.md`, `/.penguin/` and `/src/app/(app)/penguin/` back to .gitignore (a separate commit on the branch that needs them). |
 | evidence | certificates<br>docs/ |
 | status | resolved |
-| resolvedIn | null |
-| resolvedAt | 2026-11-04T04:39:06.791Z |
-| resolvedNote | Marked resolved manually |
+| resolvedIn | 653eb5bc6202fdd03d6f0e5b5d94098f7d9efac0 |
+| resolvedAt | 2026-11-23T12:25:45.662Z |
+| resolvedNote | Fixed in 653eb5bc: .gitignore lists .localtrack.md, /.penguin/ and /src/app/(app)/penguin/ (.gitignore:62-64). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | true |
@@ -4011,9 +4767,9 @@ _Empty._
 | files.insertions | 230 |
 | files.deletions | 53 |
 | verdict | review-with-caution |
-| score | 87 |
-| commitScore | 87 |
-| quality | good |
+| score | 92 |
+| commitScore | 92 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 2 |
 | summary.green | 2 |
@@ -4150,9 +4906,9 @@ _Empty._
 | files.insertions | 416 |
 | files.deletions | 727 |
 | verdict | review-with-caution |
-| score | 85 |
-| commitScore | 81 |
-| quality | good |
+| score | 90 |
+| commitScore | 86 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
 | summary.green | 2 |
@@ -4225,9 +4981,9 @@ _Empty._
 | fix | Use a session products dropdown for the logged-in employee once the backend adds one, or load products per picked branch from /dropdown/session-employee-branch/:id/product. |
 | evidence | const res = await getEmployeeProducts(id) |
 | status | resolved |
-| resolvedIn | null |
-| resolvedAt | 2026-11-04T05:44:44.331Z |
-| resolvedNote | Marked resolved manually |
+| resolvedIn | b10f10d2a05b943c06625406ddf81dd2c70806dc |
+| resolvedAt | 2026-11-23T12:38:02.603Z |
+| resolvedNote | Fixed in b10f10d2: sessionQueries.loanProducts now calls the login-only GET /dropdown/session-employee-product (src/features/session/queries.ts:29, src/features/session/api.ts:35) instead of the HRMS employee products endpoint. |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | true |
@@ -4309,9 +5065,9 @@ _Empty._
 | files.insertions | 230 |
 | files.deletions | 53 |
 | verdict | review-with-caution |
-| score | 87 |
-| commitScore | 87 |
-| quality | good |
+| score | 92 |
+| commitScore | 92 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 2 |
 | summary.green | 2 |
@@ -4448,8 +5204,8 @@ _Empty._
 | files.insertions | 37 |
 | files.deletions | 28 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 91 |
+| score | 100 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -4552,8 +5308,8 @@ _Empty._
 | files.insertions | 80 |
 | files.deletions | 34 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -4633,8 +5389,8 @@ _Empty._
 | files.insertions | 37 |
 | files.deletions | 28 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -4736,8 +5492,8 @@ _Empty._
 | files.insertions | 69 |
 | files.deletions | 20 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -4820,8 +5576,8 @@ _Empty._
 | files.insertions | 2019 |
 | files.deletions | 45 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -4934,9 +5690,9 @@ _Empty._
 | files.insertions | 230 |
 | files.deletions | 53 |
 | verdict | review-with-caution |
-| score | 87 |
-| commitScore | 87 |
-| quality | good |
+| score | 92 |
+| commitScore | 92 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 2 |
 | summary.green | 2 |
@@ -5072,8 +5828,8 @@ _Empty._
 | files.insertions | 416 |
 | files.deletions | 727 |
 | verdict | review-with-caution |
-| score | 81 |
-| commitScore | 81 |
+| score | 86 |
+| commitScore | 86 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 2 |
@@ -5147,9 +5903,9 @@ _Empty._
 | fix | Use a session products dropdown for the logged-in employee once the backend adds one, or load products per picked branch from /dropdown/session-employee-branch/:id/product. |
 | evidence | const res = await getEmployeeProducts(id) |
 | status | resolved |
-| resolvedIn | null |
-| resolvedAt | 2026-11-04T05:44:44.331Z |
-| resolvedNote | Marked resolved manually |
+| resolvedIn | b10f10d2a05b943c06625406ddf81dd2c70806dc |
+| resolvedAt | 2026-11-23T12:38:02.603Z |
+| resolvedNote | Fixed in b10f10d2: sessionQueries.loanProducts now calls the login-only GET /dropdown/session-employee-product (src/features/session/queries.ts:29, src/features/session/api.ts:35) instead of the HRMS employee products endpoint. |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | true |
@@ -5230,8 +5986,8 @@ _Empty._
 | files.insertions | 2575 |
 | files.deletions | 74 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -5318,9 +6074,9 @@ _Empty._
 | fix | Add `.localtrack.md`, `/.penguin/` and `/src/app/(app)/penguin/` back to .gitignore (a separate commit on the branch that needs them). |
 | evidence | certificates<br>docs/ |
 | status | resolved |
-| resolvedIn | null |
-| resolvedAt | 2026-11-04T04:39:06.791Z |
-| resolvedNote | Marked resolved manually |
+| resolvedIn | 653eb5bc6202fdd03d6f0e5b5d94098f7d9efac0 |
+| resolvedAt | 2026-11-23T12:25:45.662Z |
+| resolvedNote | Fixed in 653eb5bc: .gitignore lists .localtrack.md, /.penguin/ and /src/app/(app)/penguin/ (.gitignore:62-64). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | true |
@@ -5642,8 +6398,8 @@ _Empty._
 | files.insertions | 301 |
 | files.deletions | 436 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 87 |
+| score | 100 |
+| commitScore | 92 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -5785,8 +6541,8 @@ _Empty._
 | files.insertions | 1522 |
 | files.deletions | 35 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 81 |
+| score | 100 |
+| commitScore | 86 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -6073,8 +6829,8 @@ _Empty._
 | files.insertions | 2575 |
 | files.deletions | 74 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -6161,9 +6917,9 @@ _Empty._
 | fix | Add `.localtrack.md`, `/.penguin/` and `/src/app/(app)/penguin/` back to .gitignore (a separate commit on the branch that needs them). |
 | evidence | certificates<br>docs/ |
 | status | resolved |
-| resolvedIn | null |
-| resolvedAt | 2026-11-04T04:39:06.791Z |
-| resolvedNote | Marked resolved manually |
+| resolvedIn | 653eb5bc6202fdd03d6f0e5b5d94098f7d9efac0 |
+| resolvedAt | 2026-11-23T12:25:45.662Z |
+| resolvedNote | Fixed in 653eb5bc: .gitignore lists .localtrack.md, /.penguin/ and /src/app/(app)/penguin/ (.gitignore:62-64). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | true |
@@ -6221,9 +6977,9 @@ _Empty._
 | files.insertions | 230 |
 | files.deletions | 53 |
 | verdict | review-with-caution |
-| score | 87 |
-| commitScore | 87 |
-| quality | good |
+| score | 92 |
+| commitScore | 92 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 2 |
 | summary.green | 2 |
@@ -6350,8 +7106,8 @@ _Empty._
 | files.insertions | 416 |
 | files.deletions | 727 |
 | verdict | review-with-caution |
-| score | 81 |
-| commitScore | 81 |
+| score | 86 |
+| commitScore | 86 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 2 |
@@ -6425,9 +7181,9 @@ _Empty._
 | fix | Use a session products dropdown for the logged-in employee once the backend adds one, or load products per picked branch from /dropdown/session-employee-branch/:id/product. |
 | evidence | const res = await getEmployeeProducts(id) |
 | status | resolved |
-| resolvedIn | null |
-| resolvedAt | 2026-11-05T07:04:33.335Z |
-| resolvedNote | Marked resolved manually |
+| resolvedIn | b10f10d2a05b943c06625406ddf81dd2c70806dc |
+| resolvedAt | 2026-11-23T12:38:02.603Z |
+| resolvedNote | Fixed in b10f10d2: sessionQueries.loanProducts now calls the login-only GET /dropdown/session-employee-product (src/features/session/queries.ts:29, src/features/session/api.ts:35) instead of the HRMS employee products endpoint. |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -6504,8 +7260,8 @@ _Empty._
 | files.insertions | 256 |
 | files.deletions | 35 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -7119,8 +7875,8 @@ _Empty._
 | files.insertions | 1714 |
 | files.deletions | 287 |
 | verdict | review-with-caution |
-| score | 75 |
-| commitScore | 51 |
+| score | 80 |
+| commitScore | 56 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 2 |
@@ -7584,8 +8340,8 @@ _Empty._
 | files.insertions | 16 |
 | files.deletions | 11 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -7663,8 +8419,8 @@ _Empty._
 | files.insertions | 63 |
 | files.deletions | 1112 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 87 |
+| score | 100 |
+| commitScore | 92 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -7798,7 +8554,7 @@ _Empty._
 | files.insertions | 63 |
 | files.deletions | 1112 |
 | verdict | looks-good |
-| score | 95 |
+| score | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -7892,8 +8648,8 @@ _Empty._
 | files.insertions | 63 |
 | files.deletions | 1112 |
 | verdict | review-with-caution |
-| score | 87 |
-| quality | good |
+| score | 92 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 2 |
 | summary.green | 2 |
@@ -8019,8 +8775,8 @@ _Empty._
 | files.insertions | 301 |
 | files.deletions | 436 |
 | verdict | review-with-caution |
-| score | 87 |
-| quality | good |
+| score | 92 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 2 |
 | summary.green | 2 |
@@ -8154,8 +8910,8 @@ _Empty._
 | files.insertions | 301 |
 | files.deletions | 436 |
 | verdict | review-with-caution |
-| score | 87 |
-| quality | good |
+| score | 92 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 2 |
 | summary.green | 2 |
@@ -8289,7 +9045,7 @@ _Empty._
 | files.insertions | 1522 |
 | files.deletions | 35 |
 | verdict | review-with-caution |
-| score | 81 |
+| score | 86 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 2 |
@@ -8412,7 +9168,7 @@ _Empty._
 | files.insertions | 1522 |
 | files.deletions | 35 |
 | verdict | review-with-caution |
-| score | 81 |
+| score | 86 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 2 |
@@ -8593,7 +9349,7 @@ _Empty._
 | files.insertions | 1522 |
 | files.deletions | 35 |
 | verdict | review-with-caution |
-| score | 81 |
+| score | 86 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 2 |
@@ -8704,8 +9460,8 @@ _Empty._
 | files.insertions | 301 |
 | files.deletions | 436 |
 | verdict | review-with-caution |
-| score | 87 |
-| quality | good |
+| score | 92 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 2 |
 | summary.green | 2 |

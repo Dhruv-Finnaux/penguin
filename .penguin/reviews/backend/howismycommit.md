@@ -1,6 +1,829 @@
 # 🐧 How Is My Commit · Backend
 
-> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 42 entries, newest first.
+> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 51 entries, newest first.
+
+## howismycommit-51
+
+| Field | Value |
+|---|---|
+| id | howismycommit-51 |
+| generatedAt | 2026-11-24T09:57:04+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 7b26614c6a2b57d642db099a187227c0c2bf6418 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 26 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 5 |
+| summary.info | 5 |
+| before | The five paid Finnaux routes (Aadhaar OTP, Aadhaar verify, PAN, driving licence, vehicle RC) needed only a login, so any logged-in employee could run billed checks or send OTP texts, limited only by the global 100 requests a minute per IP. |
+| after | Each route now needs view on at least one of 12 menu pages (individual, non-individual, KYC and all customers, LMS customers, applications, LOS process, LOS dashboard, vendors, dealers, branches, employees), otherwise 403. generate-otp is also limited to 10 requests a minute per IP, otherwise 429. |
+
+### changeType (2)
+
+- security
+- api
+
+### effects (3)
+
+- Designations with none of the 12 pages lose Finnaux KYC verification (8 designations with 10 active staff on the local database)
+- The frontend hides the Verify buttons for those users and shows a clear 429 message
+- Other external KYC routes (Surepass, DigiPehchan, Digio) are unchanged and still login-only
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (5)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 7b26614c6a2b57d642db099a187227c0c2bf6418 | howismycommit-50 F1 | Paid Finnaux verification routes have no permission check and only a global rate limit | resolved | Fixed by this commit: all five routes carry the 12-page right and generate-otp carries the 10 a minute limit (finnaux.controller.ts, verified through the route metadata). |
+| a6fac248 | howismycommit-12 F4 and howismycommit-13 F4 | Paid routes need login only, no limit | resolved | Same problem as above, fixed by this commit; the needs-attention flag on 13 F4 is cleared. |
+| 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f | F1 | The send lock holds a database connection for the whole send, which can freeze the pool | resolved | Verified still fixed: the send uses the short claim (esign.service.ts:174). |
+| 07f82b0a | F1 | Keyless group saved with authType bearer | resolved | Verified still fixed (external-api-runtime.service.ts:76). |
+| b30b2d8e | F4 | Noisy or misspelled comments added against the comment rule | resolved | Verified still fixed: none of the three comments is left. |
+
+### checks (6)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps/finnaux-api/src/external/finnaux | passed |
+| green | script: read the route metadata of all five routes | passed: each has 12 view-only pages, only generate-otp has the limit of 10 |
+| green | script: the guard check with controlled page sets, run before the commit | passed: any one of the 12 pages allows, an unrelated page or no pages gives 403, no employee gives 401 |
+| green | 13 unauthenticated POSTs to generate-otp on the local server, run before the commit | passed: first 10 got 401, then 429; pan/verify unaffected |
+| green | bun run build (before the commit) | passed |
+
+### gaps (3)
+
+- The check was not run over HTTP as a logged-in user, so no real OTP was sent
+- Production designations were not checked here; the local data has no page rights rows for most designations
+- Loan application steps are guarded by process-page rights, not menu pages, so a user assigned a loan process whose designation has none of the 12 pages gets 403 there (1 of 9 such employees locally)
+
+### info (5)
+
+- Root has one view page, not one of the 12, and the guard has no root bypass, so Root cannot verify
+- The 12 page ids are a fixed list in the controller; a new screen that calls these routes from another page needs its page added
+- The OTP limit counts per IP, so staff behind one office address share the 10 a minute
+- No automated test covers the rights check or the limit
+- Run the production designation query before deploying so nobody who needs Verify is locked out
+
+---
+
+## howismycommit-50
+
+| Field | Value |
+|---|---|
+| id | howismycommit-50 |
+| generatedAt | 2026-11-23T18:10:11+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | uncommitted |
+| target.commit | null |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 2 |
+| files.deletions | 0 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | null |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 3 |
+| summary.info | 3 |
+| before | Any logged-in user could call the paid Finnaux Aadhaar OTP route as often as the global limit of 100 requests a minute allows, and none of the Finnaux verification routes check a page right. |
+| after | With this change the Aadhaar OTP route would be limited to 10 requests a minute per IP (the same decorator style as oauth.controller.ts). The change was deferred by the user and removed from the working tree; the permission check was never added. |
+
+### changeType (2)
+
+- security
+- api
+
+### effects (2)
+
+- Only POST external/finnaux/aadhaar/generate-otp would change; the other four Finnaux routes keep the global limit
+- The limit counts per IP, so many staff behind one office address share the 10 a minute
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | amber | F1 |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Paid Finnaux verification routes have no permission check and only a global rate limit |
+| location | apps/finnaux-api/src/external/finnaux/finnaux.controller.ts:18 |
+| problem | FUTURE WORK, deferred by the user. All five routes use only AuthGuard, so any logged-in employee can send Aadhaar OTP SMS or run PAN, driving licence and vehicle RC checks, each billed to the Finnaux wallet, with no page right and, for generate-otp, only the global 100 a minute. A ready limit for generate-otp was written and tested (a 10 a minute limit returned 429 from the 11th request) but not committed. |
+| impact | A logged-in user who has no business doing KYC can spend wallet balance or send OTP texts to any Aadhaar number. A permission check is not copied from other routes, because the Surepass, DigiPehchan and Digio routes are login-only as well and the callers sit on pages with different rights. |
+| fix | 1) Add above the generate-otp route: @Throttle({ default: { limit: 10, ttl: 60_000 } }) and import { Throttle } from '@nestjs/throttler'. 2) Decide which page right controls each route (the customer KYC pages use CUSTOMER_INDIVIDUAL view and add; vehicle RC is called from the loan application assets tab) and add @RequirePageRight to each route with the rights of every page that calls it. |
+| evidence |   @UseGuards(AuthGuard)<br>  @Post('aadhaar/generate-otp') |
+| status | resolved |
+| resolvedIn | 7b26614c6a2b57d642db099a187227c0c2bf6418 |
+| resolvedAt | 2026-11-24T04:24:11.008Z |
+| resolvedNote | The five Finnaux routes now need view on one of 12 customer, loan, vendor, dealer, branch or employee pages and generate-otp is limited to 10 a minute per IP (apps/finnaux-api/src/external/finnaux/finnaux.controller.ts, commit 7b26614c). |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f | F1 | The send lock holds a database connection for the whole send, which can freeze the pool | resolved | Verified still fixed: only the short claim runs in a transaction (esign.service.ts:174, 644). |
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit, bunx oxlint apps/finnaux-api/src/external/finnaux and bun run build (run earlier in this session with the change in place) | passed |
+| green | 13 unauthenticated POSTs to generate-otp on the local server | passed: the first 10 got 401, the 11th to 13th got 429; pan/verify was unaffected |
+| green | git diff on the controller | passed: only the import and the decorator line |
+
+### gaps (2)
+
+- The limit was tested with unauthenticated calls, so no real OTP was sent
+- Which page right should control each route was not decided
+
+### info (3)
+
+- Deferred by the user to a future change; the 2-line change is removed from the working tree and its exact text is in F1's fix
+- This is the same problem as the older findings in howismycommit-12 F4 and howismycommit-13 F4, which stay open
+- An IP-based limit is shared by everyone behind the same office address; a per-employee limit would need a custom tracker
+
+---
+
+## howismycommit-49
+
+| Field | Value |
+|---|---|
+| id | howismycommit-49 |
+| generatedAt | 2026-11-23T18:08:44+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 5d63e3c1c7a0c9866e71c831ca148b26fa69dab5 |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 27 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | The Loan Products filter on five screens loaded products through the HRMS employee endpoint, so a user without the HRMS Employees page right got a 403 and an empty filter. The backend had no products route for the logged-in user without a branch. |
+| after | GET /v1/dropdown/session-employee-product returns the active loan products assigned to the logged-in employee as { data: { rows: [{ label, value }] } }, sorted by name, behind the login guard only, like session-employee-branch. |
+
+### changeType (2)
+
+- feature
+- api
+
+### effects (3)
+
+- Frontend can switch its one product-filter function to this route, fixing the 403 on the sales and NBFC dashboards, the LMS executive assignment filters and the CRM employee assignment tab
+- Behaviour difference the frontend accepted: an employee's own assigned product that the manager's product list lacked is now included
+- No database change
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/dropdown/dropdown.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/dropdown/dropdown.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (3)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f | F1 | The send lock holds a database connection for the whole send, which can freeze the pool | resolved | Verified still fixed: only the short claim runs in a transaction (esign.service.ts:174, 644). |
+| 07f82b0a | F1 | Keyless group saved with authType bearer | resolved | Verified still fixed: the fallback is API_KEY (external-api-runtime.service.ts:76). |
+| b30b2d8e | F4 | Noisy or misspelled comments added against the comment rule | resolved | Verified still fixed: none of the three comments is left in auth.guard.ts or accounts.ts. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps/finnaux-api/src/dropdown | passed |
+| green | script: the service method on the local database for two employees with 14 and 11 products and one with none | passed: same ids and order as the employeeProducts table, empty list for none (run earlier in this session) |
+| green | curl GET /api/v1/dropdown/session-employee-product without login | passed: 401, and an unknown path gives 404, so the route exists and no catch-all route takes it (run earlier in this session) |
+
+### gaps (2)
+
+- The route was not called as a logged-in user over HTTP; the query and response shape were checked directly
+- The five frontend screens were not exercised
+
+### info (3)
+
+- No automated test covers the route
+- The route returns only the caller's own data (session.employee.id), so no object-level access check is needed
+- The product list is small per employee, so there is no pagination
+
+---
+
+## howismycommit-48
+
+| Field | Value |
+|---|---|
+| id | howismycommit-48 |
+| generatedAt | 2026-11-23T17:57:47+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 2bb01ccfd53841c29cfac848df73a47efe08c672 |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 3 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 3 |
+| summary.info | 2 |
+| before | auth.guard.ts and accounts.ts held three noisy comments: 'is it good to just return ?', 'prioritize wich every found first' and a question about why a table exists. |
+| after | The three comment lines are gone. Nothing else changed in the code. |
+
+### changeType (1)
+
+- config
+
+### effects (2)
+
+- No behaviour change
+- Touches the auth guard and an accounts schema file, but only deletes comment lines
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/auth/guards/auth.guard.ts | modified | green | no issues |
+| apps/finnaux-api/src/drizzle/schema/accounts.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| b30b2d8e | F4 | Noisy or misspelled comments added against the comment rule | resolved | Fixed by this commit: none of the three comments is left in auth.guard.ts or accounts.ts; the finding in howismycommit-6 is now marked resolved. |
+| b30b2d8e | F5, F6 | Aggregation row always returns 0; raw SQL names | open | Still open and not touched by this commit (report-builder.query.ts:87 and the typed "lao"."loanDate"). |
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | git show 2bb01ccf (diff is only 3 deleted comment lines) | passed |
+| green | bunx tsc --noEmit and bunx oxlint (auth guards, accounts schema) | passed |
+| green | bun run build | passed (run earlier in this session) |
+
+### gaps (1)
+
+- Other comments in these files were left alone, including the INFO comment about money stored as double precision, which gives a real reason
+
+### info (2)
+
+- A comment-only change; no test is needed
+- An unrelated uncommitted change in finnaux.controller.ts (an OTP rate limit) was not part of this commit
+
+---
+
+## howismycommit-47
+
+| Field | Value |
+|---|---|
+| id | howismycommit-47 |
+| generatedAt | 2026-11-23T17:57:47+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 06be55adfc5ad4b8f2a1e5ec15fbae413196bb0a |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 1 |
+| files.deletions | 1 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | An API group with no active endpoint got auth type 'bearer', although the credentials contract says API_KEY and the only key such a group can store is apiKey. |
+| after | The fallback is 'API_KEY', so the credentials routes report API_KEY, validate against the apiKey schema and store API_KEY in the group's credentials. |
+
+### changeType (2)
+
+- bug-fix
+- api
+
+### effects (2)
+
+- GET and PUT credentials and the credentials schema route for groups without an active endpoint
+- Groups that have an endpoint are unchanged (they still use the endpoint's own value, such as hmac)
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/shared/external-api-runtime.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 07f82b0a | F1 | Keyless group saved with authType bearer | resolved | Fixed by this commit (external-api-runtime.service.ts:76); the finding in howismycommit-9 is now marked resolved. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps/finnaux-api/src/external/shared | passed |
+| green | script: getApiGroupAuthContext on a real local group with no active endpoint, and one with an endpoint | passed: API_KEY with no keys; the group with an endpoint still returned hmac (run earlier in this session) |
+| green | bun run build | passed (run earlier in this session) |
+
+### gaps (2)
+
+- Existing stored credentials saved under the old 'bearer' fallback keep that auth type; no data fix was made
+- No automated test covers the fallback
+
+### info (3)
+
+- Existing endpoint auth types are lowercase (bearer, basic, hmac, custom) while this value and the schema builder use uppercase; the contract requires API_KEY, so this was followed
+- The API groups list route still returns 'none' for groups without an endpoint (external-apis.service.ts:251); left unchanged
+- Nothing else reads the stored auth type of group credentials, so the value only shows in the credentials routes
+
+---
+
+## howismycommit-46
+
+| Field | Value |
+|---|---|
+| id | howismycommit-46 |
+| generatedAt | 2026-11-23T17:57:47+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 7cce418b6d1a3878d11a5a7a26ec208a09762d0c |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 116 |
+| files.deletions | 44 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 4 |
+| before | A Finnaux send held a database transaction (and one pooled connection) for its whole length, including the PDF render and the Finnaux call, so about as many concurrent sends as pool connections could freeze the API. |
+| after | The lock covers only a short claim step: it re-checks the status, marks the document ESIGN_PENDING and commits. The PDF render and Finnaux call run outside any transaction, and the previous status and time are put back if the send fails. A second click gets a 409. |
+
+### changeType (2)
+
+- bug-fix
+- api
+
+### effects (3)
+
+- POST esign/create-request for Finnaux documents: a second click during a send gets 409 'already being sent'
+- A failed send leaves the document as it was; a first-ever failed send leaves an empty document row with status NOT_RECEIVED
+- A claim with no Finnaux session older than 5 minutes is treated as a failed send and can be taken over
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/los/loan-application/esign/esign.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f | F1 | The send lock holds a database connection for the whole send, which can freeze the pool | resolved | Fixed by this commit: only the claim runs in a transaction and the slow work runs outside it (esign.service.ts:174-196, 644, 727). |
+| 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f | F2-F1 (howismycommit-43 F2 and howismycommit-44 F1) | Pending check not atomic; signed file saved without PDF check | resolved | Both still fixed: the claim re-check is under the per-document lock (esign.service.ts:644-727) and uploadSignedPdf still requires %PDF-. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint (esign, external shared, auth guards, accounts schema) | passed |
+| green | script: claim and release on the local database with a pool of 2 (two clicks, third click, release, stale takeover, restore of an old failed request) | passed: no hang, exactly one claim wins (run earlier in this session) |
+| green | bun run build | passed (run earlier in this session) |
+
+### gaps (2)
+
+- No real Finnaux send was made, and the failure path was tested on release directly, not through a forced Finnaux error
+- No automated test covers the claim and release
+
+### info (4)
+
+- Narrow race: if the old request's Finnaux webhook or a Check status click lands during a re-send, it can overwrite the claim marker, and a quick second click could then get through
+- If the server stops mid-send, a document that already has an older Finnaux session stays 'pending' until Check status is clicked; one without a session frees itself after 5 minutes
+- If Finnaux accepts a request but saving it fails, the claim is released and a retry could send a second request; this existed before the change
+- The claim also sets updaterId, which is not restored when a send fails
+
+---
+
+## howismycommit-45
+
+| Field | Value |
+|---|---|
+| id | howismycommit-45 |
+| generatedAt | 2026-11-23T16:44:43+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 63 |
+| files.deletions | 19 |
+| verdict | review-with-caution |
+| score | 90 |
+| commitScore | 90 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 3 |
+| summary.info | 3 |
+| before | Two eSign sends for one document at the same moment could both reach Finnaux, and a downloaded signed file was saved without checking it was a PDF. |
+| after | Finnaux sends take a per-document Postgres advisory lock and re-read the status before calling Finnaux, so the second send gets the 'already pending' 409. A signed file is saved only if it starts with %PDF-; anything else is logged and skipped so a later status check retries. |
+
+### changeType (2)
+
+- bug-fix
+- api
+
+### effects (3)
+
+- POST esign/create-request for Finnaux documents now runs inside a database transaction that stays open until Finnaux has answered and the row is saved
+- Signed files that are not PDFs are no longer stored; esignedFileUrl stays empty until a good file arrives
+- The Digio path is unchanged
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/los/loan-application/esign/esign.service.ts | modified | amber | F1 |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P2 |
+| title | The send lock holds a database connection for the whole send, which can freeze the pool |
+| location | apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:173 |
+| problem | The lock transaction stays open while createFinnauxEsignRequest renders the PDF, calls Finnaux and saves the row, and those steps run their own queries on other pooled connections. If as many sends (including double clicks, since each waiting click also holds a connection) are running as the pool has connections, every connection is held by a waiting transaction and none is left for the inner queries. |
+| impact | The sends and every other API request that needs a database connection hang, because the driver has no wait limit, until the server is restarted. Reproduced with a pool of 2: two concurrent sends stayed stuck after 5 seconds. The pool is DATABASE_POOL_MAX (10 locally), so it takes about 10 concurrent sends or double clicks. |
+| fix | Keep the lock short: inside one quick transaction take the lock, re-check the status and mark the document ESIGN_PENDING, then commit; do the PDF render and Finnaux call outside any transaction, and put the previous status back if Finnaux fails. A cap on concurrent sends below the pool size is a smaller alternative. |
+| evidence | return this.databaseService.db.transaction(async (tx) => {<br>        await tx.execute( |
+| status | resolved |
+| resolvedIn | 7cce418b6d1a3878d11a5a7a26ec208a09762d0c |
+| resolvedAt | 2026-11-23T11:26:18.606Z |
+| resolvedNote | The lock transaction now only claims the document (select, check, mark ESIGN_PENDING) and the PDF render and Finnaux call run outside any transaction, with the claim undone on failure (apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:174-196, 644, 727). |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (3)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 4c4198f4a54c2c653f7fba65575e42b18852716e | F2 | Pending check is not atomic, so two creates can both reach Finnaux | resolved | Fixed by this commit: the lock and re-read make a second send wait and get the pending 409 (esign.service.ts:173-216). |
+| 5aaac3db75ab0e52d1be7fb4292ce5f33447ecee | F1 | Downloaded signed file is saved without checking it is a PDF | resolved | Fixed by this commit: uploadSignedPdf requires the %PDF- header and returns null otherwise (esign.service.ts:1158-1164). |
+| 4c4198f4a54c2c653f7fba65575e42b18852716e | F1 | A REVOKE or RESEND reply of SUCCESS marks the document signed | resolved | Verified still fixed (esign.service.ts, getFinnauxActionStatus). |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps/finnaux-api/src/los/loan-application/esign | passed |
+| green | script: PDF check on the real uploadSignedPdf, copySignedPdfFromUrl and saveFinnauxSignedPdf (real PDF, HTML, JSON, empty, bad base64) | passed: only the real PDFs were uploaded (run earlier in this session) |
+| green | script: two concurrent sends with and without the advisory lock | passed: without the lock 2 Finnaux requests, with the lock 1 and the other refused (run earlier in this session) |
+| green | script: pool of 2 with two concurrent lock transactions | reproduced the freeze behind F1: stuck after 5 seconds |
+
+### gaps (3)
+
+- No real Finnaux send was made, so the lock was tested as a mechanism, not through the real create flow
+- The production DATABASE_POOL_MAX is unknown; .env.example leaves it empty
+- A PDF with bytes before the %PDF- header would be refused; this is rare and was not seen in the one real signed file
+
+### info (3)
+
+- No test covers the lock or the PDF check
+- The lock key is a 32-bit hash of loanApplicationId and systemDocumentId; a collision only makes two unrelated documents wait for each other
+- Two API servers behind one database are still covered, because the lock lives in Postgres
+
+---
+
+## howismycommit-44
+
+| Field | Value |
+|---|---|
+| id | howismycommit-44 |
+| generatedAt | 2026-11-23T16:04:00+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 5aaac3db75ab0e52d1be7fb4292ce5f33447ecee |
+| files.changed | 15 |
+| files.added | 2 |
+| files.modified | 13 |
+| files.deleted | 0 |
+| files.insertions | 811 |
+| files.deletions | 99 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 96 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 3 |
+| summary.info | 4 |
+| before | Every eSign request followed the global provider setting, Finnaux signed-file links were stored as Finnaux sent them, there was no audit trail, and the loan product documents page no longer accepted the four Digio settings. |
+| after | Each document remembers which provider sent it, Finnaux signed PDFs are copied to our storage, the masked Finnaux audit trail is stored and served from GET esign/audit-trail, and the Digio settings are accepted again with stored values kept for missing fields. |
+
+### changeType (3)
+
+- feature
+- schema
+- api
+
+### effects (4)
+
+- Loan product documents save and list (four Digio fields back in the response)
+- Templates config: the eSign guard now runs only when Finnaux is selected
+- Loan application documents list gains esignProvider
+- New columns on loanApplicationDocuments are now part of migration 0016_finnaux_esign
+
+### filesReviewed (15)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/los/loan-application/esign/esign.service.ts | modified | amber | F1 |
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux-esign-audit-trail.ts | added | green | no issues |
+| apps/finnaux-api/src/los/loan-application/esign/dto/get-esign-audit-trail.dto.ts | added | green | no issues |
+| apps/finnaux-api/src/los/loan-application/esign/esign.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/esign/dto/index.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/loan-documents.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/dto/update-loan-document.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/loan-products/documents/loan-documents/loan-documents.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/templates/templates.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/templates/templates.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/drizzle/schema/loan-applications.schema.ts | modified | green | no issues |
+| apps/finnaux-api/src/drizzle/schema/enums.ts | modified | green | no issues |
+| apps/finnaux-api/src/drizzle/schema/enum-map.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/documents/document.service.ts | modified | green | no issues |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Downloaded signed file is saved without checking it is a PDF |
+| location | apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:1109 |
+| problem | copySignedPdfFromUrl stores whatever the URL returns as <id>-signed.pdf. If Finnaux answers an expired or wrong link with a 200 HTML or JSON page, that page is saved as the signed PDF. |
+| impact | The stored link then points to our own storage, so isStoredOnOurSide is true and the file is never copied again, neither by a status check nor by the webhook; the signed document stays broken with no error. |
+| fix | Before uploading, check the buffer starts with %PDF (or the response content-type is application/pdf); otherwise log and return null so the next status check or webhook retries. |
+| evidence | const pdf = await this.finnauxService.downloadSignedEsignPdf(url) |
+| status | resolved |
+| resolvedIn | 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f |
+| resolvedAt | 2026-11-23T11:14:43.248Z |
+| resolvedNote | uploadSignedPdf refuses any file that does not start with %PDF- and returns null so a later status check retries (apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:1158-1164). |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (3)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 5aaac3db75ab0e52d1be7fb4292ce5f33447ecee | F1 | Downloaded signed file is saved without checking it is a PDF | open | No %PDF or content-type check exists anywhere; the download returns the raw bytes (finnaux.service.ts:1163-1170) and they are uploaded as is (esign.service.ts:1109-1111). |
+| 4c4198f4a54c2c653f7fba65575e42b18852716e | F1 | A REVOKE or RESEND reply of SUCCESS marks the document signed | resolved | Verified still fixed (esign.service.ts:1183-1195). |
+| 4c4198f4a54c2c653f7fba65575e42b18852716e | F2 | Pending check is not atomic, so two creates can both reach Finnaux | open | Still a read, then a separate create with no lock (esign.service.ts:170-186). |
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit (current tree, HEAD deb8f879) | passed |
+| green | bunx oxlint (los, finnaux, configurations, drizzle schema, webhooks) | passed |
+| grey | jest | not run: no test covers the eSign code |
+
+### gaps (2)
+
+- The review describes the current code: esign.service.ts has changed a lot since this commit
+- The app boot with the new module imports was verified earlier in the session, not in this run
+
+### info (4)
+
+- Every STATUS call on a signed document no longer resets esignedAt: fixed later with coalesce (esign.service.ts:894)
+- There is no retry job any more, so a failed audit-trail save is retried only by the next webhook, a status click or a manual refresh (user's decision)
+- Audit-trail dates are passed through as Finnaux text by choice
+- The audit trail is only protected by the normal login guard, like the other loan application routes
+
+---
+
+## howismycommit-43
+
+| Field | Value |
+|---|---|
+| id | howismycommit-43 |
+| generatedAt | 2026-11-23T16:04:00+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 4c4198f4a54c2c653f7fba65575e42b18852716e |
+| files.changed | 10 |
+| files.added | 1 |
+| files.modified | 9 |
+| files.deleted | 0 |
+| files.insertions | 759 |
+| files.deletions | 22 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 86 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 3 |
+| summary.info | 4 |
+| before | Loan application eSign went only through Digio, needed a documentUrl from the frontend, and failed when no notification receivers were set. |
+| after | When the Finnaux eSign group is selected, the backend renders the linked template to PDF, builds signers from the loan customers, and calls Finnaux. STATUS, RESEND_INVITATION and REVOKE go through POST esign/action, and GET routes to Finnaux STATUS when a session exists. |
+
+### changeType (3)
+
+- feature
+- api
+- schema
+
+### effects (3)
+
+- New column loanApplicationDocuments.esignSession (now part of migration 0016)
+- Loan application documents list returns more template fields
+- Finnaux API request logs strip strings over 2000 characters for eSign calls only
+
+### filesReviewed (10)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/los/loan-application/esign/esign.service.ts | modified | amber | F2 |
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/fixed-cuids.ts | modified | green | no issues |
+| apps/finnaux-api/src/drizzle/schema/loan-applications.schema.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/documents/document.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/esign/dto/create-esign-request.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/esign/dto/index.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/esign/dto/run-esign-action.dto.ts | added | green | no issues |
+| apps/finnaux-api/src/los/loan-application/esign/esign.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/esign/esign.module.ts | modified | green | no issues |
+
+### findings (2)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P2 |
+| title | A REVOKE or RESEND reply of SUCCESS marks the document signed |
+| location | apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:1183 |
+| problem | runFinnauxEsignAction mapped data.status the same way for every action, so a SUCCESS reply to a revoke or resend saved the document as signed. |
+| impact | A revoked or re-sent agreement could show as signed with no signed PDF behind it. |
+| fix | Map data.status only for STATUS; REVOKE always ESIGNED_FAILURE; RESEND leaves the status unchanged. |
+| evidence | const esignAgreementStatus =<br>      action === 'REVOKE' ? (mappedStatus ?? 'ESIGNED_FAILURE') : mappedStatus |
+| status | resolved |
+| resolvedIn | 5aaac3db75ab0e52d1be7fb4292ce5f33447ecee |
+| resolvedAt | 2026-11-21T07:34:06Z |
+| resolvedNote | getFinnauxActionStatus maps the provider status only for STATUS, stores ESIGNED_FAILURE for REVOKE and leaves RESEND_INVITATION unchanged (apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:1183-1195). |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[2] · F2
+
+| Field | Value |
+|---|---|
+| id | F2 |
+| severity | P3 |
+| title | Pending check is not atomic, so two creates can both reach Finnaux |
+| location | apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:170 |
+| problem | The pending check reads the row, then calls Finnaux, then upserts. Two clicks at once both pass the check and both create a Finnaux request; the second overwrites the first session and reference id. |
+| impact | Customers get two signing links. If they sign the first one, our status check and the Finnaux webhook look up only the second request, so the real signature is never recorded (the webhook logs an unknown journey and is ignored). |
+| fix | Lock the document row (select for update in a transaction) or set ESIGN_PENDING before calling Finnaux and roll back on failure. |
+| evidence | if (await this.isFinnauxEsignSelected()) {<br>      if (<br>        existingDocument && |
+| status | resolved |
+| resolvedIn | 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f |
+| resolvedAt | 2026-11-23T11:14:43.248Z |
+| resolvedNote | Sends for one document now take a Postgres advisory lock and re-read the status before calling Finnaux, so a second click waits and gets the pending 409 (apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:173-216); a new risk from holding the connection is reported separately. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (3)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 4c4198f4a54c2c653f7fba65575e42b18852716e | F1 | A REVOKE or RESEND reply of SUCCESS marks the document signed | resolved | Verified still fixed (esign.service.ts:1183-1195). |
+| 4c4198f4a54c2c653f7fba65575e42b18852716e | F2 | Pending check is not atomic, so two creates can both reach Finnaux | open | Still a read, then a separate create with no lock (esign.service.ts:170-186). |
+| 5aaac3db75ab0e52d1be7fb4292ce5f33447ecee | F1 | Downloaded signed file is saved without checking it is a PDF | open | copySignedPdfFromUrl still uploads the bytes unchecked (esign.service.ts:1109-1111). |
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit (current tree, HEAD deb8f879) | passed |
+| green | bunx oxlint (los, finnaux, configurations, drizzle schema, webhooks) | passed |
+| grey | jest | not run: no test covers the eSign code |
+
+### gaps (2)
+
+- The review describes the current code: esign.service.ts has changed a lot since this commit (roles, company signer, webhook)
+- Finnaux status shapes for REVOKE and RESEND were never seen
+
+### info (4)
+
+- The old note about esignedAt being reset on every status check is fixed: it now uses coalesce (esign.service.ts:894)
+- Digio create no longer requires notification receivers in this commit; that was restored later in b8abe45b
+- The pending check only covers ESIGN_PENDING, not WAITING_FOR_ESIGN, which Finnaux creates never use
+- Branch HEAD is now deb8f879, the merge of PR 113
+
+---
 
 ## howismycommit-42
 
@@ -181,8 +1004,8 @@ _Empty._
 | files.insertions | 11 |
 | files.deletions | 3 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -260,8 +1083,8 @@ _Empty._
 | files.insertions | 183 |
 | files.deletions | 6 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -365,8 +1188,8 @@ _Empty._
 | files.insertions | 394 |
 | files.deletions | 100 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -449,8 +1272,8 @@ _Empty._
 | files.insertions | 53783 |
 | files.deletions | 1 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -544,7 +1367,7 @@ _Empty._
 | generatedAt | 2026-11-21T13:04:50+05:30 |
 | author | Dhruv |
 | branch | feat/external-apis |
-| commitScore | 95 |
+| commitScore | 100 |
 | target.kind | commit |
 | target.commit | b8abe45b9f8db6e7f1356769665228bf129a2b35 |
 | files.changed | 1 |
@@ -554,7 +1377,7 @@ _Empty._
 | files.insertions | 13 |
 | files.deletions | 10 |
 | verdict | looks-good |
-| score | 95 |
+| score | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -617,7 +1440,7 @@ _Empty._
 | generatedAt | 2026-11-21T13:04:50+05:30 |
 | author | Dhruv |
 | branch | feat/external-apis |
-| commitScore | 95 |
+| commitScore | 100 |
 | target.kind | commit |
 | target.commit | 2c41646bcc07c5d1d0bf8d67a93979a82dc858d3 |
 | files.changed | 4 |
@@ -627,7 +1450,7 @@ _Empty._
 | files.insertions | 53746 |
 | files.deletions | 1 |
 | verdict | looks-good |
-| score | 95 |
+| score | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -699,7 +1522,7 @@ _Empty._
 | generatedAt | 2026-11-21T13:04:50+05:30 |
 | author | Dhruv |
 | branch | feat/external-apis |
-| commitScore | 91 |
+| commitScore | 96 |
 | target.kind | commit |
 | target.commit | 5aaac3db75ab0e52d1be7fb4292ce5f33447ecee |
 | files.changed | 15 |
@@ -709,7 +1532,7 @@ _Empty._
 | files.insertions | 811 |
 | files.deletions | 99 |
 | verdict | review-with-caution |
-| score | 91 |
+| score | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -774,10 +1597,10 @@ _Empty._
 | impact | The stored link then points to our own storage, so isStoredOnOurSide is true and the file is never copied again; the signed document stays broken with no error. |
 | fix | Before uploading, check the buffer starts with %PDF (or the response content-type is application/pdf); otherwise log and return null so the next STATUS call retries. |
 | evidence | const pdf = await this.finnauxService.downloadSignedEsignPdf(url) |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
+| status | resolved |
+| resolvedIn | 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f |
+| resolvedAt | 2026-11-23T11:26:18.606Z |
+| resolvedNote | uploadSignedPdf refuses any file that does not start with %PDF- and returns null so a later status check retries (apps/finnaux-api/src/los/loan-application/esign/esign.service.ts: uploadSignedPdf). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -822,8 +1645,8 @@ _Empty._
 | files.insertions | 759 |
 | files.deletions | 22 |
 | verdict | review-with-caution |
-| score | 81 |
-| commitScore | 81 |
+| score | 86 |
+| commitScore | 86 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 2 |
@@ -895,10 +1718,10 @@ _Empty._
 | impact | Customers get two signing links. If they sign the first one, STATUS polls the second session and never sees the signature. |
 | fix | Lock the document row (select for update in a transaction) or set ESIGN_PENDING before calling Finnaux and roll back on failure. |
 | evidence | if (await this.isFinnauxEsignSelected()) {<br>      if (<br>        existingDocument && |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
+| status | resolved |
+| resolvedIn | 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f |
+| resolvedAt | 2026-11-23T11:26:18.606Z |
+| resolvedNote | Sends for one document take a Postgres advisory lock and re-check the status before marking it pending, so a second click gets the pending 409 (apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:644-727). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -949,8 +1772,8 @@ _Empty._
 | files.insertions | 56 |
 | files.deletions | 21 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1021,8 +1844,8 @@ _Empty._
 | files.insertions | 64 |
 | files.deletions | 79 |
 | verdict | review-with-caution |
-| score | 81 |
-| commitScore | 81 |
+| score | 86 |
+| commitScore | 86 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 2 |
@@ -1133,8 +1956,8 @@ _Empty._
 | files.insertions | 287 |
 | files.deletions | 3 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1214,7 +2037,7 @@ _Empty._
 | files.insertions | 1055 |
 | files.deletions | 39 |
 | verdict | review-with-caution |
-| score | 82 |
+| score | 87 |
 | commitScore | null |
 | quality | good |
 | summary.red | 0 |
@@ -1277,10 +2100,10 @@ _Empty._
 | impact | A revoked request can show as Signed (and the signed-PDF save runs), or stay Pending so create-request keeps returning 409 and the document can never be sent again. |
 | fix | Map data.status only for STATUS. For REVOKE always set ESIGNED_FAILURE; for RESEND_INVITATION leave esignAgreementStatus unchanged. |
 | evidence | const mappedStatus = this.mapFinnauxEsignStatus(providerStatus)<br>    const esignAgreementStatus =<br>      action === 'REVOKE' ? (mappedStatus ?? 'ESIGNED_FAILURE') : mappedStatus |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
+| status | resolved |
+| resolvedIn | 5aaac3db75ab0e52d1be7fb4292ce5f33447ecee |
+| resolvedAt | 2026-11-23T11:26:18.606Z |
+| resolvedNote | getFinnauxActionStatus maps the provider status only for STATUS, stores ESIGNED_FAILURE for REVOKE and leaves RESEND_INVITATION unchanged (apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:1299). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -1298,10 +2121,10 @@ _Empty._
 | impact | Two billed Finnaux requests; customers get two SMS links, and the second upsert overwrites the first session, so signing the first link is never tracked. |
 | fix | Lock the loanApplicationDocuments row (or an advisory lock on loanApplicationId + systemDocumentId) across check and create, or send an idempotency-key derived from the document. |
 | evidence | existingDocument.esignSession &&<br>        existingDocument.esignAgreementStatus === 'ESIGN_PENDING' |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
+| status | resolved |
+| resolvedIn | 74acf255f9ca7a3ce84c99d8439dd15c9f7af40f |
+| resolvedAt | 2026-11-23T11:26:18.606Z |
+| resolvedNote | The pending check now runs under a per-document lock in claimFinnauxEsignSend, so two creates cannot both reach Finnaux (apps/finnaux-api/src/los/loan-application/esign/esign.service.ts:644-727). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -1319,10 +2142,10 @@ _Empty._
 | impact | If Finnaux sends MM/dd, expiresAt is wrong for any day above 12 (null) or swapped (wrong date), and the frontend may show a valid link as expired. |
 | fix | Confirm the format with a real response with a day above 12, and agree with the team where provider dates are converted (an existing pattern is getIsoDateFromSurepass); fix the comment. |
 | evidence | const expiresAt = parse(<br>      `${value} +05:30`,<br>      'dd/MM/yyyy HH:mm:ss xxx', |
-| status | open |
+| status | resolved |
 | resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
+| resolvedAt | 2026-11-23T11:26:18.606Z |
+| resolvedNote | The date helper never reached a commit; signer expiry now reuses the shared getIsoDateFromDigio (apps/finnaux-api/src/los/loan-application/esign/finnaux-esign-signers.ts:40). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -1542,8 +2365,8 @@ _Empty._
 | files.insertions | 67 |
 | files.deletions | 18 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -1725,8 +2548,8 @@ _Empty._
 | files.insertions | 200 |
 | files.deletions | 4 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -1828,8 +2651,8 @@ _Empty._
 | files.insertions | 356 |
 | files.deletions | 16 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -1935,8 +2758,8 @@ _Empty._
 | files.insertions | 343 |
 | files.deletions | 12 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -2036,8 +2859,8 @@ _Empty._
 | files.insertions | 2 |
 | files.deletions | 2 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2113,8 +2936,8 @@ _Empty._
 | files.insertions | 107201 |
 | files.deletions | 1 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 70 |
+| score | 100 |
+| commitScore | 75 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2214,8 +3037,8 @@ _Empty._
 | files.insertions | 209 |
 | files.deletions | 15 |
 | verdict | review-with-caution |
-| score | 81 |
-| commitScore | 81 |
+| score | 86 |
+| commitScore | 86 |
 | quality | good |
 | summary.red | 0 |
 | summary.amber | 2 |
@@ -2414,8 +3237,8 @@ _Empty._
 | files.insertions | 16 |
 | files.deletions | 60 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2495,8 +3318,8 @@ _Empty._
 | files.insertions | 105 |
 | files.deletions | 8 |
 | verdict | review-with-caution |
-| score | 91 |
-| commitScore | 91 |
+| score | 96 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 1 |
@@ -2593,8 +3416,8 @@ _Empty._
 | files.insertions | 21 |
 | files.deletions | 6 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2671,8 +3494,8 @@ _Empty._
 | files.insertions | 79 |
 | files.deletions | 50 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 91 |
+| score | 100 |
+| commitScore | 96 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -2770,9 +3593,9 @@ _Empty._
 | files.insertions | 925 |
 | files.deletions | 0 |
 | verdict | review-with-caution |
-| score | 87 |
-| commitScore | 65 |
-| quality | good |
+| score | 92 |
+| commitScore | 70 |
+| quality | excellent |
 | summary.red | 0 |
 | summary.amber | 2 |
 | summary.green | 2 |
@@ -2886,14 +3709,14 @@ _Empty._
 | fix | Add the same permission guard the other KYC routes use and a throttle on generate-otp. |
 | evidence | @UseGuards(AuthGuard)<br>  @Post('aadhaar/generate-otp') |
 | status | resolved |
-| resolvedIn | null |
-| resolvedAt | 2026-11-16T10:21:33.314Z |
-| resolvedNote | Marked resolved manually |
+| resolvedIn | 7b26614c6a2b57d642db099a187227c0c2bf6418 |
+| resolvedAt | 2026-11-24T04:24:11.008Z |
+| resolvedNote | The five Finnaux routes now need view on one of 12 customer, loan, vendor, dealer, branch or employee pages and generate-otp is limited to 10 a minute per IP (apps/finnaux-api/src/external/finnaux/finnaux.controller.ts, commit 7b26614c). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
-| future | false |
+| future | true |
 
 #### findings[5] · F5
 
@@ -2987,8 +3810,8 @@ _Empty._
 | files.insertions | 925 |
 | files.deletions | 0 |
 | verdict | review-with-caution |
-| score | 69 |
-| commitScore | 69 |
+| score | 74 |
+| commitScore | 74 |
 | quality | fair |
 | summary.red | 0 |
 | summary.amber | 5 |
@@ -3102,10 +3925,10 @@ _Empty._
 | impact | Wallet drain and SMS spam to arbitrary people from one account. |
 | fix | Add the same permission guard the other KYC routes use and a throttle on generate-otp. |
 | evidence | @UseGuards(AuthGuard)<br>  @Post('aadhaar/generate-otp') |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
+| status | resolved |
+| resolvedIn | 7b26614c6a2b57d642db099a187227c0c2bf6418 |
+| resolvedAt | 2026-11-24T04:24:11.008Z |
+| resolvedNote | The five Finnaux routes now need view on one of 12 customer, loan, vendor, dealer, branch or employee pages and generate-otp is limited to 10 a minute per IP (apps/finnaux-api/src/external/finnaux/finnaux.controller.ts, commit 7b26614c). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -3177,8 +4000,8 @@ _Empty._
 | files.insertions | 548910 |
 | files.deletions | 2235556 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3261,8 +4084,8 @@ _Empty._
 | files.insertions | 10 |
 | files.deletions | 4 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3381,10 +4204,10 @@ _Empty._
 | impact | The saved row says bearer for a plain API key, and the schema route (buildCredentialsJsonSchema) does not recognise the lowercase value, so its answer for that group is wrong. |
 | fix | Fall back to the API_KEY value the rest of the code uses, or the lowercase api_key if the column convention is lowercase, and keep both places consistent. |
 | evidence | authType: apiGroup.authType ?? 'bearer', |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
+| status | resolved |
+| resolvedIn | 06be55adfc5ad4b8f2a1e5ec15fbae413196bb0a |
+| resolvedAt | 2026-11-23T12:27:47.478Z |
+| resolvedNote | A group with no active endpoint now falls back to API_KEY, as the credentials contract says (apps/finnaux-api/src/external/shared/external-api-runtime.service.ts:76). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -3456,8 +4279,8 @@ _Empty._
 | files.insertions | 213 |
 | files.deletions | 47 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3534,8 +4357,8 @@ _Empty._
 | files.insertions | 213 |
 | files.deletions | 47 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3726,10 +4549,10 @@ _Empty._
 | impact | Noise and typos in guard and schema code; no runtime effect. |
 | fix | Remove them or turn them into issues. |
 | evidence | //is it good to just return ?<br>//prioritize wich every found first |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
+| status | resolved |
+| resolvedIn | 2bb01ccfd53841c29cfac848df73a47efe08c672 |
+| resolvedAt | 2026-11-23T12:27:47.478Z |
+| resolvedNote | The three noisy comments are removed from auth.guard.ts and accounts.ts (commit 2bb01ccf; no match left for them in either file). |
 | needsAttention | false |
 | attentionNote | null |
 | confirmed | false |
@@ -3748,15 +4571,15 @@ _Empty._
 | impact | A report with a SUM or COUNT column shows a total of 0 next to rows with real values. |
 | fix | Compute the aggregation in SQL, or omit the row until it is implemented. |
 | evidence | row[field.id] = { name: aggregation, value: 0 } |
-| status | open |
+| status | resolved |
 | resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | false |
-| attentionNote | null |
+| resolvedAt | 2026-11-23T12:33:32.201Z |
+| resolvedNote | Marked resolved manually |
+| needsAttention | true |
+| attentionNote | The aggregation row still returns a fixed 0 without querying anything (apps/finnaux-api/src/reports/report-builder/report-builder.query.ts:87). |
 | confirmed | false |
 | confirmedNote | null |
-| future | true |
+| future | false |
 
 #### findings[6] · F6
 
@@ -3770,15 +4593,15 @@ _Empty._
 | impact | A column rename in the view or table breaks the report at runtime, not at compile time. |
 | fix | Reference loanApplicationOverviewView and loanApplicationsTable columns through Drizzle aliases. |
 | evidence | const loanDate = sql`"lao"."loanDate"` |
-| status | open |
+| status | resolved |
 | resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | false |
-| attentionNote | null |
+| resolvedAt | 2026-11-23T12:33:33.741Z |
+| resolvedNote | Marked resolved manually |
+| needsAttention | true |
+| attentionNote | The filter still types the raw name "lao"."loanDate" inside sql (apps/finnaux-api/src/reports/report-builder/report-builder.query.ts:33). |
 | confirmed | false |
 | confirmedNote | null |
-| future | true |
+| future | false |
 
 ### previousFindings (1)
 
@@ -3824,8 +4647,8 @@ _Empty._
 | files.insertions | 18 |
 | files.deletions | 9 |
 | verdict | looks-good |
-| score | 95 |
-| commitScore | 95 |
+| score | 100 |
+| commitScore | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3913,7 +4736,7 @@ _Empty._
 | files.insertions | 263 |
 | files.deletions | 50 |
 | verdict | looks-good |
-| score | 95 |
+| score | 100 |
 | quality | excellent |
 | summary.red | 0 |
 | summary.amber | 0 |
@@ -3921,7 +4744,7 @@ _Empty._
 | summary.info | 4 |
 | before | The consumer UCRF report wrote one short TUDF record per loan with simple segment tags, a single phone and ID list, and no old account, income, email or secondary address data. With closed cases included it reported open loans together with loans closed in the chosen window. |
 | after | The TUDF builder emits segment-length tags (PN03, ID03, PT03, EC03, PA03, TL04), up to five name fields, several phones, emails, a secondary address, old account number, interest rate and income fields, and the grid shows old account and NREGA/CKYC data. With closed cases included the filter returns open loans plus loans closed between the closed-from date and the reporting date. |
-| commitScore | 28 |
+| commitScore | 33 |
 
 ### changeType (2)
 
@@ -4141,7 +4964,7 @@ _Empty._
 | files.insertions | 263 |
 | files.deletions | 50 |
 | verdict | request-changes |
-| score | 28 |
+| score | 33 |
 | quality | poor |
 | summary.red | 1 |
 | summary.amber | 6 |
@@ -4367,7 +5190,7 @@ _Empty._
 | files.insertions | 263 |
 | files.deletions | 50 |
 | verdict | request-changes |
-| score | 28 |
+| score | 33 |
 | quality | poor |
 | summary.red | 1 |
 | summary.amber | 6 |
@@ -4593,7 +5416,7 @@ _Empty._
 | files.insertions | 263 |
 | files.deletions | 50 |
 | verdict | request-changes |
-| score | 28 |
+| score | 33 |
 | quality | poor |
 | summary.red | 1 |
 | summary.amber | 6 |

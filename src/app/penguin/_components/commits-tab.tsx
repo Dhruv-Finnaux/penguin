@@ -26,7 +26,7 @@ import { CopyPath } from "./copy-path"
 import { Highlight } from "./highlight"
 import { AuthorTag } from "./author-tag"
 import { CopyHash } from "./copy-hash"
-import { UNNAMED_COLOR } from "../_lib/graph-layout"
+import { colorForBranch } from "../_lib/graph-layout"
 import { ArrowRightIcon, BadgeAlertIcon, ChevronRightIcon, GitBranchIcon, GitMergeIcon } from "lucide-react"
 
 async function fetchDiff(repo: RepoKey, hash: string): Promise<DiffFile[]> {
@@ -219,7 +219,14 @@ function CommitReview({ review, history }: { review: Review; history: ReviewRunS
 
 const BRANCHES_SHOWN = 3
 
-function BranchTags({ branches, colors }: { branches?: string[]; colors?: Map<string, string> }) {
+
+// Every branch chip is tinted, local or remote. No solid fills.
+const branchChipStyle = (name: string) => {
+  const color = colorForBranch(name)
+  return { color, background: `${color}1f` }
+}
+
+function BranchTags({ branches }: { branches?: string[] }) {
   if (!branches || branches.length === 0) return null
   const shown = branches.slice(0, BRANCHES_SHOWN)
   const rest = branches.length - shown.length
@@ -228,7 +235,7 @@ function BranchTags({ branches, colors }: { branches?: string[]; colors?: Map<st
       {shown.map((name) => (
         <code
           key={name}
-          style={{ color: colors?.get(name) ?? UNNAMED_COLOR, background: `${colors?.get(name) ?? UNNAMED_COLOR}1f` }}
+          style={branchChipStyle(name)}
           className="flex min-w-0 max-w-40 shrink items-center gap-1 rounded-sm px-1 py-0.5 font-mono text-xs">
           <GitBranchIcon className="size-3 shrink-0" />
           <span className="truncate">{name}</span>
@@ -239,20 +246,19 @@ function BranchTags({ branches, colors }: { branches?: string[]; colors?: Map<st
   )
 }
 
-function parseMerge(subject: string): { from: string; into: string | null; pr: string | null } {
+function parseMerge(subject: string): { from: string; into: string | null; pr: string | null; remote: boolean } {
   const pr = subject.match(/^Merge pull request (#\d+) from \S+?\/(\S+)/)
-  if (pr) return { from: pr[2], into: null, pr: pr[1] }
+  if (pr) return { from: pr[2], into: null, pr: pr[1], remote: true }
   const m = subject.match(/^Merge (?:remote-tracking )?(?:branch|branches|tag) (.+?)(?: into (\S+))?$/)
   const from = (m?.[1] ?? subject.replace(/^Merge\s+/, "")).replace(/['"]/g, "").replace(/^origin\//, "")
-  return { from, into: m?.[2] ?? null, pr: null }
+  return { from, into: m?.[2] ?? null, pr: null, remote: /^Merge remote-tracking/.test(subject) }
 }
 
-function MergeChip({ name, colors }: { name: string; colors?: Map<string, string> }) {
-  const color = colors?.get(name) ?? UNNAMED_COLOR
+function MergeChip({ name }: { name: string }) {
   return (
     <code
       title={name}
-      style={{ color, background: `${color}1f` }}
+      style={branchChipStyle(name)}
       className="flex min-w-0 max-w-48 items-center gap-1 rounded-sm px-1 py-0.5 font-mono text-xs">
       <GitBranchIcon className="size-3 shrink-0" />
       <span className="truncate">{name}</span>
@@ -260,16 +266,16 @@ function MergeChip({ name, colors }: { name: string; colors?: Map<string, string
   )
 }
 
-function MergeFlow({ subject, author, colors }: { subject: string; author: string; colors?: Map<string, string> }) {
+function MergeFlow({ subject, author }: { subject: string; author: string }) {
   const { from, into, pr } = parseMerge(subject)
   return (
     <span className="flex min-w-0 flex-1 items-center gap-2">
       <AuthorTag name={author} />
       <span className="!h-4 !w-px bg-black/25" />
       {pr && <span className="shrink-0 font-mono">{pr}</span>}
-      <MergeChip name={from} colors={colors} />
+      <MergeChip name={from} />
       <ArrowRightIcon className="size-3.5 shrink-0" />
-      {into ? <MergeChip name={into} colors={colors} /> : <span className="shrink-0">default branch</span>}
+      {into ? <MergeChip name={into} /> : <span className="shrink-0">default branch</span>}
     </span>
   )
 }
@@ -278,19 +284,17 @@ function CommitCard({
   commit,
   open,
   onToggle,
-  colors,
 }: {
   commit: CommitInfo
   open: boolean
   onToggle: () => void
-  colors?: Map<string, string>
 }) {
   if (/^Merge\b/.test(commit.subject)) {
     return (
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-1 pl-3 text-xs text-muted-foreground">
         <GitMergeIcon className="size-4 shrink-0" />
         <TimeLabel iso={commit.date} />
-        <MergeFlow subject={commit.subject} author={commit.author} colors={colors} />
+        <MergeFlow subject={commit.subject} author={commit.author} />
       </div>
     )
   }
@@ -313,7 +317,7 @@ function CommitCard({
           label={<Highlight text={commit.shortHash} />}
           className="shrink-0 rounded-md bg-blue-600/10 p-1 text-xs font-medium text-blue-600 dark:bg-blue-400/15 dark:text-blue-400"
         />
-        <BranchTags branches={commit.branches} colors={colors} />
+        <BranchTags branches={commit.branches} />
         <AuthorTag name={commit.author} />
         <code className="min-w-72 flex-1 truncate text-xs">
           <Highlight text={commit.subject} />
@@ -364,12 +368,10 @@ export function CommitTimeline({
   commits,
   openHash,
   onToggle,
-  colors,
 }: {
   commits: CommitInfo[]
   openHash: string | null
   onToggle: (hash: string) => void
-  colors?: Map<string, string>
 }) {
   const groups = useMemo(() => {
     const byDay = new Map<string, CommitInfo[]>()
@@ -433,7 +435,6 @@ export function CommitTimeline({
                       commit={commit}
                       open={openHash === commit.hash}
                       onToggle={() => onToggle(commit.hash)}
-                      colors={colors}
                     />
                   </li>
                 )

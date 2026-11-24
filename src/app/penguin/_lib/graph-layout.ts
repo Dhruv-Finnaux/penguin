@@ -1,23 +1,49 @@
 import type { BranchInfo, GraphCommit } from "./types"
 
-const PALETTE = [
-  "#2563eb",
-  "#16a34a",
-  "#db2777",
-  "#ea580c",
-  "#7c3aed",
-  "#0891b2",
-  "#ca8a04",
-  "#dc2626",
-  "#4f46e5",
-  "#059669",
-  "#c026d3",
-  "#0d9488",
-  "#9333ea",
-  "#65a30d",
-  "#e11d48",
-  "#0284c7",
+// A branch's colour comes from its name alone, so it is the same in every repo, tab and chip.
+// Branch names are hashed to a hue; saturation and lightness are fixed so every colour reads on
+// both light and dark backgrounds.
+function hslToHex(h: number, s: number, l: number) {
+  const a = s * Math.min(l, 1 - l)
+  const channel = (n: number) => {
+    const k = (n + h / 30) % 12
+    const value = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))
+    return Math.round(value * 255)
+      .toString(16)
+      .padStart(2, "0")
+  }
+  return `#${channel(0)}${channel(8)}${channel(4)}`
+}
+
+// Hues at least 30 degrees apart, so two branches never get neighbouring shades (no green next to
+// lime). Yellow is darker so it still reads on a light background.
+const HUES: [number, number][] = [
+  [0, 0.45], // red
+  [28, 0.45], // orange
+  [48, 0.4], // yellow
+  [140, 0.38], // green
+  [178, 0.36], // teal
+  [214, 0.46], // blue
+  [245, 0.5], // indigo
+  [275, 0.5], // purple
+  [305, 0.45], // fuchsia
+  [335, 0.46], // pink
 ]
+
+const colorCache = new Map<string, string>()
+
+export function colorForBranch(name: string) {
+  const key = name.trim()
+  let color = colorCache.get(key)
+  if (!color) {
+    let hash = 2166136261
+    for (const char of key) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619) >>> 0
+    const [hue, lightness] = HUES[hash % HUES.length]
+    color = hslToHex(hue, 0.68, lightness)
+    colorCache.set(key, color)
+  }
+  return color
+}
 
 export const UNNAMED_COLOR = "#94a3b8"
 
@@ -34,18 +60,20 @@ export function orderBranches(branches: BranchInfo[]) {
     .map((branch, index) => ({ branch, index }))
     .sort(
       (a, b) =>
-        rank(a.branch) - rank(b.branch) ||
-        Number(a.branch.remote) - Number(b.branch.remote) ||
-        a.index - b.index,
+        rank(a.branch) - rank(b.branch) || Number(a.branch.remote) - Number(b.branch.remote) || a.index - b.index,
     )
     .map(({ branch }) => branch)
 }
+
+// A remote branch (origin/dev) has its own colour, apart from the local dev.
+export const branchColorName = (branch: Pick<BranchInfo, "name" | "remote">) =>
+  branch.remote ? branch.name : branchKey(branch)
 
 export function branchColors(branches: BranchInfo[]) {
   const colors = new Map<string, string>()
   for (const branch of orderBranches(branches)) {
     const key = branchKey(branch)
-    if (!colors.has(key)) colors.set(key, PALETTE[colors.size % PALETTE.length])
+    if (!colors.has(key)) colors.set(key, colorForBranch(key))
   }
   return colors
 }
@@ -101,11 +129,7 @@ function mergedBranchName(subject: string) {
  * and deleted) get a lane named after the merge commit that brought them in. Lanes share a
  * column when their rows do not overlap.
  */
-export function layoutGraph(
-  commits: GraphCommit[],
-  branches: BranchInfo[],
-  colors: Map<string, string>,
-): GraphLayout {
+export function layoutGraph(commits: GraphCommit[], branches: BranchInfo[]): GraphLayout {
   const n = commits.length
   const rowOf = new Map(commits.map((c, i) => [c.hash, i]))
   const owner = new Int32Array(n).fill(-1)
@@ -136,12 +160,12 @@ export function layoutGraph(
   for (const branch of orderBranches(branches)) {
     tipsByHash.set(branch.hash, [...(tipsByHash.get(branch.hash) ?? []), branch])
     const row = rowOf.get(branch.hash)
-    if (row !== undefined) claim(row, branchKey(branch), colors.get(branchKey(branch)) ?? UNNAMED_COLOR)
+    if (row !== undefined) claim(row, branchKey(branch), colorForBranch(branchColorName(branch)))
   }
   for (let row = 0; row < n; row++) {
     if (owner[row] !== -1) continue
     const name = mergedBranchName(mergedVia.get(commits[row].hash) ?? "")
-    claim(row, name, (name && colors.get(name)) || UNNAMED_COLOR)
+    claim(row, name, name ? colorForBranch(name) : UNNAMED_COLOR)
   }
 
   // Reserve the rows each lane's connecting lines pass through.
@@ -157,22 +181,41 @@ export function layoutGraph(
       }
       const parentLane = owner[parentRow]
       if (parentLane === lane) {
-        edges.push({ fromRow: row, fromCol: lane, toRow: parentRow, toCol: lane, color: lanes[lane].color, kind: "straight" })
+        edges.push({
+          fromRow: row,
+          fromCol: lane,
+          toRow: parentRow,
+          toCol: lane,
+          color: lanes[lane].color,
+          kind: "straight",
+        })
       } else if (i === 0) {
         lanes[lane].end = Math.max(lanes[lane].end, parentRow)
-        edges.push({ fromRow: row, fromCol: lane, toRow: parentRow, toCol: parentLane, color: lanes[lane].color, kind: "fork" })
+        edges.push({
+          fromRow: row,
+          fromCol: lane,
+          toRow: parentRow,
+          toCol: parentLane,
+          color: lanes[lane].color,
+          kind: "fork",
+        })
       } else {
         lanes[parentLane].start = Math.min(lanes[parentLane].start, row)
-        edges.push({ fromRow: row, fromCol: lane, toRow: parentRow, toCol: parentLane, color: lanes[parentLane].color, kind: "merge" })
+        edges.push({
+          fromRow: row,
+          fromCol: lane,
+          toRow: parentRow,
+          toCol: parentLane,
+          color: lanes[parentLane].color,
+          kind: "merge",
+        })
       }
     })
   }
 
   const columns: [number, number][][] = []
   for (const lane of lanes) {
-    let col = columns.findIndex((taken) =>
-      taken.every(([start, end]) => lane.end < start || end < lane.start),
-    )
+    let col = columns.findIndex((taken) => taken.every(([start, end]) => lane.end < start || end < lane.start))
     if (col === -1) {
       col = columns.length
       columns.push([])

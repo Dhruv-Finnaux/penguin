@@ -198,7 +198,7 @@ Two scores are saved:
 - `score` is the current score. It subtracts only findings that are still open, plus findings marked resolved that carry `needsAttention` and are not `confirmed`. Findings that are `resolved` and verified do not subtract. A fix in the working tree therefore raises the score at the next run.
 - `commitScore` is the score of the commit as it was committed. It subtracts every finding of the report, resolved or not. It is `null` when the target is not a commit.
 
-Failed checks and the no-test deduction apply to both, based on the current state.
+Failed checks apply to both, based on the current state. A missing test is never deducted; mention it as an info note instead.
 
 | Item | Points |
 |------|--------|
@@ -207,7 +207,6 @@ Failed checks and the no-test deduction apply to both, based on the current stat
 | Each P2 finding | -10 |
 | Each P3 finding | -4 |
 | Each failed check you ran | -10 |
-| Changed behavior with no test and no test command to run | -5 |
 
 | Score | Quality |
 |-------|---------|
