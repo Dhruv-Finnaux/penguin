@@ -45,7 +45,10 @@ interface FindingGroup {
   startIndex: number
 }
 
-function groupFindings(reviews: Review[], commits: CommitInfo[], keyword: string, futureOnly = false): FindingGroup[] {
+type View = "all" | "opened" | "future"
+
+function groupFindings(reviews: Review[], commits: CommitInfo[], keyword: string, view: View = "all"): FindingGroup[] {
+  const futureOnly = view === "future"
   const commitKey = (repo: RepoKey, hash: string) => `${repo}:${hash}`
   const subjectByHash = new Map(commits.map((c) => [commitKey(c.repo, c.hash), c.subject]))
   const commitByHash = new Map(commits.map((c) => [commitKey(c.repo, c.hash), c]))
@@ -55,15 +58,22 @@ function groupFindings(reviews: Review[], commits: CommitInfo[], keyword: string
     const hash = review.target.commit
     const commitId = hash ? commitKey(review.repo, hash) : review.fileName
     const key = review.fileName
-    const visible = futureOnly ? review.findings.filter((f) => isFuture(f) && !isResolved(f)) : review.findings
+    const visible =
+      view === "future"
+        ? review.findings.filter((f) => isFuture(f) && !isResolved(f))
+        : view === "opened"
+          ? review.findings.filter((f) => !isFuture(f) && !isResolved(f))
+          : review.findings
     if (visible.length === 0) continue
 
     const shortHash = hash ? hash.slice(0, 7) : null
     const subject = hash
       ? (subjectByHash.get(commitId) ?? "")
-      : review.target.kind === "staged"
-        ? "Staged changes"
-        : "Uncommitted changes"
+      : review.target.title
+        ? review.target.title
+        : review.target.kind === "staged"
+          ? "Staged changes"
+          : "Uncommitted changes"
     if (text) {
       const commit = hash ? commitByHash.get(commitId) : undefined
       const fields = [
@@ -140,7 +150,8 @@ function FindingGroupCard({ group }: { group: FindingGroup }) {
         type="button"
         aria-expanded={open}
         className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 pl-3 text-left hover:bg-accent/30"
-        onClick={() => setOpen((value) => !value)}>
+        onClick={() => setOpen((value) => !value)}
+      >
         <Chevron open={open} />
         <code className="shrink-0 text-xs font-medium">
           <TimeLabel iso={group.date} />
@@ -170,18 +181,20 @@ function FindingGroupCard({ group }: { group: FindingGroup }) {
 export function ReviewTab({ reviews: allReviews, commits }: { reviews: Review[]; commits: CommitInfo[] }) {
   const [keyword, setKeyword] = useState("")
   const [repo, setRepo] = useState<RepoFilterValue>("all")
-  const [view, setView] = useState<"all" | "future">("all")
+  const [view, setView] = useState<View>("all")
   const reviews = useMemo(() => filterByRepo(allReviews, repo), [allReviews, repo])
-  const groups = groupFindings(reviews, commits, keyword, view === "future")
+  const groups = groupFindings(reviews, commits, keyword, view)
   const days = useMemo(() => groupByDay(groups), [groups])
 
   const allGroups = groupFindings(allReviews, commits, "")
   const hasAny = allGroups.length > 0
-  const futureGroups = groupFindings(allReviews, commits, "", true)
+  const futureGroups = groupFindings(allReviews, commits, "", "future")
   const futureCount = futureGroups.reduce((sum, group) => sum + group.findings.length, 0)
+  const openedGroups = groupFindings(allReviews, commits, "", "opened")
+  const openedCount = openedGroups.reduce((sum, group) => sum + group.findings.length, 0)
 
   const findingCounts = { all: 0, frontend: 0, backend: 0 }
-  for (const group of view === "future" ? futureGroups : allGroups) {
+  for (const group of view === "future" ? futureGroups : view === "opened" ? openedGroups : allGroups) {
     findingCounts.all += group.findings.length
     findingCounts[group.repo] += group.findings.length
   }
@@ -207,12 +220,13 @@ export function ReviewTab({ reviews: allReviews, commits }: { reviews: Review[];
         <div className="flex flex-wrap items-center gap-3">
           <NextTabs
             value={view}
-            onValueChange={(next) => setView(next as "all" | "future")}
+            onValueChange={(next) => setView(next as View)}
             shouldPersist={false}
             delayTabs={false}
             tabsClassNames={{ base: "flex-none p-0", panel: "hidden" }}
             tabs={[
               { value: "all", label: "All findings", component: null },
+              { value: "opened", label: `Opened (${openedCount})`, component: null },
               { value: "future", label: `Future (${futureCount})`, component: null },
             ]}
           />
@@ -223,7 +237,11 @@ export function ReviewTab({ reviews: allReviews, commits }: { reviews: Review[];
         </div>
         {groups.length === 0 ? (
           <div className="p-20 text-center text-sm text-muted-foreground">
-            {view === "future" && !keyword.trim() ? "Nothing is delayed for the future." : "No findings match."}
+            {!keyword.trim() && view === "future"
+              ? "Nothing is delayed for the future."
+              : !keyword.trim() && view === "opened"
+                ? "No opened findings."
+                : "No findings match."}
           </div>
         ) : (
           <ol>
@@ -235,7 +253,8 @@ export function ReviewTab({ reviews: allReviews, commits }: { reviews: Review[];
                     "relative grid gap-x-4 md:grid-cols-[9rem_1fr]",
                     dayIndex > 0 &&
                       "before:absolute before:inset-x-0 before:-top-3 before:border-t before:border-dashed before:border-border dark:before:border-white/50",
-                  )}>
+                  )}
+                >
                   <div className="pb-2 md:sticky md:top-2 md:self-start md:pb-0 md:pt-2.5 md:text-right">
                     <h3 className="text-xs font-semibold text-black/50 dark:text-white/50">{day.day}</h3>
                     <p className="text-xs text-muted-foreground">

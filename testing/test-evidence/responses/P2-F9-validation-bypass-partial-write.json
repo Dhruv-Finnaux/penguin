@@ -1,0 +1,87 @@
+{
+ "finding": "FINDING 9",
+ "title": "Validation skipped (DTOs imported with \"import type\"); empty body ran handlers and wrote a row",
+ "results": [
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/cycles",
+   "handler": "hrms/performance-management/performance-management.controller.ts:78",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/goals",
+   "handler": "hrms/performance-management/performance-management.controller.ts:155",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/pip",
+   "handler": "hrms/performance-management/performance-management.controller.ts:191",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/performance-management/pip/:id/status",
+   "handler": "hrms/performance-management/performance-management.controller.ts:214",
+   "guardInCode": false,
+   "status": 200,
+   "message": "OK",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/incentive-schemes",
+   "handler": "hrms/performance-management/performance-management.controller.ts:247",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/incentive-rules",
+   "handler": "hrms/performance-management/performance-management.controller.ts:292",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/incentive-calculations",
+   "handler": "hrms/performance-management/performance-management.controller.ts:331",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/targets",
+   "handler": "hrms/performance-management/performance-management.controller.ts:450",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  }
+ ],
+ "note": "POST /goals with {} enrolled Eve into an existing review cycle (performance_review_cycle_employee +1 row), then failed with 500. No transaction, so the enrolment stayed. PUT pip/:id/status returned 200 for a non-existent id."
+}

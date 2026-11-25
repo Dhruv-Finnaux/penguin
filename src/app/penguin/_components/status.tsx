@@ -63,9 +63,9 @@ export const QUALITY_LABEL: Record<Quality, string> = {
 }
 
 export const STATUS_SURFACE: Record<Status, string> = {
-  red: "bg-red-500/10 text-red-600 dark:text-red-400",
-  amber: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-  green: "bg-green-600/10 text-green-600 dark:text-green-400",
+  red: "text-red-600 dark:text-red-400",
+  amber: "text-amber-600 dark:text-amber-400",
+  green: "text-green-600 dark:text-green-400",
 }
 
 export function ScoreBadge({
@@ -81,11 +81,11 @@ export function ScoreBadge({
   const large = size === "lg"
   if (large) {
     // Half-circle gauge: the arc fills in proportion to the score, the number sits in the opening.
-    const arc = "M10,60 A50,50 0 0 1 110,60"
+    const arc = "M10,65 A50,53 0 0 1 110,65"
     return (
       <span
         title={`Review score ${score} out of 100: ${QUALITY_LABEL[quality]}`}
-        className="relative inline-flex h-[4.5rem] w-32 shrink-0 flex-col items-center justify-end"
+        className="relative inline-flex h-36 w-64 max-w-full shrink-0 flex-col items-center justify-end"
       >
         <svg viewBox="0 0 120 64" className="absolute inset-x-0 top-0 w-full overflow-visible" aria-hidden>
           <path d={arc} pathLength={100} fill="none" stroke="currentColor" strokeOpacity={0.18} strokeWidth={16} />
@@ -98,8 +98,8 @@ export function ScoreBadge({
             strokeDasharray={`${Math.max(0, Math.min(100, score))} 100`}
           />
         </svg>
-        <span className="relative text-3xl font-semibold leading-none tabular-nums text-foreground">{score}</span>
-        <span className="relative text-[10px] font-medium leading-tight">{QUALITY_LABEL[quality]}</span>
+        <span className="relative text-5xl font-semibold leading-none tabular-nums text-foreground">{score}</span>
+        <span className="relative text-xl font-medium leading-tight">{QUALITY_LABEL[quality]}</span>
       </span>
     )
   }

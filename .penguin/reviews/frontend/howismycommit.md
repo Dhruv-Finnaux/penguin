@@ -1,6 +1,75 @@
 # 🐧 How Is My Commit · Frontend
 
-> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 90 entries, newest first.
+> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 91 entries, newest first.
+
+## howismycommit-91
+
+| Field | Value |
+|---|---|
+| id | howismycommit-91 |
+| generatedAt | 2026-11-25T10:28:56+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | uncommitted |
+| target.commit | null |
+| target.title | Review · Finnaux provider integrations test plan |
+| files.changed | 1 |
+| files.added | 1 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 160 |
+| files.deletions | 0 |
+| verdict | review-with-caution |
+| score | 100 |
+| commitScore | null |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 0 |
+| summary.info | 3 |
+| before | There was no written test plan for the Finnaux provider integrations (Aadhaar OTP, PAN, driving licence, vehicle RC, bank, eSign, page rights). |
+| after | finnaux-api-test-plan.md lists every route the UI calls, the expected response, and numbered cases (happy path, validation, rights, wallet, idempotency, logging) for the backend team to mark Pass, Fail or Blocked. |
+
+### changeType (1)
+
+- docs
+
+### effects (1)
+
+- Untracked file at the repo root; nothing in the app changes. Not committed.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| finnaux-api-test-plan.md | added | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (1)
+
+| status | command | result |
+|---|---|---|
+| grey | live API calls against the backend | not run: backend base URL lives in .env which was not readable, no test login, and each call can spend provider credits or send a billed eSign |
+
+### gaps (2)
+
+- No endpoint was called live. Routes and bodies were taken from src/features/external-apis/api.ts and src/features/loan-application/components/esign-utils.ts, and expected responses from the TypeScript types, so the backend may differ.
+- Port 4321 on this machine did not answer; port 3100 is the penguin panel, not the API.
+
+### info (3)
+
+- Bank verify and save was tested live earlier by the team.
+- Open contract questions for backend: PAN wrong-name behaviour, rate limit for Aadhaar OTP, charging on RESEND_INVITATION and repeated RC calls, DOB format for driving licence.
+- Rights are fail-open in the UI, so the API must enforce the 12 KYC page ids itself.
+
+---
 
 ## howismycommit-90
 

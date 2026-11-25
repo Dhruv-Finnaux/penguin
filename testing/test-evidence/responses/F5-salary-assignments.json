@@ -1,0 +1,43 @@
+{
+  "request": "GET /api/v1/hrms/payroll-management/assignments",
+  "tier": "T0",
+  "account": "eve (view-only)",
+  "capturedAt": "2026-11-25",
+  "eve": {
+    "status": 200,
+    "bytes": 6006,
+    "rows": 30
+  },
+  "adam": {
+    "status": 200,
+    "bytes": 6006,
+    "rows": 30
+  },
+  "note": "baseSalary for 30 employees returned to Eve, unguarded endpoint.",
+  "redactedSample": {
+    "data": {
+      "rows": [
+        {
+          "id": "<redacted 32 chars>",
+          "employeeId": "01ZTESTADAMEMP000000000000",
+          "salaryStructureId": "01M36G01KBAVXJM46AX4GEGRN1",
+          "structureName": "<redacted 3 chars>",
+          "baseSalary": "<num>",
+          "effectiveFrom": "<redacted 10 chars>"
+        },
+        {
+          "id": "<redacted 32 chars>",
+          "employeeId": "01ZTESTEVEEMP0000000000000",
+          "salaryStructureId": "01M36G01KBAVXJM46AX4GEGRN1",
+          "structureName": "<redacted 3 chars>",
+          "baseSalary": "<num>",
+          "effectiveFrom": "<redacted 10 chars>"
+        },
+        "\u2026 28 more"
+      ]
+    },
+    "__api_metadata": {
+      "executionTimeMs": "<num>"
+    }
+  }
+}

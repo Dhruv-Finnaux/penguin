@@ -1,0 +1,113 @@
+{
+  "request": "GET /api/v1/los/loan-application/dpd-summary",
+  "tier": "T0",
+  "account": "eve (view-only)",
+  "capturedAt": "2026-11-25",
+  "eve": {
+    "status": 200,
+    "bytes": 578851,
+    "rows": 1045
+  },
+  "adam": {
+    "status": 200,
+    "bytes": 578851,
+    "rows": 1045
+  },
+  "note": "Same rows for Eve and Adam.",
+  "redactedSample": {
+    "data": {
+      "rows": [
+        {
+          "loanApplicationId": "01KY1YKTA9B2NW9WZFMJ245VP2",
+          "loanApplicationDate": "<redacted 22 chars>",
+          "asOfDate": "<redacted 10 chars>",
+          "period": {
+            "from": "<redacted 10 chars>",
+            "to": "<redacted 10 chars>"
+          },
+          "dpdDate": {
+            "from": "<redacted 10 chars>",
+            "to": "<redacted 10 chars>"
+          },
+          "overdueInstallments": [
+            {
+              "installmentId": "<redacted 24 chars>",
+              "installmentDueFrom": "<redacted 10 chars>",
+              "installmentNumbers": {
+                "due": "<num>",
+                "received": "<num>",
+                "overdue": "<num>"
+              },
+              "installmentAmounts": {
+                "due": "<num>",
+                "received": "<num>",
+                "overdue": "<num>"
+              },
+              "interest": {
+                "due": "<num>",
+                "received": "<num>",
+                "overdue": "<num>"
+              },
+              "principal": {
+                "due": "<num>",
+                "received": "<num>",
+                "overdue": "<num>"
+              },
+              "dpd": {
+                "current": "<num>",
+                "maximum": "<num>"
+              }
+            }
+          ]
+        },
+        {
+          "loanApplicationId": "01KY6NEWKWBBFH36C4DAM7X3SG",
+          "loanApplicationDate": "<redacted 22 chars>",
+          "asOfDate": "<redacted 10 chars>",
+          "period": {
+            "from": "<redacted 10 chars>",
+            "to": "<redacted 10 chars>"
+          },
+          "dpdDate": {
+            "from": "<redacted 10 chars>",
+            "to": "<redacted 10 chars>"
+          },
+          "overdueInstallments": [
+            {
+              "installmentId": "<redacted 24 chars>",
+              "installmentDueFrom": "<redacted 10 chars>",
+              "installmentNumbers": {
+                "due": "<num>",
+                "received": "<num>",
+                "overdue": "<num>"
+              },
+              "installmentAmounts": {
+                "due": "<num>",
+                "received": "<num>",
+                "overdue": "<num>"
+              },
+              "interest": {
+                "due": "<num>",
+                "received": "<num>",
+                "overdue": "<num>"
+              },
+              "principal": {
+                "due": "<num>",
+                "received": "<num>",
+                "overdue": "<num>"
+              },
+              "dpd": {
+                "current": "<num>",
+                "maximum": "<num>"
+              }
+            }
+          ]
+        },
+        "\u2026 1043 more"
+      ]
+    },
+    "__api_metadata": {
+      "executionTimeMs": "<num>"
+    }
+  }
+}

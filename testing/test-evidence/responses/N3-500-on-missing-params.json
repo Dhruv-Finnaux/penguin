@@ -1,0 +1,27 @@
+{
+  "request": "GET /api/v1/dropdown/common",
+  "tier": "T0",
+  "account": "eve (view-only)",
+  "capturedAt": "2026-11-25",
+  "eve": {
+    "status": 500,
+    "bytes": 157,
+    "rows": null
+  },
+  "adam": {
+    "status": 500,
+    "bytes": 157,
+    "rows": null
+  },
+  "note": "Validation gap: 500 Internal server error, no stack trace leaked.",
+  "redactedSample": {
+    "statusCode": "<num>",
+    "path": "<redacted 23 chars>",
+    "method": "<redacted 3 chars>",
+    "message": "<redacted 21 chars>",
+    "requestId": null,
+    "__api_metadata": {
+      "executionTimeMs": "<num>"
+    }
+  }
+}

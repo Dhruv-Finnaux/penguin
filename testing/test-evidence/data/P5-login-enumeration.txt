@@ -1,0 +1,4 @@
+POST /auth/login, wrong password, fresh cookie jar (no existing session touched). Usernames: 5 made-up zz_nouser_* vs the test user "eve".
+unknown user -> 404 "Username or password incorrect"     times(s): 0.025 0.071 0.008 0.008 0.005
+known user   -> 401 "Username or password is incorrect"  times(s): 0.202 0.109 0.080 0.076 0.077
+Source: auth/dto/login.dto.ts @UserExists() -> auth/validators/user-exists.validator.ts:30 throws NotFoundException before bcrypt.

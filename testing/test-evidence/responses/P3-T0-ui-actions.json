@@ -1,0 +1,138 @@
+[
+ {
+  "name": "P3-T0-dashboard-collections",
+  "url": "/dashboard/dashboard-collections",
+  "finalUrl": "/dashboard/dashboard-collections/",
+  "acts": [
+   {
+    "t": "No new notifications",
+    "d": false
+   }
+  ],
+  "denied": false,
+  "title": "Dashboard Collections | Dashboard | Finnaux"
+ },
+ {
+  "name": "P3-T0-dashboard-sales",
+  "url": "/dashboard/dashboard-sales",
+  "finalUrl": "/dashboard/dashboard-sales/",
+  "acts": [
+   {
+    "t": "No new notifications",
+    "d": false
+   }
+  ],
+  "denied": false,
+  "title": "Dashboard Sales | Dashboard | Finnaux"
+ },
+ {
+  "name": "P3-T0-collection-efficiency",
+  "url": "/reports-user/collection-efficiency",
+  "finalUrl": "/reports-user/collection-efficiency/",
+  "acts": [
+   {
+    "t": "No new notifications",
+    "d": false
+   },
+   {
+    "t": "Export",
+    "d": false
+   }
+  ],
+  "denied": false,
+  "title": "Collection Efficiency | Reports User | Finnaux"
+ },
+ {
+  "name": "P3-T0-dnbs02",
+  "url": "/reports-user/dnbs02",
+  "finalUrl": "/reports-user/dnbs02/",
+  "acts": [
+   {
+    "t": "No new notifications",
+    "d": false
+   },
+   {
+    "t": "Generate report",
+    "d": false
+   }
+  ],
+  "denied": false,
+  "title": "Dnbs 02 | Reports User | Finnaux"
+ },
+ {
+  "name": "P3-T0-due-list",
+  "url": "/reports-user/due-list",
+  "finalUrl": "/reports-user/due-list/",
+  "acts": [],
+  "denied": false,
+  "title": "Due List | Reports User | Finnaux"
+ },
+ {
+  "name": "P3-T0-master-data",
+  "url": "/reports-user/master-data",
+  "finalUrl": "/reports-user/master-data/",
+  "acts": [
+   {
+    "t": "No new notifications",
+    "d": false
+   },
+   {
+    "t": "Export",
+    "d": false
+   }
+  ],
+  "denied": false,
+  "title": "Master Data | Reports User | Finnaux"
+ },
+ {
+  "name": "P3-T0-my-reports",
+  "url": "/reports-user/my-reports",
+  "finalUrl": "/reports-user/my-reports/",
+  "acts": [
+   {
+    "t": "No new notifications",
+    "d": false
+   }
+  ],
+  "denied": false,
+  "title": "My Reports | Reports User | Finnaux"
+ },
+ {
+  "name": "P3-T0-report-builder",
+  "url": "/reports-user/report-builder",
+  "finalUrl": "/reports-user/report-builder/",
+  "acts": [
+   {
+    "t": "No new notifications",
+    "d": false
+   },
+   {
+    "t": "Export",
+    "d": true
+   },
+   {
+    "t": "Save",
+    "d": true
+   },
+   {
+    "t": "Save",
+    "d": true
+   }
+  ],
+  "denied": false,
+  "title": "Report Builder | Reports User | Finnaux"
+ },
+ {
+  "name": "P3-T0-ucrf-submission",
+  "url": "/reports-user/ucrf-submission",
+  "finalUrl": "/reports-user/ucrf-submission/",
+  "acts": [
+   {
+    "t": "No new notifications",
+    "d": false
+   }
+  ],
+  "denied": false,
+  "title": "Ucrf Submission | Reports User | Finnaux"
+ }
+]

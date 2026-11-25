@@ -1,0 +1,20 @@
+{
+ "finding": "FINDING 10",
+ "title": "Aadhaar OTP / KYC provider calls need only a VIEW right",
+ "results": [
+  {
+   "method": "POST",
+   "path": "/external/finnaux/aadhaar/generate-otp",
+   "handler": "external/finnaux/finnaux.controller.ts:37",
+   "guardInCode": true,
+   "status": 400,
+   "message": [
+    "aadhaarNumber must match /^\\d{12}$/ regular expression",
+    "aadhaarNumber must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  }
+ ],
+ "note": "KYC_PAGE_RIGHTS = canView on any of 12 pages. Eve (view-only) passed the guard; only validation of the Aadhaar number stopped it. Nothing was sent."
+}

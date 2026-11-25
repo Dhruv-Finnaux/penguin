@@ -1,6 +1,74 @@
 # 🐧 DB Backups · Backend
 
-> Generated from `data/backend/dbbackups.json`. Edit the JSON, not this file. 6 entries, newest first.
+> Generated from `data/backend/dbbackups.json`. Edit the JSON, not this file. 10 entries, newest first.
+
+## dbbackups-10
+
+| Field | Value |
+|---|---|
+| id | dbbackups-10 |
+| generatedAt | 2026-11-25T17:18:00+05:30 |
+| author | Dhruv |
+| action | backup |
+| database | finnaux_dev |
+| file | /Users/kunaljain/Desktop/Work/db-backups/finnaux_dev.dump |
+| sizeBytes | 11555730 |
+| fileModifiedAt | 2026-11-25T11:48:00.100Z |
+| tables | 370 |
+| migrations | 18 |
+
+---
+
+## dbbackups-9
+
+| Field | Value |
+|---|---|
+| id | dbbackups-9 |
+| generatedAt | 2026-11-25T12:27:18+05:30 |
+| author | Dhruv |
+| action | backup |
+| database | finnaux_dev |
+| file | /Users/kunaljain/Desktop/Work/db-backups/finnaux_dev.dump |
+| sizeBytes | 11549758 |
+| fileModifiedAt | 2026-11-25T06:57:18.065Z |
+| tables | 370 |
+| migrations | 18 |
+
+---
+
+## dbbackups-8
+
+| Field | Value |
+|---|---|
+| id | dbbackups-8 |
+| generatedAt | 2026-11-25T12:25:21+05:30 |
+| author | Dhruv |
+| action | backup |
+| database | finnaux_dev |
+| file | /Users/kunaljain/Desktop/Work/db-backups/finnaux_dev.dump |
+| sizeBytes | 11549835 |
+| fileModifiedAt | 2026-11-25T06:55:20.862Z |
+| tables | 370 |
+| migrations | 18 |
+
+---
+
+## dbbackups-7
+
+| Field | Value |
+|---|---|
+| id | dbbackups-7 |
+| generatedAt | 2026-11-25T11:27:40+05:30 |
+| author | Dhruv |
+| action | backup |
+| database | finnaux_dev |
+| file | /Users/kunaljain/Desktop/Work/db-backups/finnaux_dev.dump |
+| sizeBytes | 11546633 |
+| fileModifiedAt | 2026-11-25T05:57:40.108Z |
+| tables | 370 |
+| migrations | 18 |
+
+---
 
 ## dbbackups-6
 

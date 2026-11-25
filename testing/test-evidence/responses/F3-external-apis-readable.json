@@ -1,0 +1,153 @@
+{
+  "request": "GET /api/v1/configuration/external-apis",
+  "tier": "T0",
+  "account": "eve (view-only)",
+  "capturedAt": "2026-11-25",
+  "eve": {
+    "status": 200,
+    "bytes": 12685,
+    "rows": 15
+  },
+  "adam": {
+    "status": 200,
+    "bytes": 12685,
+    "rows": 15
+  },
+  "note": "Integration groups, endpoints, auth secret references and header templates are visible to any logged-in user. No literal secrets seen (x-api-key values are templates).",
+  "redactedSample": {
+    "data": {
+      "rows": [
+        {
+          "id": "01KQ7BFVPJ1SH9B5833YSA3HF0",
+          "name": "<redacted 7 chars>",
+          "description": "<redacted 46 chars>",
+          "isEnabled": true,
+          "enabledApiGroupId": "01M77M7TG5JKC691D4V5R37SSN",
+          "enabledApiGroupName": "<redacted 15 chars>",
+          "apiGroups": [
+            {
+              "id": "01M77M7TG5JKC691D4V5R37SSN",
+              "name": "<redacted 15 chars>",
+              "provider": "<redacted 7 chars>",
+              "endpoints": [
+                {
+                  "id": "01M7HJJAP75CDVK30797HQ02JK",
+                  "name": "<redacted 20 chars>",
+                  "path": "<redacted 15 chars>",
+                  "tags": [
+                    "<redacted 3 chars>",
+                    "<redacted 7 chars>",
+                    "\u2026 1 more"
+                  ],
+                  "method": "<redacted 4 chars>",
+                  "baseUrl": "<redacted 33 chars>",
+                  "authType": "<redacted 4 chars>",
+                  "provider": "<redacted 7 chars>",
+                  "apiGroupId": "01M77M7TG5JKC691D4V5R37SSN",
+                  "defaultBody": null,
+                  "description": "<redacted 77 chars>",
+                  "authSecretRef": "<redacted 57 chars>",
+                  "authHeaderName": "<redacted 9 chars>",
+                  "defaultHeaders": {
+                    "x-api-key": "<redacted 19 chars>",
+                    "Content-Type": "<redacted 16 chars>"
+                  },
+                  "defaultQueryParams": null
+                },
+                {
+                  "id": "01M7HJJAPGWCTZ3056P05E6MDB",
+                  "name": "<redacted 18 chars>",
+                  "path": "<redacted 15 chars>",
+                  "tags": [
+                    "<redacted 3 chars>",
+                    "<redacted 7 chars>",
+                    "\u2026 1 more"
+                  ],
+                  "method": "<redacted 4 chars>",
+                  "baseUrl": "<redacted 33 chars>",
+                  "authType": "<redacted 4 chars>",
+                  "provider": "<redacted 7 chars>",
+                  "apiGroupId": "01M77M7TG5JKC691D4V5R37SSN",
+                  "defaultBody": null,
+                  "description": "<redacted 66 chars>",
+                  "authSecretRef": "<redacted 57 chars>",
+                  "authHeaderName": "<redacted 9 chars>",
+                  "defaultHeaders": {
+                    "x-api-key": "<redacted 19 chars>",
+                    "Content-Type": "<redacted 16 chars>"
+                  },
+                  "defaultQueryParams": null
+                }
+              ],
+              "isEnabled": true,
+              "description": "<redacted 31 chars>",
+              "hasCredentialsConfigured": true,
+              "authType": "<redacted 4 chars>",
+              "authHeaderName": "<redacted 9 chars>",
+              "requiredCredentialKeys": [
+                "<redacted 15 chars>",
+                "<redacted 18 chars>",
+                "\u2026 1 more"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "01KQ7BFVPJQ9PCE45B7VR020AB",
+          "name": "<redacted 12 chars>",
+          "description": "<redacted 34 chars>",
+          "isEnabled": true,
+          "enabledApiGroupId": "01M77M7TG59NDWDRJBRFHR758G",
+          "enabledApiGroupName": "<redacted 20 chars>",
+          "apiGroups": [
+            {
+              "id": "01M77M7TG59NDWDRJBRFHR758G",
+              "name": "<redacted 20 chars>",
+              "provider": "<redacted 7 chars>",
+              "endpoints": [
+                {
+                  "id": "01M85YRJS6S1MDJXY5W0YBWNWC",
+                  "name": "<redacted 28 chars>",
+                  "path": "<redacted 29 chars>",
+                  "tags": [
+                    "<redacted 7 chars>",
+                    "<redacted 4 chars>",
+                    "\u2026 1 more"
+                  ],
+                  "method": "<redacted 4 chars>",
+                  "baseUrl": "<redacted 33 chars>",
+                  "authType": "<redacted 4 chars>",
+                  "provider": "<redacted 7 chars>",
+                  "apiGroupId": "01M77M7TG59NDWDRJBRFHR758G",
+                  "defaultBody": null,
+                  "description": "<redacted 149 chars>",
+                  "authSecretRef": "<redacted 57 chars>",
+                  "authHeaderName": "<redacted 9 chars>",
+                  "defaultHeaders": {
+                    "x-api-key": "<redacted 19 chars>",
+                    "Content-Type": "<redacted 16 chars>"
+                  },
+                  "defaultQueryParams": null
+                }
+              ],
+              "isEnabled": true,
+              "description": "<redacted 31 chars>",
+              "hasCredentialsConfigured": true,
+              "authType": "<redacted 4 chars>",
+              "authHeaderName": "<redacted 9 chars>",
+              "requiredCredentialKeys": [
+                "<redacted 15 chars>",
+                "<redacted 18 chars>",
+                "\u2026 1 more"
+              ]
+            }
+          ]
+        },
+        "\u2026 13 more"
+      ]
+    },
+    "__api_metadata": {
+      "executionTimeMs": "<num>"
+    }
+  }
+}

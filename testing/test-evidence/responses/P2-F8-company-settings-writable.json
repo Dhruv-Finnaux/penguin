@@ -1,0 +1,63 @@
+{
+ "finding": "FINDING 8",
+ "title": "Company settings writable by a view-only user",
+ "results": [
+  {
+   "method": "PUT",
+   "path": "/configuration/company",
+   "handler": "configurations/configurations.controller.ts:38",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "companyName should not be empty",
+    "companyName must be a string",
+    "dateOfIncorporation must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/company-addresses",
+   "handler": "configurations/configurations.controller.ts:85",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "addresses must contain no more than 2 elements",
+    "addresses must contain at least 2 elements",
+    "addresses should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/company-financial-details",
+   "handler": "configurations/configurations.controller.ts:98",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "dailyCashLimit must be a number conforming to the specified constraints",
+    "yearlyCashPaymentLimit must be a number conforming to the specified constraints",
+    "yearlyCashReceiptLimit must be a number conforming to the specified constraints"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/company-system-settings",
+   "handler": "configurations/configurations.controller.ts:114",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeCodePrefix should not be empty",
+    "employeeCodePrefix must be a string",
+    "invoiceNumberPrefix should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  }
+ ],
+ "note": "All four PUTs passed the rights check (400 = only validation stopped the empty body). With a valid body Eve could change company name, addresses, cash limits and system settings."
+}

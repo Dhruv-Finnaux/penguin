@@ -1,0 +1,57 @@
+{
+ "finding": "CONTROL",
+ "title": "Guarded endpoints correctly refuse Eve (403)",
+ "results": [
+  {
+   "method": "PUT",
+   "path": "/configuration/external-apis/api-groups/:apiGroupId/credentials",
+   "handler": "configurations/external-apis/external-apis.controller.ts:52",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/customer/:customerId/kyc",
+   "handler": "lms/customer/kyc/kyc.controller.ts:30",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/designation",
+   "handler": "hrms/designation/designation.controller.ts:38",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/designation/:designationId/modules/:moduleId/page-rights",
+   "handler": "hrms/designation/designation.controller.ts:127",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/employees/on-role",
+   "handler": "hrms/employee/employee.controller.ts:39",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  }
+ ],
+ "note": "106 probes answered 403: the guard works where it is declared."
+}

@@ -1,6 +1,1856 @@
 # 🐧 How Is My Commit · Backend
 
-> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 58 entries, newest first.
+> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 71 entries, newest first.
+
+## howismycommit-71
+
+| Field | Value |
+|---|---|
+| id | howismycommit-71 |
+| generatedAt | 2026-11-25T17:13:28+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P5 T6 · Restricted admin pages (self-escalation, plain-text API keys) |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 20 |
+| commitScore | null |
+| quality | poor |
+| summary.red | 2 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | Adam/Eve test run P5 T6 with the human present. Adam granted Eve's role the 16 restricted pages (view, then DESIGNATION_PAGE and DESIGNATION_MAIN edit) one step at a time. |
+| after | Eve raised her own role's rights and set her role to Admin level; restricted credentials come back unmasked. All grants reverted; Eve's role matches the snapshot (16 restricted pages left as all-false rows). |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (2)
+
+- Eve (Test) role: 16 extra page-rights rows with every flag false (API cannot delete rows).
+- Role level restored to 5, verified identical to snapshot.
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (2)
+
+#### findings[1] · F29
+
+| Field | Value |
+|---|---|
+| id | F29 |
+| severity | P0 |
+| title | Role rights, role settings and employee edits have no hierarchy check: self-escalation to Admin |
+| location | apps/finnaux-api/src/hrms/designation/designation.service.ts:449 |
+| problem | updatePageRights and update (designation.service.ts:449, 74) write any role, the caller's own and Admin's included, and grant rights the caller lacks. updateOnRoleEmployee (employee.service.ts:311) changes any employee's username, password and role with no level check; hasHigherDesignation is only used by one LOS step. Eve with DESIGNATION_PAGE edit gave her role EMPLOYEE_MAIN edit; with DESIGNATION_MAIN edit she set her role to level 1. |
+| impact | Any user given one of these pages can become Admin, raise own waiver/payment limits or reset the Admin password. With F23 (open employee import) it is a full takeover path. |
+| fix | Refuse writes to the caller's own role and to equal or higher roles/employees (hasHigherDesignation, allowEqual=false); refuse granting rights the caller lacks; audit every rights change. |
+| evidence | penguin/testing/TEST_LOG.md rows 108-111 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P5 T6 |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F30
+
+| Field | Value |
+|---|---|
+| id | F30 |
+| severity | P1 |
+| title | External API credentials returned in plain text to anyone with External APIs view |
+| location | apps/finnaux-api/src/configurations/external-apis/external-apis.controller.ts |
+| problem | GET /configuration/external-apis/api-groups/:id/credentials needs only EXTERNAL_APIS canView and returns 21 unmasked secrets (FINNAUX_API_KEY, FINNAUX_API_SECRET, FINNAUX_ENCRYPTION_KEY, apiKey) for 9 services incl. Aadhaar, PAN, eSign, Credit Bureau, Bank Account. DB is a production copy, so keys may be live. |
+| impact | Holders of the page or a stolen session can call paid KYC/eSign/bureau services as the company and decrypt data under the encryption key. |
+| fix | Never return secret values: return set/not-set and last 4 characters; keep PUT for replacement; rotate keys that were exposed. |
+| evidence | test-evidence/data/P5-T6-external-api-credentials-summary.txt (counts and field names only) |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P5 T6 |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | Eve PUT own role rights / own role level without the edit right | 403 both |
+| green | Restricted reads after view grant | 200 as expected (employees, roles, audit logs, company) |
+| green | Revert: Adam sets 16 pages all-false, restores level | 151 original rows unchanged; role equals snapshot; Eve 403 again |
+| green | Employee edit (password/role of others) | code check only; not run live (would change a real login) |
+
+### gaps (2)
+
+- Employee edit escalation proven in code only.
+- Whether exposed external API keys are live was not checked (would be an outbound call).
+
+### info (1)
+
+- N15 page-rights PUT ignores moduleId: any page id is granted
+
+---
+
+## howismycommit-70
+
+| Field | Value |
+|---|---|
+| id | howismycommit-70 |
+| generatedAt | 2026-11-25T16:23:27+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P4/P5 · Process rights, sessions, login, IDOR |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 40 |
+| commitScore | null |
+| quality | poor |
+| summary.red | 2 |
+| summary.amber | 1 |
+| summary.green | 4 |
+| summary.info | 5 |
+| before | Adam/Eve test run P4 (process rights) and P5 (restricted admin pages, sessions, login, cross-branch access). Eve view-only on restricted pages; no restricted page granted. |
+| after | Process rights confirmed UI-only. Restricted pages and role editors refuse Eve. Deviation approvers are writable by anyone, login reveals usernames, and loan detail routes ignore branch. Nothing written to the database. |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (2)
+
+- Eve's API session was logged out to test logout (log in again to continue as Eve).
+- No data written: deviation/operation assignment and tour counts unchanged (0\|190\|50\|1).
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (3)
+
+#### findings[1] · F26
+
+| Field | Value |
+|---|---|
+| id | F26 |
+| severity | P1 |
+| title | Deviation approvers for any branch can be replaced by any logged-in user |
+| location | apps/finnaux-api/src/configurations/branch/branch.controller.ts:196 |
+| problem | GET/POST/PUT configuration/branch/:branchId/product/:productId/deviation-assignments have no @RequirePageRight (employee-assign-range next to them needs BRANCH_PROCESS_EMPLOYEE). Eve got 200 on GET for another branch and 400 (validation, guard passed) on POST/PUT with {}. updateDeviationAssignments (branch.service.ts:761) ignores the URL branch/product, hard-deletes all deviation types for body.rangeId and inserts the caller's list. |
+| impact | A branch user can make themselves approver of their own loan deviations (maker-checker bypass) or wipe approvers of any branch. Fee, policy, manual and document deviation services read these tables. |
+| fix | Require BRANCH_PROCESS_EMPLOYEE view/edit; check rangeId belongs to the URL branch and product; soft-delete instead of hard delete. |
+| evidence | penguin/testing/TEST_LOG.md rows 96-97 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P5 |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F28
+
+| Field | Value |
+|---|---|
+| id | F28 |
+| severity | P1 |
+| title | Loan application detail routes have no branch check (IDOR) |
+| location | apps/finnaux-api/src/los/loan-application/customer/customer.controller.ts:63 |
+| problem | Eve (one branch) opened another branch's loan by id: /customer returned 3 customers x 51 fields (name, date of birth, caste, religion, signature, photo URL), /activity-logs 90 rows, /tat 16 rows. Own-branch and other-branch loans answer identically. |
+| impact | Any user can read personal data of customers in every branch by loan id; ULIDs are time-ordered and guessable near known ids. Per-record form of F2. |
+| fix | Add a shared loan-application access check: loan.branchId must be in the caller's employeeBranches before any :loanApplicationId route runs. |
+| evidence | penguin/testing/TEST_LOG.md row 102; test-evidence/data/P5-idor-customer-field-names.txt |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P5 |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[3] · F27
+
+| Field | Value |
+|---|---|
+| id | F27 |
+| severity | P2 |
+| title | Login reveals which usernames exist |
+| location | apps/finnaux-api/src/auth/validators/user-exists.validator.ts:30 |
+| problem | LoginDto.username has @UserExists(), which throws 404 'Username or password incorrect' for unknown users before bcrypt. Real user + wrong password gets 401 'Username or password is incorrect'. Unknown ~7 ms vs known ~80 ms. |
+| impact | Staff usernames can be listed and then targeted; there is no account lockout (only 100 req/min per IP). |
+| fix | Remove @UserExists() from LoginDto; same 401 and text for both cases; compare against a dummy hash when the user is missing; add per-account failed-login limits. |
+| evidence | test-evidence/data/P5-login-enumeration.txt |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P5 |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | Eve GET 8 restricted-page APIs (employees, employee branch/product/los-process/department, designation, audit-logs, employee-assign-range) | 403 on all 8 |
+| green | Designation editors (page, menu, voucher-type, report, process rights) | all carry DESIGNATION_* rights; no self-escalation |
+| green | DELETE /auth/logout then replay old cookie | 401; session row isActive=false, reason LOGOUT |
+| green | GET /sessions and DELETE /sessions/:id | scoped to own employee |
+| red | designationLmsProcessPageRights readers (P4) | never enforced by any LOS/LMS service; confirms F17 |
+
+### gaps (2)
+
+- T6 positive tests (granting Eve restricted pages) not done: need the human at the screen.
+- Deviation PUT/POST not executed with real data; proven by guard-passing 400 and code.
+
+### info (5)
+
+- N10 branch operation assignments writable without rights (unused elsewhere today)
+- N11 employee hierarchy (29 names) and all employee tours readable
+- N12 no account lockout; global throttle 100/min per IP
+- N13 guard ignores employees.isActive; cookie 7 days, sameSite none
+- N14 POST /hrms/employees/off-role unguarded but a no-op stub
+
+### responses (0)
+
+_Empty._
+
+### data (3)
+
+- P5-admin-area-route-guards
+- P5-idor-customer-field-names
+- P5-login-enumeration
+
+---
+
+## howismycommit-69
+
+| Field | Value |
+|---|---|
+| id | howismycommit-69 |
+| generatedAt | 2026-11-25T15:02:41+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P3 · Admin rule engine (rules/workflows open) |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 40 |
+| commitScore | null |
+| quality | poor |
+| summary.red | 1 |
+| summary.amber | 0 |
+| summary.green | 1 |
+| summary.info | 1 |
+| before | Adam/Eve test run P3, Admin segment (Rule Engine), with the human present. Eve view-only, no grants. |
+| after | Eve created a ZZ-TEST workflow and credit rule without rights. Existing rulesets untouched. |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (1)
+
+- ZZ-TEST workflow and rule left until baseline restore (no delete endpoint).
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (2)
+
+#### findings[1] · F25
+
+| Field | Value |
+|---|---|
+| id | F25 |
+| severity | P1 |
+| title | Credit rules, rulesets and workflows open to any user; expressions run on expr-eval 2.0.2 |
+| location | apps/finnaux-api/src/rule-engine/rule-engine.controller.ts |
+| problem | POST /rule, POST /ruleset, PUT /ruleset/:id, POST /workflow and PUT /workflow/:id declare no @RequirePageRight (only the two Rule Engine GETs are guarded). View-only Eve created a workflow and a credit rule. Rule expressions are evaluated by Parser.evaluate (expr-eval 2.0.2, default options) in process-orchestrator.ts:1551; public advisories CVE-2025-12735 and CVE-2026-12866 report code-execution issues in that version (not tested here). rule/workflow tables have no audit columns. |
+| impact | Anyone can change live loan decisioning; user-controlled expressions reach a library with published code-execution advisories; changes are untraceable. |
+| fix | Guard with RULE_ENGINE canAdd/canEdit (admin only); replace or sandbox expr-eval (restricted operators, no member access); add audit columns. |
+| evidence | penguin/testing/TEST_LOG.md rows 90-93 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (Admin) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · N9
+
+| Field | Value |
+|---|---|
+| id | N9 |
+| severity | P3 |
+| title | Rule create without outputConfig returns 500 |
+| location | apps/finnaux-api/src/rule-engine/dto/create-rule.dto.ts:36 |
+| problem | outputConfig is optional in the DTO but NOT NULL in the rule table, so a missing value fails in the database (500). |
+| impact | Unclear errors. |
+| fix | Make outputConfig required (@IsDefined) or give it a default. |
+| evidence | penguin/testing/TEST_LOG.md row 92 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (Admin) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (1)
+
+| status | command | result |
+|---|---|---|
+| green | GET rule-engine/master-tree and rules-by-levels | guarded (RULE_ENGINE canView) |
+
+### gaps (1)
+
+- expr-eval advisories not exploited or verified locally.
+
+### info (0)
+
+_Empty._
+
+### responses (0)
+
+_Empty._
+
+### data (0)
+
+_Empty._
+
+---
+
+## howismycommit-68
+
+| Field | Value |
+|---|---|
+| id | howismycommit-68 |
+| generatedAt | 2026-11-25T13:57:35+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P3 · Configuration imports + security settings (critical) |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 20 |
+| commitScore | null |
+| quality | poor |
+| summary.red | 2 |
+| summary.amber | 0 |
+| summary.green | 5 |
+| summary.info | 0 |
+| before | Adam/Eve test run P3, Configuration. Eve view-only except Parking Yards (granted stepwise for T1-T3). |
+| after | Guarded masters behave correctly (parking yard T0-T3 PASS). Imports and company security settings are open to any user. |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (1)
+
+- Security settings re-sent unchanged (updater now Eve). Parking yard ZZ-TEST soft-deleted.
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (2)
+
+#### findings[1] · F23
+
+| Field | Value |
+|---|---|
+| id | F23 |
+| severity | P0 |
+| title | Bulk imports open to any user; employee import creates logins with a hardcoded password |
+| location | apps/finnaux-api/src/configurations/import-data/import-data.controller.ts |
+| problem | All 36 import-data validate/import endpoints declare no @RequirePageRight. import-employees.service.ts:40 defines DEFAULT_IMPORT_PASSWORD as a string literal and every imported employee gets its hash; DesignationName comes from the file. View-only Eve reached employees/validate (404 only because the file did not exist). Not executed. |
+| impact | Any logged-in user can create an Admin-designation account with a known password (full privilege escalation), and bulk-import salaries, attendance, vouchers, loans and customers. |
+| fix | Guard every import with the matching page add right (and admin-only for employees/salary/vouchers); generate a random one-time password per employee and force reset; never keep passwords in source. |
+| evidence | penguin/testing/TEST_LOG.md row 83 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (Configuration) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F24
+
+| Field | Value |
+|---|---|
+| id | F24 |
+| severity | P0 |
+| title | Company security settings writable by any logged-in user |
+| location | apps/finnaux-api/src/configurations/configurations.controller.ts |
+| problem | PUT /configuration/company-security-settings has no page right. View-only Eve PUT the current values back and got 200 (verified unchanged). The same call toggles OTP validation, MAC address validation, voucher maker-checker and KYC/communication masking. |
+| impact | Anyone can disable core security controls company-wide. |
+| fix | Guard with COMPANY_CONFIGURATION canEdit (admin only) and audit changes. |
+| evidence | penguin/testing/TEST_LOG.md row 84 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (Configuration) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | parking yard T0..T3 as Eve | 403/200/403/200/200 as rights were granted |
+| green | security settings before/after | identical values |
+
+### gaps (1)
+
+- Imports not executed (would create accounts/records).
+
+### info (0)
+
+_Empty._
+
+### responses (0)
+
+_Empty._
+
+### data (0)
+
+_Empty._
+
+---
+
+## howismycommit-67
+
+| Field | Value |
+|---|---|
+| id | howismycommit-67 |
+| generatedAt | 2026-11-25T13:54:43+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P3 · HRMS leave self-approval + open writes |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 35 |
+| commitScore | null |
+| quality | poor |
+| summary.red | 2 |
+| summary.amber | 0 |
+| summary.green | 1 |
+| summary.info | 1 |
+| before | Adam/Eve test run P3, HRMS. No grants: Eve stayed view-only. |
+| after | Eve approved her own leave and managed recruitment data without any HRMS rights. |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (1)
+
+- ZZ-TEST leave request and job left until baseline restore.
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (3)
+
+#### findings[1] · F22
+
+| Field | Value |
+|---|---|
+| id | F22 |
+| severity | P1 |
+| title | HR members can approve their own leave |
+| location | apps/finnaux-api/src/hrms/leave-management/leave-management.service.ts:374 |
+| problem | updateLeaveStatus checks that the approver is in an HR department and approver.level <= requester.level, but never that approver != requester. Eve (HR department, level 5) applied for one day and gave the final APPROVED herself; the leave balance was deducted. |
+| impact | Maker-checker on leave is defeated for every HR employee; same pattern likely for extra-work requests and cancellations. |
+| fix | Reject status changes where session.employee.id equals the requester, and add a page right on the status endpoints. |
+| evidence | penguin/testing/TEST_LOG.md rows 77-78 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (HRMS) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F21
+
+| Field | Value |
+|---|---|
+| id | F21 |
+| severity | P1 |
+| title | HRMS writes have no page rights outside employee/designation |
+| location | apps/finnaux-api/src/hrms |
+| problem | 94 write handlers in attendance, leave, payroll, performance, recruitment, holiday and tour controllers declare no @RequirePageRight. View-only Eve created, edited and closed a job opening and reached the attendance logic for a level-1 employee; in P2 57 of these writes passed the guard (salary assignments, payroll loans/adjustments, holidays...). |
+| impact | Any logged-in employee can change HR, payroll and recruitment data for anyone. |
+| fix | Add page rights per HRMS page and scope by reporting line/HR department. |
+| evidence | penguin/testing/TEST_LOG.md rows 79-82; P2-probe-results.json |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (HRMS) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[3] · N8
+
+| Field | Value |
+|---|---|
+| id | N8 |
+| severity | P3 |
+| title | Job salary range accepts min > max |
+| location | apps/finnaux-api/src/hrms/recruitment/dto/recruitment.dto.ts |
+| problem | PUT /hrms/recruitment-management/jobs/:id accepted salaryRangeMin 5 with salaryRangeMax 1. |
+| impact | Inconsistent job data. |
+| fix | Validate min <= max (and experience range). |
+| evidence | penguin/testing/TEST_LOG.md row 81 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (HRMS) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (1)
+
+| status | command | result |
+|---|---|---|
+| green | outbound check of recruitment/leave/attendance services | database only |
+
+### gaps (2)
+
+- Payroll processing and bank export not exercised (money).
+- Self-approval of extra-work and cancellations not tested.
+
+### info (0)
+
+_Empty._
+
+### responses (0)
+
+_Empty._
+
+### data (0)
+
+_Empty._
+
+---
+
+## howismycommit-66
+
+| Field | Value |
+|---|---|
+| id | howismycommit-66 |
+| generatedAt | 2026-11-25T13:52:19+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P3 · CRM entries + tickets |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 60 |
+| commitScore | null |
+| quality | fair |
+| summary.red | 0 |
+| summary.amber | 2 |
+| summary.green | 3 |
+| summary.info | 1 |
+| before | Adam/Eve test run P3, CRM segment. Eve view on CRM; Adam granted V A on CRM Customer Request All for ticket T1. |
+| after | Ticket endpoints and CRM configuration are guarded; CRM entries are not. Ticket T1 blocked by workflow configuration. |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (1)
+
+- ZZ-TEST CRM entry 01M88WP68N6X1YHGQHB1XR17NY left until baseline restore.
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (3)
+
+#### findings[1] · F20
+
+| Field | Value |
+|---|---|
+| id | F20 |
+| severity | P2 |
+| title | CRM entries can be created, closed and reassigned by any logged-in user |
+| location | apps/finnaux-api/src/crm/crm.controller.ts |
+| problem | POST /crm/entry and PUT /crm/entry/:id/status declare no @RequirePageRight. View-only Eve created a NOTE on a loan, set it COMPLETED and reassigned it to a level-1 user (no hierarchy check). |
+| impact | Customer request/complaint records can be opened, closed or moved by anyone with a session. |
+| fix | Guard with the CRM page (canAdd / canEdit) and check the caller may reassign to the target employee. |
+| evidence | penguin/testing/TEST_LOG.md rows 70-73 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (CRM) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F9b
+
+| Field | Value |
+|---|---|
+| id | F9b |
+| severity | P2 |
+| title | CRM ticket create crashes (500) on an unvalidated body |
+| location | apps/finnaux-api/src/crm/crm-tickets/crm-tickets.controller.ts |
+| problem | crm-tickets imports its DTOs with `import type`, so the ValidationPipe skips them. POST /crm/tickets with {applicationId, unexpectedField} returned 500; nothing was written. |
+| impact | Bad input reaches the service and DB layer; errors surface as 500. |
+| fix | Import DTOs as values (see F9). |
+| evidence | penguin/testing/TEST_LOG.md row 76 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (CRM) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[3] · N7
+
+| Field | Value |
+|---|---|
+| id | N7 |
+| severity | P3 |
+| title | CRM enums validated with value arrays; crm_entries uses snake_case columns |
+| location | apps/finnaux-api/src/crm/dto/crm.dto.ts:29 |
+| problem | @IsEnum(CRM_ENTRY_TYPE_VALUES) gets an array, so validation errors list no allowed values. Table crm_entries has loan_application_id, attachment_url, next_follow_up_date, promised_days. |
+| impact | Unhelpful errors; schema breaks the camelCase rule in AGENTS.md. |
+| fix | Use CrmEntryTypeEnum etc. in @IsEnum and @ApiProperty; rename columns via migration. |
+| evidence | penguin/testing/TEST_LOG.md (CRM section) |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (CRM) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | ticket/forward/ticket-type/dashboard as Eve at T0 | 403 x 4 |
+| green | table scan after ticket attempts | nothing written |
+
+### gaps (1)
+
+- Ticket create/forward T1-T2 not completed: needs a CRM workflow with an entry step for the ticket type.
+
+### info (0)
+
+_Empty._
+
+### responses (0)
+
+_Empty._
+
+### data (0)
+
+_Empty._
+
+---
+
+## howismycommit-65
+
+| Field | Value |
+|---|---|
+| id | howismycommit-65 |
+| generatedAt | 2026-11-25T13:36:54+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P3 · LMS customer records + money endpoints |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 55 |
+| commitScore | null |
+| quality | fair |
+| summary.red | 1 |
+| summary.amber | 0 |
+| summary.green | 8 |
+| summary.info | 1 |
+| before | Adam/Eve test run P3, LMS. Money flows need a disbursed loan; only the guard state was checked (from P2). Customer address/contact T0-T2 on the ZZ-TEST customer. |
+| after | Customer sub-record guards and ownership work. Money endpoints (receipts, authorisation, collection, NACH) have no page rights. |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (1)
+
+- NACH probe blocked by the Claude Code permission classifier; not retried.
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (2)
+
+#### findings[1] · F19
+
+| Field | Value |
+|---|---|
+| id | F19 |
+| severity | P1 |
+| title | Receipt creation, collection and authorisation have no page rights (maker-checker bypass) |
+| location | apps/finnaux-api/src/receipt-authorisations/receipt-authorisations.controller.ts |
+| problem | POST /lms/:loanApplicationId/receipts, .../receipts/:receiptId/collect, POST /lms/receipt-authorisations/:receiptId and PUT /lms/collection declare no @RequirePageRight. In P2 view-only Eve passed the guard on all four (400 on validation). NACH post/clear/bounce/undo/import are also unguarded (code). |
+| impact | Any logged-in user can create and authorise money receipts on any loan; the maker-checker control is not enforced server-side. |
+| fix | Guard receipt create/collect with the receipt pages (canAdd), authorisation with the authorisation page (canEdit) and block the maker from authorising their own receipt. |
+| evidence | penguin/testing/TEST_LOG.md (P3 LMS table); P2-probe-results.json |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (LMS) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F18
+
+| Field | Value |
+|---|---|
+| id | F18 |
+| severity | P3 |
+| title | Contact details are not format-validated |
+| location | apps/finnaux-api/src/lms/customer/communication/dto/create-communication.dto.ts |
+| problem | EMAIL "not-an-email ZZ-TEST" was saved; details is @IsString only and type is @IsString on an enum (DB rejects bad types). |
+| impact | Bad contact data reaches SMS/email senders. |
+| fix | Validate by type (IsEmail / phone pattern) and use @IsEnum for type. |
+| evidence | penguin/testing/TEST_LOG.md row 53 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (LMS) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (1)
+
+| status | command | result |
+|---|---|---|
+| green | address T0..T2 + cross-customer edit | 403/201/200/400 as expected |
+
+### gaps (1)
+
+- Receipts, NACH, legal, closure, NPA, repossession flows not exercised: need a ZZ-TEST disbursed loan and involve money.
+
+### info (0)
+
+_Empty._
+
+### responses (0)
+
+_Empty._
+
+### data (0)
+
+_Empty._
+
+---
+
+## howismycommit-64
+
+| Field | Value |
+|---|---|
+| id | howismycommit-64 |
+| generatedAt | 2026-11-25T13:33:24+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P3 · LOS loan create/edit/reject |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 45 |
+| commitScore | null |
+| quality | poor |
+| summary.red | 1 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | Adam/Eve test run P3, LOS T1-T3. Human approved adding Eve to one branch process range (Application Generation); reverted afterwards and verified identical. |
+| after | Eve created, edited and rejected a ZZ-TEST loan with no LOS page rights. Mass-assignment attempts (dangerouslySkipRightCheck, applicationStatus) were stripped. |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (1)
+
+- ZZ-TEST loan 01M88VK1NEY3WBWVF44SBA1967 left REJECTED until baseline restore.
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (3)
+
+#### findings[1] · F17
+
+| Field | Value |
+|---|---|
+| id | F17 |
+| severity | P1 |
+| title | Loan application lifecycle has no page rights; LOS process rights are UI-only |
+| location | apps/finnaux-api/src/los/loan-application/loan-application.controller.ts:51 |
+| problem | The loan-application controller declares no @RequirePageRight (create, user-loan-detail, reject, initiate-npa, authorise-npa, ...). designationLmsProcessPageRights is read only by the designation admin and the session endpoint for the UI, never by a guard. Eve, view-only on every LOS page, created, edited and rejected a ZZ-TEST loan; edits and rejects filter by id only. |
+| impact | Any logged-in user can edit or reject any loan application in any branch, and initiate NPA flows. |
+| fix | Add page/process-right guards to every loan-application write, and scope by hasEmployeeBranchLoanProductAccess (already exists in process-orchestrator). |
+| evidence | penguin/testing/TEST_LOG.md rows 39-43 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (LOS T1-T3) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · N5
+
+| Field | Value |
+|---|---|
+| id | N5 |
+| severity | P3 |
+| title | Branch range update hard-deletes and re-inserts all employee rows |
+| location | apps/finnaux-api/src/configurations/branch/branch.service.ts:612 |
+| problem | PUT employee-assign-range/:rangeId deletes every process-employee row of the range and inserts the new list. Unchanged assignments lose their ids, creator and timestamps. |
+| impact | Audit trail of who assigned whom is lost on every edit. |
+| fix | Diff the lists and only insert/deactivate the changes. |
+| evidence | penguin/testing/TEST_LOG.md (LOS T1-T3 journal) |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (LOS T1-T3) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[3] · N6
+
+| Field | Value |
+|---|---|
+| id | N6 |
+| severity | P3 |
+| title | Repeat reject returns OK although nothing changes |
+| location | apps/finnaux-api/src/los/loan-application/process-orchestrator/process-orchestrator.ts |
+| problem | POST :id/reject on an already rejected loan answers 201 OK (update matches 0 rows). Same pattern as customer edit on a non-existent id. |
+| impact | Clients cannot tell a no-op from success. |
+| fix | Return 404/409 when no row is updated. |
+| evidence | penguin/testing/TEST_LOG.md row 43 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (LOS T1-T3) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | range read-back after revert | identical to original, Eve absent |
+| green | create after revert | 403 |
+
+### gaps (1)
+
+- No outbound LOS step (verification, CRIF, eSign, disbursement) was exercised.
+
+### info (0)
+
+_Empty._
+
+### responses (0)
+
+_Empty._
+
+### data (0)
+
+_Empty._
+
+---
+
+## howismycommit-63
+
+| Field | Value |
+|---|---|
+| id | howismycommit-63 |
+| generatedAt | 2026-11-25T13:28:26+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P3 · LOS view-only: loan create rule, swap |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 55 |
+| commitScore | null |
+| quality | fair |
+| summary.red | 1 |
+| summary.amber | 0 |
+| summary.green | 3 |
+| summary.info | 1 |
+| before | Adam/Eve test run P3, LOS segment, tier T0. |
+| after | Loan creation is gated by the branch process-range employee list (works; mass-assignment of dangerouslySkipRightCheck is stripped). Application swap is open to any user. |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (1)
+
+- No data created in LOS.
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (1)
+
+#### findings[1] · F16
+
+| Field | Value |
+|---|---|
+| id | F16 |
+| severity | P1 |
+| title | Any logged-in user can reassign loan applications between employees |
+| location | apps/finnaux-api/src/los/los.controller.ts:46 |
+| problem | PUT /los/update-swap-loan-application has no @RequirePageRight. los.service.ts:655 only checks that the from/to employees are eligible, not that the caller holds APPLICATION_SWAP or manages the from-employee. View-only Eve reached the reassignment logic (400 only because the test ids did not exist). |
+| impact | Ownership and work queues of real loan applications can be moved by anyone with a session. |
+| fix | Add @RequirePageRight(APPLICATION_SWAP canEdit) and check the caller manages fromEmployeeId (or is HR/admin). |
+| evidence | penguin/testing/TEST_LOG.md row 37 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (LOS T0) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | POST /los/loan-application as Eve (ZZ-TEST body) | 403 business rule |
+| green | same + dangerouslySkipRightCheck: true | 403 (stripped) |
+
+### gaps (1)
+
+- LOS T1+ blocked: needs Eve in the branch process-range list (restricted branch configuration).
+
+### info (0)
+
+_Empty._
+
+### screenshots (1)
+
+- UI-05-eve-los-application-status
+
+### responses (0)
+
+_Empty._
+
+### data (0)
+
+_Empty._
+
+---
+
+## howismycommit-62
+
+| Field | Value |
+|---|---|
+| id | howismycommit-62 |
+| generatedAt | 2026-11-25T13:26:06+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P3 · Report Builder + Customer add/edit/delete |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | review-with-caution |
+| score | 70 |
+| commitScore | null |
+| quality | fair |
+| summary.red | 0 |
+| summary.amber | 2 |
+| summary.green | 6 |
+| summary.info | 1 |
+| before | Adam/Eve test run P3, Report Builder T1-T3 and Customer T1-T2 with ZZ-TEST data. Grants made by Adam through the designation API, read back each time. |
+| after | Page guards on these endpoints work (403 before each grant, success after, neighbours still 403). Ownership/hierarchy and existence checks are missing. |
+
+### changeType (1)
+
+- test-run
+
+### effects (1)
+
+- ZZ-TEST data left until baseline restore: 3 soft-deleted customReports, 1 customer.
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (3)
+
+#### findings[1] · F14
+
+| Field | Value |
+|---|---|
+| id | F14 |
+| severity | P2 |
+| title | Report templates have no ownership or hierarchy check |
+| location | apps/finnaux-api/src/reports/report-builder/report-builder.repository.ts:156 |
+| problem | PATCH/DELETE /reports/builder/templates/:id filter only by id. Eve (level 5) renamed and then deleted a ZZ-TEST template created by Adam (level 1) using only page edit/delete rights. |
+| impact | Any holder of the page right can change or remove every user's reports, including those assigned to roles. |
+| fix | Restrict edit/delete to the creator, or to users at or above the creator's level; consider an owner check in the repository where clause. |
+| evidence | penguin/testing/TEST_LOG.md rows 19-20 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (T1-T3 with ZZ-TEST data) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F15
+
+| Field | Value |
+|---|---|
+| id | F15 |
+| severity | P2 |
+| title | Customer edit has no existence check and no branch scope |
+| location | apps/finnaux-api/src/lms/customer/customer.service.ts:196 |
+| problem | PUT /lms/customer/:customerId/individual/basic-detail updates where customerId = :id only. Returned 200 OK for a non-existent id; no branch/product filter, so any holder of CUSTOMER_DEMOGRAPHIC edit can change any customer. |
+| impact | Silent no-op success hides client errors; cross-branch edits of customer identity data. |
+| fix | Return 404 when no row is updated; check the customer belongs to the caller's branches. |
+| evidence | penguin/testing/TEST_LOG.md rows 30-32 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (T1-T3 with ZZ-TEST data) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[3] · N4
+
+| Field | Value |
+|---|---|
+| id | N4 |
+| severity | P3 |
+| title | Customer can be created with no KYC document and no contact detail |
+| location | apps/finnaux-api/src/lms/customer/customer.service.ts:108 |
+| problem | POST /lms/customer/individual accepted kycDocuments: [] and communication: []; communication items are not validated (an empty object passes). |
+| impact | Incomplete customer records; other flows assume contact rows exist (see login crash in TEST_ARCHITECTURE section 13). |
+| fix | Enforce the KYC/contact policy in the DTO (ArrayMinSize, ValidateNested) or document that it is optional. |
+| evidence | penguin/testing/TEST_LOG.md rows 26-27 |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (T1-T3 with ZZ-TEST data) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | Report Builder T0..T3 as Eve | 403 / 201 / 200 / 200 as rights were granted |
+| green | Customer T0..T2 as Eve | 403 / 201 / 200 |
+
+### gaps (1)
+
+- Customer UI buttons not checked; UI Save on Report Builder inconclusive.
+
+### info (0)
+
+_Empty._
+
+### screenshots (3)
+
+- P3-T0-report-builder
+- P3-T3-report-builder
+- P3-T4-report-builder
+
+### responses (0)
+
+_Empty._
+
+### data (0)
+
+_Empty._
+
+---
+
+## howismycommit-61
+
+| Field | Value |
+|---|---|
+| id | howismycommit-61 |
+| generatedAt | 2026-11-25T13:10:46+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P3 · Dashboard + Reports-U print/export |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 60 |
+| commitScore | null |
+| quality | fair |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | Adam/Eve test run P3, segments Dashboard and Reports-U, tiers T0 and T4 (print/export). Adam granted Eve print+export on the 9 pages via the designation API (read back OK). |
+| after | View works on 8 of 9 pages (Due List 404). Print/export rights have no effect in UI or API. T1-T3 (Report Builder templates, DNBS02 mappings) not run: they create or change data. |
+
+### changeType (1)
+
+- test-run
+
+### effects (1)
+
+- Approach: headless Chrome as Eve, list action buttons per page at T0 and T4, screenshots with data blurred; grep of controllers for canPrint/canExport.
+
+### filesReviewed (0)
+
+_Empty._
+
+### findings (2)
+
+#### findings[1] · F12
+
+| Field | Value |
+|---|---|
+| id | F12 |
+| severity | P2 |
+| title | Print and export rights are not enforced |
+| location | apps/finnaux-api/src/reports/dnbs02/dnbs02.controller.ts:51 |
+| problem | No controller checks canPrint/canExport. GET /dnbs02/export requires only canView. Report pages export client-side from table data. In the UI, Collection Efficiency and Master Data show Export to a user without the right, and granting print/export (verified by read-back) changed nothing on any of 9 pages. |
+| impact | Any viewer can export full reports; the rights matrix suggests control that does not exist. |
+| fix | Require canExport on export endpoints (dnbs02/export, ucrf downloads) and gate export buttons with the page canExport flag (permission-guard). |
+| evidence | penguin/testing/test-evidence/responses/P3-T0-ui-actions.json, P3-T4-ui-actions.json, screenshots/P3-T0-master-data.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (Dashboard, Reports-U) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F13
+
+| Field | Value |
+|---|---|
+| id | F13 |
+| severity | P3 |
+| title | Reports-U "Due List" menu page has no UI route |
+| location | FINNAUX2.0-UI: src/app/(app)/(main)/reports-user (no due-list folder) |
+| problem | master_menu_pages has "Due List" (slug due-list) with view rights, but /reports-user/due-list renders the 404 page. |
+| impact | Broken menu entry for users with the right. |
+| fix | Add the route or deactivate the menu page. |
+| evidence | penguin/testing/test-evidence/screenshots/P3-T4-due-list.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P3 (Dashboard, Reports-U) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | Adam PUT/GET designation page-rights (Eve role, 2 modules) | 200, flags read back as intended |
+| green | Eve rights totals | 150 view, 0 add/edit/delete, 9 print, 9 export |
+
+### gaps (1)
+
+- T1-T3 for Report Builder and DNBS02 not run (data changes; waiting for approval).
+
+### info (0)
+
+_Empty._
+
+### screenshots (14)
+
+- P3-T0-collection-efficiency
+- P3-T0-dashboard-collections
+- P3-T0-dashboard-sales
+- P3-T0-dnbs02
+- P3-T0-my-reports
+- P3-T0-ucrf-submission
+- P3-T4-collection-efficiency
+- P3-T4-dashboard-collections
+- P3-T4-dashboard-sales
+- P3-T4-dnbs02
+- P3-T4-my-reports
+- P3-T4-ucrf-submission
+- P3-T0-due-list
+- P3-T4-master-data
+
+### responses (2)
+
+- P3-T0-ui-actions
+- P3-T4-ui-actions
+
+### data (0)
+
+_Empty._
+
+---
+
+## howismycommit-60
+
+| Field | Value |
+|---|---|
+| id | howismycommit-60 |
+| generatedAt | 2026-11-25T13:01:26+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P2 · Write probes as view-only Eve |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 30 |
+| commitScore | null |
+| quality | poor |
+| summary.red | 3 |
+| summary.amber | 2 |
+| summary.green | 1 |
+| summary.info | 2 |
+| before | Adam/Eve test run, phase P2 (T0 write probes) against local finnaux_dev at HEAD 813f0fd0. Eve is view-only. |
+| after | 267 write endpoints probed with an empty body: 106 refused (403); 153 let Eve through the rights check; 8 ran handlers without validation. One probe wrote a row (Eve enrolled in a review cycle). |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (3)
+
+- Approach: only DTOs with a required field were probed, so validation blocks execution after the guard; path ids replaced with a non-existent id; row counts of all 369 tables compared before/after.
+- Side effect: performance_review_cycle_employee +1 row (Eve in cycle 01M0A3QR5MVV0HWGXXX9YRESZS); undo pending human decision.
+- Filter slip: aadhaar/generate-otp received {} (400 on validation, nothing sent).
+
+### filesReviewed (3)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/main.ts | modified | amber | ValidationPipe whitelist without forbidNonWhitelisted |
+| apps/finnaux-api/src/hrms/performance-management/performance-management.controller.ts | modified | red | import type DTOs, no page rights |
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | red | KYC calls on canView |
+
+### findings (5)
+
+#### findings[1] · F8
+
+| Field | Value |
+|---|---|
+| id | F8 |
+| severity | P1 |
+| title | Company settings writable by a view-only user |
+| location | apps/finnaux-api/src/configurations/configurations.controller.ts |
+| problem | PUT /configuration/company, /company-addresses, /company-financial-details and /company-system-settings have no page right. Eve (view-only, no COMPANY_CONFIGURATION page) passed the guard on all four; only validation of the empty body stopped her (400). |
+| impact | Any employee can change company identity, addresses, cash limits and system settings. |
+| fix | Add @RequirePageRight with COMPANY_CONFIGURATION canEdit on all company PUTs. |
+| evidence | penguin/testing/test-evidence/responses/P2-F8-company-settings-writable.json, penguin/testing/test-evidence/screenshots/P2-F8-company-settings-writable.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F9
+
+| Field | Value |
+|---|---|
+| id | F9 |
+| severity | P1 |
+| title | DTOs imported with "import type" disable validation; empty body wrote a row |
+| location | apps/finnaux-api/src/hrms/performance-management/performance-management.controller.ts:15 |
+| problem | `import type { ...Dto }` erases the DTO classes at runtime, so ValidationPipe has no metatype and skips validation. Affects performance-management (32 DTOs, no page rights at all), crm-configuration (10) and crm-tickets (4). Probes with {}: 7 POSTs reached the DB (500), PUT pip/:id/status returned 200 for a non-existent id, and POST /goals enrolled the caller into an existing review cycle before failing (createGoal has no transaction). |
+| impact | Unvalidated writes by any logged-in user; partial writes left behind on error. |
+| fix | Import DTOs as values (`import { ... }`); check scripts/fix-type-imports.ts does not convert DTO imports; add page rights; wrap createGoal (service.ts:989) in a transaction. |
+| evidence | penguin/testing/test-evidence/responses/P2-F9-validation-bypass-partial-write.json, penguin/testing/test-evidence/screenshots/P2-F9-validation-bypass-partial-write.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[3] · F10
+
+| Field | Value |
+|---|---|
+| id | F10 |
+| severity | P1 |
+| title | Aadhaar OTP and Finnaux KYC calls require only a view right |
+| location | apps/finnaux-api/src/external/finnaux/finnaux.controller.ts:20 |
+| problem | KYC_PAGE_RIGHTS maps 12 pages to { canView: true }, so any view-only user passes. Eve passed the guard on POST /external/finnaux/aadhaar/generate-otp (stopped only by Aadhaar-number validation; nothing sent). |
+| impact | A view-only user can trigger paid KYC calls and send OTPs to real people (throttle 10/min). |
+| fix | Require canAdd/canEdit on the customer KYC page for provider calls, not canView on any page. |
+| evidence | penguin/testing/test-evidence/screenshots/P2-F10-kyc-otp-view-right.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[4] · F4b
+
+| Field | Value |
+|---|---|
+| id | F4b |
+| severity | P2 |
+| title | SMS configuration PUT confirmed unguarded at runtime |
+| location | apps/finnaux-api/src/configurations/message-configuration/message-configuration.controller.ts:32 |
+| problem | P2: PUT sms-configuration/:id as Eve returned 400 (validation) instead of 403. |
+| impact | Any employee can change SMS events/templates. |
+| fix | Add @RequirePageRight canEdit. |
+| evidence | penguin/testing/test-evidence/screenshots/P2-F4-sms-config-writable.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[5] · F11
+
+| Field | Value |
+|---|---|
+| id | F11 |
+| severity | P2 |
+| title | 145 write endpoints let a view-only user past the rights check |
+| location | apps/finnaux-api/src/auth/guards/auth.guard.ts |
+| problem | Of 267 probed write endpoints (body {}, fake ids), 145 answered 400 and 8 answered 404 for Eve: the guard did not refuse her. Corrected static count: 370 of 532 write handlers and 360 of 503 GET handlers declare no @RequirePageRight. Only 106 probes returned 403. |
+| impact | The UI hides buttons, but the API does not enforce rights for most writes. |
+| fix | Add @RequirePageRight to every mutating handler (or a deny-by-default global guard that requires a page right unless marked otherwise). |
+| evidence | penguin/testing/test-evidence/responses/P2-all-write-probes.json |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | bash db status | finnaux_dev (local) |
+| red | row counts of 369 tables before/after P2 | performance_review_cycle_employee 5 -> 6; employeeSessions +1 (expected) |
+| green | createdAt/updatedAt scan since 07:15 UTC, all tables | no other row created or updated |
+
+### gaps (2)
+
+- 117 write handlers not called (would execute without validation); reported from code only.
+- 148 excluded as outbound/auth/dangerous.
+
+### info (2)
+
+- Throttle on Finnaux KYC: 10/min.
+- Rate limit 100 req/window globally.
+
+### screenshots (1)
+
+- P2-control-guarded-403
+
+### responses (6)
+
+- P2-F10-kyc-otp-view-right
+- P2-F4-sms-config-writable
+- P2-F8-company-settings-writable
+- P2-F9-validation-bypass-partial-write
+- P2-all-write-probes
+- P2-control-guarded-403
+
+### data (5)
+
+- P2-probe-plan
+- P2-probe-results
+- P2-table-counts-before
+- P2-table-counts-after
+- static-write-handlers
+
+---
+
+## howismycommit-59
+
+| Field | Value |
+|---|---|
+| id | howismycommit-59 |
+| generatedAt | 2026-11-25T12:45:04+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | test-run |
+| target.commit | null |
+| target.title | P1 · View-only API sweep (Eve) |
+| files.changed | 0 |
+| files.added | 0 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 0 |
+| files.deletions | 0 |
+| verdict | request-changes |
+| score | 40 |
+| commitScore | null |
+| quality | poor |
+| summary.red | 3 |
+| summary.amber | 3 |
+| summary.green | 1 |
+| summary.info | 2 |
+| before | Adam/Eve test run, phase P1 (T0 view-only) against local finnaux_dev at HEAD 813f0fd0. Eve = copy of a branch manager (level 5, 1 branch, 3 products), 150 view-only pages, no voucher-type rights. |
+| after | 270 parameter-free GETs swept as eve and adam: Eve 200 on 217, 403 on only 5. Several list endpoints return the full organisation data to a 1-branch user, and restricted configuration (External APIs, SMS) is readable via API although the UI denies it. |
+
+### changeType (2)
+
+- test-run
+- security
+
+### effects (3)
+
+- Approach: API sweep with curl (status + size per account), size comparison eve vs adam to detect missing scope, static scan of @RequirePageRight on handlers, UI check in headless Chrome with data blurred.
+- Evidence: penguin/testing/test-evidence/ (screenshots/*.png, responses/*.json with redacted samples). Log: penguin/testing/TEST_LOG.md.
+- Write probes (P2) not run yet: F3, F4 and F6 write paths are static findings only.
+
+### filesReviewed (7)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/auth/guards/auth.guard.ts | modified | green | Guard reads rights from DB per request; endpoints without @RequirePageRight only need a session |
+| apps/finnaux-api/src/accounts/vouchers/vouchers.service.ts | modified | red | findAll has no session/branch filter |
+| apps/finnaux-api/src/los/loan-application/loan-application.controller.ts | modified | red | findAll unguarded and unscoped |
+| apps/finnaux-api/src/configurations/external-apis/external-apis.controller.ts | modified | amber | GET and integration-group PUT unguarded |
+| apps/finnaux-api/src/configurations/message-configuration/message-configuration.controller.ts | modified | amber | SMS GET/PUT unguarded |
+| apps/finnaux-api/src/hrms/payroll-management/payroll-management.controller.ts | modified | red | salary assignments unguarded |
+| apps/finnaux-api/src/hrms/employee/employee.controller.ts | modified | amber | /filter and off-role unguarded |
+
+### findings (9)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P1 |
+| title | Voucher list ignores branch scope and voucher-type rights |
+| location | apps/finnaux-api/src/accounts/vouchers/vouchers.controller.ts:64 |
+| problem | GET /accounts/vouchers calls vouchersService.findAll(query) without the session, so no branch or voucher-type filter is applied. Eve (1 branch, 0 voucher-type rights) gets the same 1104 vouchers (4,099,044 bytes) as Adam (8 branches). The UI branch filter offers "All branches". |
+| impact | Any user with the voucher view right sees every branch's vouchers, amounts and customer names. Unpaginated 4 MB response. |
+| fix | Pass the session to findAll and filter by the employee's branches (employeeBranches) and by designation_voucher_types canView. Add pagination. |
+| evidence | API eve 200 / adam 200, 1104 rows each. penguin/testing/test-evidence/responses/F1-vouchers-unscoped.json, penguin/testing/test-evidence/screenshots/F1-vouchers-unscoped.png, penguin/testing/test-evidence/screenshots/UI-02-eve-vouchers-list.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[2] · F2
+
+| Field | Value |
+|---|---|
+| id | F2 |
+| severity | P1 |
+| title | Loan applications, DPD summary and financials not scoped; loan list has no page right |
+| location | apps/finnaux-api/src/los/loan-application/loan-application.controller.ts:85 |
+| problem | GET /los/loan-application has no @RequirePageRight and findAll(query) receives no session. Same for /los/loan-application/dpd-summary and /financials: Eve gets 1045 / 1045 / 2120 rows, identical to Adam. /reports/application-current-status IS scoped (eve 17 vs adam 46 rows), so the scoping pattern exists but is missing here. |
+| impact | Every logged-in employee can read all loan applications and financials across branches and products. |
+| fix | Add @RequirePageRight with the LOS page id and filter by employeeBranches/employeeProducts from the session, as application-current-status does. |
+| evidence | penguin/testing/test-evidence/responses/F2-loan-applications-unscoped.json, F2b-dpd-summary-unscoped.json, F2c-financials-unscoped.json, F2d-scoped-control.json; screenshots F2-*.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[3] · F3
+
+| Field | Value |
+|---|---|
+| id | F3 |
+| severity | P2 |
+| title | External APIs config readable (and integration-group PUT unguarded) without the External APIs page |
+| location | apps/finnaux-api/src/configurations/external-apis/external-apis.controller.ts:28 |
+| problem | GET /configuration/external-apis and PUT /configuration/external-apis/integration-groups/:id have no @RequirePageRight. Eve (no External APIs page; UI shows Access Denied) gets 200 with 15 integration groups, endpoints, authSecretRef and header templates. No literal secrets seen. The PUT is static-only so far (P2 probe pending). |
+| impact | Read: integration map disclosed. Write (if confirmed): any user could switch KYC/eSign/bureau providers. |
+| fix | Guard both handlers with the External APIs page (canView for GET, canEdit for PUT), like the credentials endpoints in the same controller. |
+| evidence | penguin/testing/test-evidence/responses/F3-external-apis-readable.json, penguin/testing/test-evidence/screenshots/F3-external-apis-readable.png, penguin/testing/test-evidence/screenshots/UI-03-eve-external-apis-restricted.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[4] · F4
+
+| Field | Value |
+|---|---|
+| id | F4 |
+| severity | P2 |
+| title | SMS configuration GET and PUT have no page right |
+| location | apps/finnaux-api/src/configurations/message-configuration/message-configuration.controller.ts:32 |
+| problem | GET and PUT /configuration/message-configuration/sms-configuration[/:id] have no guard. Eve reads all 33 SMS event configs. PUT not probed yet (P2). |
+| impact | Any employee could enable/disable or rewrite customer SMS templates (if PUT confirmed). |
+| fix | Add @RequirePageRight with the message-configuration page (canView / canEdit). |
+| evidence | penguin/testing/test-evidence/responses/F4-sms-config-readable.json, penguin/testing/test-evidence/screenshots/F4-sms-config-readable.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[5] · F5
+
+| Field | Value |
+|---|---|
+| id | F5 |
+| severity | P1 |
+| title | Salary data of all employees readable by a branch-level user |
+| location | apps/finnaux-api/src/hrms/payroll-management/payroll-management.controller.ts:76 |
+| problem | GET /hrms/payroll-management/assignments (baseSalary, 30 rows) and GET /hrms/performance-management/salary-history/employees (baseSalary, 29 rows; performance-management.controller.ts:344) have no page right and no scope. Eve has no EMPLOYEE_* pages yet gets every employee's salary. |
+| impact | Exposure of personal financial data to any logged-in employee. |
+| fix | Guard with the payroll / salary pages and scope to the caller's reporting tree or branch. |
+| evidence | penguin/testing/test-evidence/responses/F5-salary-assignments.json, F5b-salary-history.json, penguin/testing/test-evidence/screenshots/F5-salary-assignments.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[6] · F6
+
+| Field | Value |
+|---|---|
+| id | F6 |
+| severity | P2 |
+| title | Employee filter bypasses the guarded employee list; off-role create unguarded |
+| location | apps/finnaux-api/src/hrms/employee/employee.controller.ts:87 |
+| problem | GET /hrms/employees is 403 for Eve (EMPLOYEE_ALL), but GET /hrms/employees/filter returns 29 employee rows with no guard. POST /hrms/employees/off-role (line 74) also has no page right (static; not called). |
+| impact | Employee directory readable by anyone; off-role creation possibly open to any user. |
+| fix | Apply the same EMPLOYEE_ALL view right to /filter, and EMPLOYEE add right to off-role. |
+| evidence | penguin/testing/test-evidence/responses/F6-employees-filter.json, penguin/testing/test-evidence/screenshots/F6-employees-filter.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[7] · F7
+
+| Field | Value |
+|---|---|
+| id | F7 |
+| severity | P3 |
+| title | 19 GET endpoints return 500 when query params are missing |
+| location | apps/finnaux-api/src/dropdown/dropdown.controller.ts:99 |
+| problem | E.g. /dropdown/common, /dropdown/enum, /crm/entries, /crm/sub-types, /hrms/leave-management/resignations, /lms/customer/review-bank, /rule-engine/rules-by-levels answer 500 instead of 400 (same for Adam). No stack trace leaked. |
+| impact | Noisy errors, unclear client feedback; hides real server errors in monitoring. |
+| fix | Mark required query params in the DTOs so validation returns 400. |
+| evidence | penguin/testing/test-evidence/screenshots/N3-500-on-missing-params.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[8] · N1
+
+| Field | Value |
+|---|---|
+| id | N1 |
+| severity | P3 |
+| title | app-logs SSE stream open to all and never emits |
+| location | apps/finnaux-api/src/app.controller.ts:52 |
+| problem | GET /app-logs is an SSE stream with no page right; logSubject.next is never called, so clients hang until timeout. |
+| impact | Dead endpoint holding connections open. |
+| fix | Remove it or guard it and wire it up. |
+| evidence | curl timed out after 60 s for eve and adam with 0 bytes. |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+#### findings[9] · N2
+
+| Field | Value |
+|---|---|
+| id | N2 |
+| severity | P3 |
+| title | Service accounts page visible to any logged-in user |
+| location | apps/finnaux-api/src/service-accounts/service-accounts.controller.ts:13 |
+| problem | GET /service-accounts renders names, ids, permissions and allowed domains of service accounts (clientId/clientSecret omitted) with no page right. |
+| impact | Information disclosure useful for an attacker mapping integrations. |
+| fix | Guard with an admin page right. |
+| evidence | penguin/testing/test-evidence/screenshots/N2-service-accounts.png |
+| status | open |
+| resolvedIn | null |
+| resolvedAt | null |
+| resolvedNote | null |
+| needsAttention | true |
+| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| confirmed | false |
+| confirmedNote | null |
+| future | false |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bash db status | finnaux_dev (local) |
+| green | POST /auth/login (adam, eve) | 201 both; no password in response; cookie HttpOnly + Secure |
+| red | GET sweep: 270 endpoints as eve and adam | eve 217x200, 28x400, 19x500, 5x403, 1x404 |
+| green | UI: /configuration/external-apis and /hrms/designations as eve | Access Denied shown (UI layer correct) |
+
+### gaps (3)
+
+- 19 GETs skipped as outbound risk (KVB, CKYC provider status, UCRF generate/download, DNBS export, fintech, identity lookup, Digio draft, customer-app).
+- GETs with path parameters (189) not swept yet.
+- No write probes yet (P2 needs approval).
+
+### info (2)
+
+- Static count: 342 GET, 224 POST, 90 PUT, 36 DELETE handlers have no @RequirePageRight.
+- Login with unknown username returns 404: possible username enumeration, to compare later.
+
+### screenshots (4)
+
+- UI-00-login-form
+- UI-01-eve-dashboard-sidebar
+- UI-04-eve-designations-restricted
+- P3-T4-neg-accounts-vouchers
+
+### responses (12)
+
+- F1-vouchers-unscoped
+- F2-loan-applications-unscoped
+- F2b-dpd-summary-unscoped
+- F2c-financials-unscoped
+- F2d-scoped-control
+- F3-external-apis-readable
+- F4-sms-config-readable
+- F5-salary-assignments
+- F5b-salary-history
+- F6-employees-filter
+- N2-service-accounts
+- N3-500-on-missing-params
+
+### data (1)
+
+- P1-get-sweep
+
+---
 
 ## howismycommit-58
 
@@ -834,6 +2684,7 @@ _Empty._
 | branch | feat/external-apis |
 | target.kind | uncommitted |
 | target.commit | null |
+| target.title | Review · Finnaux Aadhaar OTP rate limit (deferred) |
 | files.changed | 1 |
 | files.added | 0 |
 | files.modified | 1 |
@@ -2767,6 +4618,7 @@ _Empty._
 | branch | feat/external-apis |
 | target.kind | uncommitted |
 | target.commit | null |
+| target.title | Review · Template eSign via Finnaux |
 | files.changed | 19 |
 | files.added | 2 |
 | files.modified | 17 |

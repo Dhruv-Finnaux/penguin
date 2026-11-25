@@ -7,6 +7,10 @@ import type { DbBackupData, DbBackupFileStatus, DbBackupRun } from "../_lib/type
 import { matchesQuery } from "../_lib/fuzzy"
 import { AuthorTag } from "./author-tag"
 import { CopyPath } from "./copy-path"
+import type { Nest } from "./db-layers"
+import { buildNests, colorForBackup, CopyNameButton, DbLayers, inkForBackup } from "./db-layers"
+import { Collapse } from "./collapse"
+import { ChevronRightIcon } from "lucide-react"
 import { Highlight, SearchHighlightProvider } from "./highlight"
 import { CopyTextButton, RunCard, RunTimeline } from "./run-timeline"
 import { SearchBox } from "./search-box"
@@ -55,57 +59,67 @@ function summaryText(run: DbBackupRun) {
     : `Restored ${run.database} from ${run.backupName || run.database}`
 }
 
-function FilesOnDisk({ dir, files }: Pick<DbBackupData, "dir" | "files">) {
+function FilesOnDisk({ dir, files, nests }: Pick<DbBackupData, "dir" | "files"> & { nests: Nest[] }) {
+  const [open, setOpen] = useState(false)
   return (
-    <div className="overflow-hidden rounded-xl border bg-card">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b bg-black/5 px-4 py-2 dark:bg-white/5">
-        <p className="text-xs font-semibold uppercase text-black dark:text-white">
-          Backups on disk ({files.length})
-        </p>
+    <div
+      className="overflow-hidden rounded-xl border bg-card cursor-pointer"
+      onClick={() => setOpen((value) => !value)}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 hover:bg-accent/30">
+        <button type="button" aria-expanded={open} className="flex items-center gap-2 text-left">
+          <ChevronRightIcon className={cn("size-4 shrink-0 transition-transform duration-300", open && "rotate-90")} />
+          <span className="text-xs font-semibold uppercase text-black dark:text-foreground">
+            Backups on disk ({files.length})
+          </span>
+        </button>
         <CopyPath path={dir}>{dir}</CopyPath>
       </div>
-      <p className="border-b px-4 py-2 text-xs text-muted-foreground">
-        <code className="rounded bg-accent px-1 py-0.5">db restore &lt;name&gt;</code> loads that
-        backup into the database your backend <code className="rounded bg-accent px-1 py-0.5">.env</code>{" "}
-        points to, after you type yes.
-      </p>
-      {files.length === 0 ? (
-        <p className="px-4 py-3 text-sm text-muted-foreground">
-          No backup files yet. Run <code className="rounded bg-accent px-1.5 py-0.5">db backup</code>{" "}
-          in the backend.
+      <Collapse open={open}>
+        <p className="px-4 py-2 text-xs text-foreground">
+          <code className="rounded bg-accent px-1 py-0.5">db restore &lt;name&gt;</code> loads that backup into the
+          database your backend <code className="rounded bg-accent px-1 py-0.5">.env</code> points to, after you type
+          yes.
         </p>
-      ) : (
-        <ul className="divide-y">
-          {files.map((file) => (
-            <li key={file.path} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2.5 text-sm">
-              <span className="font-medium">{file.name}</span>
-              <span className="text-xs text-muted-foreground">{formatSize(file.sizeBytes)}</span>
-              <span className="text-xs text-muted-foreground">taken {exactTime(file.modifiedAt)}</span>
-              <span className="ml-auto">
-                <CopyTextButton label="Copy Load Command" text={`db restore ${file.name}`} />
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+        {files.length === 0 ? (
+          <p className="px-4 py-3 text-sm text-foreground">
+            No backup files yet. Run <code className="rounded bg-accent px-1.5 py-0.5">db backup</code> in the backend.
+          </p>
+        ) : (
+          <ul className="divide-y border-t">
+            {files.map((file) => (
+              <li key={file.path} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2.5 text-sm">
+                <CopyNameButton
+                  name={file.name}
+                  color={colorForBackup(file.name, nests)}
+                  className="!text-white"
+                  ink={inkForBackup(file.name, nests)}
+                />
+                <span className="text-xs text-foreground">{formatSize(file.sizeBytes)}</span>
+                <span className="text-xs text-foreground">taken {exactTime(file.modifiedAt)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Collapse>
     </div>
   )
 }
 
 export function DbBackupsTab({ dir, runs: allRuns, files }: DbBackupData) {
   const [keyword, setKeyword] = useState("")
+  const nests = useMemo(() => buildNests(files, allRuns), [files, allRuns])
   const runs = useMemo(
     () =>
-      allRuns.filter((run) =>
-        matchesQuery(keyword, [run.author, run.action, run.database, run.backupName, run.file]),
-      ),
+      allRuns.filter((run) => matchesQuery(keyword, [run.author, run.action, run.database, run.backupName, run.file])),
     [allRuns, keyword],
   )
 
   return (
     <SearchHighlightProvider query={keyword}>
       <div className="space-y-4">
-        <FilesOnDisk dir={dir} files={files} />
+        <DbLayers nests={nests} files={files} />
+        <FilesOnDisk dir={dir} files={files} nests={nests} />
         {allRuns.length > 0 && (
           <SearchBox value={keyword} onChange={setKeyword} placeholder="Search by database or action" />
         )}
@@ -117,9 +131,8 @@ export function DbBackupsTab({ dir, runs: allRuns, files }: DbBackupData) {
               "No backups match."
             ) : (
               <>
-                No backups recorded yet. Run{" "}
-                <code className="rounded bg-accent px-1.5 py-0.5">db backup</code> in the backend to
-                start the timeline.
+                No backups recorded yet. Run <code className="rounded bg-accent px-1.5 py-0.5">db backup</code> in the
+                backend to start the timeline.
               </>
             )
           }
@@ -134,7 +147,8 @@ export function DbBackupsTab({ dir, runs: allRuns, files }: DbBackupData) {
                     className={cn(
                       "shrink-0 rounded-sm px-2 py-1.5 text-[11px] font-medium uppercase leading-none",
                       ACTION_STYLE[run.action],
-                    )}>
+                    )}
+                  >
                     {run.action}
                   </span>
                   <AuthorTag name={run.author} />
@@ -151,9 +165,15 @@ export function DbBackupsTab({ dir, runs: allRuns, files }: DbBackupData) {
                   <CopyTextButton
                     label="Copy Load Command"
                     text={`db restore ${run.backupName || run.database}`}
+                    className="rounded text-white hover:opacity-90"
+                    style={{
+                      background: colorForBackup(run.backupName || run.database, nests),
+                      color: inkForBackup(run.backupName || run.database, nests),
+                    }}
                   />
                 ) : undefined
-              }>
+              }
+            >
               <Field label="Database">
                 <Highlight text={run.database} />
               </Field>

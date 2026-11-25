@@ -148,7 +148,14 @@ function normalizeReview(raw: any, fileName: string, repo: RepoKey): Review {
     target: {
       kind: asString(raw?.target?.kind, "uncommitted"),
       commit: typeof raw?.target?.commit === "string" ? raw.target.commit : null,
+      title:
+        typeof raw?.target?.title === "string" && raw.target.title.trim()
+          ? raw.target.title.trim().replace(/^Test run\s+/i, "")
+          : null,
     },
+    screenshots: asArray(raw?.screenshots).filter((n): n is string => typeof n === "string"),
+    responses: asArray(raw?.responses).filter((n): n is string => typeof n === "string"),
+    data: asArray(raw?.data).filter((n): n is string => typeof n === "string"),
     files: {
       changed: asNumber(files.changed),
       added: asNumber(files.added),
@@ -1195,4 +1202,28 @@ export async function updateTodo(id: string, patch: { status?: unknown; text?: u
 
 export async function deleteTodo(id: string) {
   await writeTodos((await getTodos()).filter((t) => t.id !== id))
+}
+
+
+// Test evidence lives in testing/test-evidence/{screenshots,responses,data}.
+const TESTING_DIR = path.join(ROOT, "testing", "test-evidence")
+export const TESTING_FOLDERS = ["screenshots", "responses", "data"] as const
+export type TestingFolder = (typeof TESTING_FOLDERS)[number]
+
+export async function getTestingFiles() {
+  const out: Record<TestingFolder, { name: string; size: number }[]> = { screenshots: [], responses: [], data: [] }
+  for (const folder of TESTING_FOLDERS) {
+    const names = await fs.readdir(path.join(TESTING_DIR, folder)).catch(() => [] as string[])
+    for (const name of names.sort()) {
+      const stat = await fs.stat(path.join(TESTING_DIR, folder, name)).catch(() => null)
+      if (stat?.isFile()) out[folder].push({ name, size: stat.size })
+    }
+  }
+  return out
+}
+
+export function testingFilePath(folder: string, name: string) {
+  if (!(TESTING_FOLDERS as readonly string[]).includes(folder)) return null
+  if (!name || name !== path.basename(name)) return null
+  return path.join(TESTING_DIR, folder, name)
 }

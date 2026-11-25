@@ -156,43 +156,36 @@ function CommitReview({ review, history }: { review: Review; history: ReviewRunS
 
   return (
     <div className="space-y-4">
-      <div
-        className={cn(
-          "flex flex-wrap items-center gap-4 rounded-xl p-3",
-          STATUS_SURFACE[scoreStatus(review.score)],
-        )}>
-        <ScoreBadge score={review.score} quality={review.quality} verdict={review.verdict} size="lg" />
-        <div className="text-sm">
-          <p className="font-semibold">{VERDICT_LABEL[review.verdict]}</p>
-          {review.commitScore !== null && review.commitScore !== review.score && (
-            <p className="text-xs text-black">As committed: {review.commitScore}</p>
-          )}
-          <p className="text-xs text-black">
-            Latest review {review.id}, scored on the code as it is now.
-          </p>
+      <div className="flex flex-wrap items-stretch gap-4">
+        <div className={cn("flex items-center rounded-xl p-4", STATUS_SURFACE[scoreStatus(review.score)])}>
+          <ScoreBadge score={review.score} quality={review.quality} verdict={review.verdict} size="lg" />
+        </div>
+        <div className="flex min-w-72 flex-1 flex-col gap-4 text-sm">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="min-w-0 break-words border border-dashed border-amber-600/50 p-3">
+              <p className="pb-2 text-xs font-semibold uppercase text-amber-500">Existing</p>
+              <p className="text-sm">{review.before || "-"}</p>
+            </div>
+            <div className="min-w-0 break-words border border-dashed border-blue-600/50 p-3">
+              <p className="pb-2 text-xs font-semibold uppercase text-blue-500">New</p>
+              <p className="text-sm">{review.after || "-"}</p>
+            </div>
+          </div>
+          <div className="min-w-0 flex-1 break-words border border-dashed border-purple-600/50 p-3">
+            <p className="pb-2 text-xs font-semibold uppercase text-purple-600">Effects</p>
+            {review.effects.length > 0 ? (
+              <ul className="list-disc space-y-1 pl-5 text-sm">
+                {review.effects.map((effect, i) => (
+                  <li key={i}>{effect}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm">-</p>
+            )}
+          </div>
         </div>
       </div>
       <ReviewHistory history={history} />
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="border border-dashed border-amber-600/50 p-2.5">
-          <p className="pb-2 text-xs font-semibold uppercase text-amber-500">Existing</p>
-          <p className="text-sm">{review.before || "-"}</p>
-        </div>
-        <div className="border border-dashed border-blue-600/50 p-2.5">
-          <p className="pb-2 text-xs font-semibold uppercase text-blue-500">New</p>
-          <p className="text-sm">{review.after || "-"}</p>
-        </div>
-      </div>
-      {review.effects.length > 0 && (
-        <div className="border border-dashed border-purple-600/50 p-2.5">
-          <p className="pb-2 text-xs font-semibold uppercase text-purple-600">Effects</p>
-          <ul className="list-disc space-y-0.5 pl-5 text-sm">
-            {review.effects.map((effect, i) => (
-              <li key={i}>{effect}</li>
-            ))}
-          </ul>
-        </div>
-      )}
       <div className="space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-sm font-semibold">

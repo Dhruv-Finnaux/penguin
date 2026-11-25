@@ -7,7 +7,17 @@ import { useMemo, useState, type ReactNode } from "react"
 import { toast } from "sonner"
 import { Collapse } from "./collapse"
 
-export function CopyTextButton({ label, text }: { label: string; text: string }) {
+export function CopyTextButton({
+  label,
+  text,
+  className,
+  style,
+}: {
+  label: string
+  text: string
+  className?: string
+  style?: React.CSSProperties
+}) {
   const [copied, setCopied] = useState(false)
 
   const copy = async () => {
@@ -25,8 +35,13 @@ export function CopyTextButton({ label, text }: { label: string; text: string })
       type="button"
       title={label}
       aria-label={label}
-      className="inline-flex h-7 shrink-0 items-center gap-1.5 px-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-      onClick={() => void copy()}>
+      className={cn(
+        "inline-flex h-7 shrink-0 items-center gap-1.5 px-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground",
+        className,
+      )}
+      style={style}
+      onClick={() => void copy()}
+    >
       {copied ? <CheckIcon className="size-3.5" /> : <CopyIcon className="size-3.5" />}
       {copied ? "Copied" : label}
     </button>
@@ -51,10 +66,9 @@ export function RunCard({
           type="button"
           aria-expanded={open}
           className="flex max-w-30 flex-1 flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 pl-3 text-left"
-          onClick={() => setOpen((value) => !value)}>
-          <ChevronRightIcon
-            className={cn("size-4 shrink-0 transition-transform duration-300", open && "rotate-90")}
-          />
+          onClick={() => setOpen((value) => !value)}
+        >
+          <ChevronRightIcon className={cn("size-4 shrink-0 transition-transform duration-300", open && "rotate-90")} />
           {summary}
         </button>
         {actions && <div className="flex shrink-0 items-center self-center pr-3">{actions}</div>}
@@ -93,11 +107,14 @@ export function RunTimeline<T extends { fileName: string; generatedAt: string }>
   return (
     <ol>
       {days.map((day, dayIndex) => (
-        <li key={day.day} className={cn(
-          "relative grid gap-x-4 md:grid-cols-[9rem_1fr]",
-          dayIndex > 0 &&
-          "before:absolute before:inset-x-0 before:-top-3 before:border-t before:border-dashed before:border-border dark:before:border-white/50",
-        )}>
+        <li
+          key={day.day}
+          className={cn(
+            "relative grid gap-x-4 md:grid-cols-[9rem_1fr]",
+            dayIndex > 0 &&
+              "before:absolute before:inset-x-0 before:-top-3 before:border-t before:border-dashed before:border-border dark:before:border-white/50",
+          )}
+        >
           <div className="pb-2 md:sticky md:top-2 md:self-start md:pb-0 md:pt-2.5 md:text-right">
             <h2 className="text-xs font-semibold text-black/50 dark:text-white/50">{day.day}</h2>
             <p className="text-xs text-muted-foreground">
@@ -118,9 +135,7 @@ export function RunTimeline<T extends { fileName: string; generatedAt: string }>
                         aria-hidden
                         className={cn(
                           "absolute left-3 border-l border-dashed border-border dark:border-white/50",
-                          isLast
-                            ? "top-0 h-5"
-                            : cn(isFirst ? "top-5" : "top-0", endsDay ? "-bottom-6" : "-bottom-3"),
+                          isLast ? "top-0 h-5" : cn(isFirst ? "top-5" : "top-0", endsDay ? "-bottom-6" : "-bottom-3"),
                         )}
                       />
                     )}

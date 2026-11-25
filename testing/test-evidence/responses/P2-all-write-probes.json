@@ -1,0 +1,3194 @@
+{
+ "account": "eve",
+ "tier": "T0",
+ "date": "2026-11-25",
+ "probes": 267,
+ "results": [
+  {
+   "method": "PUT",
+   "path": "/configuration/company",
+   "handler": "configurations/configurations.controller.ts:38",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "companyName should not be empty",
+    "companyName must be a string",
+    "dateOfIncorporation must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/company-addresses",
+   "handler": "configurations/configurations.controller.ts:85",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "addresses must contain no more than 2 elements",
+    "addresses must contain at least 2 elements",
+    "addresses should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/company-financial-details",
+   "handler": "configurations/configurations.controller.ts:98",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "dailyCashLimit must be a number conforming to the specified constraints",
+    "yearlyCashPaymentLimit must be a number conforming to the specified constraints",
+    "yearlyCashReceiptLimit must be a number conforming to the specified constraints"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/company-system-settings",
+   "handler": "configurations/configurations.controller.ts:114",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeCodePrefix should not be empty",
+    "employeeCodePrefix must be a string",
+    "invoiceNumberPrefix should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/insurance-companies",
+   "handler": "configurations/insurance-companies/insurance-companies.controller.ts:25",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/insurance-companies/:insuranceCompanyId",
+   "handler": "configurations/insurance-companies/insurance-companies.controller.ts:51",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/vendor",
+   "handler": "configurations/vendors/vendors.controller.ts:29",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/loan-product",
+   "handler": "configurations/loan-products/loan-product.controller.ts:29",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId",
+   "handler": "configurations/loan-products/loan-product.controller.ts:63",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/charges-head/:chargesHeadId",
+   "handler": "configurations/loan-products/loan-product.controller.ts:95",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/closure-charges",
+   "handler": "configurations/loan-products/closure-charges/closure-charges.controller.ts:41",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/documents/loan-documents",
+   "handler": "configurations/loan-products/documents/loan-documents/loan-documents.controller.ts:26",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/documents/asset-documents/vehicle-documents/:systemDocumentId",
+   "handler": "configurations/loan-products/documents/asset-documents/asset-documents.controller.ts:39",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/documents/asset-documents/property-documents/:systemDocumentId",
+   "handler": "configurations/loan-products/documents/asset-documents/asset-documents.controller.ts:69",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/documents/asset-documents/gold-documents",
+   "handler": "configurations/loan-products/documents/asset-documents/asset-documents.controller.ts:99",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/documents/asset-documents/education-documents",
+   "handler": "configurations/loan-products/documents/asset-documents/asset-documents.controller.ts:127",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/documents/customer-documents/:systemDocumentId",
+   "handler": "configurations/loan-products/documents/customer-documents/customer-documents.controller.ts:28",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/documents/income-documents",
+   "handler": "configurations/loan-products/documents/income-documents/income-documents.controller.ts:32",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/loan-product/:loanProductId/policies",
+   "handler": "configurations/loan-products/customer-policies/customer-policies.controller.ts:35",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/branch",
+   "handler": "configurations/branch/branch.controller.ts:39",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/branch/:branchId",
+   "handler": "configurations/branch/branch.controller.ts:67",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/branch/:branchId/configuration",
+   "handler": "configurations/branch/branch.controller.ts:91",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/branch/:branchId/account-head",
+   "handler": "configurations/branch/branch.controller.ts:115",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/branch/:branchId/product/:productId/deviation-assignments",
+   "handler": "configurations/branch/branch.controller.ts:194",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "rangeId must be a string",
+    "deviations should not be empty",
+    "deviations must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/branch/:branchId/product/:productId/deviation-assignments",
+   "handler": "configurations/branch/branch.controller.ts:217",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "rangeId must be a string",
+    "deviations should not be empty",
+    "deviations must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/branch/:branchId/assignments",
+   "handler": "configurations/branch/assignments/assignments.controller.ts:30",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanProductId must be a valid ID",
+    "type must be one of the following values: REPOSSESS_WAIVER, REPOSSESS_WRITE_OFF, LEGAL_WAIVER, LEGAL_WRITE_OFF, CLOSURE_WAIVER, NPA_WAIVER, NPA_WRITE_OFF",
+    "limits should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/branch/:branchId/assignments/:assignmentId",
+   "handler": "configurations/branch/assignments/assignments.controller.ts:57",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanProductId must be a valid ID",
+    "type must be one of the following values: REPOSSESS_WAIVER, REPOSSESS_WRITE_OFF, LEGAL_WAIVER, LEGAL_WRITE_OFF, CLOSURE_WAIVER, NPA_WAIVER, NPA_WRITE_OFF",
+    "limits should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/message-configuration/sms-configuration/:smsConfigurationId",
+   "handler": "configurations/message-configuration/message-configuration.controller.ts:30",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "templateId must be a string",
+    "message must be a string",
+    "enabled must be a boolean value"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/parking-yards",
+   "handler": "configurations/parking-yards/parking-yards.controller.ts:28",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/parking-yards/:parkingYardId",
+   "handler": "configurations/parking-yards/parking-yards.controller.ts:59",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/asset/manufacturer",
+   "handler": "configurations/asset/manufacturer/manufacturer.controller.ts:26",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/asset/manufacturer/:manufacturerId",
+   "handler": "configurations/asset/manufacturer/manufacturer.controller.ts:66",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/asset/product",
+   "handler": "configurations/asset/product/product.controller.ts:27",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/asset/product/:productId",
+   "handler": "configurations/asset/product/product.controller.ts:58",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/asset/variant",
+   "handler": "configurations/asset/variant/variant.controller.ts:27",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/asset/variant/:variantId",
+   "handler": "configurations/asset/variant/variant.controller.ts:64",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/co-lending/portfolio/generate",
+   "handler": "configurations/co-lending/portfolio-lender-loan.controller.ts:113",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/co-lending",
+   "handler": "configurations/co-lending/co-lending.controller.ts:30",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/co-lending/:lenderId/dv-deductions/batch",
+   "handler": "configurations/co-lending/co-lending.controller.ts:105",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/question-configuration/question",
+   "handler": "configurations/question-configuration/question/question.controller.ts:36",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/question-configuration/question/file-check",
+   "handler": "configurations/question-configuration/question/question.controller.ts:48",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/question-configuration/question/:questionId",
+   "handler": "configurations/question-configuration/question/question.controller.ts:63",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/question-configuration/question/pd",
+   "handler": "configurations/question-configuration/question/pd/pd.controller.ts:31",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/question-configuration/question/tvr",
+   "handler": "configurations/question-configuration/question/tvr/tvr.controller.ts:31",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/question-configuration/question/asset-property-fi",
+   "handler": "configurations/question-configuration/question/asset-property-fi/asset-property-fi.controller.ts:33",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/question-configuration/question/profile",
+   "handler": "configurations/question-configuration/question/profile/profile.controller.ts:39",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/question-configuration/question/fi",
+   "handler": "configurations/question-configuration/question/fi/fi.controller.ts:31",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/external-apis/api-groups/:apiGroupId/credentials",
+   "handler": "configurations/external-apis/external-apis.controller.ts:52",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/dealer",
+   "handler": "configurations/dealer/dealer.controller.ts:29",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/dealer/:dealerId/price-list",
+   "handler": "configurations/dealer/dealer.controller.ts:104",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/menu-management/menus",
+   "handler": "configurations/menu-management/menu-management.controller.ts:71",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/menu-management/pages",
+   "handler": "configurations/menu-management/menu-management.controller.ts:83",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PATCH",
+   "path": "/configuration/menu-management/modules/:id",
+   "handler": "configurations/menu-management/menu-management.controller.ts:95",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PATCH",
+   "path": "/configuration/menu-management/menus/:id",
+   "handler": "configurations/menu-management/menu-management.controller.ts:110",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PATCH",
+   "path": "/configuration/menu-management/pages/:id",
+   "handler": "configurations/menu-management/menu-management.controller.ts:125",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/templates",
+   "handler": "configurations/templates/templates.controller.ts:26",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/templates/:templateId",
+   "handler": "configurations/templates/templates.controller.ts:59",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/crm-configuration/ticket-status",
+   "handler": "configurations/crm-configuration/crm-configuration.controller.ts:38",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/crm-configuration/ticket-type",
+   "handler": "configurations/crm-configuration/crm-configuration.controller.ts:106",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/crm-configuration/workflow",
+   "handler": "configurations/crm-configuration/crm-configuration.controller.ts:202",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/crm-configuration/employee-assignment",
+   "handler": "configurations/crm-configuration/crm-configuration.controller.ts:261",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/crm-configuration/employee-assignment/:id",
+   "handler": "configurations/crm-configuration/crm-configuration.controller.ts:332",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/crm-configuration/employee-assignment/eligible-employees",
+   "handler": "configurations/crm-configuration/crm-configuration.controller.ts:367",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/branch-area",
+   "handler": "configurations/branch-area/branch-area.controller.ts:27",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/branch-area/:branchAreaId",
+   "handler": "configurations/branch-area/branch-area.controller.ts:58",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/mclr",
+   "handler": "configurations/mclr/mclr.controller.ts:26",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name should not be empty",
+    "name must be a string",
+    "rate must not be less than 0"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/legal/acts",
+   "handler": "configurations/legal/acts/acts.controller.ts:22",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/legal/acts/:actId/sections",
+   "handler": "configurations/legal/acts/sections/sections.controller.ts:22",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/legal/acts/:actId/sections/:sectionId/sub-sections",
+   "handler": "configurations/legal/acts/sections/sub-sections/sub-sections.controller.ts:25",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/legal/courts",
+   "handler": "configurations/legal/courts/courts.controller.ts:13",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/configuration/reports/slabs",
+   "handler": "configurations/reports/reports.controller.ts:31",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/configuration/reports/slabs/:slabId",
+   "handler": "configurations/reports/reports.controller.ts:54",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/receipt-authorisations/:receiptId",
+   "handler": "receipt-authorisations/receipt-authorisations.controller.ts:19",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: PENDING, AUTHORISED, REJECTED, CANCELLED"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/preferences",
+   "handler": "preferences/preferences.controller.ts:18",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "financialYearId must be a string",
+    "themeMode must be a string",
+    "layoutOrientation must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/:loanApplicationId/receipts",
+   "handler": "lms/receipts/receipts.controller.ts:36",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "subTypeId must be a valid ID",
+    "effectiveDate must be a valid ISO 8601 date string",
+    "chargesHeads should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/:loanApplicationId/receipts/:receiptId/collect",
+   "handler": "lms/receipts/receipts.controller.ts:76",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "effectiveDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/collection",
+   "handler": "lms/collection/collection.controller.ts:44",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "voucherIds must be a valid ID",
+    "voucherIds should not be empty",
+    "voucherIds must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/vehicle-repossession-authorisations/update-status",
+   "handler": "lms/vehicle-repossession-authorisations/vehicle-repossession-authorisations.controller.ts:26",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/closure-receipt-authorisations",
+   "handler": "lms/closure-receipt-authorisations/closure-receipt-authorisations.controller.ts:30",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/refactor-legal-settlement-authorisations/:eventId/action",
+   "handler": "lms/refactor-legal-settlement-authorisations/refactor-legal-settlement-authorisations.controller.ts:41",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/assignment-lists/assign",
+   "handler": "lms/assignment-lists/assignment-lists.controller.ts:33",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanApplicationIds must be a valid ID",
+    "loanApplicationIds should not be empty",
+    "loanApplicationIds must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/assignment-lists/remove",
+   "handler": "lms/assignment-lists/assignment-lists.controller.ts:41",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanApplicationIds must be a valid ID",
+    "loanApplicationIds should not be empty",
+    "loanApplicationIds must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/vehicle-release-authorisations/update-status",
+   "handler": "lms/vehicle-release-authorisations/vehicle-release-authorisations.controller.ts:26",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/legal-receipt-authorisations",
+   "handler": "lms/legal-receipt-authorisations/legal-receipt-authorisations.controller.ts:28",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanApplicationId must be a valid ID",
+    "legalIds must be a valid ID",
+    "legalIds must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/npa-regularise-authorisations",
+   "handler": "lms/npa-regularise-authorisations/npa-regularise-authorisations.controller.ts:30",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/refactor-legal-settlement-requests",
+   "handler": "lms/refactor-legal-settlement-requests/refactor-legal-settlement-requests.controller.ts:35",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/customer/:customerId/individual/basic-detail",
+   "handler": "lms/customer/customer.controller.ts:57",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/customer/:customerId/non-individual/basic-detail",
+   "handler": "lms/customer/customer.controller.ts:91",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/customer/kyc/face-match",
+   "handler": "lms/customer/customer.controller.ts:134",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/customer/:customerId/kyc",
+   "handler": "lms/customer/kyc/kyc.controller.ts:30",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/customer/:customerId/kyc/:customerKycDocumentId",
+   "handler": "lms/customer/kyc/kyc.controller.ts:47",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/customer/:customerId/kyc/re-verify",
+   "handler": "lms/customer/kyc/kyc.controller.ts:81",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/customer/:customerId/bank",
+   "handler": "lms/customer/bank/bank.controller.ts:29",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/customer/:customerId/bank/:bankId",
+   "handler": "lms/customer/bank/bank.controller.ts:46",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/customer/:customerId/address",
+   "handler": "lms/customer/address/address.controller.ts:28",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/customer/:customerId/address/:addressId",
+   "handler": "lms/customer/address/address.controller.ts:45",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/lms/customer/:customerId/communication",
+   "handler": "lms/customer/communication/communication.controller.ts:28",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/lms/legal-authorisations/update-status",
+   "handler": "lms/legal-authorisations/legal-authorisations.controller.ts:26",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/crm/entry",
+   "handler": "crm/crm.controller.ts:33",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "type must be one of the following values: ",
+    "loanApplicationId must be a string",
+    "customerId must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/crm/entry/:crmEntryId/status",
+   "handler": "crm/crm.controller.ts:48",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/crm/tickets",
+   "handler": "crm/crm-tickets/crm-tickets.controller.ts:31",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/crm/tickets/:ticketId/forward",
+   "handler": "crm/crm-tickets/crm-tickets.controller.ts:131",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/rule",
+   "handler": "rule-engine/rule-engine.controller.ts:27",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "masterRuleId must be a string",
+    "expression must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/ruleset",
+   "handler": "rule-engine/rule-engine.controller.ts:37",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "level0 must be a string",
+    "level1 must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/holiday-management",
+   "handler": "hrms/holiday-management/holiday-management.controller.ts:27",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name should not be empty",
+    "name must be a string",
+    "date should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/holiday-management/week-off",
+   "handler": "hrms/holiday-management/holiday-management.controller.ts:45",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "each value in daysOfWeek must not be greater than 6",
+    "each value in daysOfWeek must not be less than 0",
+    "each value in daysOfWeek must be an integer number"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/cycles",
+   "handler": "hrms/performance-management/performance-management.controller.ts:78",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/goals",
+   "handler": "hrms/performance-management/performance-management.controller.ts:155",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/pip",
+   "handler": "hrms/performance-management/performance-management.controller.ts:191",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/performance-management/pip/:pipId/goals/:goalId",
+   "handler": "hrms/performance-management/performance-management.controller.ts:199",
+   "guardInCode": false,
+   "status": 404,
+   "message": "PIP goal not found.",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/performance-management/pip/:id/status",
+   "handler": "hrms/performance-management/performance-management.controller.ts:214",
+   "guardInCode": false,
+   "status": 200,
+   "message": "OK",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/incentive-schemes",
+   "handler": "hrms/performance-management/performance-management.controller.ts:247",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/incentive-rules",
+   "handler": "hrms/performance-management/performance-management.controller.ts:292",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/incentive-calculations",
+   "handler": "hrms/performance-management/performance-management.controller.ts:331",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/appraisals/:id/submit-manager-review",
+   "handler": "hrms/performance-management/performance-management.controller.ts:398",
+   "guardInCode": false,
+   "status": 404,
+   "message": "Appraisal not found.",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/appraisals/:id/approve",
+   "handler": "hrms/performance-management/performance-management.controller.ts:411",
+   "guardInCode": false,
+   "status": 404,
+   "message": "Appraisal not found.",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/appraisals/:id/finalize",
+   "handler": "hrms/performance-management/performance-management.controller.ts:424",
+   "guardInCode": false,
+   "status": 404,
+   "message": "Appraisal not found.",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/targets",
+   "handler": "hrms/performance-management/performance-management.controller.ts:450",
+   "guardInCode": false,
+   "status": 500,
+   "message": "Internal server error",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/targets/:id/submit",
+   "handler": "hrms/performance-management/performance-management.controller.ts:495",
+   "guardInCode": false,
+   "status": 404,
+   "message": "Target not found.",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/targets/:id/manager-review",
+   "handler": "hrms/performance-management/performance-management.controller.ts:508",
+   "guardInCode": false,
+   "status": 404,
+   "message": "Target not found.",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/performance-management/appraisals/:id/finalize",
+   "handler": "hrms/performance-management/performance-management.controller.ts:521",
+   "guardInCode": false,
+   "status": 404,
+   "message": "Appraisal not found.",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/performance-management/appraisals/:id/return",
+   "handler": "hrms/performance-management/performance-management.controller.ts:534",
+   "guardInCode": false,
+   "status": 404,
+   "message": "Appraisal not found.",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/payroll-management/components",
+   "handler": "hrms/payroll-management/payroll-management.controller.ts:40",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "name should not be empty",
+    "code must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/payroll-management/structures",
+   "handler": "hrms/payroll-management/payroll-management.controller.ts:53",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "name should not be empty",
+    "each value in componentIds must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/payroll-management/assignments",
+   "handler": "hrms/payroll-management/payroll-management.controller.ts:66",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeId must be a string",
+    "employeeId should not be empty",
+    "salaryStructureId must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/payroll-management/loans",
+   "handler": "hrms/payroll-management/payroll-management.controller.ts:164",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeId must be a string",
+    "employeeId should not be empty",
+    "type must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/payroll-management/adjustments",
+   "handler": "hrms/payroll-management/payroll-management.controller.ts:178",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeId must be a string",
+    "employeeId should not be empty",
+    "month must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/payroll-management/components/:id",
+   "handler": "hrms/payroll-management/payroll-management.controller.ts:208",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "name should not be empty",
+    "code must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/payroll-management/structures/:id",
+   "handler": "hrms/payroll-management/payroll-management.controller.ts:225",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "name should not be empty",
+    "each value in componentIds must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/employee-tours",
+   "handler": "hrms/employee-tour/employee-tour.controller.ts:23",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeId must be a string",
+    "employeeId should not be empty",
+    "purpose must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/recruitment-management/jobs",
+   "handler": "hrms/recruitment/recruitment.controller.ts:51",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "title should not be empty",
+    "title must be a string",
+    "departmentId should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/recruitment-management/jobs/:jobId/status",
+   "handler": "hrms/recruitment/recruitment.controller.ts:56",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/recruitment-management/candidates",
+   "handler": "hrms/recruitment/recruitment.controller.ts:94",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "jobId should not be empty",
+    "jobId must be a string",
+    "firstName should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/recruitment-management/candidates/:candidateId/stage",
+   "handler": "hrms/recruitment/recruitment.controller.ts:102",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "stage must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/recruitment-management/interviews",
+   "handler": "hrms/recruitment/recruitment.controller.ts:145",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "candidateId should not be empty",
+    "candidateId must be a string",
+    "roundName should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/recruitment-management/interviews/:interviewId/feedback",
+   "handler": "hrms/recruitment/recruitment.controller.ts:153",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/recruitment-management/interviews/reschedule",
+   "handler": "hrms/recruitment/recruitment.controller.ts:166",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "candidateId should not be empty",
+    "candidateId must be a string",
+    "roundName should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/recruitment-management/settings",
+   "handler": "hrms/recruitment/recruitment.controller.ts:200",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "isCooldownEnabled must be a boolean value",
+    "cooldownDays must be a number conforming to the specified constraints"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/recruitment-management/agencies",
+   "handler": "hrms/recruitment/recruitment.controller.ts:213",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name should not be empty",
+    "name must be a string",
+    "contactEmail should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/recruitment-management/interviewers",
+   "handler": "hrms/recruitment/recruitment.controller.ts:243",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "agencyId should not be empty",
+    "agencyId must be a string",
+    "firstName should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/recruitment-management/letter-templates",
+   "handler": "hrms/recruitment/recruitment.controller.ts:281",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "type must be one of the following values: ",
+    "name must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/designation",
+   "handler": "hrms/designation/designation.controller.ts:38",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/designation/:designationId",
+   "handler": "hrms/designation/designation.controller.ts:53",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/designation/:designationId/modules/:moduleId/menu-rights",
+   "handler": "hrms/designation/designation.controller.ts:85",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/designation/:designationId/modules/:moduleId/page-rights",
+   "handler": "hrms/designation/designation.controller.ts:127",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/designation/:designationId/lms-process-pages",
+   "handler": "hrms/designation/designation.controller.ts:157",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/designation/:designationId/voucher-types",
+   "handler": "hrms/designation/voucher-types/voucher-types.controller.ts:34",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/attendance/mark-attendance",
+   "handler": "hrms/attendance-management/attendance-management.controller.ts:66",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeId must be a string",
+    "employeeId should not be empty",
+    "targetDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/attendance/mark-shift",
+   "handler": "hrms/attendance-management/attendance-management.controller.ts:74",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeId must be a string",
+    "employeeId should not be empty",
+    "shiftCategoryId must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/attendance/unassign-shift",
+   "handler": "hrms/attendance-management/attendance-management.controller.ts:79",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeId must be a string",
+    "employeeId should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/attendance/shift-categories",
+   "handler": "hrms/attendance-management/attendance-management.controller.ts:92",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "name should not be empty",
+    "startTime must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/attendance/bulk-assign-shift",
+   "handler": "hrms/attendance-management/attendance-management.controller.ts:100",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "each value in employeeIds must be a string",
+    "employeeIds should not be empty",
+    "shiftCategoryId must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/attendance/bulk-unassign-shift",
+   "handler": "hrms/attendance-management/attendance-management.controller.ts:108",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "each value in employeeIds must be a string",
+    "employeeIds should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/attendance/shift-categories/:shiftCategoryId",
+   "handler": "hrms/attendance-management/attendance-management.controller.ts:116",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "name should not be empty",
+    "startTime must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/employees/on-role",
+   "handler": "hrms/employee/employee.controller.ts:39",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/employees/:employeeId/on-role",
+   "handler": "hrms/employee/employee.controller.ts:54",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/employees/:employeeId/product",
+   "handler": "hrms/employee/employee.controller.ts:110",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/employees/:employeeId/product",
+   "handler": "hrms/employee/employee.controller.ts:141",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/employees/:employeeId/branch",
+   "handler": "hrms/employee/employee.controller.ts:165",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/employees/:employeeId/branch",
+   "handler": "hrms/employee/employee.controller.ts:196",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/employees/:employeeId/los-process",
+   "handler": "hrms/employee/employee.controller.ts:229",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/employees/:employeeId/department",
+   "handler": "hrms/employee/employee.controller.ts:262",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/leave-management/types",
+   "handler": "hrms/leave-management/leave-management.controller.ts:49",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "code must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/leave-management/types/:leaveTypeId",
+   "handler": "hrms/leave-management/leave-management.controller.ts:57",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string",
+    "code must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/leave-management/apply",
+   "handler": "hrms/leave-management/leave-management.controller.ts:84",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "leaveTypeId must be a string",
+    "startDate must be a valid ISO 8601 date string",
+    "endDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/leave-management/requests/:leaveRequestId/status",
+   "handler": "hrms/leave-management/leave-management.controller.ts:92",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/leave-management/balances/:employeeId/adjust",
+   "handler": "hrms/leave-management/leave-management.controller.ts:127",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "leaveTypeId must be a string",
+    "daysToAdjust must be a number conforming to the specified constraints",
+    "operation must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/leave-management/encash",
+   "handler": "hrms/leave-management/leave-management.controller.ts:140",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "leaveTypeId must be a string",
+    "daysToEncash must be a number conforming to the specified constraints"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/leave-management/resignations",
+   "handler": "hrms/leave-management/leave-management.controller.ts:157",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "resignationDate must be a valid ISO 8601 date string",
+    "requestedLastWorkingDay must be a valid ISO 8601 date string",
+    "reason must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/leave-management/resignations/:resignationId/status",
+   "handler": "hrms/leave-management/leave-management.controller.ts:169",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/leave-management/extra-work-requests",
+   "handler": "hrms/leave-management/leave-management.controller.ts:223",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "requestType must be one of the following values: ",
+    "workDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/leave-management/extra-work-requests/:requestId/status",
+   "handler": "hrms/leave-management/leave-management.controller.ts:235",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/hrms/leave-management/cancellations",
+   "handler": "hrms/leave-management/leave-management.controller.ts:265",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "leaveRequestId must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/leave-management/cancellations/:cancellationId/status",
+   "handler": "hrms/leave-management/leave-management.controller.ts:277",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: "
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/hrms/leave-management/designation-rules/:designationId",
+   "handler": "hrms/leave-management/leave-management.controller.ts:303",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "allowCompOff must be a boolean value",
+    "allowTOIL must be a boolean value",
+    "allowOvertimePay must be a boolean value"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PATCH",
+   "path": "/accounts/statement/vouchers/:voucherId/bank-clear-date",
+   "handler": "accounts/account-statement/account-statement.controller.ts:38",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/accounts/vouchers",
+   "handler": "accounts/vouchers/vouchers.controller.ts:66",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/accounts/vouchers/:voucherId",
+   "handler": "accounts/vouchers/vouchers.controller.ts:73",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/account/account-group",
+   "handler": "accounts/account-group/account-group.controller.ts:31",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/account/account-group/profit-loss",
+   "handler": "accounts/account-group/account-group.controller.ts:121",
+   "guardInCode": true,
+   "status": 400,
+   "message": [
+    "fromDate must be a valid ISO 8601 date string",
+    "fromDate should not be empty",
+    "toDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/account/account-group/:accountGroupId",
+   "handler": "accounts/account-group/account-group.controller.ts:143",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/accounts/voucher-decisions/update-status",
+   "handler": "accounts/voucher-decisions/voucher-decisions.controller.ts:27",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/accounts/borrowings",
+   "handler": "accounts/borrowings/borrowings.controller.ts:27",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/account/account-head",
+   "handler": "accounts/account-heads/account-heads.controller.ts:31",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/account/account-head/:accountHeadId",
+   "handler": "accounts/account-heads/account-heads.controller.ts:66",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/repayment-plan-calculator",
+   "handler": "los/los.controller.ts:29",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "calculationTypeId must be a valid ID",
+    "loanAmount must not be less than 0",
+    "loanAmount must be a number conforming to the specified constraints"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/update-swap-loan-application",
+   "handler": "los/los.controller.ts:43",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "fromEmployeeId should not be empty",
+    "fromEmployeeId must be a string",
+    "toEmployeeId should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application",
+   "handler": "los/loan-application/loan-application.controller.ts:48",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "productId must be a valid ID",
+    "branchId must be a valid ID",
+    "requiredLoanAmount must not be less than 0"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/user-loan-detail",
+   "handler": "los/loan-application/loan-application.controller.ts:87",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "sourceTypeId must be a string",
+    "sourceAreaId must be a string",
+    "loanPurpose must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/next-process",
+   "handler": "los/loan-application/loan-application.controller.ts:100",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "remark must be a string",
+    "currentProcessId must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/hold",
+   "handler": "los/loan-application/loan-application.controller.ts:116",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "Hold reason is required.",
+    "Hold reason is required."
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/process-to-complete",
+   "handler": "los/loan-application/loan-application.controller.ts:142",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "each value in processIds must be a string",
+    "processIds should not be empty",
+    "processIds must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/process-send-back",
+   "handler": "los/loan-application/loan-application.controller.ts:198",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "targetProcessId must be a string",
+    "employeeId must be a string",
+    "remark must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/reject",
+   "handler": "los/loan-application/loan-application.controller.ts:256",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "rejectionReason should not be empty",
+    "rejectionReason must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/initiate-npa",
+   "handler": "los/loan-application/loan-application.controller.ts:283",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "date must be a valid ISO 8601 date string",
+    "reportSlabId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/calculate-broken-period-interest",
+   "handler": "los/loan-application/loan-application.controller.ts:380",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "effectiveDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/calculate-termination-charges",
+   "handler": "los/loan-application/loan-application.controller.ts:391",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "effectiveDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/vehicle-repossess",
+   "handler": "los/loan-application/vehicle-repossess/vehicle-repossess.controller.ts:27",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "assetVehicleId must be a valid ID",
+    "parkingYardId must be a valid ID",
+    "Event date must be today or earlier."
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/financials",
+   "handler": "los/loan-application/financials/financials.controller.ts:36",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "processPageId should not be empty",
+    "processPageId must be a string",
+    "calculationTypeId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/remarks",
+   "handler": "los/loan-application/remarks/remarks.controller.ts:30",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "processPageId must be a string",
+    "header must be a string",
+    "each value in remarks must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/asset-vehicles/rc-address",
+   "handler": "los/loan-application/asset-vehicles/asset-vehicles.controller.ts:54",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "registrationNumber should not be empty",
+    "registrationNumber must be a string",
+    "streetRoadLane should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/asset-vehicles/:assetVehicleId/valuations",
+   "handler": "los/loan-application/asset-vehicles/valuations/valuations.controller.ts:29",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "valuationDoneById should not be empty",
+    "valuationDoneById must be a string",
+    "valuationDoneDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/asset-vehicles/:assetVehicleId/valuations/:valuationId",
+   "handler": "los/loan-application/asset-vehicles/valuations/valuations.controller.ts:65",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "valuationDoneById should not be empty",
+    "valuationDoneById must be a string",
+    "valuationDoneDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/deductions",
+   "handler": "los/loan-application/deductions/deductions.controller.ts:24",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "targetLoanApplicationId should not be empty",
+    "targetLoanApplicationId must be a string",
+    "chargesHeadId should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/asset-property",
+   "handler": "los/loan-application/asset-properties/asset-properties.controller.ts:30",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "ownerId must be a valid ID",
+    "nature must be one of the following values: FULLY_CONSTRUCTED, PARTIALLY_CONSTRUCTED, PLOT, SHOP, FLAT, AGRICULTURE_LAND",
+    "ownershipType must be one of the following values: GOVERNMENT_AUTHORITY, MUNICIPAL_CORPORATION, PANCHAYAT_PATTA, SOCIETY, HOUSING_BOARD, RIICO"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/asset-property/:assetPropertyId",
+   "handler": "los/loan-application/asset-properties/asset-properties.controller.ts:49",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "ownerId must be a valid ID",
+    "nature must be one of the following values: FULLY_CONSTRUCTED, PARTIALLY_CONSTRUCTED, PLOT, SHOP, FLAT, AGRICULTURE_LAND",
+    "ownershipType must be one of the following values: GOVERNMENT_AUTHORITY, MUNICIPAL_CORPORATION, PANCHAYAT_PATTA, SOCIETY, HOUSING_BOARD, RIICO"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/asset-properties/:assetPropertyId/technicals",
+   "handler": "los/loan-application/asset-properties/technicals/technicals.controller.ts:29",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "technicalDoneById should not be empty",
+    "technicalDoneById must be a string",
+    "technicalDoneDate should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/asset-properties/:assetPropertyId/technicals/:technicalId",
+   "handler": "los/loan-application/asset-properties/technicals/technicals.controller.ts:65",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "technicalDoneById should not be empty",
+    "technicalDoneById must be a string",
+    "technicalDoneDate should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/asset-properties/:assetPropertyId/valuations",
+   "handler": "los/loan-application/asset-properties/valuations/valuations.controller.ts:29",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "valuationDoneById should not be empty",
+    "valuationDoneById must be a string",
+    "valuationDoneDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/asset-property/:assetPropertyId/fi-answer",
+   "handler": "los/loan-application/asset-properties/fi-answer/fi-answer.controller.ts:34",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "premisesStandard must be one of the following values: POOR, AVERAGE, GOOD, LUXURY, NOT_APPLICABLE",
+    "travelEase must be one of the following values: EASY, AVERAGE, DIFFICULT",
+    "transportationAvailability must be one of the following values: HIGH_AVAILABILITY, AVERAGE_AVAILABILITY, LIMITED_AVAILABILITY, NO_AVAILABILITY, ONLY_PERSONAL_VEHICLE"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/asset-property/:assetPropertyId/fi-answer/:fiAnswerId",
+   "handler": "los/loan-application/asset-properties/fi-answer/fi-answer.controller.ts:64",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "premisesStandard must be one of the following values: POOR, AVERAGE, GOOD, LUXURY, NOT_APPLICABLE",
+    "travelEase must be one of the following values: EASY, AVERAGE, DIFFICULT",
+    "transportationAvailability must be one of the following values: HIGH_AVAILABILITY, AVERAGE_AVAILABILITY, LIMITED_AVAILABILITY, NO_AVAILABILITY, ONLY_PERSONAL_VEHICLE"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/asset-properties/:assetPropertyId/documents/:systemDocumentId",
+   "handler": "los/loan-application/asset-properties/documents/documents.controller.ts:22",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "documents must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/generate-loan-number",
+   "handler": "los/loan-application/generate-loan-number/generate-loan-number.controller.ts:26",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanDate must be a valid ISO 8601 date string",
+    "Date must be before or equal to today"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/spdc",
+   "handler": "los/loan-application/spdc/spdc.controller.ts:25",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "customerId must be a string",
+    "bankDetailId must be a string",
+    "chequeStartFrom must match /^\\d+$/ regular expression"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/mortgages/:assetPropertyId",
+   "handler": "los/loan-application/mortgages/mortgages.controller.ts:21",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "mortgageDoneById must be a string",
+    "mortgageDoneDate must be a valid ISO 8601 date string",
+    "mortgageType must be one of the following values: EQUITABLE, REGISTERED"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/deviations/manual-deviations",
+   "handler": "los/loan-application/deviations/manual-deviations/manual-deviations.controller.ts:33",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "cause should not be empty",
+    "cause must be a string",
+    "combinedProcessId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/deviations/manual-deviations/:manualDeviationId/assign",
+   "handler": "los/loan-application/deviations/manual-deviations/manual-deviations.controller.ts:47",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "assigneeId must be a valid ID",
+    "remark should not be empty",
+    "remark must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/deviations/manual-deviations/:manualDeviationId/update-status",
+   "handler": "los/loan-application/deviations/manual-deviations/manual-deviations.controller.ts:90",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: PENDING, ASSIGNED, APPROVED, REJECTED, ESCALATED",
+    "remark should not be empty",
+    "remark must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/deviations/policy-deviations/assign",
+   "handler": "los/loan-application/deviations/policy-deviations/policy-deviations.controller.ts:35",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanProductProcessPolicyId must be a valid ID",
+    "assigneeId must be a valid ID",
+    "remark should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/deviations/policy-deviations/:feeDeviationId/update-status",
+   "handler": "los/loan-application/deviations/policy-deviations/policy-deviations.controller.ts:44",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: PENDING, ASSIGNED, APPROVED, REJECTED, ESCALATED",
+    "remark should not be empty",
+    "remark must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/deviations/asset-vehicle-document-deviations/assign",
+   "handler": "los/loan-application/deviations/asset-vehicle-document-deviations/asset-vehicle-document-deviations.controller.ts:35",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "assetVehicleId must be a valid ID",
+    "systemDocumentId must be a valid ID",
+    "assigneeId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/deviations/asset-vehicle-document-deviations/:customerDocumentDeviationId/update-status",
+   "handler": "los/loan-application/deviations/asset-vehicle-document-deviations/asset-vehicle-document-deviations.controller.ts:48",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: PENDING, ASSIGNED, APPROVED, REJECTED, ESCALATED",
+    "remark should not be empty",
+    "remark must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/deviations/fee-deviations/assign",
+   "handler": "los/loan-application/deviations/fee-deviations/fee-deviations.controller.ts:38",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "targetLoanApplicationId must be a valid ID",
+    "chargesHeadId should not be empty",
+    "chargesHeadId must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/deviations/fee-deviations/:feeDeviationId/update-status",
+   "handler": "los/loan-application/deviations/fee-deviations/fee-deviations.controller.ts:47",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: PENDING, ASSIGNED, APPROVED, REJECTED, ESCALATED",
+    "waiver must not be less than 1",
+    "waiver must be a number conforming to the specified constraints"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/deviations/customer-document-deviations/assign",
+   "handler": "los/loan-application/deviations/customer-document-deviations/customer-document-deviations.controller.ts:35",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "customerId must be a valid ID",
+    "systemDocumentId must be a valid ID",
+    "assigneeId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/deviations/customer-document-deviations/:customerDocumentDeviationId/update-status",
+   "handler": "los/loan-application/deviations/customer-document-deviations/customer-document-deviations.controller.ts:48",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: PENDING, ASSIGNED, APPROVED, REJECTED, ESCALATED",
+    "remark should not be empty",
+    "remark must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/deviations/loan-document-deviations/assign",
+   "handler": "los/loan-application/deviations/loan-document-deviations/loan-document-deviations.controller.ts:35",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "systemDocumentId must be a valid ID",
+    "assigneeId must be a valid ID",
+    "remark should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/deviations/loan-document-deviations/:loanDocumentDeviationId/update-status",
+   "handler": "los/loan-application/deviations/loan-document-deviations/loan-document-deviations.controller.ts:48",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: PENDING, ASSIGNED, APPROVED, REJECTED, ESCALATED",
+    "remark should not be empty",
+    "remark must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/deviations/income-document-deviations/assign",
+   "handler": "los/loan-application/deviations/income-document-deviations/income-document-deviations.controller.ts:35",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanApplicationCustomerProfileAnswerMasterId should not be empty",
+    "loanApplicationCustomerProfileAnswerMasterId must be a string",
+    "systemDocumentId should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/deviations/income-document-deviations/:incomeDocumentDeviationId/update-status",
+   "handler": "los/loan-application/deviations/income-document-deviations/income-document-deviations.controller.ts:48",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: PENDING, ASSIGNED, APPROVED, REJECTED, ESCALATED",
+    "remark should not be empty",
+    "remark must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/deviations/asset-property-document-deviations/assign",
+   "handler": "los/loan-application/deviations/asset-property-document-deviations/asset-property-document-deviations.controller.ts:35",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "assetPropertyId should not be empty",
+    "assetPropertyId must be a string",
+    "systemDocumentId should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/deviations/asset-property-document-deviations/:customerDocumentDeviationId/update-status",
+   "handler": "los/loan-application/deviations/asset-property-document-deviations/asset-property-document-deviations.controller.ts:48",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "status must be one of the following values: PENDING, ASSIGNED, APPROVED, REJECTED, ESCALATED",
+    "remark should not be empty",
+    "remark must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/file-check-answer",
+   "handler": "los/loan-application/file-check-answer/file-check-answer.controller.ts:26",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "answers must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/file-check-answer/:fileCheckAnswerId",
+   "handler": "los/loan-application/file-check-answer/file-check-answer.controller.ts:40",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "answers must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/foir",
+   "handler": "los/loan-application/foir/foir.controller.ts:27",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "incomes must be an array",
+    "expenses must be an array",
+    "obligations must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/vehicle-release",
+   "handler": "los/loan-application/vehicle-release/vehicle-release.controller.ts:23",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "assetVehicleId must be a valid ID",
+    "eventDate must be a valid ISO 8601 date string",
+    "subTypeId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/documents/:systemDocumentId",
+   "handler": "los/loan-application/documents/document.controller.ts:27",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "documents must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/customer",
+   "handler": "los/loan-application/customer/customer.controller.ts:26",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "customerId should not be empty",
+    "customerId must be a string",
+    "customerType must be one of the following values: BORROWER, CO_BORROWER, GUARANTOR"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/obligation",
+   "handler": "los/loan-application/customer/obligation/obligation.controller.ts:31",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "processPageId must be a string",
+    "obligations should not be empty",
+    "obligations must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/family-member",
+   "handler": "los/loan-application/customer/customer-family-member/family-member.controller.ts:23",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "numberOfEarners must not be less than 0",
+    "numberOfEarners must be an integer number",
+    "numberOfNonEarners must not be less than 0"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/expense",
+   "handler": "los/loan-application/customer/expense/expense.controller.ts:31",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "processPageId should not be empty",
+    "processPageId must be a string",
+    "expenses should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/pd-answer",
+   "handler": "los/loan-application/customer/pd-answer/pd-answer.controller.ts:24",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "answers must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/pd-answer/:loanApplicationCustomerPdAnswerMasterId",
+   "handler": "los/loan-application/customer/pd-answer/pd-answer.controller.ts:47",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "answers must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/loan-application/:loanApplicationId/legals",
+   "handler": "los/loan-application/customer/legals/legals.controller.ts:29",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "customerId must be a valid ID",
+    "caseType must be one of the following values: CIVIL, CRIMINAL, FAMILY, TRIBUNAL",
+    "courtId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/loan-application/:loanApplicationId/legals/:legalId/trail",
+   "handler": "los/loan-application/customer/legals/legals.controller.ts:38",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "legalStageId must be a valid ID",
+    "legalSubStageId must be a valid ID",
+    "nextDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/loan-application/:loanApplicationId/legals/:legalId/trail",
+   "handler": "los/loan-application/customer/legals/legals.controller.ts:53",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "legalStageId must be a valid ID",
+    "legalSubStageId must be a valid ID",
+    "nextDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/tvr-answer",
+   "handler": "los/loan-application/customer/tvr-answer/tvr-answer.controller.ts:24",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "answers must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/tvr-answer/:loanApplicationCustomerTvrAnswerMasterId",
+   "handler": "los/loan-application/customer/tvr-answer/tvr-answer.controller.ts:47",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "answers must be an array"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/fi-answer",
+   "handler": "los/loan-application/customer/fi-answer/fi-answer.controller.ts:24",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "addressId should not be empty",
+    "addressId must be a string",
+    "addressTypeId should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/fi-answer/:fiAnswerId",
+   "handler": "los/loan-application/customer/fi-answer/fi-answer.controller.ts:47",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "addressId should not be empty",
+    "addressId must be a string",
+    "addressTypeId should not be empty"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/profile-answer",
+   "handler": "los/loan-application/customer/profile-answer/profile-answer.controller.ts:24",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "profileId must be a string",
+    "incomeFrom must be a string",
+    "workTenure must be a number conforming to the specified constraints"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/profile-answer/:fiAnswerId",
+   "handler": "los/loan-application/customer/profile-answer/profile-answer.controller.ts:60",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "profileId must be a string",
+    "incomeFrom must be a string",
+    "workTenure must be a number conforming to the specified constraints"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/loan-application/:loanApplicationId/refactor-legals",
+   "handler": "los/loan-application/customer/refactor-legals/refactor-legals.controller.ts:33",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "customerId must be a valid ID",
+    "caseType must be one of the following values: CIVIL, CRIMINAL, FAMILY, TRIBUNAL",
+    "courtId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/loan-application/:loanApplicationId/refactor-legals/:legalId/trail",
+   "handler": "los/loan-application/customer/refactor-legals/refactor-legals.controller.ts:47",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "legalStageId must be a valid ID",
+    "legalSubStageId must be a valid ID",
+    "nextDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/loan-application/:loanApplicationId/refactor-legals/:legalId/trail",
+   "handler": "los/loan-application/customer/refactor-legals/refactor-legals.controller.ts:62",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "legalStageId must be a valid ID",
+    "legalSubStageId must be a valid ID",
+    "nextDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/customer/:customerId/reference",
+   "handler": "los/loan-application/customer/reference/reference.controller.ts:25",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "relation must be one of the following values: NEIGHBOUR, FRIEND, FATHER, MOTHER, BROTHER, SISTER, GRAND_FATHER, GRAND_MOTHER, SPOUSE, SON, DAUGHTER, FATHER_IN_LAW, MOTHER_IN_LAW, BROTHER_IN_LAW, SISTER_IN_LAW, SON_IN_LAW, DAUGHTER_IN_LAW, OTHER",
+    "relationName should not be empty",
+    "relationName must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/reschedule/financials-preview",
+   "handler": "los/loan-application/reschedule/reschedule.controller.ts:32",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "reschedulingTypeId must be a valid ID",
+    "rescheduleDate must be a valid ISO 8601 date string",
+    "rescheduleDate must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/reschedule",
+   "handler": "los/loan-application/reschedule/reschedule.controller.ts:40",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "employeeId must be a valid ID",
+    "reschedulingTypeId must be a valid ID",
+    "rescheduleDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/pdd",
+   "handler": "los/loan-application/pdd/pdd.controller.ts:33",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanApplicationAssetId must be a valid ID",
+    "documentName should not be empty",
+    "documentName must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/pdd/:pddId/status",
+   "handler": "los/loan-application/pdd/pdd.controller.ts:42",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "loanApplicationAssetId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/los/loan-application/:loanApplicationId/insurances",
+   "handler": "los/loan-application/insurances/insurances.controller.ts:24",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "insuranceType must be one of the following values: ASSET, CUSTOMER",
+    "customerOrAssetId must be a valid ID",
+    "insuranceCompanyId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "PUT",
+   "path": "/los/loan-application/:loanApplicationId/insurances/:loanApplicationInsuranceId",
+   "handler": "los/loan-application/insurances/insurances.controller.ts:38",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "insuranceType must be one of the following values: ASSET, CUSTOMER",
+    "customerOrAssetId must be a valid ID",
+    "insuranceCompanyId must be a valid ID"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/workflow",
+   "handler": "workflow/workflow.controller.ts:14",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "name must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/external/finnaux/aadhaar/generate-otp",
+   "handler": "external/finnaux/finnaux.controller.ts:37",
+   "guardInCode": true,
+   "status": 400,
+   "message": [
+    "aadhaarNumber must match /^\\d{12}$/ regular expression",
+    "aadhaarNumber must be a string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/reports/builder/designation-reports/:id/run",
+   "handler": "reports/report-builder/report-builder.controller.ts:58",
+   "guardInCode": true,
+   "status": 400,
+   "message": [
+    "toDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/reports/builder/templates/:id/run",
+   "handler": "reports/report-builder/report-builder.controller.ts:72",
+   "guardInCode": true,
+   "status": 400,
+   "message": [
+    "toDate must be a valid ISO 8601 date string"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  },
+  {
+   "method": "POST",
+   "path": "/reports/builder/templates",
+   "handler": "reports/report-builder/report-builder.controller.ts:92",
+   "guardInCode": true,
+   "status": 403,
+   "message": "You do not have sufficient rights",
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  }
+ ]
+}

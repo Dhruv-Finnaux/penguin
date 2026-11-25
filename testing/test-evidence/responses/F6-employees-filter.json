@@ -1,0 +1,35 @@
+{
+  "request": "GET /api/v1/hrms/employees/filter",
+  "tier": "T0",
+  "account": "eve (view-only)",
+  "capturedAt": "2026-11-25",
+  "eve": {
+    "status": 200,
+    "bytes": 1774,
+    "rows": 29
+  },
+  "adam": {
+    "status": 200,
+    "bytes": 1774,
+    "rows": 29
+  },
+  "note": "GET /hrms/employees is 403 for Eve, but /hrms/employees/filter returns employee data with no guard.",
+  "redactedSample": {
+    "data": {
+      "rows": [
+        {
+          "id": "01M0CJEFATFD8S5XZXCNAT5AM4",
+          "name": "<redacted 17 chars>"
+        },
+        {
+          "id": "01M09VGQF3CBQD9QWZRJS0BBJ8",
+          "name": "<redacted 14 chars>"
+        },
+        "\u2026 27 more"
+      ]
+    },
+    "__api_metadata": {
+      "executionTimeMs": "<num>"
+    }
+  }
+}

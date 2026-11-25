@@ -1,0 +1,2972 @@
+[
+ {
+  "path": "/api/v1/account/account-group",
+  "eve": [
+   200,
+   18245
+  ],
+  "adam": [
+   200,
+   18245
+  ]
+ },
+ {
+  "path": "/api/v1/account/account-group/branch-zone-wise-profit-and-loss",
+  "eve": [
+   400,
+   328
+  ],
+  "adam": [
+   400,
+   328
+  ]
+ },
+ {
+  "path": "/api/v1/account/account-group/multi-branch-trial-balance",
+  "eve": [
+   400,
+   322
+  ],
+  "adam": [
+   400,
+   322
+  ]
+ },
+ {
+  "path": "/api/v1/account/account-group/profit-and-loss",
+  "eve": [
+   400,
+   310
+  ],
+  "adam": [
+   400,
+   311
+  ]
+ },
+ {
+  "path": "/api/v1/account/account-group/schedule-vi-balance-sheet",
+  "eve": [
+   400,
+   321
+  ],
+  "adam": [
+   400,
+   321
+  ]
+ },
+ {
+  "path": "/api/v1/account/account-group/schedule-vi-balance-sheet/html",
+  "eve": [
+   400,
+   326
+  ],
+  "adam": [
+   400,
+   326
+  ]
+ },
+ {
+  "path": "/api/v1/account/account-group/trading-account",
+  "eve": [
+   400,
+   312
+  ],
+  "adam": [
+   400,
+   311
+  ]
+ },
+ {
+  "path": "/api/v1/account/account-group/trial-balance",
+  "eve": [
+   400,
+   309
+  ],
+  "adam": [
+   400,
+   309
+  ]
+ },
+ {
+  "path": "/api/v1/account/account-head",
+  "eve": [
+   200,
+   75680
+  ],
+  "adam": [
+   200,
+   75680
+  ]
+ },
+ {
+  "path": "/api/v1/accounts/borrowings",
+  "eve": [
+   200,
+   304
+  ],
+  "adam": [
+   200,
+   304
+  ]
+ },
+ {
+  "path": "/api/v1/accounts/statement",
+  "eve": [
+   400,
+   267
+  ],
+  "adam": [
+   400,
+   267
+  ]
+ },
+ {
+  "path": "/api/v1/accounts/tax-slabs",
+  "eve": [
+   200,
+   5790
+  ],
+  "adam": [
+   200,
+   5790
+  ]
+ },
+ {
+  "path": "/api/v1/accounts/voucher-decisions",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   2249
+  ]
+ },
+ {
+  "path": "/api/v1/accounts/vouchers",
+  "eve": [
+   200,
+   4099044
+  ],
+  "adam": [
+   200,
+   4099044
+  ]
+ },
+ {
+  "path": "/api/v1/accounts/vouchers/types",
+  "eve": [
+   200,
+   7630
+  ],
+  "adam": [
+   200,
+   7631
+  ]
+ },
+ {
+  "path": "/api/v1/app-logs",
+  "eve": [
+   200,
+   1
+  ],
+  "adam": [
+   200,
+   1
+  ]
+ },
+ {
+  "path": "/api/v1/audit-logs",
+  "eve": [
+   403,
+   164
+  ],
+  "adam": [
+   200,
+   15988
+  ]
+ },
+ {
+  "path": "/api/v1/auth/two-factor/methods",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/chat/conversations/mine",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/chat/conversations/recent-sidebar",
+  "eve": [
+   200,
+   144
+  ],
+  "adam": [
+   200,
+   144
+  ]
+ },
+ {
+  "path": "/api/v1/chat/employees",
+  "eve": [
+   200,
+   1770
+  ],
+  "adam": [
+   200,
+   1769
+  ]
+ },
+ {
+  "path": "/api/v1/chat/notifications/inbox",
+  "eve": [
+   200,
+   93
+  ],
+  "adam": [
+   200,
+   93
+  ]
+ },
+ {
+  "path": "/api/v1/ckyc/bulk-batches",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/ckyc/operations",
+  "eve": [
+   200,
+   80
+  ],
+  "adam": [
+   200,
+   80
+  ]
+ },
+ {
+  "path": "/api/v1/collection-efficiency",
+  "eve": [
+   400,
+   276
+  ],
+  "adam": [
+   400,
+   276
+  ]
+ },
+ {
+  "path": "/api/v1/common/get-session",
+  "eve": [
+   200,
+   211
+  ],
+  "adam": [
+   200,
+   239
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/asset/manufacturer",
+  "eve": [
+   200,
+   968
+  ],
+  "adam": [
+   200,
+   968
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/asset/product",
+  "eve": [
+   200,
+   1075
+  ],
+  "adam": [
+   200,
+   1076
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/asset/variant",
+  "eve": [
+   200,
+   1121
+  ],
+  "adam": [
+   200,
+   1121
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/branch",
+  "eve": [
+   200,
+   655009
+  ],
+  "adam": [
+   200,
+   655009
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/branch-area",
+  "eve": [
+   200,
+   1491
+  ],
+  "adam": [
+   200,
+   1491
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/co-lending",
+  "eve": [
+   200,
+   404
+  ],
+  "adam": [
+   200,
+   404
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/co-lending/charges-heads",
+  "eve": [
+   200,
+   3876
+  ],
+  "adam": [
+   200,
+   3876
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/co-lending/portfolio/lenders-loans",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/co-lending/portfolio/unallocated-lms-loans",
+  "eve": [
+   200,
+   12947
+  ],
+  "adam": [
+   200,
+   12947
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/company",
+  "eve": [
+   200,
+   298
+  ],
+  "adam": [
+   200,
+   298
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/company-addresses",
+  "eve": [
+   200,
+   496
+  ],
+  "adam": [
+   200,
+   496
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/company-financial-details",
+  "eve": [
+   200,
+   314
+  ],
+  "adam": [
+   200,
+   314
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/company-security-settings",
+  "eve": [
+   200,
+   319
+  ],
+  "adam": [
+   200,
+   320
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/company-system-settings",
+  "eve": [
+   200,
+   219
+  ],
+  "adam": [
+   200,
+   219
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/company/branding",
+  "eve": [
+   200,
+   119
+  ],
+  "adam": [
+   200,
+   119
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/company/logo",
+  "eve": [
+   404,
+   168
+  ],
+  "adam": [
+   404,
+   168
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/crm-configuration/employee-assignment",
+  "eve": [
+   403,
+   205
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/crm-configuration/ticket-status",
+  "eve": [
+   200,
+   1041
+  ],
+  "adam": [
+   200,
+   1041
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/crm-configuration/ticket-type",
+  "eve": [
+   200,
+   362
+  ],
+  "adam": [
+   200,
+   362
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/crm-configuration/workflow",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/dealer",
+  "eve": [
+   200,
+   2893
+  ],
+  "adam": [
+   200,
+   2893
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/dealer/customer",
+  "eve": [
+   200,
+   61
+  ],
+  "adam": [
+   200,
+   61
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/external-apis",
+  "eve": [
+   200,
+   12685
+  ],
+  "adam": [
+   200,
+   12685
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/asset/manufacturers/template",
+  "eve": [
+   200,
+   8444
+  ],
+  "adam": [
+   200,
+   8444
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/asset/products/template",
+  "eve": [
+   200,
+   8641
+  ],
+  "adam": [
+   200,
+   8641
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/asset/variants/template",
+  "eve": [
+   200,
+   8249
+  ],
+  "adam": [
+   200,
+   8249
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/attendance/template",
+  "eve": [
+   200,
+   19683
+  ],
+  "adam": [
+   200,
+   19683
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/branches/template",
+  "eve": [
+   200,
+   9471
+  ],
+  "adam": [
+   200,
+   9471
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/customers/template",
+  "eve": [
+   200,
+   9902
+  ],
+  "adam": [
+   200,
+   9902
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/dealers/template",
+  "eve": [
+   200,
+   18825
+  ],
+  "adam": [
+   200,
+   18825
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/employees/template",
+  "eve": [
+   200,
+   18433
+  ],
+  "adam": [
+   200,
+   18433
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/insurance-companies/template",
+  "eve": [
+   200,
+   8268
+  ],
+  "adam": [
+   200,
+   8268
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/loan/amortisation/template",
+  "eve": [
+   200,
+   7908
+  ],
+  "adam": [
+   200,
+   7908
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/loan/asset-properties/template",
+  "eve": [
+   200,
+   52025
+  ],
+  "adam": [
+   200,
+   52025
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/loan/asset-vehicles/template",
+  "eve": [
+   200,
+   10257
+  ],
+  "adam": [
+   200,
+   10257
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/loan/customers/template",
+  "eve": [
+   200,
+   8710
+  ],
+  "adam": [
+   200,
+   8710
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/loan/headers/template",
+  "eve": [
+   200,
+   18709
+  ],
+  "adam": [
+   200,
+   18709
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/parking-yards/template",
+  "eve": [
+   200,
+   7768
+  ],
+  "adam": [
+   200,
+   7768
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/salary/template",
+  "eve": [
+   200,
+   9809
+  ],
+  "adam": [
+   200,
+   9809
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/vendors/template",
+  "eve": [
+   200,
+   18687
+  ],
+  "adam": [
+   200,
+   18687
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/import-data/vouchers/general/template",
+  "eve": [
+   200,
+   21460
+  ],
+  "adam": [
+   200,
+   21460
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/insurance-companies",
+  "eve": [
+   200,
+   392
+  ],
+  "adam": [
+   200,
+   392
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/legal/acts",
+  "eve": [
+   200,
+   128
+  ],
+  "adam": [
+   200,
+   128
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/legal/acts/sections",
+  "eve": [
+   200,
+   234
+  ],
+  "adam": [
+   200,
+   234
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/legal/acts/sections/sub-sections",
+  "eve": [
+   200,
+   248
+  ],
+  "adam": [
+   200,
+   248
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/legal/courts",
+  "eve": [
+   200,
+   448
+  ],
+  "adam": [
+   200,
+   448
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/legal/stages",
+  "eve": [
+   400,
+   228
+  ],
+  "adam": [
+   400,
+   228
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/legal/sub-stages",
+  "eve": [
+   400,
+   183
+  ],
+  "adam": [
+   400,
+   184
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/loan-product",
+  "eve": [
+   200,
+   3172
+  ],
+  "adam": [
+   200,
+   3172
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/location",
+  "eve": [
+   200,
+   2934
+  ],
+  "adam": [
+   200,
+   2934
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/mclr",
+  "eve": [
+   200,
+   741
+  ],
+  "adam": [
+   200,
+   741
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/mclr/active",
+  "eve": [
+   200,
+   249
+  ],
+  "adam": [
+   200,
+   249
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/mclr/application-status",
+  "eve": [
+   200,
+   249
+  ],
+  "adam": [
+   200,
+   249
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/menu-management/menus",
+  "eve": [
+   200,
+   18906
+  ],
+  "adam": [
+   200,
+   18906
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/menu-management/modules",
+  "eve": [
+   200,
+   2479
+  ],
+  "adam": [
+   200,
+   2479
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/menu-management/pages",
+  "eve": [
+   200,
+   34476
+  ],
+  "adam": [
+   200,
+   34476
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/message-configuration/sms-configuration",
+  "eve": [
+   200,
+   9139
+  ],
+  "adam": [
+   200,
+   9139
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/parking-yards",
+  "eve": [
+   200,
+   1229
+  ],
+  "adam": [
+   200,
+   1229
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/question-configuration/language",
+  "eve": [
+   200,
+   6470
+  ],
+  "adam": [
+   200,
+   6470
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/question-configuration/question",
+  "eve": [
+   200,
+   8377
+  ],
+  "adam": [
+   200,
+   8377
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/question-configuration/question/asset-property-fi",
+  "eve": [
+   200,
+   11672
+  ],
+  "adam": [
+   200,
+   11672
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/question-configuration/question/fi",
+  "eve": [
+   200,
+   16303
+  ],
+  "adam": [
+   200,
+   16303
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/question-configuration/question/file-check",
+  "eve": [
+   200,
+   3929
+  ],
+  "adam": [
+   200,
+   3929
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/question-configuration/question/pd",
+  "eve": [
+   200,
+   9080
+  ],
+  "adam": [
+   200,
+   9080
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/question-configuration/question/profile",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/question-configuration/question/tvr",
+  "eve": [
+   200,
+   19469
+  ],
+  "adam": [
+   200,
+   19469
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/reports/npa-types",
+  "eve": [
+   200,
+   556
+  ],
+  "adam": [
+   200,
+   556
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/reports/slabs",
+  "eve": [
+   200,
+   6299
+  ],
+  "adam": [
+   200,
+   6299
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/templates",
+  "eve": [
+   200,
+   1765
+  ],
+  "adam": [
+   200,
+   1765
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/templates/variables",
+  "eve": [
+   200,
+   36632
+  ],
+  "adam": [
+   200,
+   36633
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/vendor",
+  "eve": [
+   200,
+   372066
+  ],
+  "adam": [
+   200,
+   372066
+  ]
+ },
+ {
+  "path": "/api/v1/configuration/vendor/customer",
+  "eve": [
+   200,
+   61
+  ],
+  "adam": [
+   200,
+   61
+  ]
+ },
+ {
+  "path": "/api/v1/crm/collection-follow-ups",
+  "eve": [
+   500,
+   167
+  ],
+  "adam": [
+   500,
+   167
+  ]
+ },
+ {
+  "path": "/api/v1/crm/entries",
+  "eve": [
+   500,
+   153
+  ],
+  "adam": [
+   500,
+   153
+  ]
+ },
+ {
+  "path": "/api/v1/crm/sub-types",
+  "eve": [
+   500,
+   155
+  ],
+  "adam": [
+   500,
+   155
+  ]
+ },
+ {
+  "path": "/api/v1/crm/tickets",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/crm/tickets/dashboard",
+  "eve": [
+   403,
+   175
+  ],
+  "adam": [
+   403,
+   175
+  ]
+ },
+ {
+  "path": "/api/v1/dnbs02",
+  "eve": [
+   400,
+   387
+  ],
+  "adam": [
+   400,
+   387
+  ]
+ },
+ {
+  "path": "/api/v1/dnbs02/annex2-shareholding",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/dnbs02/annex3-directors",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/dnbs02/group-mappings",
+  "eve": [
+   200,
+   47167
+  ],
+  "adam": [
+   200,
+   47167
+  ]
+ },
+ {
+  "path": "/api/v1/dnbs02/part8-product-mappings",
+  "eve": [
+   200,
+   6471
+  ],
+  "adam": [
+   200,
+   6471
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/account-heads",
+  "eve": [
+   200,
+   633
+  ],
+  "adam": [
+   200,
+   633
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/area-details",
+  "eve": [
+   500,
+   163
+  ],
+  "adam": [
+   500,
+   163
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/asset/manufacturer/category",
+  "eve": [
+   200,
+   182
+  ],
+  "adam": [
+   200,
+   182
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/asset/manufacturer/sub-category",
+  "eve": [
+   500,
+   182
+  ],
+  "adam": [
+   500,
+   182
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/asset/product",
+  "eve": [
+   500,
+   164
+  ],
+  "adam": [
+   500,
+   164
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/asset/product/sub-category",
+  "eve": [
+   500,
+   177
+  ],
+  "adam": [
+   500,
+   177
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/asset/variant/product",
+  "eve": [
+   400,
+   194
+  ],
+  "adam": [
+   400,
+   194
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/branch",
+  "eve": [
+   200,
+   1040
+  ],
+  "adam": [
+   200,
+   1040
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/business-category",
+  "eve": [
+   200,
+   1632
+  ],
+  "adam": [
+   200,
+   1632
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/calculate-metrics",
+  "eve": [
+   200,
+   792
+  ],
+  "adam": [
+   200,
+   792
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/common",
+  "eve": [
+   500,
+   157
+  ],
+  "adam": [
+   500,
+   157
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/configuration/dealer",
+  "eve": [
+   200,
+   50253
+  ],
+  "adam": [
+   200,
+   50253
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/configuration/loan-product/charges-heads",
+  "eve": [
+   200,
+   6321
+  ],
+  "adam": [
+   200,
+   6321
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/configuration/loan-product/deviations",
+  "eve": [
+   200,
+   89559
+  ],
+  "adam": [
+   200,
+   89559
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/configuration/loan-product/document-policy",
+  "eve": [
+   200,
+   17323
+  ],
+  "adam": [
+   200,
+   17323
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/configuration/vendor",
+  "eve": [
+   200,
+   50017
+  ],
+  "adam": [
+   200,
+   50017
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/departments",
+  "eve": [
+   200,
+   698
+  ],
+  "adam": [
+   200,
+   698
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/designation",
+  "eve": [
+   200,
+   382
+  ],
+  "adam": [
+   200,
+   383
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/designations",
+  "eve": [
+   200,
+   4870
+  ],
+  "adam": [
+   200,
+   4870
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/employee",
+  "eve": [
+   200,
+   8578
+  ],
+  "adam": [
+   200,
+   8578
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/employee-branch",
+  "eve": [
+   500,
+   166
+  ],
+  "adam": [
+   500,
+   166
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/employee-managers",
+  "eve": [
+   500,
+   168
+  ],
+  "adam": [
+   500,
+   167
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/employee-product",
+  "eve": [
+   500,
+   167
+  ],
+  "adam": [
+   500,
+   167
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/enum",
+  "eve": [
+   500,
+   155
+  ],
+  "adam": [
+   500,
+   154
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/firm-owner-designations",
+  "eve": [
+   500,
+   174
+  ],
+  "adam": [
+   500,
+   173
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/individual-customer",
+  "eve": [
+   200,
+   2884
+  ],
+  "adam": [
+   200,
+   2884
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/lms/customer/address",
+  "eve": [
+   400,
+   233
+  ],
+  "adam": [
+   400,
+   234
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/lms/customer/bank",
+  "eve": [
+   200,
+   488
+  ],
+  "adam": [
+   200,
+   488
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/lms/customer/communication",
+  "eve": [
+   200,
+   260
+  ],
+  "adam": [
+   200,
+   260
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/lms/customer/individual/basic-detail",
+  "eve": [
+   200,
+   1335
+  ],
+  "adam": [
+   200,
+   1336
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/lms/customer/kyc",
+  "eve": [
+   200,
+   863
+  ],
+  "adam": [
+   200,
+   863
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/lms/customer/relation",
+  "eve": [
+   500,
+   171
+  ],
+  "adam": [
+   500,
+   172
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/lms/customer/relation-code",
+  "eve": [
+   500,
+   177
+  ],
+  "adam": [
+   500,
+   177
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/loan-product",
+  "eve": [
+   200,
+   10641
+  ],
+  "adam": [
+   200,
+   10641
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/los-processes",
+  "eve": [
+   200,
+   1368
+  ],
+  "adam": [
+   200,
+   1369
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/menu-lists",
+  "eve": [
+   400,
+   175
+  ],
+  "adam": [
+   400,
+   176
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/menu-modules",
+  "eve": [
+   200,
+   919
+  ],
+  "adam": [
+   200,
+   918
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/modules",
+  "eve": [
+   200,
+   16368
+  ],
+  "adam": [
+   200,
+   16368
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/nach-failed-reasons",
+  "eve": [
+   200,
+   915
+  ],
+  "adam": [
+   200,
+   914
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/nach-frequencies",
+  "eve": [
+   200,
+   720
+  ],
+  "adam": [
+   200,
+   720
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/nature-of-business",
+  "eve": [
+   500,
+   169
+  ],
+  "adam": [
+   500,
+   168
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/non-individual-customer",
+  "eve": [
+   200,
+   3932
+  ],
+  "adam": [
+   200,
+   3932
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/profile-category-tree",
+  "eve": [
+   200,
+   15551
+  ],
+  "adam": [
+   200,
+   15551
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/rule",
+  "eve": [
+   200,
+   2832
+  ],
+  "adam": [
+   200,
+   2832
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/ruleset",
+  "eve": [
+   200,
+   4942
+  ],
+  "adam": [
+   200,
+   4943
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/session-employee-branch",
+  "eve": [
+   200,
+   115
+  ],
+  "adam": [
+   200,
+   518
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/session-employee-product",
+  "eve": [
+   200,
+   247
+  ],
+  "adam": [
+   200,
+   703
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/source-type",
+  "eve": [
+   200,
+   1107
+  ],
+  "adam": [
+   200,
+   1107
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/source-value",
+  "eve": [
+   400,
+   328
+  ],
+  "adam": [
+   400,
+   328
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/taxes",
+  "eve": [
+   200,
+   886
+  ],
+  "adam": [
+   200,
+   886
+  ]
+ },
+ {
+  "path": "/api/v1/dropdown/workflow",
+  "eve": [
+   200,
+   938
+  ],
+  "adam": [
+   200,
+   937
+  ]
+ },
+ {
+  "path": "/api/v1/financial-years",
+  "eve": [
+   200,
+   1862
+  ],
+  "adam": [
+   200,
+   1861
+  ]
+ },
+ {
+  "path": "/api/v1/financials",
+  "eve": [
+   200,
+   6724981
+  ],
+  "adam": [
+   200,
+   6724981
+  ]
+ },
+ {
+  "path": "/api/v1/healthz",
+  "eve": [
+   200,
+   55
+  ],
+  "adam": [
+   200,
+   55
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/attendance/employees",
+  "eve": [
+   200,
+   13261
+  ],
+  "adam": [
+   200,
+   13261
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/attendance/my-shift",
+  "eve": [
+   200,
+   61
+  ],
+  "adam": [
+   200,
+   61
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/attendance/report/monthly",
+  "eve": [
+   400,
+   203
+  ],
+  "adam": [
+   400,
+   203
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/attendance/shift-categories",
+  "eve": [
+   200,
+   1246
+  ],
+  "adam": [
+   200,
+   1246
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/dashboard/activity",
+  "eve": [
+   200,
+   1996
+  ],
+  "adam": [
+   200,
+   1996
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/dashboard/anniversaries",
+  "eve": [
+   200,
+   298
+  ],
+  "adam": [
+   200,
+   298
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/dashboard/headcount",
+  "eve": [
+   200,
+   428
+  ],
+  "adam": [
+   200,
+   428
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/dashboard/leave-distribution",
+  "eve": [
+   200,
+   93
+  ],
+  "adam": [
+   200,
+   93
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/dashboard/stats",
+  "eve": [
+   200,
+   127
+  ],
+  "adam": [
+   200,
+   127
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/dashboard/trends",
+  "eve": [
+   200,
+   703
+  ],
+  "adam": [
+   200,
+   703
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/designation",
+  "eve": [
+   403,
+   170
+  ],
+  "adam": [
+   200,
+   3951
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/employee-tours",
+  "eve": [
+   200,
+   281
+  ],
+  "adam": [
+   200,
+   281
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/employees",
+  "eve": [
+   403,
+   168
+  ],
+  "adam": [
+   200,
+   50309
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/employees/filter",
+  "eve": [
+   200,
+   1774
+  ],
+  "adam": [
+   200,
+   1774
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/holiday-management",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/holiday-management/week-off",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   59
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/all-balances",
+  "eve": [
+   200,
+   14929
+  ],
+  "adam": [
+   200,
+   14929
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/cancellations",
+  "eve": [
+   200,
+   399
+  ],
+  "adam": [
+   200,
+   399
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/designation-rules",
+  "eve": [
+   200,
+   8541
+  ],
+  "adam": [
+   200,
+   8541
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/designation-rules/me",
+  "eve": [
+   200,
+   121
+  ],
+  "adam": [
+   200,
+   121
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/extra-work-policy",
+  "eve": [
+   200,
+   291
+  ],
+  "adam": [
+   200,
+   291
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/extra-work-requests",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/months",
+  "eve": [
+   200,
+   496
+  ],
+  "adam": [
+   200,
+   496
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/requests",
+  "eve": [
+   200,
+   956
+  ],
+  "adam": [
+   200,
+   956
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/resignations",
+  "eve": [
+   500,
+   176
+  ],
+  "adam": [
+   500,
+   176
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/reversal-policy",
+  "eve": [
+   200,
+   193
+  ],
+  "adam": [
+   200,
+   193
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/leave-management/types",
+  "eve": [
+   200,
+   1343
+  ],
+  "adam": [
+   200,
+   1343
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/payroll-management/assignments",
+  "eve": [
+   200,
+   6006
+  ],
+  "adam": [
+   200,
+   6006
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/payroll-management/components",
+  "eve": [
+   200,
+   3590
+  ],
+  "adam": [
+   200,
+   3590
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/payroll-management/dashboard-stats",
+  "eve": [
+   200,
+   548
+  ],
+  "adam": [
+   200,
+   548
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/payroll-management/loans",
+  "eve": [
+   200,
+   338
+  ],
+  "adam": [
+   200,
+   338
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/payroll-management/payrolls",
+  "eve": [
+   200,
+   1066
+  ],
+  "adam": [
+   200,
+   1066
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/payroll-management/structures",
+  "eve": [
+   200,
+   2093
+  ],
+  "adam": [
+   200,
+   2093
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/appraisals",
+  "eve": [
+   200,
+   7891
+  ],
+  "adam": [
+   200,
+   7891
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/cycles",
+  "eve": [
+   200,
+   947
+  ],
+  "adam": [
+   200,
+   947
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/dashboard",
+  "eve": [
+   200,
+   1279
+  ],
+  "adam": [
+   200,
+   1279
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/direct-reports",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   150
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/goals",
+  "eve": [
+   200,
+   2005
+  ],
+  "adam": [
+   200,
+   2005
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/incentive-calculations",
+  "eve": [
+   200,
+   560
+  ],
+  "adam": [
+   200,
+   560
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/incentive-rules",
+  "eve": [
+   200,
+   339
+  ],
+  "adam": [
+   200,
+   339
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/incentive-schemes",
+  "eve": [
+   200,
+   347
+  ],
+  "adam": [
+   200,
+   347
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/pip",
+  "eve": [
+   200,
+   1304
+  ],
+  "adam": [
+   200,
+   1304
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/salary-history/employees",
+  "eve": [
+   200,
+   5341
+  ],
+  "adam": [
+   200,
+   5341
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/settings",
+  "eve": [
+   200,
+   311
+  ],
+  "adam": [
+   200,
+   311
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/targets/my",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/performance-management/targets/team",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/recruitment-management/agencies",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/recruitment-management/candidates/deleted",
+  "eve": [
+   200,
+   885
+  ],
+  "adam": [
+   200,
+   885
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/recruitment-management/candidates/hired",
+  "eve": [
+   200,
+   2231
+  ],
+  "adam": [
+   200,
+   2231
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/recruitment-management/jobs",
+  "eve": [
+   200,
+   1802
+  ],
+  "adam": [
+   200,
+   1802
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/recruitment-management/letter-templates",
+  "eve": [
+   200,
+   18400
+  ],
+  "adam": [
+   200,
+   18400
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/recruitment-management/letter-templates/variables",
+  "eve": [
+   200,
+   1453
+  ],
+  "adam": [
+   200,
+   1454
+  ]
+ },
+ {
+  "path": "/api/v1/hrms/recruitment-management/settings",
+  "eve": [
+   200,
+   112
+  ],
+  "adam": [
+   200,
+   112
+  ]
+ },
+ {
+  "path": "/api/v1/lms/_receipts",
+  "eve": [
+   200,
+   61
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/lms/assignment-lists",
+  "eve": [
+   400,
+   275
+  ],
+  "adam": [
+   400,
+   275
+  ]
+ },
+ {
+  "path": "/api/v1/lms/collection",
+  "eve": [
+   200,
+   1039
+  ],
+  "adam": [
+   200,
+   1039
+  ]
+ },
+ {
+  "path": "/api/v1/lms/collection/executives",
+  "eve": [
+   400,
+   216
+  ],
+  "adam": [
+   400,
+   216
+  ]
+ },
+ {
+  "path": "/api/v1/lms/customer/review-bank",
+  "eve": [
+   500,
+   166
+  ],
+  "adam": [
+   500,
+   166
+  ]
+ },
+ {
+  "path": "/api/v1/lms/customer/search-v2",
+  "eve": [
+   200,
+   3892962
+  ],
+  "adam": [
+   200,
+   3892961
+  ]
+ },
+ {
+  "path": "/api/v1/lms/eligible-lists/eligible-for-closure-details",
+  "eve": [
+   200,
+   1472409
+  ],
+  "adam": [
+   200,
+   1472409
+  ]
+ },
+ {
+  "path": "/api/v1/lms/eligible-lists/eligible-for-legal",
+  "eve": [
+   200,
+   62798
+  ],
+  "adam": [
+   200,
+   62798
+  ]
+ },
+ {
+  "path": "/api/v1/lms/eligible-lists/eligible-for-repossess",
+  "eve": [
+   200,
+   41285
+  ],
+  "adam": [
+   200,
+   41285
+  ]
+ },
+ {
+  "path": "/api/v1/lms/legal-authorisations",
+  "eve": [
+   200,
+   61
+  ],
+  "adam": [
+   200,
+   61
+  ]
+ },
+ {
+  "path": "/api/v1/lms/receipt-authorisations",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/lms/receipts/sub-types",
+  "eve": [
+   200,
+   2432
+  ],
+  "adam": [
+   200,
+   2432
+  ]
+ },
+ {
+  "path": "/api/v1/lms/receipts/types",
+  "eve": [
+   200,
+   481
+  ],
+  "adam": [
+   200,
+   481
+  ]
+ },
+ {
+  "path": "/api/v1/lms/refactor-eligible-lists/eligible-for-legal",
+  "eve": [
+   200,
+   62798
+  ],
+  "adam": [
+   200,
+   62798
+  ]
+ },
+ {
+  "path": "/api/v1/lms/refactor-legal-markings",
+  "eve": [
+   200,
+   61
+  ],
+  "adam": [
+   200,
+   61
+  ]
+ },
+ {
+  "path": "/api/v1/lms/refactor-legal-settlement-authorisations",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/lms/refactor-legal-settlement-requests",
+  "eve": [
+   200,
+   61
+  ],
+  "adam": [
+   200,
+   61
+  ]
+ },
+ {
+  "path": "/api/v1/los/deviations",
+  "eve": [
+   200,
+   358
+  ],
+  "adam": [
+   200,
+   358
+  ]
+ },
+ {
+  "path": "/api/v1/los/loan-application",
+  "eve": [
+   200,
+   2062170
+  ],
+  "adam": [
+   200,
+   2062170
+  ]
+ },
+ {
+  "path": "/api/v1/los/loan-application/asset-vehicles/events",
+  "eve": [
+   200,
+   60
+  ],
+  "adam": [
+   200,
+   60
+  ]
+ },
+ {
+  "path": "/api/v1/los/loan-application/dpd-summary",
+  "eve": [
+   200,
+   578851
+  ],
+  "adam": [
+   200,
+   578851
+  ]
+ },
+ {
+  "path": "/api/v1/los/loan-statement",
+  "eve": [
+   400,
+   293
+  ],
+  "adam": [
+   400,
+   294
+  ]
+ },
+ {
+  "path": "/api/v1/los/pre-emi-interest",
+  "eve": [
+   400,
+   296
+  ],
+  "adam": [
+   400,
+   296
+  ]
+ },
+ {
+  "path": "/api/v1/los/swap-loan-application",
+  "eve": [
+   400,
+   283
+  ],
+  "adam": [
+   400,
+   283
+  ]
+ },
+ {
+  "path": "/api/v1/master-report",
+  "eve": [
+   400,
+   268
+  ],
+  "adam": [
+   400,
+   268
+  ]
+ },
+ {
+  "path": "/api/v1/nach-entries",
+  "eve": [
+   200,
+   97395
+  ],
+  "adam": [
+   200,
+   97395
+  ]
+ },
+ {
+  "path": "/api/v1/nach-entries/bouncing-reasons",
+  "eve": [
+   200,
+   3470
+  ],
+  "adam": [
+   200,
+   3470
+  ]
+ },
+ {
+  "path": "/api/v1/nbfc-dashboard/collections",
+  "eve": [
+   200,
+   2812
+  ],
+  "adam": [
+   200,
+   2812
+  ]
+ },
+ {
+  "path": "/api/v1/nbfc-dashboard/executive",
+  "eve": [
+   200,
+   180824
+  ],
+  "adam": [
+   200,
+   180824
+  ]
+ },
+ {
+  "path": "/api/v1/nbfc-dashboard/lms",
+  "eve": [
+   200,
+   1791
+  ],
+  "adam": [
+   200,
+   1791
+  ]
+ },
+ {
+  "path": "/api/v1/nbfc-dashboard/los",
+  "eve": [
+   200,
+   1840
+  ],
+  "adam": [
+   200,
+   1840
+  ]
+ },
+ {
+  "path": "/api/v1/nbfc-dashboard/sales",
+  "eve": [
+   200,
+   62072
+  ],
+  "adam": [
+   200,
+   62071
+  ]
+ },
+ {
+  "path": "/api/v1/notifications/inbox",
+  "eve": [
+   200,
+   93
+  ],
+  "adam": [
+   200,
+   93
+  ]
+ },
+ {
+  "path": "/api/v1/preferences",
+  "eve": [
+   200,
+   283
+  ],
+  "adam": [
+   200,
+   371
+  ]
+ },
+ {
+  "path": "/api/v1/reports/account-statement",
+  "eve": [
+   400,
+   227
+  ],
+  "adam": [
+   400,
+   228
+  ]
+ },
+ {
+  "path": "/api/v1/reports/application-current-status",
+  "eve": [
+   200,
+   85707
+  ],
+  "adam": [
+   200,
+   234933
+  ]
+ },
+ {
+  "path": "/api/v1/reports/bank-reconciliation",
+  "eve": [
+   400,
+   241
+  ],
+  "adam": [
+   400,
+   241
+  ]
+ },
+ {
+  "path": "/api/v1/reports/builder/charges-heads",
+  "eve": [
+   200,
+   3628
+  ],
+  "adam": [
+   200,
+   3628
+  ]
+ },
+ {
+  "path": "/api/v1/reports/builder/designation-reports",
+  "eve": [
+   200,
+   336
+  ],
+  "adam": [
+   200,
+   334
+  ]
+ },
+ {
+  "path": "/api/v1/reports/builder/fields",
+  "eve": [
+   200,
+   9932
+  ],
+  "adam": [
+   200,
+   9932
+  ]
+ },
+ {
+  "path": "/api/v1/reports/builder/templates",
+  "eve": [
+   200,
+   1242
+  ],
+  "adam": [
+   200,
+   1242
+  ]
+ },
+ {
+  "path": "/api/v1/reports/dpd-summary",
+  "eve": [
+   200,
+   3175271
+  ],
+  "adam": [
+   200,
+   3175271
+  ]
+ },
+ {
+  "path": "/api/v1/reports/ucrf-report/commercial-grid",
+  "eve": [
+   400,
+   281
+  ],
+  "adam": [
+   400,
+   280
+  ]
+ },
+ {
+  "path": "/api/v1/reports/ucrf-report/consumer-coded-field-labels",
+  "eve": [
+   200,
+   4658
+  ],
+  "adam": [
+   200,
+   4658
+  ]
+ },
+ {
+  "path": "/api/v1/reports/ucrf-report/consumer-grid",
+  "eve": [
+   400,
+   279
+  ],
+  "adam": [
+   400,
+   279
+  ]
+ },
+ {
+  "path": "/api/v1/rule",
+  "eve": [
+   200,
+   25583
+  ],
+  "adam": [
+   200,
+   25583
+  ]
+ },
+ {
+  "path": "/api/v1/rule-engine/master-tree",
+  "eve": [
+   200,
+   2323
+  ],
+  "adam": [
+   200,
+   2323
+  ]
+ },
+ {
+  "path": "/api/v1/rule-engine/rules-by-levels",
+  "eve": [
+   500,
+   169
+  ],
+  "adam": [
+   500,
+   169
+  ]
+ },
+ {
+  "path": "/api/v1/ruleset",
+  "eve": [
+   200,
+   6977
+  ],
+  "adam": [
+   200,
+   6977
+  ]
+ },
+ {
+  "path": "/api/v1/service-accounts",
+  "eve": [
+   200,
+   7879
+  ],
+  "adam": [
+   200,
+   7879
+  ]
+ },
+ {
+  "path": "/api/v1/sessions",
+  "eve": [
+   200,
+   374
+  ],
+  "adam": [
+   200,
+   373
+  ]
+ },
+ {
+  "path": "/api/v1/sessions/lms-process-pages",
+  "eve": [
+   400,
+   184
+  ],
+  "adam": [
+   400,
+   185
+  ]
+ },
+ {
+  "path": "/api/v1/sessions/voucher-types",
+  "eve": [
+   200,
+   14876
+  ],
+  "adam": [
+   200,
+   14624
+  ]
+ },
+ {
+  "path": "/api/v1/states",
+  "eve": [
+   200,
+   3156
+  ],
+  "adam": [
+   200,
+   3155
+  ]
+ },
+ {
+  "path": "/api/v1/workflow",
+  "eve": [
+   200,
+   427
+  ],
+  "adam": [
+   200,
+   427
+  ]
+ }
+]

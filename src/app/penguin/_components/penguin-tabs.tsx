@@ -9,7 +9,6 @@ import { AnimatedRefreshIcon } from "@/components/ui/animated-refresh-icon"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { InfoIcon } from "lucide-react"
-import { format } from "date-fns"
 import { useRouter } from "next/navigation"
 import { startTransition as startBackgroundTransition, useEffect, useTransition } from "react"
 import type {
@@ -33,6 +32,7 @@ import { DocsTab } from "./docs-tab"
 import { ExplainTab } from "./explain-tab"
 import { GitGuideTab } from "./git-guide-tab"
 import { GitPlaygroundTab } from "./git-playground-tab"
+import { TestingTab } from "./testing-tab"
 import { TodosTab } from "./todos-tab"
 import { QuestionsTab } from "./questions-tab"
 import { ReviewTab } from "./review-tab"
@@ -41,6 +41,15 @@ import { Scroller } from "@/components/ui/scroller"
 import { ThemeToggle } from "./theme-toggle"
 
 const TAB_SOURCES: { tab: string; source: React.ReactNode }[] = [
+  {
+    tab: "Testing",
+    source: (
+      <>
+        Test runs are the Findings reviews whose target kind is <code>test-run</code>. Screenshots and data are read live
+        from <code>testing/test-evidence/</code>.
+      </>
+    ),
+  },
   {
     tab: "Frontend / Backend",
     source: (
@@ -159,7 +168,6 @@ export function PenguinTabs({
   backendQuestions,
   repos,
   dbBackups,
-  loadedAt,
 }: {
   reviews: Review[]
   reviewedCommits: CommitInfo[]
@@ -172,7 +180,6 @@ export function PenguinTabs({
   backendQuestions: QuestionItem[]
   repos: Record<RepoKey, RepoInfo>
   dbBackups: DbBackupData
-  loadedAt: string
 }) {
   const router = useRouter()
   const [isRefreshing, startTransition] = useTransition()
@@ -202,9 +209,6 @@ export function PenguinTabs({
         tabsClassNames={{ base: "p-0", panel: "mt-4" }}
         extra={
           <div className="flex items-center gap-3">
-            <span className="hidden text-xs text-muted-foreground sm:inline">
-              Updated {format(new Date(loadedAt), "HH:mm:ss")}
-            </span>
             <InfoButton />
             <ThemeToggle />
             <Button
@@ -219,6 +223,11 @@ export function PenguinTabs({
           </div>
         }
         tabs={[
+          {
+            value: "testing",
+            label: "Testing",
+            component: <TestingTab reviews={reviews} />,
+          },
           {
             value: "findings",
             label: "Findings",

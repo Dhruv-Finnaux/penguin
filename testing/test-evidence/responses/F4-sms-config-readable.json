@@ -1,0 +1,49 @@
+{
+  "request": "GET /api/v1/configuration/message-configuration/sms-configuration",
+  "tier": "T0",
+  "account": "eve (view-only)",
+  "capturedAt": "2026-11-25",
+  "eve": {
+    "status": 200,
+    "bytes": 9139,
+    "rows": 33
+  },
+  "adam": {
+    "status": 200,
+    "bytes": 9139,
+    "rows": 33
+  },
+  "note": "33 SMS event configs readable; the PUT on the same resource has no page right (to confirm in P2).",
+  "redactedSample": {
+    "data": {
+      "rows": [
+        {
+          "id": "01K3JS2B6YBFWM3WMWEJSARVVF",
+          "event": "<redacted 22 chars>",
+          "templateId": null,
+          "message": null,
+          "enabled": false,
+          "createdAt": "<redacted 26 chars>",
+          "creatorId": "01JWZ8NE0WQAVV9FSGXKWNMFZ5",
+          "updatedAt": "<redacted 26 chars>",
+          "updaterId": "01JWZ8NE0WQAVV9FSGXKWNMFZ5"
+        },
+        {
+          "id": "01K3JS2B6YHFDG6ET9EJG1HJ36",
+          "event": "<redacted 11 chars>",
+          "templateId": null,
+          "message": null,
+          "enabled": false,
+          "createdAt": "<redacted 26 chars>",
+          "creatorId": "01JWZ8NE0WQAVV9FSGXKWNMFZ5",
+          "updatedAt": "<redacted 26 chars>",
+          "updaterId": "01JWZ8NE0WQAVV9FSGXKWNMFZ5"
+        },
+        "\u2026 31 more"
+      ]
+    },
+    "__api_metadata": {
+      "executionTimeMs": "<num>"
+    }
+  }
+}

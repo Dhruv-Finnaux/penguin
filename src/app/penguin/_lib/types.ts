@@ -123,7 +123,13 @@ export interface Review {
   repo: RepoKey
   generatedAt: string
   branch: string
-  target: { kind: string; commit: string | null }
+  /** `title` names a card that has no commit (shown instead of "Uncommitted changes"). */
+  target: { kind: string; commit: string | null; title: string | null }
+  /** Names (no extension) of the test screenshots that belong to this run. */
+  screenshots: string[]
+  /** Names (no extension) of the response and run-data files of this run. */
+  responses: string[]
+  data: string[]
   files: {
     changed: number
     added: number

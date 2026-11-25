@@ -1,0 +1,45 @@
+{
+  "request": "GET /api/v1/hrms/performance-management/salary-history/employees",
+  "tier": "T0",
+  "account": "eve (view-only)",
+  "capturedAt": "2026-11-25",
+  "eve": {
+    "status": 200,
+    "bytes": 5341,
+    "rows": 29
+  },
+  "adam": {
+    "status": 200,
+    "bytes": 5341,
+    "rows": 29
+  },
+  "note": "baseSalary for 29 employees.",
+  "redactedSample": {
+    "data": {
+      "rows": [
+        {
+          "id": "01ZTESTADAMEMP000000000000",
+          "employeeName": "<redacted 9 chars>",
+          "code": "<redacted 11 chars>",
+          "designationName": "<redacted 17 chars>",
+          "baseSalary": "<num>",
+          "structureName": "<redacted 3 chars>",
+          "hasHistory": false
+        },
+        {
+          "id": "01JWZYRDFSCGNBKV0DAGA956RY",
+          "employeeName": "<redacted 12 chars>",
+          "code": "<redacted 11 chars>",
+          "designationName": "<redacted 5 chars>",
+          "baseSalary": "<num>",
+          "structureName": "<redacted 3 chars>",
+          "hasHistory": true
+        },
+        "\u2026 27 more"
+      ]
+    },
+    "__api_metadata": {
+      "executionTimeMs": "<num>"
+    }
+  }
+}

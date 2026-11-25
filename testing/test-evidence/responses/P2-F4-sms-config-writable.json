@@ -1,0 +1,21 @@
+{
+ "finding": "FINDING 4 (confirmed)",
+ "title": "SMS configuration PUT passes the guard",
+ "results": [
+  {
+   "method": "PUT",
+   "path": "/configuration/message-configuration/sms-configuration/:smsConfigurationId",
+   "handler": "configurations/message-configuration/message-configuration.controller.ts:30",
+   "guardInCode": false,
+   "status": 400,
+   "message": [
+    "templateId must be a string",
+    "message must be a string",
+    "enabled must be a boolean value"
+   ],
+   "body": "{}",
+   "pathIds": "fake 01ZZZZZZZZZZZZZZZZZZZZZZZZ"
+  }
+ ],
+ "note": "Confirmed at runtime: a view-only user can update SMS event configs."
+}
