@@ -1,6 +1,161 @@
 # 🐧 How Is My Commit · Frontend
 
-> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 91 entries, newest first.
+> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 93 entries, newest first.
+
+## howismycommit-93
+
+| Field | Value |
+|---|---|
+| id | howismycommit-93 |
+| generatedAt | 2026-11-26T10:52:53+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | ce9bcd4ba69af9576851780d7a6f3963deb36fb3 |
+| files.changed | 3 |
+| files.added | 1 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 49 |
+| files.deletions | 10 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 3 |
+| before | The document form kept the Electricity Bill operator code only as operatorCode, which the backend drops, so saves failed or stayed unverified; Finnaux had no board field in the form. |
+| after | Saving an Electricity Bill document also sends operatorCodeId, a successful verify fills operatorCode from the response, and with Finnaux the field is a required Electricity Board dropdown (locked once verified). The new-customer schema keeps both fields. |
+
+### changeType (3)
+
+- feature
+- bug fix
+- UI
+
+### effects (3)
+
+- The shared document form feeds both new-customer create and the KYC tab add/edit, so one mapping covers every save path.
+- The board chosen in the form is passed to the Finnaux dialog through extraContext.operatorCode for pre-selection.
+- use-electricity-provider reads the provider through the same getActiveProvider rule as useVerificationCore.
+
+### filesReviewed (3)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/customers/components/identification-document-modal/identification-document-form.tsx | modified | green | no issues |
+| src/features/customers/schema.ts | modified | green | no issues |
+| src/features/external-apis/hooks/use-electricity-provider.ts | added | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <files of both commits> | passed |
+
+### gaps (2)
+
+- Not exercised against the backend: saving verified and unverified Electricity Bill documents, and re-verify pre-selection, were checked by reading code only.
+- Assumes the KYC list returns the saved code as operatorCode, as ICustomerKycDetail declares.
+
+### info (3)
+
+- While the external API config is loading the form briefly shows the free-text Operator Code field before switching to the board dropdown for Finnaux.
+- An existing document saved with a non-enum code shows an empty board under Finnaux until the user picks one.
+- Earlier reports of the previous commits have no findings, so nothing was re-checked.
+
+---
+
+## howismycommit-92
+
+| Field | Value |
+|---|---|
+| id | howismycommit-92 |
+| generatedAt | 2026-11-26T10:52:53+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 19095d679d0ebe41e312611fca85f168caae8954 |
+| files.changed | 9 |
+| files.added | 1 |
+| files.modified | 8 |
+| files.deleted | 0 |
+| files.insertions | 152 |
+| files.deletions | 18 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 3 |
+| before | Electricity Bill verification only had a SurePass flow that needed an Operator Code typed in the document form. |
+| after | When the Electricity Bill integration group uses Finnaux, Verify opens a dialog with an Electricity Board dropdown (enum options) and a Kerala-only registered mobile field, posts to /external/finnaux/electricity-bill/verify and passes the row to the existing fill logic. |
+
+### changeType (3)
+
+- feature
+- API
+- refactor
+
+### effects (3)
+
+- The Operator Code check in the electricity context now applies only to SurePass.
+- Provider lookup moved into a shared getActiveProvider used by useVerificationCore; behaviour is unchanged.
+- operatorCode in ElectricityRequestData is now optional; the SurePass flow sends an empty string when it is missing.
+
+### filesReviewed (9)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/external-apis/components/electricity-verify/flows/finnaux-electricity-flow.tsx | added | green | no issues |
+| src/features/external-apis/hooks/use-verification-core.ts | modified | green | no issues |
+| src/features/external-apis/api.ts | modified | green | no issues |
+| src/features/external-apis/hooks.ts | modified | green | no issues |
+| src/features/external-apis/components/electricity-verify/context.tsx | modified | green | no issues |
+| src/features/external-apis/components/electricity-verify/dialog-manager.tsx | modified | green | no issues |
+| src/features/external-apis/components/electricity-verify/flows/surepass-electricity-flow.tsx | modified | green | no issues |
+| src/features/external-apis/components/electricity-verify/types.ts | modified | green | no issues |
+| src/config/fixed-enums.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (2)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+| green | npx eslint <files of both commits> | passed |
+
+### gaps (1)
+
+- Not run in a browser or against the real route; the Kerala mobile rule and 400 messages were checked by reading code only.
+
+### info (3)
+
+- The board list is loaded from the enum dropdown; if that request fails the dropdown is empty and no error is shown (matches how other dropdowns behave).
+- Only KERALA is a constant because it is the only board with different behaviour.
+- Earlier reports of the five previous commits have no findings, so nothing was re-checked.
+
+---
 
 ## howismycommit-91
 

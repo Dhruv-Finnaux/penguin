@@ -9,44 +9,44 @@
   {
     "id": "todo-37",
     "text": "Testing (backend): Test Finnaux eSign: send a document with a template, check signer links and status, the webhook updates it, and the signed file downloads. Check company signer and role based signers.",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-25T04:50:03.757Z",
-    "doneAt": null
+    "doneAt": "2026-11-25T13:04:45.237Z"
   },
   {
     "id": "todo-36",
     "text": "Testing (backend): Test Finnaux bank account verification: right account (VERIFIED, name match 90 or more), a wrong holder name (should be blocked), and re-verify the same account (no extra PENDING row). Check add bank and edit bank link and expire the row.",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-25T04:50:03.757Z",
-    "doneAt": null
+    "doneAt": "2026-11-25T13:04:48.951Z"
   },
   {
     "id": "todo-35",
     "text": "Testing (backend): Test Finnaux vehicle RC verification: verify an RC with and without spaces, check the vehicle details and the RC address creation on a loan application.",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-25T04:50:03.757Z",
-    "doneAt": null
+    "doneAt": "2026-11-25T13:04:52.062Z"
   },
   {
     "id": "todo-34",
     "text": "Testing (backend): Test Finnaux driving licence verification: right number and date of birth, and a wrong one. Check the details fill the form.",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-25T04:50:03.757Z",
-    "doneAt": null
+    "doneAt": "2026-11-25T13:05:22.832Z"
   },
   {
     "id": "todo-33",
     "text": "Testing (backend): Test Finnaux PAN verification: right PAN with matching name, a wrong PAN, and a name that does not match. Check the KYC record is saved.",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-25T04:50:03.757Z",
-    "doneAt": null
+    "doneAt": "2026-11-25T13:05:25.198Z"
   },
   {
     "id": "todo-32",
     "text": "Testing (backend): Test Finnaux Aadhaar: generate OTP, verify OTP, check name, address and photo fill the form. Try a wrong OTP and an already used OTP (caches are off for now).",
-    "status": "todo",
+    "status": "done",
     "createdAt": "2026-11-25T04:50:03.757Z",
-    "doneAt": null
+    "doneAt": "2026-11-25T13:05:26.794Z"
   },
   {
     "id": "todo-31",

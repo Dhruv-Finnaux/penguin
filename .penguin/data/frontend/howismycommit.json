@@ -1,5 +1,206 @@
 [
   {
+    "id": "howismycommit-93",
+    "generatedAt": "2026-11-26T10:52:53+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "ce9bcd4ba69af9576851780d7a6f3963deb36fb3"
+    },
+    "files": {
+      "changed": 3,
+      "added": 1,
+      "modified": 2,
+      "deleted": 0,
+      "insertions": 49,
+      "deletions": 10
+    },
+    "changeType": [
+      "feature",
+      "bug fix",
+      "UI"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "The document form kept the Electricity Bill operator code only as operatorCode, which the backend drops, so saves failed or stayed unverified; Finnaux had no board field in the form.",
+    "after": "Saving an Electricity Bill document also sends operatorCodeId, a successful verify fills operatorCode from the response, and with Finnaux the field is a required Electricity Board dropdown (locked once verified). The new-customer schema keeps both fields.",
+    "effects": [
+      "The shared document form feeds both new-customer create and the KYC tab add/edit, so one mapping covers every save path.",
+      "The board chosen in the form is passed to the Finnaux dialog through extraContext.operatorCode for pre-selection.",
+      "use-electricity-provider reads the provider through the same getActiveProvider rule as useVerificationCore."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/customers/components/identification-document-modal/identification-document-form.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/schema.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks/use-electricity-provider.ts",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <files of both commits>",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not exercised against the backend: saving verified and unverified Electricity Bill documents, and re-verify pre-selection, were checked by reading code only.",
+      "Assumes the KYC list returns the saved code as operatorCode, as ICustomerKycDetail declares."
+    ],
+    "info": [
+      "While the external API config is loading the form briefly shows the free-text Operator Code field before switching to the board dropdown for Finnaux.",
+      "An existing document saved with a non-enum code shows an empty board under Finnaux until the user picks one.",
+      "Earlier reports of the previous commits have no findings, so nothing was re-checked."
+    ]
+  },
+  {
+    "id": "howismycommit-92",
+    "generatedAt": "2026-11-26T10:52:53+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "19095d679d0ebe41e312611fca85f168caae8954"
+    },
+    "files": {
+      "changed": 9,
+      "added": 1,
+      "modified": 8,
+      "deleted": 0,
+      "insertions": 152,
+      "deletions": 18
+    },
+    "changeType": [
+      "feature",
+      "API",
+      "refactor"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "Electricity Bill verification only had a SurePass flow that needed an Operator Code typed in the document form.",
+    "after": "When the Electricity Bill integration group uses Finnaux, Verify opens a dialog with an Electricity Board dropdown (enum options) and a Kerala-only registered mobile field, posts to /external/finnaux/electricity-bill/verify and passes the row to the existing fill logic.",
+    "effects": [
+      "The Operator Code check in the electricity context now applies only to SurePass.",
+      "Provider lookup moved into a shared getActiveProvider used by useVerificationCore; behaviour is unchanged.",
+      "operatorCode in ElectricityRequestData is now optional; the SurePass flow sends an empty string when it is missing."
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/components/electricity-verify/flows/finnaux-electricity-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks/use-verification-core.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/electricity-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/electricity-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/electricity-verify/flows/surepass-electricity-flow.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/electricity-verify/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/config/fixed-enums.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint <files of both commits>",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not run in a browser or against the real route; the Kerala mobile rule and 400 messages were checked by reading code only."
+    ],
+    "info": [
+      "The board list is loaded from the enum dropdown; if that request fails the dropdown is empty and no error is shown (matches how other dropdowns behave).",
+      "Only KERALA is a constant because it is the only board with different behaviour.",
+      "Earlier reports of the five previous commits have no findings, so nothing was re-checked."
+    ]
+  },
+  {
     "id": "howismycommit-91",
     "generatedAt": "2026-11-25T10:28:56+05:30",
     "author": "Dhruv",

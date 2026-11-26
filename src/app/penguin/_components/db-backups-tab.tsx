@@ -12,25 +12,25 @@ import { buildNests, colorForBackup, CopyNameButton, DbLayers, inkForBackup } fr
 import { Collapse } from "./collapse"
 import { ChevronRightIcon } from "lucide-react"
 import { Highlight, SearchHighlightProvider } from "./highlight"
-import { CopyTextButton, RunCard, RunTimeline } from "./run-timeline"
+import { RunCard, RunTimeline } from "./run-timeline"
 import { SearchBox } from "./search-box"
 import { TimeLabel } from "./time-label"
 
 const ACTION_STYLE: Record<DbBackupRun["action"], string> = {
-  backup: "bg-emerald-600/10 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300",
-  restore: "bg-amber-600/10 text-amber-700 dark:bg-amber-400/15 dark:text-amber-300",
+  backup: "bg-green-600/10 text-green-700 dark:bg-green-400/15 dark:text-green-300",
+  restore: "bg-amber-600/10 text-amber-600 dark:bg-amber-400/15 dark:text-amber-300",
 }
 
 const STATUS_LABEL: Record<DbBackupFileStatus, string> = {
-  current: "File on disk",
-  replaced: "Overwritten by a newer backup",
-  deleted: "File deleted",
+  current: "Exists",
+  replaced: "Overwritten",
+  deleted: "Deleted",
 }
 
 const STATUS_STYLE: Record<DbBackupFileStatus, string> = {
-  current: "text-emerald-700 dark:text-emerald-300",
-  replaced: "text-muted-foreground",
-  deleted: "text-red-600 dark:text-red-400",
+  current: "text-green-600 bg-green-600/10 dark:bg-green-900/50 dark:text-green-300 px-2 py-1 rounded text-xs",
+  replaced: "text-muted-foreground dark:text-muted-foreground px-2 py-1 rounded text-xs",
+  deleted: "text-red-600 bg-red-600/10 dark:bg-red-900/50 dark:text-red-300 px-2 py-1 rounded text-xs",
 }
 
 function formatSize(bytes: number) {
@@ -159,19 +159,6 @@ export function DbBackupsTab({ dir, runs: allRuns, files }: DbBackupData) {
                     {STATUS_LABEL[run.fileStatus]}
                   </span>
                 </>
-              }
-              actions={
-                run.fileStatus === "current" ? (
-                  <CopyTextButton
-                    label="Copy Load Command"
-                    text={`db restore ${run.backupName || run.database}`}
-                    className="rounded text-white hover:opacity-90"
-                    style={{
-                      background: colorForBackup(run.backupName || run.database, nests),
-                      color: inkForBackup(run.backupName || run.database, nests),
-                    }}
-                  />
-                ) : undefined
               }
             >
               <Field label="Database">
