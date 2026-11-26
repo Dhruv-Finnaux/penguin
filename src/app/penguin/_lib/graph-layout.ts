@@ -24,33 +24,66 @@ const FIXED: Record<string, [number, number]> = {
   develop: [214, 0.46],
 }
 
-const HUES: [number, number][] = [
-  [0, 0.45], // red
-  [28, 0.45], // orange
-  [48, 0.4], // yellow
-  [275, 0.5], // purple
-  [305, 0.45], // fuchsia
-  [335, 0.46], // pink
-]
+// Hues around the wheel for the other branches, skipping the greens and blues that main and dev own.
+// Two lightnesses for every hue, so there are enough distinct slots for all branches of both repos.
+const SLOTS: { hue: number; color: string }[] = []
+for (const lightness of [0.42, 0.58]) {
+  for (let hue = 0; hue < 360; hue += 8) {
+    if ((hue >= 95 && hue <= 170) || (hue >= 195 && hue <= 245)) continue
+    SLOTS.push({ hue, color: hslToHex(hue, 0.68, lightness) })
+  }
+}
+const PALETTE = SLOTS.map((slot) => slot.color)
+// Two branches should never look alike: a new one takes the free hue furthest from every hue already taken.
+const hueGap = (a: number, b: number) => Math.min(Math.abs(a - b), 360 - Math.abs(a - b))
 
-const colorCache = new Map<string, string>()
+// Every branch gets its own slot: the name's hash picks the first choice, and a taken slot moves to the next one.
+// Names are assigned in sorted order, so the same set of branches always gets the same colours.
+const registry = new Map<string, string>()
+
+const hashOf = (key: string) => {
+  let hash = 2166136261
+  for (const char of key) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619) >>> 0
+  return hash
+}
+
+export function registerBranchColors(names: string[]) {
+  const keys = [
+    ...new Set(names.map((name) => name.trim()).filter((name) => name && !FIXED[name] && name !== "origin/main")),
+  ].sort()
+  const taken = new Set<string>()
+  registry.clear()
+  for (const key of keys) {
+    const start = hashOf(key) % SLOTS.length
+    const takenHues = [...taken].map((i) => SLOTS[Number(i)].hue)
+    let slot: number | undefined
+    let best = -1
+    for (let step = 0; step < SLOTS.length; step++) {
+      const candidate = (start + step) % SLOTS.length
+      if (taken.has(String(candidate))) continue
+      const gap = takenHues.length ? Math.min(...takenHues.map((hue) => hueGap(hue, SLOTS[candidate].hue))) : 360
+      if (gap > best) {
+        best = gap
+        slot = candidate
+      }
+    }
+    if (slot === undefined) continue
+    taken.add(String(slot))
+    registry.set(key, SLOTS[slot].color)
+  }
+}
 
 export function colorForBranch(name: string) {
   const key = name.trim()
-  let color = colorCache.get(key)
-  if (!color) {
-    let hash = 2166136261
-    for (const char of key) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619) >>> 0
-    const [hue, lightness] = FIXED[key] ?? HUES[hash % HUES.length]
-    color = hslToHex(hue, 0.68, lightness)
-    colorCache.set(key, color)
-  }
-  return color
+  const fixed = FIXED[key] ?? (key === "origin/main" ? FIXED.main : undefined)
+  if (fixed) return hslToHex(fixed[0], 0.68, fixed[1])
+  return registry.get(key) ?? PALETTE[hashOf(key) % PALETTE.length]
 }
 
 export const UNNAMED_COLOR = "#94a3b8"
 
 const BASE_NAMES = new Set(["main", "master"])
+const LONG_LIVED = ["dev", "develop", "development", "staging", "qa", "uat", "release"]
 
 // origin/feature-x and feature-x are the same branch, so they share a colour.
 export const branchKey = (branch: Pick<BranchInfo, "name" | "remote">) =>
@@ -58,7 +91,10 @@ export const branchKey = (branch: Pick<BranchInfo, "name" | "remote">) =>
 
 // main first, then the checked-out branch, then the rest newest first. Local before remote.
 export function orderBranches(branches: BranchInfo[]) {
-  const rank = (b: BranchInfo) => (BASE_NAMES.has(branchKey(b)) ? 0 : b.current ? 1 : 2)
+  // main, then the long-lived integration branches (dev, staging...), then the checked-out branch, then the rest.
+  // A feature branch claims only the commits nothing before it has claimed, so it starts at its own fork point.
+  const rank = (b: BranchInfo) =>
+    BASE_NAMES.has(branchKey(b)) ? 0 : LONG_LIVED.includes(branchKey(b).toLowerCase()) ? 1 : b.current ? 2 : 3
   return branches
     .map((branch, index) => ({ branch, index }))
     .sort(

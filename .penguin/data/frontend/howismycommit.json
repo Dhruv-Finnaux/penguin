@@ -1,5 +1,375 @@
 [
   {
+    "id": "howismycommit-97",
+    "generatedAt": "2026-11-26T16:45:27+05:30",
+    "author": "Dhruv",
+    "branch": "feat/finnaux-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "ebd0f8d2ec6ef95183f46f87e9964757673f4a50"
+    },
+    "files": {
+      "changed": 1,
+      "added": 0,
+      "modified": 1,
+      "deleted": 0,
+      "insertions": 31,
+      "deletions": 0
+    },
+    "changeType": [
+      "feature"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "A verified Voter ID only marked the document verified. The response has no basicDetails or addressDetails, so nothing else on the new customer form was filled.",
+    "after": "After a Voter ID verification, empty form fields are filled from kycDocuments[0].verification: names, gender and date of birth for individual customers, and street address and pincode for both customer types. Existing values are never overwritten.",
+    "effects": [
+      "Both the document-form verify and the Verify button now call applyVoterId for Voter ID documents",
+      "Other documents (Aadhaar, PAN, driving licence, GST) follow their existing paths"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not tested in the browser or against the Finnaux backend",
+      "Behaviour relies on the backend answers: dateOfBirth as 'YYYY-MM-DD HH:MM:SS+00' text, gender as MALE/FEMALE/OTHER, pincode often null"
+    ],
+    "info": [
+      "Names written in Devanagari are not filled into the English name fields",
+      "Gender and date of birth are required on the individual form, so they stay for the user to enter when Finnaux returns null",
+      "Pincode is filled without a location, so the location dropdown stays empty"
+    ]
+  },
+  {
+    "id": "howismycommit-96",
+    "generatedAt": "2026-11-26T16:29:42+05:30",
+    "author": "Dhruv",
+    "branch": "feat/finnaux-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "ef1ca657a9507193c8560a38679d6122d5e8ef21"
+    },
+    "files": {
+      "changed": 5,
+      "added": 1,
+      "modified": 4,
+      "deleted": 0,
+      "insertions": 57,
+      "deletions": 1
+    },
+    "changeType": [
+      "feature"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 2
+    },
+    "before": "Voter ID verification only supported SurePass.",
+    "after": "When the Voter ID integration group points to Finnaux, a plain confirm-and-verify flow posts the Voter ID number to the Finnaux route and passes the returned row to the existing success handler. SurePass is unchanged.",
+    "effects": [
+      "Voter ID verify dialog renders FinnauxVoterIdFlow when the active provider is finnaux",
+      "Finnaux page-rights gating in VerificationTrigger applies to the Voter ID check",
+      "The response has no basicDetails or addressDetails, so no other form fields are filled, as with SurePass"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/voter-id-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/voter-id-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/voter-id-verify/flows/finnaux-voter-id-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint src/features/external-apis/components/voter-id-verify",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not tested in the browser or against the Finnaux backend",
+      "No test script is configured, so behaviour was checked by reading the code only"
+    ],
+    "info": [
+      "The working tree matches the commit",
+      "Errors come from backend 400 messages; the flow also fails clearly when kycDocuments[0].docNumber is absent"
+    ]
+  },
+  {
+    "id": "howismycommit-95",
+    "generatedAt": "2026-11-26T13:05:48+05:30",
+    "author": "Dhruv",
+    "branch": "feat/finnaux-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "db6852324a46cd511d7e1f78a0c6c232db064afb"
+    },
+    "files": {
+      "changed": 7,
+      "added": 1,
+      "modified": 6,
+      "deleted": 0,
+      "insertions": 102,
+      "deletions": 17
+    },
+    "changeType": [
+      "feature"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "GST verification only supported SurePass, and a verified GST document did not fill anything else on the new non-individual customer form.",
+    "after": "When the GST integration group points to Finnaux, a Finnaux flow verifies the GSTIN and, for new non-individual customers, fills an empty firm name and an empty address from the reply. SurePass behaviour is unchanged.",
+    "effects": [
+      "GST verify dialog renders FinnauxGstFlow when the active provider is finnaux",
+      "Driving licence address fill now goes through the shared fillEmptyAddress helper",
+      "Finnaux page-rights gating in VerificationTrigger applies to the GST check"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/gst-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/gst-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/gst-verify/flows/finnaux-gst-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint (gst-verify and kyc-section.tsx)",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not tested in the browser or against the Finnaux backend",
+      "No test script is configured, so behaviour was checked by reading the code only"
+    ],
+    "info": [
+      "Same content as the earlier commit 1f2027d1 (report howismycommit-94), recommitted on feat/finnaux-apis; the working tree matches this commit",
+      "The flow fails with a clear message when kycDocuments[0].docNumber is absent; other errors come from backend 400 messages",
+      "constitution and registrationDate from firmDetails are intentionally not mapped, per the contract"
+    ]
+  },
+  {
+    "id": "howismycommit-94",
+    "generatedAt": "2026-11-26T12:31:27+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "1f2027d1467028e0d6e67a868590942ec03a592e"
+    },
+    "files": {
+      "changed": 7,
+      "added": 1,
+      "modified": 6,
+      "deleted": 0,
+      "insertions": 102,
+      "deletions": 17
+    },
+    "changeType": [
+      "feature"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "GST verification only supported SurePass, and a verified GST document did not fill anything else on the new non-individual customer form.",
+    "after": "When the GST integration group points to Finnaux, a Finnaux flow verifies the GSTIN and, for new non-individual customers, fills an empty firm name and an empty address from the reply. SurePass behaviour is unchanged.",
+    "effects": [
+      "GST verify dialog now renders FinnauxGstFlow when the active provider is finnaux",
+      "Driving licence address fill now goes through the shared fillEmptyAddress helper",
+      "VerificationTrigger page-rights gating applies to the Finnaux provider as for other Finnaux checks"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/types.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/gst-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/gst-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/gst-verify/flows/finnaux-gst-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      },
+      {
+        "status": "green",
+        "command": "npx eslint (changed gst-verify files and kyc-section.tsx)",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not tested in the browser or against the Finnaux backend",
+      "No test script is configured, so behaviour was checked by reading the code only"
+    ],
+    "info": [
+      "The working tree matches the commit for all 7 files",
+      "Missing-status and missing-name replies depend on backend 400s; the flow also fails when kycDocuments[0].docNumber is absent",
+      "constitution and registrationDate from firmDetails are intentionally not mapped, per the contract"
+    ]
+  },
+  {
     "id": "howismycommit-93",
     "generatedAt": "2026-11-26T10:52:53+05:30",
     "author": "Dhruv",

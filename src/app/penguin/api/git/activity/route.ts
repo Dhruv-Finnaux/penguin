@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    return NextResponse.json(await getActivity(repo, branch))
+    return NextResponse.json(await getActivity(repo, branch, params.get("remote") !== "0"))
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not read the activity"
     return NextResponse.json({ message }, { status: 500 })

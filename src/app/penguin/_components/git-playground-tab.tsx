@@ -9,6 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { REMOTE_ID } from "../_lib/branch-flow"
+import { colorForBranch } from "../_lib/graph-layout"
 import type { PlaygroundEdge, PlaygroundKind, PlaygroundNode, RepoKey } from "../_lib/types"
 import {
   addEdge,
@@ -121,14 +122,10 @@ const KIND_META: Record<Kind, { title: string; icon: typeof GitBranchIcon; hint:
   },
 }
 
-const PALETTE = ["#7c3aed", "#2563eb", "#db2777", "#0891b2", "#16a34a", "#ea580c", "#4f46e5", "#c026d3"]
-
+// The same colour a branch has everywhere else in Penguin, so two branches never share one.
 function branchColor(name: string | null) {
   if (!name) return "#94a3b8"
-  if (name === "main") return PALETTE[0]
-  let hash = 0
-  for (const char of name) hash = (hash * 31 + char.charCodeAt(0)) >>> 0
-  return PALETTE[1 + (hash % (PALETTE.length - 1))]
+  return colorForBranch(name)
 }
 
 const uid = (prefix: string) => `${prefix}-${Math.random().toString(36).slice(2, 9)}`
@@ -1271,7 +1268,8 @@ function Playground() {
                         aria-pressed={commitView === value}
                         className={cn(
                           "hover:bg-black/5 dark:hover:bg-white/15",
-                          commitView === value && "bg-blue-600/10 dark:bg-blue-600/20 text-blue-600 hover:text-blue-600 hover:bg-blue-600/10 dark:hover:bg-blue-600/20",
+                          commitView === value &&
+                            "bg-blue-600/10 dark:bg-blue-600/20 text-blue-600 hover:text-blue-600 hover:bg-blue-600/10 dark:hover:bg-blue-600/20",
                         )}
                         onClick={() => setCommitView(value)}
                       >

@@ -18,7 +18,7 @@ import { format } from "date-fns"
 import { CheckIcon, ChevronDownIcon, GitBranchIcon, UsersIcon, XIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 import { matchesQuery } from "../_lib/fuzzy"
-import { branchColorName, colorForBranch, layoutGraph } from "../_lib/graph-layout"
+import { branchColorName, colorForBranch, layoutGraph, type GraphEdge, type GraphRow } from "../_lib/graph-layout"
 import type {
   BranchInfo,
   CommitInfo,
@@ -34,8 +34,8 @@ import { CopyHash } from "./copy-hash"
 import { Highlight, SearchHighlightProvider } from "./highlight"
 import { ActivityHeatmap } from "./activity-heatmap"
 import { FileActivityPanel } from "./file-activity"
-import { NextTabs } from "./penguin-tabs"
 import { SearchBox } from "./search-box"
+import { NextTabs } from "./penguin-tabs"
 
 const ALL_BRANCHES = "__all__"
 const PAGE_SIZE = 50
@@ -66,6 +66,35 @@ function ErrorBox({ message, onRetry }: { message: string; onRetry: () => void }
   )
 }
 
+// A switch whose thumb slides between the two ends.
+function Switch({ checked, onChange, label }: { checked: boolean; onChange: (next: boolean) => void; label?: string }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      onClick={() => onChange(!checked)}
+      className="inline-flex h-8 items-center gap-2 rounded-lg border border-dashed bg-card px-2.5 text-xs font-medium"
+    >
+      {label && <span className="text-foreground/80">{label}</span>}
+      <span
+        className={cn(
+          "relative inline-block h-4 w-7 shrink-0 rounded-full transition-colors duration-300 ease-out",
+          checked ? "bg-emerald-600" : "bg-foreground/20",
+        )}
+      >
+        <span
+          className={cn(
+            "absolute left-0.5 top-0.5 size-3 rounded-full bg-white shadow-sm transition-transform duration-300 ease-out",
+            checked && "translate-x-3",
+          )}
+        />
+      </span>
+    </button>
+  )
+}
+
+// The view options: each one is a switch, and they all stay open while you flip them.
 function Segmented<T extends string>({
   value,
   options,
@@ -100,13 +129,14 @@ function BranchPicker({
   const remote = branches.filter((b) => b.remote)
 
   const item = (branch: BranchInfo) => (
-    <DropdownMenuItem
-      key={branch.name}
-      onSelect={() => onChange(branch.name)}
-      className="cursor-pointer gap-2">
+    <DropdownMenuItem key={branch.name} onSelect={() => onChange(branch.name)} className="cursor-pointer gap-2">
       <GitBranchIcon className="size-3.5 shrink-0" style={{ color: colorForBranch(branchColorName(branch)) }} />
       <span className="flex-1 truncate">{branch.name}</span>
-      {branch.current && <span className=" bg-green-600/10 dark:bg-green-600/20 px-2 py-1 rounded-md font-medium text-xs text-green-600">Current</span>}
+      {branch.current && (
+        <span className=" bg-green-600/10 dark:bg-green-600/20 px-2 py-1 rounded-md font-medium text-xs text-green-600">
+          Current
+        </span>
+      )}
     </DropdownMenuItem>
   )
 
@@ -121,7 +151,8 @@ function BranchPicker({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="max-h-96 min-w-64 overflow-y-auto rounded-xl bg-white p-2 dark:bg-card">
+        className="max-h-96 min-w-64 overflow-y-auto rounded-xl bg-white p-2 dark:bg-card"
+      >
         <DropdownMenuItem onSelect={() => onChange(ALL_BRANCHES)} className="cursor-pointer gap-2">
           <span className="flex-1">All branches</span>
           {value === ALL_BRANCHES && <CheckIcon className="size-4" />}
@@ -160,8 +191,7 @@ function ContributorPicker({
 }) {
   const [search, setSearch] = useState("")
   const people = (query.data ?? []).filter((p) => matchesQuery(search, [p.name]))
-  const toggle = (name: string) =>
-    onChange(value.includes(name) ? value.filter((n) => n !== name) : [...value, name])
+  const toggle = (name: string) => onChange(value.includes(name) ? value.filter((n) => n !== name) : [...value, name])
 
   return (
     <DropdownMenu onOpenChange={(open) => !open && setSearch("")}>
@@ -169,14 +199,19 @@ function ContributorPicker({
         <Button size="sm" variant="outline" className="max-w-72 bg-white border-0 dark:bg-card">
           <UsersIcon className="size-4 shrink-0" />
           <span className="truncate">
-            {value.length === 0 ? "All contributors" : value.length === 1 ? value[0] : `${value[0]} +${value.length - 1}`}
+            {value.length === 0
+              ? "All contributors"
+              : value.length === 1
+                ? value[0]
+                : `${value[0]} +${value.length - 1}`}
           </span>
           <ChevronDownIcon className="size-3.5 shrink-0" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="max-h-96 min-w-72 overflow-y-auto rounded-xl bg-white p-2 dark:bg-card">
+        className="max-h-96 min-w-72 overflow-y-auto rounded-xl bg-white p-2 dark:bg-card"
+      >
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -198,7 +233,8 @@ function ContributorPicker({
             checked={value.includes(person.name)}
             onCheckedChange={() => toggle(person.name)}
             onSelect={(e) => e.preventDefault()}
-            className="cursor-pointer gap-2">
+            className="cursor-pointer gap-2"
+          >
             <span className="flex-1 truncate">{person.name}</span>
             <span className="text-xs text-muted-foreground">
               {person.commits} · {format(new Date(person.lastDate), "dd MMM yy")}
@@ -217,20 +253,22 @@ function VerboseHistory({
   reviews,
   keyword,
   authors,
+  showRemote,
 }: {
   repo: RepoKey
   branch: string
   reviews: Review[]
   keyword: string
   authors: string[]
+  showRemote: boolean
 }) {
   const [openHash, setOpenHash] = useState<string | null>(null)
 
   const query = useInfiniteQuery({
-    queryKey: ["penguin", "log", repo, branch, authors],
+    queryKey: ["penguin", "log", repo, branch, authors, showRemote],
     queryFn: ({ pageParam }) =>
       getJson<CommitPage>(
-        `/penguin/api/git/log?repo=${repo}&branch=${encodeURIComponent(branch)}&skip=${pageParam}&limit=${PAGE_SIZE}${authors
+        `/penguin/api/git/log?repo=${repo}&branch=${encodeURIComponent(branch)}&remote=${showRemote ? 1 : 0}&skip=${pageParam}&limit=${PAGE_SIZE}${authors
           .map((name) => `&author=${encodeURIComponent(name)}`)
           .join("")}`,
       ),
@@ -253,20 +291,16 @@ function VerboseHistory({
     () =>
       (query.data?.pages.flatMap((page) => page.commits) ?? []).map((commit) => ({
         ...commit,
+        branches: showRemote ? commit.branches : commit.branches?.filter((name) => !name.startsWith("origin/")),
         review: reviewByHash.get(commit.hash) ?? null,
       })),
-    [query.data, reviewByHash],
+    [query.data, reviewByHash, showRemote],
   )
 
   const matching = useMemo(() => {
     if (!keyword.trim()) return commits
     return commits.filter((commit) =>
-      matchesQuery(keyword, [
-        commit.hash,
-        commit.subject,
-        commit.author,
-        ...commit.files.map((f) => f.path),
-      ]),
+      matchesQuery(keyword, [commit.hash, commit.subject, commit.author, ...commit.files.map((f) => f.path)]),
     )
   }, [commits, keyword])
 
@@ -300,7 +334,8 @@ function VerboseHistory({
             variant="outline"
             loading={query.isFetchingNextPage}
             disabled={query.isFetchingNextPage}
-            onClick={() => query.fetchNextPage()}>
+            onClick={() => query.fetchNextPage()}
+          >
             Load {PAGE_SIZE} more
           </Button>
         )}
@@ -309,20 +344,202 @@ function VerboseHistory({
   )
 }
 
-function edgePath(fromRow: number, fromCol: number, toRow: number, toCol: number, kind: string) {
-  const x1 = fromCol * COL_W + COL_W / 2
-  const y1 = fromRow * ROW_H + ROW_H / 2
-  const x2 = toCol * COL_W + COL_W / 2
-  const y2 = toRow * ROW_H + ROW_H / 2
-  if (kind === "straight" || kind === "open" || x1 === x2) return `M${x1},${y1}L${x2},${y2}`
+// Horizontal flow: commits run left to right, lanes run top to bottom.
+const HCOL_W = 124
+const HLANE_H = 104
+const HTOP = 36
+const HDOT = 14
+
+function edgePath(fromRow: number, fromCol: number, toRow: number, toCol: number, kind: string, horizontal = false) {
+  // Work in lane (L) and row (R) coordinates, then map back to x and y.
+  const rowSpan = horizontal ? HCOL_W : ROW_H
+  const at = (row: number, col: number): [number, number] =>
+    horizontal
+      ? [row * HCOL_W + HCOL_W / 2, HTOP + col * HLANE_H + HDOT]
+      : [col * COL_W + COL_W / 2, row * ROW_H + ROW_H / 2]
+  const [x1, y1] = at(fromRow, fromCol)
+  const [x2, y2] = at(toRow, toCol)
+  const [L1, R1] = horizontal ? [y1, x1] : [x1, y1]
+  const [L2, R2] = horizontal ? [y2, x2] : [x2, y2]
+  const P = (l: number, r: number) => (horizontal ? `${r},${l}` : `${l},${r}`)
+  if (kind === "straight" || kind === "open" || L1 === L2) return `M${P(L1, R1)}L${P(L2, R2)}`
   if (kind === "fork") {
-    // Down its own lane, then bend into the commit it branched from.
-    const bend = y2 - ROW_H
-    return `M${x1},${y1}L${x1},${bend}C${x1},${bend + ROW_H / 2} ${x2},${bend + ROW_H / 2} ${x2},${y2}`
+    // Along its own lane, then bend into the commit it branched from.
+    const bend = R2 - rowSpan
+    return `M${P(L1, R1)}L${P(L1, bend)}C${P(L1, bend + rowSpan / 2)} ${P(L2, bend + rowSpan / 2)} ${P(L2, R2)}`
   }
-  // Merge: bend into the merged lane right away, then run down to its commit.
-  const bend = y1 + ROW_H
-  return `M${x1},${y1}C${x1},${y1 + ROW_H / 2} ${x2},${y1 + ROW_H / 2} ${x2},${bend}L${x2},${y2}`
+  // Merge: bend into the merged lane right away, then run along it to its commit.
+  const bend = R1 + rowSpan
+  return `M${P(L1, R1)}C${P(L1, R1 + rowSpan / 2)} ${P(L2, R1 + rowSpan / 2)} ${P(L2, bend)}L${P(L2, R2)}`
+}
+
+function FlowHorizontal({
+  rows,
+  edges,
+  columns,
+  total,
+  truncated,
+  matches,
+  selected,
+  onMore,
+}: {
+  rows: GraphRow[]
+  edges: GraphEdge[]
+  columns: number
+  total: number
+  truncated: boolean
+  matches: Set<number> | null
+  selected: string | null
+  onMore: () => void
+}) {
+  const width = rows.length * HCOL_W
+  const height = HTOP + columns * HLANE_H + 40
+  const [openHash, setOpenHash] = useState<string | null>(null)
+  const shownEdges = edges.filter((edge) => edge.fromRow < rows.length)
+  const dim = (color: string) => selected !== null && selected !== color
+  const delay = (row: number) => Math.min(row, 40) * 14
+  const remaining = total - rows.length
+
+  return (
+    <div className="space-y-3">
+      <div className="overflow-x-auto rounded-xl border bg-card p-3">
+        <div className="relative" style={{ width, height }}>
+          <svg width={width} height={height} className="absolute left-0 top-0 overflow-visible" aria-hidden>
+            {shownEdges.map((edge, i) => (
+              <path
+                key={i}
+                d={edgePath(edge.fromRow, edge.fromCol, edge.toRow, edge.toCol, edge.kind, true)}
+                stroke={edge.color}
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                pathLength={edge.kind === "open" ? undefined : 1}
+                strokeDasharray={edge.kind === "open" ? "3 5" : 1}
+                fill="none"
+                className="transition-opacity duration-300"
+                style={{
+                  opacity: dim(edge.color) ? 0.12 : edge.kind === "open" ? 0.35 : 0.9,
+                  animation:
+                    edge.kind === "open" ? undefined : `flow-draw 700ms ${delay(edge.fromRow)}ms ease-out both`,
+                }}
+              />
+            ))}
+            {rows.map((row, i) => {
+              const cx = i * HCOL_W + HCOL_W / 2
+              const cy = HTOP + row.col * HLANE_H + HDOT
+              const faded = (matches && !matches.has(i)) || dim(row.color)
+              return (
+                <g
+                  key={row.commit.hash}
+                  className="transition-opacity duration-300"
+                  style={{
+                    opacity: faded ? 0.2 : 1,
+                    transformBox: "fill-box",
+                    transformOrigin: "center",
+                    animation: `heat-in 450ms ${delay(i)}ms cubic-bezier(0.22, 1, 0.36, 1) both`,
+                  }}
+                >
+                  {row.tips.length > 0 && <circle cx={cx} cy={cy} r={10} fill={row.color} opacity={0.18} />}
+                  <circle
+                    cx={cx}
+                    cy={cy}
+                    r={row.tips.length > 0 ? 6 : 4.5}
+                    fill={row.tips.length > 0 ? row.color : "hsl(var(--card))"}
+                    stroke={row.color}
+                    strokeWidth={row.tips.length > 0 ? 2 : 2.5}
+                  />
+                </g>
+              )
+            })}
+          </svg>
+          {rows.map((row, i) => {
+            const date = new Date(row.commit.date)
+            const faded = (matches && !matches.has(i)) || dim(row.color)
+            const open = openHash === row.commit.hash
+            return (
+              <div
+                key={row.commit.hash}
+                onClick={() => setOpenHash(open ? null : row.commit.hash)}
+                className={cn(
+                  "absolute cursor-pointer space-y-0.5 rounded-md transition-opacity duration-300",
+                  faded && "opacity-25",
+                  open && "z-10",
+                )}
+                style={{
+                  left: i * HCOL_W + 4,
+                  top: HTOP + row.col * HLANE_H + HDOT + 12,
+                  width: HCOL_W - 10,
+                }}
+              >
+                <div className="flex items-center gap-1.5 text-[11px]">
+                  <span className="text-muted-foreground">{format(date, "HH:mm")}</span>
+                  <span className="font-semibold" style={{ color: row.color }}>
+                    <Highlight text={row.commit.hash.slice(0, 7)} />
+                  </span>
+                </div>
+                {row.tips.map((tip) => (
+                  <span
+                    key={tip.name}
+                    className="block truncate rounded-full px-1.5 text-[10px] font-medium"
+                    style={{
+                      color: colorForBranch(branchColorName(tip)),
+                      background: `${colorForBranch(branchColorName(tip))}1f`,
+                    }}
+                  >
+                    <Highlight text={tip.name} />
+                  </span>
+                ))}
+                {open && (
+                  <div
+                    className="absolute left-0 top-full mt-2 w-60 space-y-1.5 rounded-lg border bg-card p-3 text-xs shadow-lg"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <CopyHash
+                        hash={row.commit.hash}
+                        className="rounded px-1 font-semibold"
+                        label={<span style={{ color: row.color }}>{row.commit.hash.slice(0, 7)}</span>}
+                      />
+                      <button
+                        type="button"
+                        aria-label="Close"
+                        onClick={() => setOpenHash(null)}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <XIcon className="size-3.5" />
+                      </button>
+                    </div>
+                    <p className="font-medium leading-snug">{row.commit.subject}</p>
+                    <p className="text-muted-foreground">
+                      {row.commit.author} · {format(date, "dd MMM yyyy HH:mm")}
+                    </p>
+                    {(row.tips.length > 0 || row.lane) && (
+                      <p>
+                        Branch:{" "}
+                        <span style={{ color: row.color }}>{row.tips.map((t) => t.name).join(", ") || row.lane}</span>
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+      <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
+        <span>
+          {matches && `${matches.size} matching · `}
+          {rows.length} of {total}
+          {truncated ? "+" : ""} commits
+        </span>
+        {remaining > 0 && (
+          <Button size="sm" variant="outline" onClick={onMore}>
+            Show {Math.min(FLOW_STEP, remaining)} more
+          </Button>
+        )}
+      </div>
+    </div>
+  )
 }
 
 function FlowHistory({
@@ -330,24 +547,36 @@ function FlowHistory({
   branch,
   keyword,
   authors,
+  showRemote,
+  horizontal,
 }: {
   repo: RepoKey
   branch: string
   keyword: string
   authors: string[]
+  showRemote: boolean
+  horizontal: boolean
 }) {
   const [more, setMore] = useState(0)
   const [selected, setSelected] = useState<string | null>(null)
 
   const query = useQuery({
-    queryKey: ["penguin", "graph", repo, branch],
+    queryKey: ["penguin", "graph", repo, branch, showRemote],
     queryFn: () =>
-      getJson<GraphData>(`/penguin/api/git/graph?repo=${repo}&branch=${encodeURIComponent(branch)}`),
+      getJson<GraphData>(
+        `/penguin/api/git/graph?repo=${repo}&branch=${encodeURIComponent(branch)}&remote=${showRemote ? 1 : 0}`,
+      ),
   })
 
   const layout = useMemo(
-    () => (query.data ? layoutGraph(query.data.commits, query.data.branches) : null),
-    [query.data],
+    () =>
+      query.data
+        ? layoutGraph(
+            query.data.commits,
+            showRemote ? query.data.branches : query.data.branches.filter((b) => !b.remote),
+          )
+        : null,
+    [query.data, showRemote],
   )
 
   // The graph cannot drop rows without breaking its lines, so a search dims the rest instead.
@@ -378,6 +607,20 @@ function FlowHistory({
   }
 
   const rows = layout.rows.slice(0, shown)
+  if (horizontal) {
+    return (
+      <FlowHorizontal
+        rows={rows}
+        edges={layout.edges}
+        columns={layout.columns}
+        total={layout.rows.length}
+        truncated={query.data?.truncated ?? false}
+        matches={matches}
+        selected={selected}
+        onMore={() => setMore((v) => v + FLOW_STEP)}
+      />
+    )
+  }
   const width = layout.columns * COL_W
   const height = rows.length * ROW_H
   const edges = layout.edges.filter((edge) => edge.fromRow < rows.length)
@@ -389,12 +632,7 @@ function FlowHistory({
     <div className="space-y-3">
       <div className="overflow-x-auto rounded-xl border bg-card p-3">
         <div className="relative" style={{ height, minWidth: left + width + 520 }}>
-          <svg
-            width={width}
-            height={height}
-            className="absolute top-0 overflow-visible"
-            style={{ left }}
-            aria-hidden>
+          <svg width={width} height={height} className="absolute top-0 overflow-visible" style={{ left }} aria-hidden>
             {edges.map((edge, i) => (
               <path
                 key={i}
@@ -427,7 +665,8 @@ function FlowHistory({
                     transformBox: "fill-box",
                     transformOrigin: "center",
                     animation: `heat-in 450ms ${delay(i)}ms cubic-bezier(0.22, 1, 0.36, 1) both`,
-                  }}>
+                  }}
+                >
                   {row.tips.length > 0 && <circle cx={cx} cy={cy} r={10} fill={row.color} opacity={0.18} />}
                   <circle
                     cx={cx}
@@ -455,8 +694,12 @@ function FlowHistory({
                     ((matches && !matches.has(i)) || dim(row.color)) && "opacity-25",
                   )}
                   style={{ height: ROW_H }}
-                  title={`${row.commit.subject}\n${row.commit.author} · ${format(date, "dd MMM yyyy HH:mm")}${row.lane ? `\nBranch: ${row.lane}` : ""}`}>
-                  <div className="flex shrink-0 flex-col justify-center text-right leading-tight" style={{ width: DATE_W }}>
+                  title={`${row.commit.subject}\n${row.commit.author} · ${format(date, "dd MMM yyyy HH:mm")}${row.lane ? `\nBranch: ${row.lane}` : ""}`}
+                >
+                  <div
+                    className="flex shrink-0 flex-col justify-center text-right leading-tight"
+                    style={{ width: DATE_W }}
+                  >
                     {newDay && <span className="text-xs font-semibold text-black/60 dark:text-white/60">{day}</span>}
                     <span className="text-[10px] text-muted-foreground">{format(date, "HH:mm")}</span>
                   </div>
@@ -477,7 +720,8 @@ function FlowHistory({
                         style={{
                           color: colorForBranch(branchColorName(tip)),
                           background: `${colorForBranch(branchColorName(tip))}1f`,
-                        }}>
+                        }}
+                      >
                         <Highlight text={tip.name} />
                       </span>
                     ))}
@@ -510,16 +754,55 @@ function FlowHistory({
   )
 }
 
-export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }) {
-  const [branch, setBranch] = useState(repo.currentBranch ?? ALL_BRANCHES)
-  const [mode, setMode] = useState<Mode>("verbose")
+// The view options are shared by both repo tabs, so they survive switching between frontend and backend.
+export interface ViewOptions {
+  mode: Mode
+  showRemote: boolean
+  horizontal: boolean
+}
+
+export const DEFAULT_VIEW_OPTIONS: ViewOptions = { mode: "verbose", showRemote: false, horizontal: false }
+
+// The branch and author filters of a repo tab. They live above the tabs, so they survive switching repos.
+export interface RepoFilters {
+  /** Undefined until the user picks a branch: then the repo's checked-out branch is used. */
+  branch?: string
+  /** Null until the user picks: then the repo's own git user is selected, when they have commits here. */
+  authors: string[] | null
+}
+
+export const DEFAULT_REPO_FILTERS: RepoFilters = { branch: undefined, authors: null }
+
+export function RepoTab({
+  repo,
+  reviews,
+  options,
+  onOptions,
+  filters,
+  onFilters,
+}: {
+  repo: RepoInfo
+  reviews: Review[]
+  options: ViewOptions
+  onOptions: (next: ViewOptions) => void
+  filters: RepoFilters
+  onFilters: (next: RepoFilters) => void
+}) {
+  const branch = filters.branch ?? repo.currentBranch ?? ALL_BRANCHES
+  const setBranch = (next: string) => onFilters({ branch: next, authors: null })
+  const { mode, showRemote, horizontal } = options
+  const setMode = (next: Mode) => onOptions({ ...options, mode: next })
+  const setShowRemote = (next: boolean) => onOptions({ ...options, showRemote: next })
+  const setHorizontal = (next: boolean) => onOptions({ ...options, horizontal: next })
   const [keyword, setKeyword] = useState("")
-  // null until the user picks: then the repo's own git user is selected, when they have commits here.
-  const [picked, setPicked] = useState<string[] | null>(null)
+  const picked = filters.authors
+  const setPicked = (next: string[] | null) => onFilters({ ...filters, authors: next })
   const contributors = useQuery({
-    queryKey: ["penguin", "contributors", repo.key, branch],
+    queryKey: ["penguin", "contributors", repo.key, branch, showRemote],
     queryFn: () =>
-      getJson<Contributor[]>(`/penguin/api/git/contributors?repo=${repo.key}&branch=${encodeURIComponent(branch)}`),
+      getJson<Contributor[]>(
+        `/penguin/api/git/contributors?repo=${repo.key}&branch=${encodeURIComponent(branch)}&remote=${showRemote ? 1 : 0}`,
+      ),
   })
   const me = repo.currentUser
   const authors = useMemo(
@@ -542,16 +825,23 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
           <h2 className="text-xl uppercase font-semibold">{repo.name}</h2>
           {repo.currentBranch && (
             <span className="truncate text-xs text-muted-foreground">
-              on <code className="rounded-sm bg-indigo-600/10 px-1 py-0.5 text-xs text-indigo-600 font-mono">{repo.currentBranch}</code>
+              on{" "}
+              <code className="rounded-sm bg-indigo-600/10 px-1 py-0.5 text-xs text-indigo-600 font-mono">
+                {repo.currentBranch}
+              </code>
             </span>
           )}
         </div>
-        <BranchPicker branches={repo.branches} value={branch} onChange={(next) => {
-          setBranch(next)
-          setPicked(null)
-        }}
+        <BranchPicker
+          branches={repo.branches}
+          value={branch}
+          onChange={(next) => {
+            setBranch(next)
+          }}
         />
         <ContributorPicker query={contributors} value={authors} onChange={setPicked} />
+        <Switch checked={showRemote} onChange={setShowRemote} label="Remote branches" />
+        <Switch checked={horizontal} onChange={setHorizontal} label="Horizontal flow" />
         <Segmented
           value={mode}
           onChange={setMode}
@@ -588,18 +878,35 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
               reviews={reviews}
               keyword={keyword}
               authors={authors}
-                />
+              showRemote={showRemote}
+            />
           ) : mode === "files" ? (
-            <FileActivityPanel key={branch} repo={repo.key} branch={branch} authors={authors} keyword={keyword} />
+            <FileActivityPanel
+              key={branch}
+              repo={repo.key}
+              branch={branch}
+              authors={authors}
+              keyword={keyword}
+              showRemote={showRemote}
+            />
           ) : mode === "data" ? (
-            <ActivityHeatmap key={branch} repo={repo.key} branch={branch} keyword={keyword} authors={authors} />
+            <ActivityHeatmap
+              key={branch}
+              repo={repo.key}
+              branch={branch}
+              keyword={keyword}
+              authors={authors}
+              showRemote={showRemote}
+            />
           ) : (
             <FlowHistory
               key={branch}
               repo={repo.key}
               branch={branch}
-                  keyword={keyword}
+              keyword={keyword}
               authors={authors}
+              showRemote={showRemote}
+              horizontal={horizontal}
             />
           )}
         </div>

@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    return NextResponse.json(await getFileActivity(repo, branch, authors, from, to))
+    return NextResponse.json(await getFileActivity(repo, branch, authors, from, to, params.get("remote") !== "0"))
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not read the files"
     return NextResponse.json({ message }, { status: 500 })
