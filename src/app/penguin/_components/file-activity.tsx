@@ -28,20 +28,22 @@ export function FileActivityPanel({
   branch,
   authors,
   keyword,
+  showRemote = true,
 }: {
   repo: RepoKey
   branch: string
   authors: string[]
   keyword: string
+  showRemote?: boolean
 }) {
   const [from, setFrom] = useState("")
   const [to, setTo] = useState("")
   const [view, setView] = useState<View>("names")
 
   const query = useQuery({
-    queryKey: ["penguin", "files", repo, branch, authors, from, to],
+    queryKey: ["penguin", "files", repo, branch, authors, from, to, showRemote],
     queryFn: async (): Promise<FileActivity> => {
-      const params = new URLSearchParams({ repo, branch, from, to })
+      const params = new URLSearchParams({ repo, branch, from, to, remote: showRemote ? "1" : "0" })
       for (const name of authors) params.append("author", name)
       const res = await fetch(`/penguin/api/git/files?${params}`)
       const body = await res.json().catch(() => null)
@@ -130,7 +132,7 @@ export function FileActivityPanel({
               className={cn(
                 "relative grid gap-x-4 md:grid-cols-[9rem_minmax(0,1fr)]",
                 i > 0 &&
-                "before:absolute before:inset-x-0 before:-top-3 before:border-t before:border-dashed before:border-border dark:before:border-white/50",
+                  "before:absolute before:inset-x-0 before:-top-3 before:border-t before:border-dashed before:border-border dark:before:border-white/50",
               )}
             >
               <div className="pb-2 md:sticky md:top-2 md:self-start md:pb-0 md:pt-2.5 md:text-right">

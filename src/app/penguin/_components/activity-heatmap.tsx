@@ -273,8 +273,10 @@ function CommitGraph({ authors, weeks }: { authors: ActivityAuthor[]; weeks: Dat
   )
 }
 
-async function fetchActivity(repo: RepoKey, branch: string): Promise<ActivityData> {
-  const res = await fetch(`/penguin/api/git/activity?repo=${repo}&branch=${encodeURIComponent(branch)}`)
+async function fetchActivity(repo: RepoKey, branch: string, remote: boolean): Promise<ActivityData> {
+  const res = await fetch(
+    `/penguin/api/git/activity?repo=${repo}&branch=${encodeURIComponent(branch)}&remote=${remote ? 1 : 0}`,
+  )
   const body = await res.json().catch(() => null)
   if (!res.ok) throw new Error(body?.message ?? "Could not load the activity")
   return body as ActivityData
@@ -285,18 +287,20 @@ export function ActivityHeatmap({
   branch,
   keyword,
   authors: picked = [],
+  showRemote = true,
 }: {
   repo: RepoKey
   branch: string
   keyword: string
   authors?: string[]
+  showRemote?: boolean
 }) {
   const metric: Metric = "lines"
   const [view, setView] = useState<View>("heatmap")
   const [shown, setShown] = useState(PAGE)
   const query = useQuery({
-    queryKey: ["penguin", "activity", repo, branch],
-    queryFn: () => fetchActivity(repo, branch),
+    queryKey: ["penguin", "activity", repo, branch, showRemote],
+    queryFn: () => fetchActivity(repo, branch, showRemote),
   })
 
   // Weeks start on Sunday and run up to the current one.

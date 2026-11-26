@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    return NextResponse.json(await getCommitPage(repo, branch, skip, limit, authors))
+    return NextResponse.json(await getCommitPage(repo, branch, skip, limit, authors, params.get("remote") !== "0"))
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not read the commits"
     return NextResponse.json({ message }, { status: 500 })
