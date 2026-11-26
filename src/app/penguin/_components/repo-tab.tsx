@@ -2,7 +2,6 @@
 
 import { LoadingIndicatorView } from "@/components/loading-indicator-view"
 import { Button } from "@/components/ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Card } from "@/components/ui/card"
 import {
   DropdownMenu,
@@ -36,6 +35,7 @@ import { Highlight, SearchHighlightProvider } from "./highlight"
 import { ActivityHeatmap } from "./activity-heatmap"
 import { FileActivityPanel } from "./file-activity"
 import { SearchBox } from "./search-box"
+import { NextTabs } from "./penguin-tabs"
 
 const ALL_BRANCHES = "__all__"
 const PAGE_SIZE = 50
@@ -95,78 +95,24 @@ function Switch({ checked, onChange, label }: { checked: boolean; onChange: (nex
 }
 
 // The view options: each one is a switch, and they all stay open while you flip them.
-const VIEWS: { value: Mode; label: string; hint: string }[] = [
-  { value: "verbose", label: "Verbose", hint: "Commit list with diffs" },
-  { value: "flow", label: "Flow", hint: "Branch lanes and merges" },
-  { value: "data", label: "Data", hint: "Authors and activity" },
-  { value: "files", label: "Files", hint: "Changed files over time" },
-]
-
-function OptionsMenu({
-  mode,
-  onMode,
-  showRemote,
-  onShowRemote,
-  horizontal,
-  onHorizontal,
+function Segmented<T extends string>({
+  value,
+  options,
+  onChange,
 }: {
-  mode: Mode
-  onMode: (next: Mode) => void
-  showRemote: boolean
-  onShowRemote: (next: boolean) => void
-  horizontal: boolean
-  onHorizontal: (next: boolean) => void
+  value: T
+  options: { value: T; label: string }[]
+  onChange: (value: T) => void
 }) {
-  const count = Number(showRemote) + Number(horizontal)
-  const view = VIEWS.find((v) => v.value === mode)?.label ?? "Verbose"
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button size="sm" variant="ghost" className="bg-card hover:bg-card">
-          Options: <span className="text-green-600">{view}</span>
-          {count > 0 && <span className="rounded-full bg-green-600/10 text-green-600 px-1.5 text-[10px]">{count}</span>}
-          <ChevronDownIcon className="size-3.5 shrink-0" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent align="end" className="w-72 space-y-3 p-3">
-        <div className="space-y-1">
-          <p className="text-xs font-medium uppercase text-muted-foreground">View</p>
-          {VIEWS.map((item) => (
-            <button
-              key={item.value}
-              type="button"
-              aria-pressed={mode === item.value}
-              onClick={() => onMode(item.value)}
-              className={cn(
-                "flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left transition-colors",
-                mode === item.value ? "bg-green-600/10 text-green-600" : "hover:bg-foreground/5",
-              )}
-            >
-              <span className="text-sm font-medium">{item.label}</span>
-              <span className={cn("text-xs", mode === item.value ? "text-green-600" : "text-muted-foreground")}>
-                {item.hint}
-              </span>
-            </button>
-          ))}
-        </div>
-        <div className="space-y-3 border-t pt-3">
-          <div className="flex items-start justify-between gap-3">
-            <div className="space-y-0.5">
-              <p className="text-sm font-medium">Remote branches</p>
-              <p className="text-xs text-muted-foreground">Include commits and labels that only exist on origin.</p>
-            </div>
-            <Switch checked={showRemote} onChange={onShowRemote} />
-          </div>
-          <div className="flex items-start justify-between gap-3">
-            <div className="space-y-0.5">
-              <p className="text-sm font-medium">Horizontal flow</p>
-              <p className="text-xs text-muted-foreground">Commits run left to right. Used in the Flow tab.</p>
-            </div>
-            <Switch checked={horizontal} onChange={onHorizontal} />
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
+    <NextTabs
+      value={value}
+      onValueChange={(next) => onChange(next as T)}
+      shouldPersist={false}
+      delayTabs={false}
+      tabsClassNames={{ base: "flex-none p-0", panel: "hidden" }}
+      tabs={options.map((option) => ({ ...option, component: null }))}
+    />
   )
 }
 
@@ -435,7 +381,6 @@ function FlowHorizontal({
   truncated,
   matches,
   selected,
-  onSelect,
   onMore,
 }: {
   rows: GraphRow[]
@@ -445,11 +390,11 @@ function FlowHorizontal({
   truncated: boolean
   matches: Set<number> | null
   selected: string | null
-  onSelect: (color: string | null) => void
   onMore: () => void
 }) {
   const width = rows.length * HCOL_W
   const height = HTOP + columns * HLANE_H + 40
+  const [openHash, setOpenHash] = useState<string | null>(null)
   const shownEdges = edges.filter((edge) => edge.fromRow < rows.length)
   const dim = (color: string) => selected !== null && selected !== color
   const delay = (row: number) => Math.min(row, 40) * 14
@@ -510,34 +455,28 @@ function FlowHorizontal({
           {rows.map((row, i) => {
             const date = new Date(row.commit.date)
             const faded = (matches && !matches.has(i)) || dim(row.color)
+            const open = openHash === row.commit.hash
             return (
               <div
                 key={row.commit.hash}
-                onClick={() => onSelect(selected === row.color ? null : row.color)}
+                onClick={() => setOpenHash(open ? null : row.commit.hash)}
                 className={cn(
-                  "absolute cursor-pointer space-y-0.5 overflow-hidden rounded-md transition-opacity duration-300",
+                  "absolute cursor-pointer space-y-0.5 rounded-md transition-opacity duration-300",
                   faded && "opacity-25",
+                  open && "z-10",
                 )}
                 style={{
                   left: i * HCOL_W + 4,
                   top: HTOP + row.col * HLANE_H + HDOT + 12,
                   width: HCOL_W - 10,
                 }}
-                title={`${row.commit.subject}\n${row.commit.author} · ${format(date, "dd MMM yyyy HH:mm")}${row.lane ? `\nBranch: ${row.lane}` : ""}`}
               >
-                <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                  <span>{format(date, "dd MMM")}</span>
-                  <span>{format(date, "HH:mm")}</span>
+                <div className="flex items-center gap-1.5 text-[11px]">
+                  <span className="text-muted-foreground">{format(date, "HH:mm")}</span>
+                  <span className="font-semibold" style={{ color: row.color }}>
+                    <Highlight text={row.commit.hash.slice(0, 7)} />
+                  </span>
                 </div>
-                <CopyHash
-                  hash={row.commit.hash}
-                  className="rounded px-1 text-xs font-semibold"
-                  label={
-                    <span style={{ color: row.color }}>
-                      <Highlight text={row.commit.hash.slice(0, 7)} />
-                    </span>
-                  }
-                />
                 {row.tips.map((tip) => (
                   <span
                     key={tip.name}
@@ -550,9 +489,38 @@ function FlowHorizontal({
                     <Highlight text={tip.name} />
                   </span>
                 ))}
-                <div className="truncate text-xs">
-                  <Highlight text={row.commit.subject} />
-                </div>
+                {open && (
+                  <div
+                    className="absolute left-0 top-full mt-2 w-60 space-y-1.5 rounded-lg border bg-card p-3 text-xs shadow-lg"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <CopyHash
+                        hash={row.commit.hash}
+                        className="rounded px-1 font-semibold"
+                        label={<span style={{ color: row.color }}>{row.commit.hash.slice(0, 7)}</span>}
+                      />
+                      <button
+                        type="button"
+                        aria-label="Close"
+                        onClick={() => setOpenHash(null)}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <XIcon className="size-3.5" />
+                      </button>
+                    </div>
+                    <p className="font-medium leading-snug">{row.commit.subject}</p>
+                    <p className="text-muted-foreground">
+                      {row.commit.author} · {format(date, "dd MMM yyyy HH:mm")}
+                    </p>
+                    {(row.tips.length > 0 || row.lane) && (
+                      <p>
+                        Branch:{" "}
+                        <span style={{ color: row.color }}>{row.tips.map((t) => t.name).join(", ") || row.lane}</span>
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             )
           })}
@@ -649,7 +617,6 @@ function FlowHistory({
         truncated={query.data?.truncated ?? false}
         matches={matches}
         selected={selected}
-        onSelect={setSelected}
         onMore={() => setMore((v) => v + FLOW_STEP)}
       />
     )
@@ -787,14 +754,49 @@ function FlowHistory({
   )
 }
 
-export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }) {
-  const [branch, setBranch] = useState(repo.currentBranch ?? ALL_BRANCHES)
-  const [mode, setMode] = useState<Mode>("verbose")
-  const [showRemote, setShowRemote] = useState(false)
-  const [horizontal, setHorizontal] = useState(false)
+// The view options are shared by both repo tabs, so they survive switching between frontend and backend.
+export interface ViewOptions {
+  mode: Mode
+  showRemote: boolean
+  horizontal: boolean
+}
+
+export const DEFAULT_VIEW_OPTIONS: ViewOptions = { mode: "verbose", showRemote: false, horizontal: false }
+
+// The branch and author filters of a repo tab. They live above the tabs, so they survive switching repos.
+export interface RepoFilters {
+  /** Undefined until the user picks a branch: then the repo's checked-out branch is used. */
+  branch?: string
+  /** Null until the user picks: then the repo's own git user is selected, when they have commits here. */
+  authors: string[] | null
+}
+
+export const DEFAULT_REPO_FILTERS: RepoFilters = { branch: undefined, authors: null }
+
+export function RepoTab({
+  repo,
+  reviews,
+  options,
+  onOptions,
+  filters,
+  onFilters,
+}: {
+  repo: RepoInfo
+  reviews: Review[]
+  options: ViewOptions
+  onOptions: (next: ViewOptions) => void
+  filters: RepoFilters
+  onFilters: (next: RepoFilters) => void
+}) {
+  const branch = filters.branch ?? repo.currentBranch ?? ALL_BRANCHES
+  const setBranch = (next: string) => onFilters({ branch: next, authors: null })
+  const { mode, showRemote, horizontal } = options
+  const setMode = (next: Mode) => onOptions({ ...options, mode: next })
+  const setShowRemote = (next: boolean) => onOptions({ ...options, showRemote: next })
+  const setHorizontal = (next: boolean) => onOptions({ ...options, horizontal: next })
   const [keyword, setKeyword] = useState("")
-  // null until the user picks: then the repo's own git user is selected, when they have commits here.
-  const [picked, setPicked] = useState<string[] | null>(null)
+  const picked = filters.authors
+  const setPicked = (next: string[] | null) => onFilters({ ...filters, authors: next })
   const contributors = useQuery({
     queryKey: ["penguin", "contributors", repo.key, branch, showRemote],
     queryFn: () =>
@@ -835,17 +837,20 @@ export function RepoTab({ repo, reviews }: { repo: RepoInfo; reviews: Review[] }
           value={branch}
           onChange={(next) => {
             setBranch(next)
-            setPicked(null)
           }}
         />
         <ContributorPicker query={contributors} value={authors} onChange={setPicked} />
-        <OptionsMenu
-          mode={mode}
-          onMode={setMode}
-          showRemote={showRemote}
-          onShowRemote={setShowRemote}
-          horizontal={horizontal}
-          onHorizontal={setHorizontal}
+        <Switch checked={showRemote} onChange={setShowRemote} label="Remote branches" />
+        <Switch checked={horizontal} onChange={setHorizontal} label="Horizontal flow" />
+        <Segmented
+          value={mode}
+          onChange={setMode}
+          options={[
+            { value: "verbose", label: "Verbose" },
+            { value: "flow", label: "Flow" },
+            { value: "data", label: "Data" },
+            { value: "files", label: "Files" },
+          ]}
         />
       </div>
 

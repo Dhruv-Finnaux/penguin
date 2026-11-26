@@ -25,7 +25,7 @@ import type {
   RepoKey,
   Review,
 } from "../_lib/types"
-import { RepoTab } from "./repo-tab"
+import { DEFAULT_REPO_FILTERS, DEFAULT_VIEW_OPTIONS, RepoTab, type RepoFilters, type ViewOptions } from "./repo-tab"
 import { branchColorName, branchKey, registerBranchColors } from "../_lib/graph-layout"
 import { CommittableTab } from "./committable-tab"
 import { DbBackupsTab } from "./db-backups-tab"
@@ -189,6 +189,12 @@ export function PenguinTabs({
   )
   const router = useRouter()
   const [isRefreshing, startTransition] = useTransition()
+  // Kept here, above the tabs, so the view survives switching between frontend and backend.
+  const [viewOptions, setViewOptions] = React.useState<ViewOptions>(DEFAULT_VIEW_OPTIONS)
+  const [repoFilters, setRepoFilters] = React.useState<Record<RepoKey, RepoFilters>>({
+    frontend: DEFAULT_REPO_FILTERS,
+    backend: DEFAULT_REPO_FILTERS,
+  })
 
   useEffect(() => {
     const refresh = () => {
@@ -243,12 +249,30 @@ export function PenguinTabs({
           {
             value: "frontend",
             label: "Frontend",
-            component: <RepoTab repo={repos.frontend} reviews={reviews} />,
+            component: (
+              <RepoTab
+                repo={repos.frontend}
+                reviews={reviews}
+                options={viewOptions}
+                onOptions={setViewOptions}
+                filters={repoFilters.frontend}
+                onFilters={(next) => setRepoFilters((all) => ({ ...all, frontend: next }))}
+              />
+            ),
           },
           {
             value: "backend",
             label: "Backend",
-            component: <RepoTab repo={repos.backend} reviews={reviews} />,
+            component: (
+              <RepoTab
+                repo={repos.backend}
+                reviews={reviews}
+                options={viewOptions}
+                onOptions={setViewOptions}
+                filters={repoFilters.backend}
+                onFilters={(next) => setRepoFilters((all) => ({ ...all, backend: next }))}
+              />
+            ),
           },
           {
             value: "committables",
