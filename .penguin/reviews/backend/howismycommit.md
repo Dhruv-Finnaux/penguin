@@ -1,6 +1,927 @@
 # 🐧 How Is My Commit · Backend
 
-> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 71 entries, newest first.
+> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 82 entries, newest first.
+
+## howismycommit-82
+
+| Field | Value |
+|---|---|
+| id | howismycommit-82 |
+| generatedAt | 2026-11-26T16:32:15+05:30 |
+| author | Dhruv |
+| branch | feat/finnaux-apis |
+| target.kind | commit |
+| target.commit | 4855421f37a05a5418836f70d243cdf661c9d971 |
+| files.changed | 10 |
+| files.added | 2 |
+| files.modified | 7 |
+| files.deleted | 1 |
+| files.insertions | 4543 |
+| files.deletions | 4243 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 4 |
+| before | GST could only be verified through SurePass. The Finnaux GST group existed in the seed but had no endpoint or code behind it. |
+| after | POST /v1/external/finnaux/gst/verify validates the GSTIN and calls Finnaux GST_VERIFY_ADVANCED. It blocks when the registration status is missing or not Active, and requires a legal or trade name. It saves a KYC verification record and returns kycDocuments plus firmDetails and addressDetails, which the customer form can use to prefill. |
+
+### changeType (2)
+
+- feature
+- schema
+
+### effects (3)
+
+- New endpoint row 01M8B9B03W7YW5VEY906AZJETQ under the existing Finnaux GST group, added both in the seed and in migration 0020.
+- Non-individual customer creation can prefill the firm name and address from firmDetails and addressDetails.
+- Verification records are written to the KYC verification tables, as for the other Finnaux checks.
+
+### filesReviewed (10)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/dto/verify-gst.dto.ts | added | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/index.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/fixed-cuids.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/customer/kyc/kyc-document-verification-channelizer.ts | modified | green | no issues |
+| drizzle/0020_finnaux_gst.sql | added | green | no issues |
+| drizzle/meta/0020_snapshot.json | modified | green | no issues |
+| drizzle/meta/_journal.json | modified | green | no issues |
+| seed/data/apiEndpoints.json | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | resolved | Still fixed: apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1116 keeps input.regMobileNo in the cache key. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | Still fixed: drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates electricity_bill_service_provider_enum. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint | passed |
+| green | bun run build | passed |
+| green | bun scripts/check-migrations.ts | passed |
+
+### gaps (2)
+
+- Not tested against the live Finnaux GST_VERIFY_ADVANCED API.
+- Migration 0020 was generated on this branch, so it may need regenerating if dev gets another 0020 first.
+
+### info (4)
+
+- This commit is the rebuilt copy of 8636df19 (reviewed in howismycommit-80). The GST files are identical; the only difference is that this branch does not carry the DTO guard commit a9d7ef4f, which lives on feat/external-apis and dev.
+- The working tree has moved on since this commit: 98b769ed adds Voter ID to the same service, controller, channelizer, fixed ids and seed, and replaces 0020_snapshot.json with 0021_snapshot.json. That later change was reviewed in howismycommit-81 and adds no defects to the GST code.
+- The snapshot rename 0019 to 0020 is key order and id only; the schema is unchanged.
+- Checks were run on the current tree (98b769ed), which contains this commit unchanged.
+
+---
+
+## howismycommit-81
+
+| Field | Value |
+|---|---|
+| id | howismycommit-81 |
+| generatedAt | 2026-11-26T16:30:02+05:30 |
+| author | Dhruv |
+| branch | feat/finnaux-apis |
+| target.kind | commit |
+| target.commit | 98b769ed2b0624efda6751b786c23ab56405c96a |
+| files.changed | 10 |
+| files.added | 2 |
+| files.modified | 7 |
+| files.deleted | 1 |
+| files.insertions | 226 |
+| files.deletions | 4 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | Voter ID could only be verified through SurePass, whose API group is inactive. The Finnaux Voter ID group existed in the seed but had no endpoint or code behind it. |
+| after | POST /v1/external/finnaux/voter-id/verify validates the EPIC number and calls Finnaux VOTER_ID_VERIFY. It reads data.details or data, requires a name (English, then Hindi), and builds the address from house number, part name, district and state. Pincode, date of birth and gender are used only when present. It saves a KYC verification record and returns the same kycDocuments shape as SurePass. |
+
+### changeType (2)
+
+- feature
+- schema
+
+### effects (3)
+
+- New endpoint row 01M8BQWZXDXERWWBK3VHZQPA93 under the existing Finnaux Voter ID group, added both in the seed and in migration 0021.
+- The frontend Voter ID flow can switch to Finnaux through the existing integration group. A contract was written in the UI repo.
+- Verification records are written to the KYC verification tables, as for the other Finnaux checks.
+
+### filesReviewed (10)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/dto/verify-voter-id.dto.ts | added | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/index.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/fixed-cuids.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/customer/kyc/kyc-document-verification-channelizer.ts | modified | green | no issues |
+| drizzle/0021_finnaux_voter_id.sql | added | green | no issues |
+| drizzle/meta/0021_snapshot.json | modified | green | no issues |
+| drizzle/meta/_journal.json | modified | green | no issues |
+| seed/data/apiEndpoints.json | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | resolved | Still fixed: apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1116 keeps input.regMobileNo in the cache key. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | Still fixed: drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates electricity_bill_service_provider_enum. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint | passed |
+| green | bun run build | passed |
+| green | bun scripts/check-migrations.ts | passed |
+
+### gaps (2)
+
+- Not tested against the live Finnaux VOTER_ID_VERIFY API. If data.details ever comes back as a string instead of an object, the call would fail with 'Voter ID details not found'.
+- Migration 0021 was generated on this branch, so it may need regenerating if dev gets another 0021 first.
+
+### info (3)
+
+- The DTO uses REGEX.VOTER_ID_CARD (3 letters + 7 digits), the same rule the KYC save DTO already applies, so verify and save agree.
+- The snapshot rename 0020 to 0021 changes only id and prevId; the schema is unchanged.
+- The request log masks the EPIC number to its last 4 characters, like the electricity bill consumer number.
+
+---
+
+## howismycommit-80
+
+| Field | Value |
+|---|---|
+| id | howismycommit-80 |
+| generatedAt | 2026-11-26T13:06:04+05:30 |
+| author | Dhruv |
+| branch | feat/finnaux-apis |
+| target.kind | commit |
+| target.commit | 8636df1921cb5510e4231d557dfff5bfb2fc912f |
+| files.changed | 10 |
+| files.added | 3 |
+| files.modified | 6 |
+| files.deleted | 0 |
+| files.insertions | 4543 |
+| files.deletions | 4243 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | GST verification ran only through SurePass; the Finnaux GST group had no route, endpoint row or migration. |
+| after | POST /external/finnaux/gst/verify verifies a GSTIN through Finnaux GST_VERIFY_ADVANCED, blocks any status other than Active, saves a FINNAUX KYC verification record and returns kycDocuments plus firmDetails and addressDetails. Migration 0020 and the seed add the endpoint row. The GST DTO transform is guarded. |
+
+### changeType (3)
+
+- feature
+- API
+- schema or migration
+
+### effects (3)
+
+- New route behind the KYC page rights.
+- SurePass GST untouched.
+- Migration 0020 and its snapshot (replacing 0019's).
+
+### filesReviewed (10)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/verify-gst.dto.ts | added | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/customer/kyc/kyc-document-verification-channelizer.ts | modified | green | no issues |
+| apps/finnaux-api/src/fixed-cuids.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/index.ts | modified | green | no issues |
+| drizzle/0020_finnaux_gst.sql | added | green | no issues |
+| drizzle/meta/0020_snapshot.json | added | green | no issues |
+| drizzle/meta/_journal.json | modified | green | no issues |
+| seed/data/apiEndpoints.json | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | resolved | apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1108 includes input.regMobileNo in the key. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates the type. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps/finnaux-api/src/external/finnaux apps/finnaux-api/src/lms/customer/kyc apps/finnaux-api/src/fixed-cuids.ts | passed |
+| green | bun run build | passed |
+| green | bun scripts/check-migrations.ts | passed |
+
+### gaps (2)
+
+- Not called against the live Finnaux GST API.
+- Migration 0020 was generated before merging into feat/external-apis; if another 0020 lands first it must be regenerated.
+
+### info (3)
+
+- This one commit holds the work earlier reviewed as 71ae2a78, 2115f32c and 3d80f31f (howismycommit-76 to 78); its GST files are identical to 3d80f31f.
+- finnaux_dev already has 0020 recorded from the earlier apply; if 0020 is regenerated, remove that record first.
+- The 0020 snapshot diff is key order only; the schema equals 0019's.
+
+---
+
+## howismycommit-79
+
+| Field | Value |
+|---|---|
+| id | howismycommit-79 |
+| generatedAt | 2026-11-26T12:44:34+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | a9d7ef4fde2986ba0fecb22fcb8c4a8870de6a04 |
+| files.changed | 5 |
+| files.added | 0 |
+| files.modified | 5 |
+| files.deleted | 0 |
+| files.insertions | 22 |
+| files.deletions | 10 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | The Finnaux PAN, driving licence, vehicle RC, bank and electricity bill DTOs called trim/replaceAll/toUpperCase before validation, so a number, null or missing value crashed with a 500. |
+| after | Each transform runs only when the value is a string; anything else reaches validation and returns the normal 400 field errors. Valid input is cleaned exactly as before. |
+
+### changeType (1)
+
+- bug fix
+
+### effects (1)
+
+- Request validation for POST /external/finnaux/pan/verify, driving-license/verify, vehicle-rc/verify, bank/verify and electricity-bill/verify.
+
+### filesReviewed (5)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/dto/verify-bank-account.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/verify-driving-license.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/verify-electricity-bill.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/verify-pan.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/verify-vehicle-rc.dto.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | resolved | apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1087 includes input.regMobileNo in the key. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates the type. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps/finnaux-api/src/external/finnaux/dto | passed |
+| green | bun run build | passed |
+| green | class-validator check of bad and good input for all five DTOs (earlier run, same code) | passed: 400 field errors for bad input, valid input cleaned as before |
+
+### gaps (1)
+
+- The GST DTO guard lives in the GST stash (stash@{0}), not on the branch yet.
+
+### info (1)
+
+- No API contract change for valid requests; only the error for malformed requests moves from 500 to 400.
+
+---
+
+## howismycommit-78
+
+| Field | Value |
+|---|---|
+| id | howismycommit-78 |
+| generatedAt | 2026-11-26T12:33:36+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 3d80f31fd04cf1cb485ad270ac96f8bd9281753d |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 2 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 3 |
+| summary.info | 1 |
+| before | The Finnaux GST DTO called replaceAll on gstNumber before validation, so a number, null or missing value crashed with a 500. |
+| after | The value is cleaned only when it is a string; anything else reaches validation and returns 400 'Enter a valid GSTIN'. |
+
+### changeType (1)
+
+- bug fix
+
+### effects (1)
+
+- Only POST /external/finnaux/gst/verify request validation.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/dto/verify-gst.dto.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 71ae2a78a68e3d0b50abafa0a67a45b23c894c00 | F1 | Non-string gstNumber crashes the DTO transform | resolved | apps/finnaux-api/src/external/finnaux/dto/verify-gst.dto.ts:11 guards the transform with typeof value === 'string'. |
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps/finnaux-api/src/external/finnaux/dto | passed |
+| green | class-validator check of 123, null, undefined and a spaced lower-case GSTIN | passed: 400 message for bad input, valid GSTIN cleaned |
+
+### gaps (1)
+
+- The same unguarded transform remains in the driving licence, bank and electricity bill Finnaux DTOs.
+
+### info (1)
+
+- The validation check was a temporary script, deleted after the run.
+
+---
+
+## howismycommit-77
+
+| Field | Value |
+|---|---|
+| id | howismycommit-77 |
+| generatedAt | 2026-11-26T12:31:56+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 2115f32cda2567b4af8f1726551237ba257c0a29 |
+| files.changed | 4 |
+| files.added | 1 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 4267 |
+| files.deletions | 4242 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | The Finnaux GST endpoint row did not exist in migrations or the seed. |
+| after | Custom migration 0020 inserts the Finnaux GST endpoint under the Finnaux GST group (ON CONFLICT DO NOTHING; skips on a fresh DB where the seed adds the row), and the seed carries the same row. |
+
+### changeType (1)
+
+- schema or migration
+
+### effects (2)
+
+- Every DB running db:migrate after 0019.
+- 0019_snapshot.json replaced by 0020_snapshot.json.
+
+### filesReviewed (4)
+
+| path | change | status | note |
+|---|---|---|---|
+| drizzle/0020_finnaux_gst.sql | added | green | no issues |
+| drizzle/meta/0020_snapshot.json | added | green | no issues |
+| drizzle/meta/_journal.json | modified | green | no issues |
+| seed/data/apiEndpoints.json | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | resolved | apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1108 still includes input.regMobileNo in the key. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates the type. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bun scripts/check-migrations.ts | passed |
+| green | bun db:migrate (finnaux_dev) | passed: 0020 applied |
+| green | bun seed:check | passed: migrations 21 of 21, orphans 0 |
+| green | compare 0019 and 0020 snapshots with sorted keys | passed: same schema |
+
+### gaps (2)
+
+- Not applied to any shared DB.
+- Numbering: another 0020 merged into dev first would need a regenerate.
+
+### info (2)
+
+- The large snapshot diff is key order only: drizzle-kit rewrote the copied snapshot; the schema is identical to 0019.
+- The seed row's createdAt is a fixed date (2026-11-26T00:00:00Z).
+
+---
+
+## howismycommit-76
+
+| Field | Value |
+|---|---|
+| id | howismycommit-76 |
+| generatedAt | 2026-11-26T12:31:56+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 71ae2a78a68e3d0b50abafa0a67a45b23c894c00 |
+| files.changed | 6 |
+| files.added | 1 |
+| files.modified | 5 |
+| files.deleted | 0 |
+| files.insertions | 276 |
+| files.deletions | 1 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 96 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 3 |
+| summary.info | 2 |
+| before | GST verification ran only through SurePass; the Finnaux GST group had no route or endpoint. |
+| after | POST /external/finnaux/gst/verify verifies a GSTIN through Finnaux GST_VERIFY_ADVANCED, blocks any status other than Active, saves a FINNAUX KYC verification record, and returns kycDocuments plus firmDetails and addressDetails for the non-individual customer form. |
+
+### changeType (2)
+
+- feature
+- API
+
+### effects (3)
+
+- New route behind the KYC page rights.
+- SurePass GST flow untouched.
+- Reply adds firmDetails and addressDetails that the frontend can use to fill firm name and address.
+
+### filesReviewed (6)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/dto/verify-gst.dto.ts | added | amber | F1 |
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/customer/kyc/kyc-document-verification-channelizer.ts | modified | green | no issues |
+| apps/finnaux-api/src/fixed-cuids.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/index.ts | modified | green | no issues |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Non-string gstNumber crashes the DTO transform |
+| location | apps/finnaux-api/src/external/finnaux/dto/verify-gst.dto.ts:11 |
+| problem | The @Transform runs before validation and calls value.replaceAll() without checking the type. A request with gstNumber as a number, null or missing throws a TypeError inside the ValidationPipe. |
+| impact | The caller gets a 500 Internal Server Error instead of a 400 'Enter a valid GSTIN'. Only malformed requests are affected. |
+| fix | Guard the transform: typeof value === 'string' ? value.replaceAll(' ', '').toUpperCase() : value. |
+| evidence |   @Transform(({ value }: { value: string }) =><br>    value.replaceAll(' ', '').toUpperCase()<br>  ) |
+| status | resolved |
+| resolvedIn | 3d80f31fd04cf1cb485ad270ac96f8bd9281753d |
+| resolvedAt | 2026-11-26T07:03:36.166Z |
+| resolvedNote | apps/finnaux-api/src/external/finnaux/dto/verify-gst.dto.ts:11 only cleans the value when it is a string, so bad input gets a 400. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | resolved | apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1108 still includes input.regMobileNo in the key. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates the type. |
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps/finnaux-api/src/external/finnaux apps/finnaux-api/src/lms/customer/kyc | passed |
+| green | bun run build | passed |
+
+### gaps (2)
+
+- Not called against the live Finnaux GST API; parsing follows the portal docs sample.
+- No unit tests for verifyGst.
+
+### info (2)
+
+- The same unguarded transform pattern exists in the other Finnaux DTOs (driving licence, bank, electricity bill); not part of this commit.
+- registrationDate is turned from Finnaux's yyyy-MM-dd into a UTC-midnight ISO string at the origin, as the date rules require.
+
+---
+
+## howismycommit-75
+
+| Field | Value |
+|---|---|
+| id | howismycommit-75 |
+| generatedAt | 2026-11-26T11:25:51+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | a1c680abb347c76eda44ae1e6b3f2c5b9a5dfce6 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 2 |
+| files.deletions | 1 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | The Finnaux Electricity Bill cache key held employee, consumer number and board, so a Kerala re-verify with another mobile number reused the cached success. |
+| after | The key also holds the mobile number (empty for boards that don't send one), so a different Kerala mobile number gets a real Finnaux check. |
+
+### changeType (1)
+
+- bug fix
+
+### effects (1)
+
+- Only Finnaux Electricity Bill verification caching; other boards behave as before.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | resolved | apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1087 adds input.regMobileNo to the key. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates the type; applied on finnaux_dev. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps/finnaux-api/src/external/finnaux | passed |
+| green | ALLOW_BREAKING=1 bun db:migrate (finnaux_dev) | passed: 0018 and 0019 applied |
+| green | bun seed:check | passed: migrations 20 of 20, orphans 0 |
+
+### gaps (2)
+
+- Not called against the live Finnaux API.
+- bun seed:run refused on finnaux_dev (24 orphan groups from local data such as missing loanProducts); nothing was written. Unrelated to this commit.
+
+### info (1)
+
+- Saved answers created before this fix use the old key shape and expire within 60 minutes.
+
+---
+
+## howismycommit-74
+
+| Field | Value |
+|---|---|
+| id | howismycommit-74 |
+| generatedAt | 2026-11-26T11:17:39+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | ba38757065377e2817effc8de7a6bf8a119a5078 |
+| files.changed | 5 |
+| files.added | 1 |
+| files.modified | 3 |
+| files.deleted | 0 |
+| files.insertions | 119 |
+| files.deletions | 6 |
+| verdict | review-with-caution |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | The FINNAUX bank provider value, the bank endpoint row and the Electricity Bill changes existed only in code, a stash and hand-run scripts. |
+| after | Migration 0019 adds FINNAUX to the bank provider enum (IF NOT EXISTS), creates the board-code enum, inserts both Finnaux endpoints (ON CONFLICT DO NOTHING) and moves Ration Card and Electricity Bill to KYC_ADDRESS. The seed carries the same rows for fresh databases. |
+
+### changeType (1)
+
+- schema or migration
+
+### effects (3)
+
+- Every DB running db:migrate after dev's 0018.
+- Fresh DBs: inserts skip because apiGroups is empty at that point, and the seed adds the rows.
+- 0018_snapshot.json replaced by 0019_snapshot.json.
+
+### filesReviewed (5)
+
+| path | change | status | note |
+|---|---|---|---|
+| drizzle/0019_finnaux_bank_and_electricity_bill.sql | added | green | no issues |
+| drizzle/meta/0019_snapshot.json | added | green | no issues |
+| drizzle/meta/_journal.json | modified | green | no issues |
+| seed/data/apiEndpoints.json | modified | green | no issues |
+| seed/data/documents.json | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | open | apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1086 still builds the key without regMobileNo. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates the type. |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bun scripts/check-migrations.ts | passed |
+| green | 0018 + 0019 in begin; ... rollback; on finnaux_dev | passed (FINNAUX already exists, skipped) |
+| green | bunx tsc --noEmit | passed |
+| green | bun run build | passed |
+| grey | bun db:migrate | not run: dev's 0018 is breaking and the DB backup is pending |
+
+### gaps (2)
+
+- Not yet applied with db:migrate or checked with seed:check on any DB.
+- Numbering: another 0019 merged into dev first would need a regenerate.
+
+### info (2)
+
+- electricity_bill_service_provider_enum is used by no column; it exists because createEnum() always defines a pg type.
+- The seed row's createdAt is a fixed date (2026-11-26T00:00:00Z).
+
+---
+
+## howismycommit-73
+
+| Field | Value |
+|---|---|
+| id | howismycommit-73 |
+| generatedAt | 2026-11-26T11:17:26+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 188da1274484dfa371f2c68744143f3ed2d29c7c |
+| files.changed | 8 |
+| files.added | 1 |
+| files.modified | 7 |
+| files.deleted | 0 |
+| files.insertions | 310 |
+| files.deletions | 2 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 92 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 3 |
+| summary.info | 2 |
+| before | Electricity Bill could be verified only through SurePass; the Finnaux Electricity Bill API group had no route or endpoint. |
+| after | POST /external/finnaux/electricity-bill/verify verifies a consumer number and board code through Finnaux, saves a FINNAUX KYC verification record and returns the SurePass-shaped kycDocuments reply. Board codes are a new enum exposed via /dropdown/enum. |
+
+### changeType (2)
+
+- feature
+- API
+
+### effects (3)
+
+- New route behind the KYC page rights.
+- New pg enum type electricity_bill_service_provider_enum (migration in ba387570).
+- SurePass Electricity Bill flow untouched.
+
+### filesReviewed (8)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/finnaux/finnaux.service.ts | modified | amber | F1 |
+| apps/finnaux-api/src/drizzle/schema/enums.ts | modified | green | F2 (resolved) |
+| apps/finnaux-api/src/external/finnaux/dto/verify-electricity-bill.dto.ts | added | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/customer/kyc/kyc-document-verification-channelizer.ts | modified | green | no issues |
+| apps/finnaux-api/src/drizzle/schema/enum-map.ts | modified | green | no issues |
+| apps/finnaux-api/src/fixed-cuids.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/dto/index.ts | modified | green | no issues |
+
+### findings (2)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Kerala mobile number not part of the cache key |
+| location | apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1086 |
+| problem | The cache key holds employee, consumer number and board but not regMobileNo. For KERALA, a second verify of the same consumer within 60 minutes with any other mobile number returns the cached success without calling Finnaux. |
+| impact | A Kerala bill can be shown as verified for a mobile number Finnaux never checked. Low impact: the mobile number is not stored. |
+| fix | Add input.regMobileNo (or an empty string) to the cache key. |
+| evidence |       input.consumerId,<br>      input.serviceProvider<br>    ].join(':') |
+| status | resolved |
+| resolvedIn | a1c680abb347c76eda44ae1e6b3f2c5b9a5dfce6 |
+| resolvedAt | 2026-11-26T05:55:51.877Z |
+| resolvedNote | apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1087 adds input.regMobileNo to the cache key. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[2] · F2
+
+| Field | Value |
+|---|---|
+| id | F2 |
+| severity | P3 |
+| title | New pg enum without a migration in this commit |
+| location | apps/finnaux-api/src/drizzle/schema/enums.ts |
+| problem | createEnum() also defines a Postgres type, so this commit alone leaves the schema ahead of the migrations. |
+| impact | db:generate on this commit would produce the CREATE TYPE; nothing reads the type at runtime. |
+| fix | Ship the migration with it. |
+| evidence | pgEnum: electricityBillServiceProviderEnum |
+| status | resolved |
+| resolvedIn | ba38757065377e2817effc8de7a6bf8a119a5078 |
+| resolvedAt | 2026-11-26T12:00:00.000Z |
+| resolvedNote | drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates electricity_bill_service_provider_enum. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint (finnaux, lms/customer/kyc, enums, enum-map, fixed-cuids) | passed |
+| green | bun run build | passed |
+
+### gaps (2)
+
+- Not called against the live Finnaux API; reply parsing follows the portal docs sample.
+- No unit tests for verifyElectricityBill.
+
+### info (2)
+
+- The Finnaux reply (consumer name, address, masked mobile/email) is logged to apiRequests like the other Finnaux KYC replies.
+- docNumber uses the consumer number the user typed, so the saved document matches its verification.
+
+---
+
+## howismycommit-72
+
+| Field | Value |
+|---|---|
+| id | howismycommit-72 |
+| generatedAt | 2026-11-26T11:17:26+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 6b3e9c4afab21120d78a8dc774e9e0c1f94e0dad |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 10 |
+| files.deletions | 6 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 3 |
+| summary.info | 2 |
+| before | A KYC document save linked a verification only when the operator code matched exactly, and a missing Electricity Bill operator code failed with 'operatorCodeId must be a string'. |
+| after | Operator codes are compared without case or spaces, and a missing Electricity Bill code fails with 'Operator code is required for Electricity Bill'. |
+
+### changeType (1)
+
+- bug fix
+
+### effects (2)
+
+- Customer KYC create/update and new-customer save for Electricity Bill (SurePass and Finnaux).
+- Only Electricity Bill carries an operator code, so other document types are unaffected.
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/lms/customer/kyc/dto/create-kyc.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/customer/kyc/kyc-document-verification.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (3)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint (finnaux, lms/customer/kyc, enums, enum-map, fixed-cuids) | passed |
+| green | bun run build | passed |
+
+### gaps (1)
+
+- No unit test covers matchesDocumentVerification; not run against a real save.
+
+### info (2)
+
+- kyc.service.ts update() still compares the stored and new operator code case-sensitively to decide whether to re-check the verification; harmless because the match itself now ignores case.
+- UpdateKycDto extends CreateKycDto, so the clearer message also applies on edit.
+
+---
 
 ## howismycommit-71
 

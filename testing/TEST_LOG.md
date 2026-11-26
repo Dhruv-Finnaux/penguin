@@ -18,6 +18,7 @@ evidence in `test-evidence/` next to it, run data (sweep, probe plan/results, ta
 | P3 | T1-T4 per module (add, edit, delete, print/export), granted via Adam | done: Dashboard, Reports-U, Customer, LOS, LMS (partial: money flows blocked), Accounts T0-T3 done (one ₹1 pending journal voucher posted and deleted; never authorised, no outbound), Managed Portfolios T0 done (T1+ blocked: real loans), CRM done (tickets T1 blocked: workflow config), HRMS done (payroll processing blocked), Configuration done, Admin done | 2026-11-25 | 2026-11-25 |
 | P4 | T5 process rights (LOS/LMS) | done (code check: process rights never enforced by the API; confirms FINDING 17) | 2026-11-25 | 2026-11-25 |
 | P5 | T6 restricted admin pages (human present) + cross-cutting security (IDOR, session, leaks) | done: T6 negative and positive (granted via Adam, reverted), sessions, login, IDOR. FINDING 26-30, NOTE N10-N15 | 2026-11-25 | 2026-11-25 |
+| P6 | Entry points without staff login: public routes, token (OAuth) routes, WebSocket, uploads, CORS/CSRF, headers | in progress | 2026-11-26 | |
 
 ## Session journal
 
