@@ -373,7 +373,59 @@ function edgePath(fromRow: number, fromCol: number, toRow: number, toCol: number
   return `M${P(L1, R1)}C${P(L1, R1 + rowSpan / 2)} ${P(L2, R1 + rowSpan / 2)} ${P(L2, bend)}L${P(L2, R2)}`
 }
 
+const BRANCH_CATEGORY_ORDER = ["main", "dev", "feat", "fix", "refactor", "hotfix"] as const
+
+function getBranchCategoryRank(branchName: string): number {
+  const normalized = branchName.trim().toLowerCase()
+
+  if (normalized === "main") return 0
+  if (normalized === "dev" || normalized === "develop") return 1
+
+  const prefix = normalized.split("/")[0]
+  if (prefix === "feat" || prefix === "feature") return 2
+  if (prefix === "fix" || prefix === "bugfix") return 3
+  if (prefix === "refactor") return 4
+  if (prefix === "hotfix") return 5
+
+  return BRANCH_CATEGORY_ORDER.length
+}
+
+function sortBranchEntries(entries: [string, string][]): [string, string][] {
+  return [...entries].sort(([nameA], [nameB]) => {
+    const rankDiff = getBranchCategoryRank(nameA) - getBranchCategoryRank(nameB)
+    if (rankDiff !== 0) return rankDiff
+    return nameA.localeCompare(nameB, undefined, { sensitivity: "base" })
+  })
+}
+
+// Colour key for the branches in the flow. Sticky, so it stays in view while the flow scrolls.
+function FlowLegend({ entries }: { entries: [string, string][] }) {
+  if (entries.length === 0) return null
+
+  const sortedEntries = sortBranchEntries(entries)
+
+  return (
+    <div className="sticky top-0 z-30 flex items-start gap-2 rounded-xl border border-dashed px-3 py-2 backdrop-blur">
+      <span className="mt-1 shrink-0 text-[11px] font-semibold uppercase text-muted-foreground">
+        Branches
+      </span>
+      <div className="grid flex-1 grid-cols-5 grid-rows-4 gap-1.5">
+        {sortedEntries.map(([name, color]) => (
+          <span
+            key={name}
+            className="inline-flex items-center gap-1.5 truncate rounded-full px-2 py-0.5 text-[11px] font-medium"
+            style={{ color, background: `${color}1f` }}
+          >
+            <span className="size-2 shrink-0 rounded-full" style={{ background: color }} />
+            <span className="truncate">{name}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
 function FlowHorizontal({
+  legend,
   rows,
   edges,
   columns,
@@ -383,6 +435,7 @@ function FlowHorizontal({
   selected,
   onMore,
 }: {
+  legend: React.ReactNode
   rows: GraphRow[]
   edges: GraphEdge[]
   columns: number
@@ -402,6 +455,7 @@ function FlowHorizontal({
 
   return (
     <div className="space-y-3">
+      {legend}
       <div className="overflow-x-auto rounded-xl border bg-card p-3">
         <div className="relative" style={{ width, height }}>
           <svg width={width} height={height} className="absolute left-0 top-0 overflow-visible" aria-hidden>
@@ -579,6 +633,15 @@ function FlowHistory({
     [query.data, showRemote],
   )
 
+  // One entry per branch lane in the flow, in the colour the lane is drawn with.
+  const legendEntries = useMemo<[string, string][]>(() => {
+    if (!layout) return []
+    const seen = new Map<string, string>()
+    for (const row of layout.rows) if (row.lane && !seen.has(row.lane)) seen.set(row.lane, row.color)
+    return [...seen]
+  }, [layout])
+  const legend = <FlowLegend entries={legendEntries} />
+
   // The graph cannot drop rows without breaking its lines, so a search dims the rest instead.
   const matches = useMemo(() => {
     if (!layout || (!keyword.trim() && authors.length === 0)) return null
@@ -610,6 +673,7 @@ function FlowHistory({
   if (horizontal) {
     return (
       <FlowHorizontal
+        legend={legend}
         rows={rows}
         edges={layout.edges}
         columns={layout.columns}
@@ -630,6 +694,7 @@ function FlowHistory({
 
   return (
     <div className="space-y-3">
+      {legend}
       <div className="overflow-x-auto rounded-xl border bg-card p-3">
         <div className="relative" style={{ height, minWidth: left + width + 520 }}>
           <svg width={width} height={height} className="absolute top-0 overflow-visible" style={{ left }} aria-hidden>
