@@ -1,6 +1,80 @@
 # 🐧 How Is My Commit · Frontend
 
-> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 97 entries, newest first.
+> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 98 entries, newest first.
+
+## howismycommit-98
+
+| Field | Value |
+|---|---|
+| id | howismycommit-98 |
+| generatedAt | 2026-11-27T12:17:30+05:30 |
+| author | Dhruv |
+| branch | feat/external-apis |
+| target.kind | commit |
+| target.commit | 35a8d13ded2d2835a2c37aef8315f89bf3ce4704 |
+| files.changed | 3 |
+| files.added | 0 |
+| files.modified | 3 |
+| files.deleted | 0 |
+| files.insertions | 32 |
+| files.deletions | 15 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 1 |
+| summary.info | 3 |
+| before | Horizontal layout had a flat navbar: the menu had square top corners, and the Finnaux and right-side blocks had no shadow. |
+| after | In horizontal layout the menu has 2rem rounded top corners with card-coloured fillers and their own shadow, and the Finnaux and right-side blocks have a shadow clipped on the curve side. The user settings drawer is 1rem wider, and toasts use rounded-xl with a border. |
+
+### changeType (2)
+
+- ui
+- bug fix
+
+### effects (3)
+
+- Navbar layout in horizontal mode: menu wrapper, fillers and block shadows
+- User settings drawer width (23rem)
+- All toasts rendered through the sonner Toaster
+
+### filesReviewed (3)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/app/(app)/(main)/_components/navbar/navbar.tsx | modified | green | no issues |
+| src/app/(app)/(main)/_components/navbar/user-settings-panel.tsx | modified | green | no issues |
+| src/components/ui/sonner.tsx | modified | green | no issues; unrelated to the navbar fix |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (1)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+
+### gaps (3)
+
+- Curve shadows and clipping were not checked in the browser
+- Eslint was run on navbar.tsx before the final edit only, not on the committed version after the last change
+- No test script is configured, so behaviour was checked by reading the code only
+
+### info (3)
+
+- Commit message says 'tidy user settings panel', but the panel change is only the width (22rem to 23rem); the earlier drawer revert is not in this commit
+- The sonner.tsx change (toast radius and border) is unrelated to the navbar fix and would be easier to find on its own commit
+- Negative clip-path insets on the Finnaux and right-side blocks may cut off focus rings or hover effects on the outer edges; not checked
+
+---
 
 ## howismycommit-97
 
