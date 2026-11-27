@@ -29,22 +29,26 @@ export function FileActivityPanel({
   authors,
   keyword,
   showRemote = true,
+  onlyBranches,
 }: {
   repo: RepoKey
   branch: string
   authors: string[]
   keyword: string
   showRemote?: boolean
+  /** The branches switched on in the Options tab. Everything when left out. */
+  onlyBranches?: string[]
 }) {
   const [from, setFrom] = useState("")
   const [to, setTo] = useState("")
   const [view, setView] = useState<View>("names")
 
   const query = useQuery({
-    queryKey: ["penguin", "files", repo, branch, authors, from, to, showRemote],
+    queryKey: ["penguin", "files", repo, branch, authors, from, to, showRemote, onlyBranches],
     queryFn: async (): Promise<FileActivity> => {
       const params = new URLSearchParams({ repo, branch, from, to, remote: showRemote ? "1" : "0" })
       for (const name of authors) params.append("author", name)
+      if (onlyBranches) params.set("shown", onlyBranches.join(","))
       const res = await fetch(`/penguin/api/git/files?${params}`)
       const body = await res.json().catch(() => null)
       if (!res.ok) throw new Error(body?.message ?? "Could not read the files")

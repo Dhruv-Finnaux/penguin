@@ -11,13 +11,14 @@ export async function GET(request: Request) {
   const branch = params.get("branch") ?? ""
   const from = params.get("from") ?? ""
   const to = params.get("to") ?? ""
+  const only = params.has("shown") ? (params.get("shown") ?? "").split(",").filter(Boolean) : undefined
   const authors = params.getAll("author").filter((name) => name && name.length < 200)
   if (!isRepoKey(repo) || !branch || !DATE.test(from) || !DATE.test(to)) {
     return NextResponse.json({ message: "Invalid request" }, { status: 400 })
   }
 
   try {
-    return NextResponse.json(await getFileActivity(repo, branch, authors, from, to, params.get("remote") !== "0"))
+    return NextResponse.json(await getFileActivity(repo, branch, authors, from, to, params.get("remote") !== "0", only))
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not read the files"
     return NextResponse.json({ message }, { status: 500 })

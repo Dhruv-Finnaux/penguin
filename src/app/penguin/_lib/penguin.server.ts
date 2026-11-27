@@ -291,7 +291,16 @@ export const ALL_BRANCHES = "__all__"
 
 // Only refs that exist in the repo reach git, so a crafted value can never become a flag.
 // With remote off, "all branches" means the local ones only.
-async function resolveRefs(repo: RepoKey, branch: string, remote = true): Promise<string[]> {
+// `only` narrows "all branches" to the branches the user has switched on (by branch key, so origin/x is x).
+async function resolveRefs(repo: RepoKey, branch: string, remote = true, only?: string[]): Promise<string[]> {
+  if (branch === ALL_BRANCHES && only) {
+    const keys = new Set(only)
+    const refs = (await getBranches(repo))
+      .filter((b) => (remote || !b.remote) && keys.has(b.remote ? b.name.replace(/^[^/]+\//, "") : b.name))
+      .map((b) => (b.remote ? `refs/remotes/${b.name}` : `refs/heads/${b.name}`))
+    // A glob that matches nothing keeps git log from falling back to HEAD when no branch is on.
+    return refs.length > 0 ? refs : ["--branches=__no_branch_selected__"]
+  }
   if (branch === ALL_BRANCHES) return remote ? ["--branches", "--remotes"] : ["--branches"]
   const branches = await getBranches(repo)
   const match = branches.find((b) => b.name === branch)
@@ -466,9 +475,10 @@ export async function getCommitPage(
   limit: number,
   authors: string[] = [],
   remote = true,
+  only?: string[],
 ): Promise<CommitPage> {
   const take = Math.min(Math.max(1, limit), MAX_PAGE)
-  const [refs, reviews] = await Promise.all([resolveRefs(repo, branch, remote), getReviews()])
+  const [refs, reviews] = await Promise.all([resolveRefs(repo, branch, remote, only), getReviews()])
   const out = await git(repo, [
     "log",
     "--date-order",
@@ -623,8 +633,13 @@ export async function getPlaygroundDataset(repo: RepoKey): Promise<PlaygroundDat
 const MAX_ACTIVITY = 5000
 
 // Files and lines changed per contributor and day, for the heat map.
-export async function getActivity(repo: RepoKey, branch: string, remote = true): Promise<ActivityData> {
-  const refs = await resolveRefs(repo, branch, remote)
+export async function getActivity(
+  repo: RepoKey,
+  branch: string,
+  remote = true,
+  only?: string[],
+): Promise<ActivityData> {
+  const refs = await resolveRefs(repo, branch, remote, only)
   const out = await git(repo, [
     "log",
     "--no-renames",
@@ -680,8 +695,9 @@ export async function getFileActivity(
   from: string,
   to: string,
   remote = true,
+  only?: string[],
 ): Promise<FileActivity> {
-  const refs = await resolveRefs(repo, branch, remote)
+  const refs = await resolveRefs(repo, branch, remote, only)
   const out = await git(repo, [
     "log",
     "--no-renames",

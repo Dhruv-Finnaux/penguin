@@ -7,12 +7,13 @@ export async function GET(request: Request) {
   const params = new URL(request.url).searchParams
   const repo = params.get("repo")
   const branch = params.get("branch") ?? ""
+  const only = params.has("shown") ? (params.get("shown") ?? "").split(",").filter(Boolean) : undefined
   if (!isRepoKey(repo) || !branch) {
     return NextResponse.json({ message: "Invalid request" }, { status: 400 })
   }
 
   try {
-    return NextResponse.json(await getActivity(repo, branch, params.get("remote") !== "0"))
+    return NextResponse.json(await getActivity(repo, branch, params.get("remote") !== "0", only))
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not read the activity"
     return NextResponse.json({ message }, { status: 500 })

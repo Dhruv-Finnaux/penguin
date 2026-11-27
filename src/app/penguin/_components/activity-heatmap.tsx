@@ -273,9 +273,9 @@ function CommitGraph({ authors, weeks }: { authors: ActivityAuthor[]; weeks: Dat
   )
 }
 
-async function fetchActivity(repo: RepoKey, branch: string, remote: boolean): Promise<ActivityData> {
+async function fetchActivity(repo: RepoKey, branch: string, remote: boolean, only?: string[]): Promise<ActivityData> {
   const res = await fetch(
-    `/penguin/api/git/activity?repo=${repo}&branch=${encodeURIComponent(branch)}&remote=${remote ? 1 : 0}`,
+    `/penguin/api/git/activity?repo=${repo}&branch=${encodeURIComponent(branch)}&remote=${remote ? 1 : 0}${only ? `&shown=${encodeURIComponent(only.join(","))}` : ""}`,
   )
   const body = await res.json().catch(() => null)
   if (!res.ok) throw new Error(body?.message ?? "Could not load the activity")
@@ -288,19 +288,22 @@ export function ActivityHeatmap({
   keyword,
   authors: picked = [],
   showRemote = true,
+  onlyBranches,
 }: {
   repo: RepoKey
   branch: string
   keyword: string
   authors?: string[]
   showRemote?: boolean
+  /** The branches switched on in the Options tab. Everything when left out. */
+  onlyBranches?: string[]
 }) {
   const metric: Metric = "lines"
   const [view, setView] = useState<View>("heatmap")
   const [shown, setShown] = useState(PAGE)
   const query = useQuery({
-    queryKey: ["penguin", "activity", repo, branch, showRemote],
-    queryFn: () => fetchActivity(repo, branch, showRemote),
+    queryKey: ["penguin", "activity", repo, branch, showRemote, onlyBranches],
+    queryFn: () => fetchActivity(repo, branch, showRemote, onlyBranches),
   })
 
   // Weeks start on Sunday and run up to the current one.
