@@ -11,7 +11,7 @@ import { matchesQuery } from "../_lib/fuzzy"
 import { HashButton } from "./hash-button"
 import { SearchBox } from "./search-box"
 import { ScoreBadge } from "./status"
-import { NextTabs } from "./penguin-tabs"
+import { NextTabs, usePersistedState } from "./penguin-tabs"
 import {
   countByPriority,
   countAttention,
@@ -179,9 +179,10 @@ function FindingGroupCard({ group }: { group: FindingGroup }) {
 }
 
 export function ReviewTab({ reviews: allReviews, commits }: { reviews: Review[]; commits: CommitInfo[] }) {
-  const [keyword, setKeyword] = useState("")
-  const [repo, setRepo] = useState<RepoFilterValue>("all")
-  const [view, setView] = useState<View>("all")
+  // Remembered across reloads, so the review tab opens as it was left.
+  const [keyword, setKeyword] = usePersistedState("penguin.review.keyword", "")
+  const [repo, setRepo] = usePersistedState<RepoFilterValue>("penguin.review.repo", "all")
+  const [view, setView] = usePersistedState<View>("penguin.review.view", "all")
   const reviews = useMemo(() => filterByRepo(allReviews, repo), [allReviews, repo])
   const groups = groupFindings(reviews, commits, keyword, view)
   const days = useMemo(() => groupByDay(groups), [groups])

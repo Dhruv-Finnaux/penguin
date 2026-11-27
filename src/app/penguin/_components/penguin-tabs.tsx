@@ -123,6 +123,41 @@ const TAB_SOURCES: { tab: string; source: React.ReactNode }[] = [
   },
 ]
 
+// State that survives reloads. It is read after mount (so the server render and the first client render match),
+// and written whenever it changes. Stored objects are merged over the defaults, so new fields get their default.
+export function usePersistedState<T>(key: string, initial: T) {
+  const [value, setValue] = React.useState<T>(initial)
+  const [ready, setReady] = React.useState(false)
+  React.useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(key)
+      if (raw !== null) {
+        const stored = JSON.parse(raw) as T
+        const merged =
+          typeof initial === "object" && initial !== null && !Array.isArray(initial)
+            ? ({ ...initial, ...stored } as T)
+            : stored
+        // One read after mount, so the stored value cannot cause a hydration mismatch.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setValue(merged)
+      }
+    } catch {
+      // Storage can be blocked or hold bad JSON: the defaults are used then.
+    }
+    setReady(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key])
+  React.useEffect(() => {
+    if (!ready) return
+    try {
+      window.localStorage.setItem(key, JSON.stringify(value))
+    } catch {
+      // Nothing to do: the state simply is not remembered.
+    }
+  }, [key, value, ready])
+  return [value, setValue] as const
+}
+
 function InfoButton() {
   return (
     <Popover>
@@ -190,8 +225,8 @@ export function PenguinTabs({
   const router = useRouter()
   const [isRefreshing, startTransition] = useTransition()
   // Kept here, above the tabs, so the view survives switching between frontend and backend.
-  const [viewOptions, setViewOptions] = React.useState<ViewOptions>(DEFAULT_VIEW_OPTIONS)
-  const [repoFilters, setRepoFilters] = React.useState<Record<RepoKey, RepoFilters>>({
+  const [viewOptions, setViewOptions] = usePersistedState<ViewOptions>("penguin.viewOptions", DEFAULT_VIEW_OPTIONS)
+  const [repoFilters, setRepoFilters] = usePersistedState<Record<RepoKey, RepoFilters>>("penguin.repoFilters", {
     frontend: DEFAULT_REPO_FILTERS,
     backend: DEFAULT_REPO_FILTERS,
   })
