@@ -1,6 +1,82 @@
 # 🐧 How Is My Commit · Frontend
 
-> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 98 entries, newest first.
+> Generated from `data/frontend/howismycommit.json`. Edit the JSON, not this file. 99 entries, newest first.
+
+## howismycommit-99
+
+| Field | Value |
+|---|---|
+| id | howismycommit-99 |
+| generatedAt | 2026-11-27T16:24:56+05:30 |
+| author | Dhruv |
+| branch | feat/finnaux-apis |
+| target.kind | commit |
+| target.commit | 7cc90ed2f36c8f0dcfff364af202fd33629e4e60 |
+| files.changed | 6 |
+| files.added | 1 |
+| files.modified | 5 |
+| files.deleted | 0 |
+| files.insertions | 88 |
+| files.deletions | 1 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 2 |
+| summary.info | 3 |
+| before | Voter ID verification only supported SurePass. A verified Voter ID marked the document verified and filled nothing else on the customer form. |
+| after | With Finnaux as the active provider, a Voter ID check posts to the Finnaux route and passes the row to the shared success handler. After a verify, empty customer fields are filled from the verification: names, gender and date of birth for individuals, and street address and pincode for both types. Existing values are not overwritten. |
+
+### changeType (1)
+
+- feature
+
+### effects (3)
+
+- Voter ID verify dialog renders FinnauxVoterIdFlow when the provider is finnaux
+- Customer KYC section fills individual and non-individual forms after Voter ID verification
+- Finnaux page-rights gating in VerificationTrigger applies to the Voter ID check
+
+### filesReviewed (6)
+
+| path | change | status | note |
+|---|---|---|---|
+| src/features/external-apis/api.ts | modified | green | no issues |
+| src/features/external-apis/hooks.ts | modified | green | no issues |
+| src/features/external-apis/components/voter-id-verify/context.tsx | modified | green | no issues |
+| src/features/external-apis/components/voter-id-verify/dialog-manager.tsx | modified | green | no issues |
+| src/features/external-apis/components/voter-id-verify/flows/finnaux-voter-id-flow.tsx | added | green | no issues |
+| src/features/customers/components/add-customer-forms/components/kyc-section.tsx | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (1)
+
+| status | command | result |
+|---|---|---|
+| green | npx tsc --noEmit | passed |
+
+### gaps (3)
+
+- Not tested in the browser or against the Finnaux backend
+- Eslint was not run on this commit in this review
+- No test script is configured, so behaviour was checked by reading the code only
+
+### info (3)
+
+- This commit is not an ancestor of the current HEAD of feat/finnaux-apis (f26aac14); the Voter ID flow file is absent from HEAD, so the branch history needs checking before merging
+- applyVoterId fills only empty fields and skips Devanagari full names, as intended by the contract
+- dateOfBirth is cut to YYYY-MM-DD from the backend text, so a timezone shift is not possible
+
+---
 
 ## howismycommit-98
 

@@ -1,5 +1,100 @@
 [
   {
+    "id": "howismycommit-99",
+    "generatedAt": "2026-11-27T16:24:56+05:30",
+    "author": "Dhruv",
+    "branch": "feat/finnaux-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "7cc90ed2f36c8f0dcfff364af202fd33629e4e60"
+    },
+    "files": {
+      "changed": 6,
+      "added": 1,
+      "modified": 5,
+      "deleted": 0,
+      "insertions": 88,
+      "deletions": 1
+    },
+    "changeType": [
+      "feature"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "Voter ID verification only supported SurePass. A verified Voter ID marked the document verified and filled nothing else on the customer form.",
+    "after": "With Finnaux as the active provider, a Voter ID check posts to the Finnaux route and passes the row to the shared success handler. After a verify, empty customer fields are filled from the verification: names, gender and date of birth for individuals, and street address and pincode for both types. Existing values are not overwritten.",
+    "effects": [
+      "Voter ID verify dialog renders FinnauxVoterIdFlow when the provider is finnaux",
+      "Customer KYC section fills individual and non-individual forms after Voter ID verification",
+      "Finnaux page-rights gating in VerificationTrigger applies to the Voter ID check"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/voter-id-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/voter-id-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/voter-id-verify/flows/finnaux-voter-id-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not tested in the browser or against the Finnaux backend",
+      "Eslint was not run on this commit in this review",
+      "No test script is configured, so behaviour was checked by reading the code only"
+    ],
+    "info": [
+      "This commit is not an ancestor of the current HEAD of feat/finnaux-apis (f26aac14); the Voter ID flow file is absent from HEAD, so the branch history needs checking before merging",
+      "applyVoterId fills only empty fields and skips Devanagari full names, as intended by the contract",
+      "dateOfBirth is cut to YYYY-MM-DD from the backend text, so a timezone shift is not possible"
+    ]
+  },
+  {
     "id": "howismycommit-98",
     "generatedAt": "2026-11-27T12:17:30+05:30",
     "author": "Dhruv",
