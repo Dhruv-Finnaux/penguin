@@ -18,7 +18,14 @@ import { format } from "date-fns"
 import { CheckIcon, ChevronDownIcon, GitBranchIcon, UsersIcon, XIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 import { matchesQuery } from "../_lib/fuzzy"
-import { branchColorName, colorForBranch, layoutGraph, type GraphEdge, type GraphRow } from "../_lib/graph-layout"
+import {
+  branchColorName,
+  colorForBranch,
+  layoutGraph,
+  type GraphEdge,
+  type GraphLayout,
+  type GraphRow,
+} from "../_lib/graph-layout"
 import type {
   BranchInfo,
   CommitInfo,
@@ -372,10 +379,12 @@ function edgePath(fromRow: number, fromCol: number, toRow: number, toCol: number
   const bend = R1 + rowSpan
   return `M${P(L1, R1)}C${P(L1, R1 + rowSpan / 2)} ${P(L2, R1 + rowSpan / 2)} ${P(L2, bend)}L${P(L2, R2)}`
 }
-
 const BRANCH_CATEGORY_ORDER = ["main", "dev", "feat", "fix", "refactor", "hotfix"] as const
+const OTHER_CATEGORY_RANK = BRANCH_CATEGORY_ORDER.length
 
-function getBranchCategoryRank(branchName: string): number {
+type BranchCategoryRank = 0 | 1 | 2 | 3 | 4 | 5 | typeof OTHER_CATEGORY_RANK
+
+function getBranchCategoryRank(branchName: string): BranchCategoryRank {
   const normalized = branchName.trim().toLowerCase()
 
   if (normalized === "main") return 0
@@ -387,7 +396,11 @@ function getBranchCategoryRank(branchName: string): number {
   if (prefix === "refactor") return 4
   if (prefix === "hotfix") return 5
 
-  return BRANCH_CATEGORY_ORDER.length
+  return OTHER_CATEGORY_RANK
+}
+
+function getCategoryLabel(rank: BranchCategoryRank): string | null {
+  return rank < OTHER_CATEGORY_RANK ? ((BRANCH_CATEGORY_ORDER as readonly string[])[rank] ?? null) : "other"
 }
 
 function sortBranchEntries(entries: [string, string][]): [string, string][] {
@@ -398,27 +411,120 @@ function sortBranchEntries(entries: [string, string][]): [string, string][] {
   })
 }
 
+function groupBranchesByCategory(
+  entries: [string, string][],
+): { rank: BranchCategoryRank; label: string | null; items: [string, string][] }[] {
+  const buckets = new Map<BranchCategoryRank, [string, string][]>()
+
+  for (const [name, color] of sortBranchEntries(entries)) {
+    const rank = getBranchCategoryRank(name)
+    const bucket = buckets.get(rank) ?? []
+    bucket.push([name, color])
+    buckets.set(rank, bucket)
+  }
+
+  return Array.from(buckets.entries())
+    .sort(([rankA], [rankB]) => rankA - rankB)
+    .map(([rank, items]) => ({
+      rank,
+      label: getCategoryLabel(rank),
+      items,
+    }))
+}
+
+// The layout without the hidden branches: their rows and the lines that touch them are dropped.
+function hideBranches(layout: GraphLayout, hidden: Set<string>): GraphLayout {
+  if (hidden.size === 0) return layout
+  const kept = new Map<number, number>()
+  const rows: GraphRow[] = []
+  layout.rows.forEach((row, index) => {
+    if (row.lane && hidden.has(row.lane)) return
+    kept.set(index, rows.length)
+    rows.push(row)
+  })
+  const edges: GraphEdge[] = []
+  for (const edge of layout.edges) {
+    const from = kept.get(edge.fromRow)
+    if (from === undefined) continue
+    // A line still open at the bottom of the history stays open.
+    if (edge.toRow >= layout.rows.length) {
+      edges.push({ ...edge, fromRow: from, toRow: rows.length })
+      continue
+    }
+    const to = kept.get(edge.toRow)
+    if (to === undefined) continue
+    edges.push({ ...edge, fromRow: from, toRow: to })
+  }
+  return { ...layout, rows, edges }
+}
+
 // Colour key for the branches in the flow. Sticky, so it stays in view while the flow scrolls.
-function FlowLegend({ entries }: { entries: [string, string][] }) {
+// Each branch is a toggle: on shows its lane in the flow, off hides it so the rest is easier to follow.
+function FlowLegend({
+  entries,
+  hidden,
+  onToggle,
+  onShowAll,
+}: {
+  entries: [string, string][]
+  hidden: Set<string>
+  onToggle: (name: string) => void
+  onShowAll: () => void
+}) {
   if (entries.length === 0) return null
 
-  const sortedEntries = sortBranchEntries(entries)
+  const columns = groupBranchesByCategory(entries)
 
   return (
-    <div className="sticky top-0 z-30 flex items-start gap-2 rounded-xl border border-dashed px-3 py-2 backdrop-blur">
-      <span className="mt-1 shrink-0 text-[11px] font-semibold uppercase text-muted-foreground">
-        Branches
-      </span>
-      <div className="grid flex-1 grid-cols-5 grid-rows-4 gap-1.5">
-        {sortedEntries.map(([name, color]) => (
-          <span
-            key={name}
-            className="inline-flex items-center gap-1.5 truncate rounded-full px-2 py-0.5 text-[11px] font-medium"
-            style={{ color, background: `${color}1f` }}
-          >
-            <span className="size-2 shrink-0 rounded-full" style={{ background: color }} />
-            <span className="truncate">{name}</span>
-          </span>
+    <div className="flex items-start gap-2 rounded-xl border border-dashed px-3 py-2">
+      {hidden.size > 0 && (
+        <button
+          type="button"
+          onClick={onShowAll}
+          className="shrink-0 rounded-md px-2 py-1 text-[11px] font-medium text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
+        >
+          Show all
+        </button>
+      )}
+      <div
+        className="grid flex-1 gap-2 overflow-x-auto"
+        style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(7.5rem, 1fr))` }}
+      >
+        {columns.map(({ rank, label, items }) => (
+          <div key={rank} className="flex min-w-0 flex-col gap-1">
+            <span className="truncate px-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+              {label}
+            </span>
+            <div className="flex flex-col gap-1">
+              {items.map(([name, color]) => {
+                const off = hidden.has(name)
+                return (
+                  <button
+                    key={name}
+                    type="button"
+                    role="switch"
+                    aria-checked={!off}
+                    title={off ? `Show ${name}` : `Hide ${name}`}
+                    onClick={() => onToggle(name)}
+                    className="inline-flex h-8 w-full items-center justify-between gap-2 rounded-lg border border-dashed bg-card px-2.5 text-xs font-medium"
+                  >
+                    <span className={cn("truncate", off ? "text-foreground/50" : "text-foreground/80")}>{name}</span>
+                    <span
+                      className="relative inline-block h-4 w-7 shrink-0 rounded-full transition-colors duration-300 ease-out"
+                      style={{ background: off ? "hsl(var(--muted-foreground) / 0.35)" : color }}
+                    >
+                      <span
+                        className={cn(
+                          "absolute left-0.5 top-0.5 size-3 rounded-full bg-white shadow-sm transition-transform duration-300 ease-out",
+                          !off && "translate-x-3",
+                        )}
+                      />
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
         ))}
       </div>
     </div>
@@ -596,6 +702,9 @@ function FlowHorizontal({
   )
 }
 
+// Branches that start shown in the flow: the checked-out one, dev and main.
+const DEFAULT_SHOWN = ["main", "dev"]
+
 function FlowHistory({
   repo,
   branch,
@@ -603,6 +712,9 @@ function FlowHistory({
   authors,
   showRemote,
   horizontal,
+  currentBranch,
+  hiddenBranches,
+  onHiddenBranches,
 }: {
   repo: RepoKey
   branch: string
@@ -610,6 +722,9 @@ function FlowHistory({
   authors: string[]
   showRemote: boolean
   horizontal: boolean
+  currentBranch: string | null
+  hiddenBranches: string[] | null
+  onHiddenBranches: (next: string[]) => void
 }) {
   const [more, setMore] = useState(0)
   const [selected, setSelected] = useState<string | null>(null)
@@ -640,20 +755,40 @@ function FlowHistory({
     for (const row of layout.rows) if (row.lane && !seen.has(row.lane)) seen.set(row.lane, row.color)
     return [...seen]
   }, [layout])
-  const legend = <FlowLegend entries={legendEntries} />
+  // Until the user changes it, everything except the checked-out branch, dev and main is hidden.
+  const hidden = useMemo(() => {
+    if (hiddenBranches) return new Set(hiddenBranches)
+    const shown = new Set([...DEFAULT_SHOWN, ...(currentBranch ? [currentBranch] : [])])
+    return new Set(legendEntries.map(([name]) => name).filter((name) => !shown.has(name)))
+  }, [hiddenBranches, currentBranch, legendEntries])
+  const toggleBranch = (name: string) => {
+    const next = new Set(hidden)
+    if (next.has(name)) next.delete(name)
+    else next.add(name)
+    onHiddenBranches([...next])
+  }
+  const visible = useMemo(() => (layout ? hideBranches(layout, hidden) : null), [layout, hidden])
+  const legend = (
+    <FlowLegend
+      entries={legendEntries}
+      hidden={hidden}
+      onToggle={toggleBranch}
+      onShowAll={() => onHiddenBranches([])}
+    />
+  )
 
   // The graph cannot drop rows without breaking its lines, so a search dims the rest instead.
   const matches = useMemo(() => {
-    if (!layout || (!keyword.trim() && authors.length === 0)) return null
+    if (!visible || (!keyword.trim() && authors.length === 0)) return null
     const found = new Set<number>()
-    layout.rows.forEach((row, i) => {
+    visible.rows.forEach((row, i) => {
       if (authors.length > 0 && !authors.includes(row.commit.author)) return
       if (!keyword.trim()) return void found.add(i)
       const fields = [row.commit.hash, row.commit.subject, row.commit.author, row.lane ?? ""]
       if (matchesQuery(keyword, [...fields, ...row.tips.map((tip) => tip.name)])) found.add(i)
     })
     return found
-  }, [layout, keyword, authors])
+  }, [visible, keyword, authors])
 
   // Show enough rows to reach the first match.
   const firstMatch = matches && matches.size > 0 ? Math.min(...matches) : 0
@@ -661,7 +796,7 @@ function FlowHistory({
 
   if (query.isLoading) return <LoadingIndicatorView className="min-h-[60vh]" />
   if (query.isError) return <ErrorBox message={query.error.message} onRetry={() => query.refetch()} />
-  if (!layout || layout.rows.length === 0) {
+  if (!visible || visible.rows.length === 0) {
     return (
       <Card className="border-0 p-20 text-center text-sm text-muted-foreground">
         No commits on {branchLabel(branch)}.
@@ -669,15 +804,15 @@ function FlowHistory({
     )
   }
 
-  const rows = layout.rows.slice(0, shown)
+  const rows = visible.rows.slice(0, shown)
   if (horizontal) {
     return (
       <FlowHorizontal
         legend={legend}
         rows={rows}
-        edges={layout.edges}
-        columns={layout.columns}
-        total={layout.rows.length}
+        edges={visible.edges}
+        columns={visible.columns}
+        total={visible.rows.length}
         truncated={query.data?.truncated ?? false}
         matches={matches}
         selected={selected}
@@ -685,9 +820,9 @@ function FlowHistory({
       />
     )
   }
-  const width = layout.columns * COL_W
+  const width = visible.columns * COL_W
   const height = rows.length * ROW_H
-  const edges = layout.edges.filter((edge) => edge.fromRow < rows.length)
+  const edges = visible.edges.filter((edge) => edge.fromRow < rows.length)
   const left = DATE_W + 8
   const dim = (color: string) => selected !== null && selected !== color
   const delay = (row: number) => Math.min(row, 40) * 14
@@ -806,12 +941,12 @@ function FlowHistory({
       <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
         <span>
           {matches && `${matches.size} matching · `}
-          {rows.length} of {layout.rows.length}
+          {rows.length} of {visible.rows.length}
           {query.data?.truncated ? "+" : ""} commits
         </span>
-        {rows.length < layout.rows.length && (
+        {rows.length < visible.rows.length && (
           <Button size="sm" variant="outline" onClick={() => setMore((v) => v + FLOW_STEP)}>
-            Show {Math.min(FLOW_STEP, layout.rows.length - rows.length)} more
+            Show {Math.min(FLOW_STEP, visible.rows.length - rows.length)} more
           </Button>
         )}
       </div>
@@ -830,13 +965,15 @@ export const DEFAULT_VIEW_OPTIONS: ViewOptions = { mode: "verbose", showRemote: 
 
 // The branch and author filters of a repo tab. They live above the tabs, so they survive switching repos.
 export interface RepoFilters {
+  /** Branches hidden in the flow. Null until the user changes them: then the default set is used. */
+  hidden: string[] | null
   /** Undefined until the user picks a branch: then the repo's checked-out branch is used. */
   branch?: string
   /** Null until the user picks: then the repo's own git user is selected, when they have commits here. */
   authors: string[] | null
 }
 
-export const DEFAULT_REPO_FILTERS: RepoFilters = { branch: undefined, authors: null }
+export const DEFAULT_REPO_FILTERS: RepoFilters = { branch: undefined, authors: null, hidden: null }
 
 export function RepoTab({
   repo,
@@ -854,7 +991,7 @@ export function RepoTab({
   onFilters: (next: RepoFilters) => void
 }) {
   const branch = filters.branch ?? repo.currentBranch ?? ALL_BRANCHES
-  const setBranch = (next: string) => onFilters({ branch: next, authors: null })
+  const setBranch = (next: string) => onFilters({ ...filters, branch: next, authors: null })
   const { mode, showRemote, horizontal } = options
   const setMode = (next: Mode) => onOptions({ ...options, mode: next })
   const setShowRemote = (next: boolean) => onOptions({ ...options, showRemote: next })
@@ -972,6 +1109,9 @@ export function RepoTab({
               authors={authors}
               showRemote={showRemote}
               horizontal={horizontal}
+              currentBranch={repo.currentBranch}
+              hiddenBranches={filters.hidden}
+              onHiddenBranches={(next) => onFilters({ ...filters, hidden: next })}
             />
           )}
         </div>
