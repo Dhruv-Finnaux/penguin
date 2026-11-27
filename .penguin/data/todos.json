@@ -1,5 +1,12 @@
 [
   {
+    "id": "todo-39",
+    "text": "Fix (backend, existing code): handleLosProcessPageCompletionByAction gets this.databaseService.db instead of tx in 4 places, so the page-complete mark is saved outside the transaction and stays even when the rest rolls back. The function accepts DBOrTx and 53 other callers pass tx. Places: los/loan-application/generate-loan-number/generate-loan-number.service.ts:342, customer/profile-answer/profile-answer.service.ts:188, customer/obligation/obligation.service.ts:100, customer/expense/expense.service.ts:94. Check each route runs in a transaction (DbTransactionInterceptor) before switching to tx.",
+    "status": "todo",
+    "createdAt": "2026-11-27T12:43:48.251Z",
+    "doneAt": null
+  },
+  {
     "id": "todo-38",
     "text": "Testing (backend): Test Finnaux credentials: save the three keys for each Finnaux group on a fresh database, then save one key only and check the masked values. Also check each Finnaux page-right route works for a user with the right and fails without it.",
     "status": "todo",

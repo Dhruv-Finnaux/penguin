@@ -272,9 +272,7 @@ export async function getRepoInfo(repo: RepoKey): Promise<RepoInfo> {
     const [branches, current, user] = await Promise.all([
       getBranches(repo),
       git(repo, ["rev-parse", "--abbrev-ref", "HEAD"]).then((s) => s.trim()),
-      git(repo, ["config", "user.name"])
-        .then((s) => s.trim() || null)
-        .catch(() => null),
+      git(repo, ["config", "user.name"]).then((s) => s.trim() || null).catch(() => null),
     ])
     return { ...meta, available: true, error: null, currentBranch: current, currentUser: user, branches }
   } catch (error) {
@@ -293,7 +291,16 @@ export const ALL_BRANCHES = "__all__"
 
 // Only refs that exist in the repo reach git, so a crafted value can never become a flag.
 // With remote off, "all branches" means the local ones only.
-async function resolveRefs(repo: RepoKey, branch: string, remote = true): Promise<string[]> {
+// `only` narrows "all branches" to the branches the user has switched on (by branch key, so origin/x is x).
+async function resolveRefs(repo: RepoKey, branch: string, remote = true, only?: string[]): Promise<string[]> {
+  if (branch === ALL_BRANCHES && only) {
+    const keys = new Set(only)
+    const refs = (await getBranches(repo))
+      .filter((b) => (remote || !b.remote) && keys.has(b.remote ? b.name.replace(/^[^/]+\//, "") : b.name))
+      .map((b) => (b.remote ? `refs/remotes/${b.name}` : `refs/heads/${b.name}`))
+    // A glob that matches nothing keeps git log from falling back to HEAD when no branch is on.
+    return refs.length > 0 ? refs : ["--branches=__no_branch_selected__"]
+  }
   if (branch === ALL_BRANCHES) return remote ? ["--branches", "--remotes"] : ["--branches"]
   const branches = await getBranches(repo)
   const match = branches.find((b) => b.name === branch)
@@ -437,10 +444,7 @@ async function getMembership(repo: RepoKey): Promise<Map<string, string[]>> {
   const tips = new Map<string, string[]>()
   for (const branch of branches) {
     const name = branch.remote ? branch.name.replace(/^origin\//, "") : branch.name
-    tips.set(name, [
-      ...(tips.get(name) ?? []),
-      branch.remote ? `refs/remotes/${branch.name}` : `refs/heads/${branch.name}`,
-    ])
+    tips.set(name, [...(tips.get(name) ?? []), branch.remote ? `refs/remotes/${branch.name}` : `refs/heads/${branch.name}`])
   }
   const names = [...tips.keys()].sort((a, b) => {
     const rank = (n: string) => (TRUNK_FIRST.includes(n) ? TRUNK_FIRST.indexOf(n) : TRUNK_FIRST.length)
@@ -471,9 +475,10 @@ export async function getCommitPage(
   limit: number,
   authors: string[] = [],
   remote = true,
+  only?: string[],
 ): Promise<CommitPage> {
   const take = Math.min(Math.max(1, limit), MAX_PAGE)
-  const [refs, reviews] = await Promise.all([resolveRefs(repo, branch, remote), getReviews()])
+  const [refs, reviews] = await Promise.all([resolveRefs(repo, branch, remote, only), getReviews()])
   const out = await git(repo, [
     "log",
     "--date-order",
@@ -585,12 +590,7 @@ const MAX_PLAYGROUND = 50_000
 // Every local branch and every origin branch, read as of the last fetch, as a Git Playground
 // flow. Read-only: for-each-ref, symbolic-ref and log, nothing that changes the repo.
 export async function getPlaygroundDataset(repo: RepoKey): Promise<PlaygroundDataset> {
-  const out = await git(repo, [
-    "for-each-ref",
-    "--format=%(refname)%1f%(objectname)",
-    "refs/heads",
-    "refs/remotes/origin",
-  ])
+  const out = await git(repo, ["for-each-ref", "--format=%(refname)%1f%(objectname)", "refs/heads", "refs/remotes/origin"])
   const refs: FlowRef[] = []
   for (const line of out.split("\n")) {
     const [ref, hash] = line.split("\x1f")
@@ -633,8 +633,13 @@ export async function getPlaygroundDataset(repo: RepoKey): Promise<PlaygroundDat
 const MAX_ACTIVITY = 5000
 
 // Files and lines changed per contributor and day, for the heat map.
-export async function getActivity(repo: RepoKey, branch: string, remote = true): Promise<ActivityData> {
-  const refs = await resolveRefs(repo, branch, remote)
+export async function getActivity(
+  repo: RepoKey,
+  branch: string,
+  remote = true,
+  only?: string[],
+): Promise<ActivityData> {
+  const refs = await resolveRefs(repo, branch, remote, only)
   const out = await git(repo, [
     "log",
     "--no-renames",
@@ -690,8 +695,9 @@ export async function getFileActivity(
   from: string,
   to: string,
   remote = true,
+  only?: string[],
 ): Promise<FileActivity> {
-  const refs = await resolveRefs(repo, branch, remote)
+  const refs = await resolveRefs(repo, branch, remote, only)
   const out = await git(repo, [
     "log",
     "--no-renames",
@@ -754,7 +760,16 @@ function splitPatch(patch: string): DiffFile[] {
 
 export async function getCommitDiff(repo: RepoKey, hash: string): Promise<DiffFile[]> {
   // -m --first-parent shows merge commits against their first parent instead of nothing.
-  const out = await git(repo, ["show", "--no-renames", "-m", "--first-parent", "--format=", "-U3", hash, "--"])
+  const out = await git(repo, [
+    "show",
+    "--no-renames",
+    "-m",
+    "--first-parent",
+    "--format=",
+    "-U3",
+    hash,
+    "--",
+  ])
   return splitPatch(out)
 }
 
@@ -983,7 +998,9 @@ const titleCase = (value: string) =>
   value
     .split(/[-_]/)
     .filter(Boolean)
-    .map((word) => (ACRONYMS.has(word) ? word.toUpperCase() : word.charAt(0).toUpperCase() + word.slice(1)))
+    .map((word) =>
+      ACRONYMS.has(word) ? word.toUpperCase() : word.charAt(0).toUpperCase() + word.slice(1),
+    )
     .join(" ")
 
 const docsDir = (repo: RepoKey) => path.join(REPOS[repo].dir, "docs")
@@ -1082,7 +1099,8 @@ export async function getQuestions(kind: QuestionKind): Promise<QuestionItem[]> 
       id: asString(q?.id),
       code: typeof q?.code === "string" ? q.code : null,
       priority:
-        asQuestionPriority(q?.priority) ?? asQuestionPriority(typeof q?.code === "string" ? q.code.slice(0, 2) : null),
+        asQuestionPriority(q?.priority) ??
+        asQuestionPriority(typeof q?.code === "string" ? q.code.slice(0, 2) : null),
       category: asString(q?.category),
       question: asString(q?.question),
       answer: asString(q?.answer),
@@ -1095,7 +1113,12 @@ export async function getQuestions(kind: QuestionKind): Promise<QuestionItem[]> 
   }
 }
 
-export async function addQuestion(kind: QuestionKind, question: string, category = "", priority: unknown = null) {
+export async function addQuestion(
+  kind: QuestionKind,
+  question: string,
+  category = "",
+  priority: unknown = null,
+) {
   const text = question.trim()
   if (!text) throw new Error("Question cannot be empty")
   if (text.length > MAX_QUESTION) throw new Error("Question is too long")
@@ -1199,6 +1222,7 @@ export async function updateTodo(id: string, patch: { status?: unknown; text?: u
 export async function deleteTodo(id: string) {
   await writeTodos((await getTodos()).filter((t) => t.id !== id))
 }
+
 
 // Test evidence lives in testing/test-evidence/{screenshots,responses,data}.
 const TESTING_DIR = path.join(ROOT, "testing", "test-evidence")

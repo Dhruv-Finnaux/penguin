@@ -1,5 +1,178 @@
 [
   {
+    "id": "howismycommit-99",
+    "generatedAt": "2026-11-27T16:24:56+05:30",
+    "author": "Dhruv",
+    "branch": "feat/finnaux-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "7cc90ed2f36c8f0dcfff364af202fd33629e4e60"
+    },
+    "files": {
+      "changed": 6,
+      "added": 1,
+      "modified": 5,
+      "deleted": 0,
+      "insertions": 88,
+      "deletions": 1
+    },
+    "changeType": [
+      "feature"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 2,
+      "info": 3
+    },
+    "before": "Voter ID verification only supported SurePass. A verified Voter ID marked the document verified and filled nothing else on the customer form.",
+    "after": "With Finnaux as the active provider, a Voter ID check posts to the Finnaux route and passes the row to the shared success handler. After a verify, empty customer fields are filled from the verification: names, gender and date of birth for individuals, and street address and pincode for both types. Existing values are not overwritten.",
+    "effects": [
+      "Voter ID verify dialog renders FinnauxVoterIdFlow when the provider is finnaux",
+      "Customer KYC section fills individual and non-individual forms after Voter ID verification",
+      "Finnaux page-rights gating in VerificationTrigger applies to the Voter ID check"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/features/external-apis/api.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/hooks.ts",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/voter-id-verify/context.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/voter-id-verify/dialog-manager.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/external-apis/components/voter-id-verify/flows/finnaux-voter-id-flow.tsx",
+        "change": "added",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/features/customers/components/add-customer-forms/components/kyc-section.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Not tested in the browser or against the Finnaux backend",
+      "Eslint was not run on this commit in this review",
+      "No test script is configured, so behaviour was checked by reading the code only"
+    ],
+    "info": [
+      "This commit is not an ancestor of the current HEAD of feat/finnaux-apis (f26aac14); the Voter ID flow file is absent from HEAD, so the branch history needs checking before merging",
+      "applyVoterId fills only empty fields and skips Devanagari full names, as intended by the contract",
+      "dateOfBirth is cut to YYYY-MM-DD from the backend text, so a timezone shift is not possible"
+    ]
+  },
+  {
+    "id": "howismycommit-98",
+    "generatedAt": "2026-11-27T12:17:30+05:30",
+    "author": "Dhruv",
+    "branch": "feat/external-apis",
+    "target": {
+      "kind": "commit",
+      "commit": "35a8d13ded2d2835a2c37aef8315f89bf3ce4704"
+    },
+    "files": {
+      "changed": 3,
+      "added": 0,
+      "modified": 3,
+      "deleted": 0,
+      "insertions": 32,
+      "deletions": 15
+    },
+    "changeType": [
+      "ui",
+      "bug fix"
+    ],
+    "verdict": "looks-good",
+    "score": 100,
+    "commitScore": 100,
+    "quality": "excellent",
+    "summary": {
+      "red": 0,
+      "amber": 0,
+      "green": 1,
+      "info": 3
+    },
+    "before": "Horizontal layout had a flat navbar: the menu had square top corners, and the Finnaux and right-side blocks had no shadow.",
+    "after": "In horizontal layout the menu has 2rem rounded top corners with card-coloured fillers and their own shadow, and the Finnaux and right-side blocks have a shadow clipped on the curve side. The user settings drawer is 1rem wider, and toasts use rounded-xl with a border.",
+    "effects": [
+      "Navbar layout in horizontal mode: menu wrapper, fillers and block shadows",
+      "User settings drawer width (23rem)",
+      "All toasts rendered through the sonner Toaster"
+    ],
+    "filesReviewed": [
+      {
+        "path": "src/app/(app)/(main)/_components/navbar/navbar.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/app/(app)/(main)/_components/navbar/user-settings-panel.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues"
+      },
+      {
+        "path": "src/components/ui/sonner.tsx",
+        "change": "modified",
+        "status": "green",
+        "note": "no issues; unrelated to the navbar fix"
+      }
+    ],
+    "findings": [],
+    "previousFindings": [],
+    "checks": [
+      {
+        "status": "green",
+        "command": "npx tsc --noEmit",
+        "result": "passed"
+      }
+    ],
+    "gaps": [
+      "Curve shadows and clipping were not checked in the browser",
+      "Eslint was run on navbar.tsx before the final edit only, not on the committed version after the last change",
+      "No test script is configured, so behaviour was checked by reading the code only"
+    ],
+    "info": [
+      "Commit message says 'tidy user settings panel', but the panel change is only the width (22rem to 23rem); the earlier drawer revert is not in this commit",
+      "The sonner.tsx change (toast radius and border) is unrelated to the navbar fix and would be easier to find on its own commit",
+      "Negative clip-path insets on the Finnaux and right-side blocks may cut off focus rings or hover effects on the outer edges; not checked"
+    ]
+  },
+  {
     "id": "howismycommit-97",
     "generatedAt": "2026-11-26T16:45:27+05:30",
     "author": "Dhruv",

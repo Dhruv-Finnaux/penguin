@@ -9,13 +9,14 @@ export async function GET(request: Request) {
   const branch = params.get("branch") ?? ""
   const skip = Number(params.get("skip") ?? 0)
   const limit = Number(params.get("limit") ?? 50)
+  const only = params.has("shown") ? (params.get("shown") ?? "").split(",").filter(Boolean) : undefined
   const authors = params.getAll("author").filter((name) => name && name.length < 200)
   if (!isRepoKey(repo) || !branch || !Number.isInteger(skip) || !Number.isInteger(limit)) {
     return NextResponse.json({ message: "Invalid request" }, { status: 400 })
   }
 
   try {
-    return NextResponse.json(await getCommitPage(repo, branch, skip, limit, authors, params.get("remote") !== "0"))
+    return NextResponse.json(await getCommitPage(repo, branch, skip, limit, authors, params.get("remote") !== "0", only))
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not read the commits"
     return NextResponse.json({ message }, { status: 500 })

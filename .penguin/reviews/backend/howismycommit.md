@@ -1,6 +1,3177 @@
 # 🐧 How Is My Commit · Backend
 
-> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 82 entries, newest first.
+> Generated from `data/backend/howismycommit.json`. Edit the JSON, not this file. 119 entries, newest first.
+
+## howismycommit-119
+
+| Field | Value |
+|---|---|
+| id | howismycommit-119 |
+| generatedAt | 2026-11-27T10:52:54+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 70811ad3557b0f42d95c102173212d138f426db7 |
+| commitScore | 100 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 5 |
+| files.deletions | 1 |
+| verdict | review-with-caution |
+| score | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | The contract did not mention the empty contact edit message or which pages are completed as a side effect. |
+| after | The contract lists 400 Contact detail cannot be empty and says the side-effect pages are covered by the right of the step the user is on. |
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| dfb2e2f2d12615da894139e14ffde8b4863587cd | F1 | Edit with empty details skips the new format check and saves an empty contact | resolved | Still fixed: apps/finnaux-api/src/lms/customer/communication/communication.service.ts:90 refuses empty or blank details. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps libs | passed |
+| green | bun run build | passed |
+| green | bunx jest | passed: 135 passed, 78 skipped |
+
+### gaps (1)
+
+- Nothing was exercised at runtime or against a database.
+
+### changeType (1)
+
+- docs
+
+### effects (1)
+
+- contracts/frontend-security-contract.md only.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| contracts/frontend-security-contract.md | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### info (1)
+
+- The side-effect sentence matches the code: each saving step still checks its own process right.
+
+---
+
+## howismycommit-118
+
+| Field | Value |
+|---|---|
+| id | howismycommit-118 |
+| generatedAt | 2026-11-27T10:52:54+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 88c9cc18f0b2bc71d70b550b19339abb4295bf0d |
+| commitScore | 100 |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 12 |
+| files.deletions | 3 |
+| verdict | looks-good |
+| score | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | Saving a vehicle also completed PDD Detail and saving financials re-opened Receipt and Deductions, and both side effects required the process right on that second page. |
+| after | Both side effects skip the second-page process-right check. Vehicle save still checks the ASSETS_VEHICLE step right right after, and financials save still checks its own step right (Proposed, Approved or Lender Financials) when it completes that step. |
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| dfb2e2f2d12615da894139e14ffde8b4863587cd | F1 | Edit with empty details skips the new format check and saves an empty contact | resolved | Still fixed: apps/finnaux-api/src/lms/customer/communication/communication.service.ts:90 refuses empty or blank details. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps libs | passed |
+| green | bun run build | passed |
+| green | bunx jest | passed: 135 passed, 78 skipped |
+
+### gaps (1)
+
+- Nothing was exercised at runtime or against a database.
+
+### changeType (2)
+
+- bug fix
+- security
+
+### effects (1)
+
+- LOS asset-vehicle save and loan financials save (proposed, approved, lender).
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/los/loan-application/asset-vehicles/asset-vehicles.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/financials/financials.service.ts | modified | green | no issues |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Financials save no longer checks any process right |
+| location | apps/finnaux-api/src/los/loan-application/financials/financials.service.ts:288 |
+| problem | FinancialsService.update never checks the right for its own step (input.processPageId: Proposed, Approved or Lender Financials). Its only process-right check came from the Receipt and Deductions side effect, which this commit turns off. |
+| impact | A user with view-only process rights on the financials steps (and the loan write page right) can save financials, which F17 meant to stop. |
+| fix | At the start of update, call the orchestrator ensureProcessPageWriteRight(tx, input.processPageId, "UPSERT", session) (exposed through LoanApplicationService) so the user's own step right is checked. |
+| evidence |             fixedIds.MASTER_PROCESS_PAGE.RECEIPT_AND_DEDUCTIONS,<br>            'DELETE',<br>            session, |
+| status | resolved |
+| resolvedIn | null |
+| resolvedAt | 2026-11-27T05:24:34.216Z |
+| resolvedNote | Review mistake, no code change needed: financials save still checks its own step right through handleLosProcessPageCompletionByAction(input.processPageId, UPSERT) in the same request transaction, so a refusal rolls the save back: apps/finnaux-api/src/los/loan-application/financials/financials.service.ts:316. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### info (1)
+
+- The first version of this review reported that financials save lost its own step check. That was wrong: the check at financials.service.ts:316 covers it, so the finding is marked resolved as a review mistake.
+
+---
+
+## howismycommit-117
+
+| Field | Value |
+|---|---|
+| id | howismycommit-117 |
+| generatedAt | 2026-11-27T10:52:54+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | bbd0c5819bb1d43e8bec5e7162e859f3a490fe8b |
+| commitScore | 100 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 5 |
+| files.deletions | 1 |
+| verdict | looks-good |
+| score | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 0 |
+| before | Contact edit checked the format only for non-empty details, so an empty string skipped the check and was saved. |
+| after | Any details value sent on edit is checked: empty, blank or non-string values return 400 Contact detail cannot be empty, and non-empty values are checked against the stored contact type. |
+
+### previousFindings (1)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| dfb2e2f2d12615da894139e14ffde8b4863587cd | F1 | Edit with empty details skips the new format check and saves an empty contact | resolved | Still fixed: apps/finnaux-api/src/lms/customer/communication/communication.service.ts:90 refuses empty or blank details. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed |
+| green | bunx oxlint apps libs | passed |
+| green | bun run build | passed |
+| green | bunx jest | passed: 135 passed, 78 skipped |
+
+### gaps (1)
+
+- Nothing was exercised at runtime or against a database.
+
+### changeType (1)
+
+- bug fix
+
+### effects (1)
+
+- PUT on LMS customer communication; the frontend contract documents the new message.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/lms/customer/communication/communication.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### info (0)
+
+_Empty._
+
+---
+
+## howismycommit-116
+
+| Field | Value |
+|---|---|
+| id | howismycommit-116 |
+| generatedAt | 2026-11-27T10:49:19+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | b05127d0f76a84fa5a021bb5384bbd6b0f9c75cf |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 24 |
+| files.deletions | 12 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | The frontend security contract had a wrong lockout description, wrong rule and credentials-schema paths, and did not describe edit-time contact validation, orphaned report templates, candidate hire rules or the widened GET rights on branch assignments. |
+| after | The contract describes the lockout as implemented, uses the real routes, and documents the review fixes in 3.1, 3.5, 3.9, 3.11, 3.13, 3.14, 3.15 and the section 5 route table. |
+
+### changeType (1)
+
+- docs
+
+### effects (1)
+
+- Frontend implementers of FINNAUX2.0-UI read this contract for messages and rights.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| contracts/frontend-security-contract.md | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD b05127d0 by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (2)
+
+- Docs only; 13 claims were checked against HEAD and all matched: lockout counting and 429 message (auth.service.ts:59-70), credentials schema route (external-apis.controller.ts:77), contact messages (is-communication-details.decorator.ts:24-31), edit uses stored type (communication.service.ts:90), Report Builder 403 text and orphan rule (report-builder.service.ts:190-197) and edit/delete rights (report-builder.controller.ts:106-121), recruitment route path (recruitment.controller.ts:46,275), 403 hire message and 400 Job not found. (recruitment.service.ts:938,977), deviation-assignments GET rights and POST/PUT (branch.controller.ts:197-240), branch assignments GET/POST/PUT/DELETE rights (assignments.controller.ts:36-90), 409/404 deviation messages (branch.service.ts:616,953), POST /v1/rule (rule-engine.controller.ts:26-30).
+- Unchanged section 5 rows and the rest of the contract were not re-checked; frontend file references were not checked in FINNAUX2.0-UI.
+
+### info (1)
+
+- The Frontend notice for hiring says an admin sets the password from the employee edit screen; this is possible via update-on-role-employee.dto.ts:31, but only for users with Employee edit and a more senior level.
+
+---
+
+## howismycommit-115
+
+| Field | Value |
+|---|---|
+| id | howismycommit-115 |
+| generatedAt | 2026-11-27T10:49:19+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | ebd0a77d5213df54fa9938724f43a14248064237 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 44 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | POST /v1/hrms/recruitment-management/candidates/convert-to-employee created the employee with the job posting designation at any level and the shared hardcoded password, so a RECRUITMENT_MANAGEMENT add user could create a senior or Admin login with a known password. |
+| after | The service returns 400 Job not found. when the posting is missing, refuses with 403 You can only hire into roles below your own level unless the job designation level is strictly larger than the caller's, and hashes a random 24-byte secret as the password. |
+
+### changeType (2)
+
+- security
+- bug fix
+
+### effects (2)
+
+- Hiring flow in the recruitment screen: hired employees cannot log in until someone with employee edit rights sets a password (update-on-role-employee.dto.ts:31).
+- Recruiters can no longer hire into their own level or above.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/hrms/recruitment/recruitment.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD b05127d0 by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (2)
+
+- Nothing was exercised at runtime or against a database; conclusions come from reading the code and the static checks.
+- No unit test covers the new level check or the missing-job path.
+
+### info (3)
+
+- Fixes the howismycommit-84/85 gap: recruitment.service.ts:980 calls assertDesignationBelowCaller and recruitment.service.ts:990-993 hashes randomBytes(24); no Finnaux@123 remains in apps or libs.
+- assertDesignationBelowCaller duplicates EmployeeService.assertCanAssignDesignation (employee.service.ts:1887) but, unlike it, does not filter designations.isActive, so hiring into an inactive role is still allowed (pre-existing behaviour, not a regression).
+- Business decision: hiring now needs a second step by a user with Employee edit to set the password, and a recruiter cannot hire peers or seniors; confirm this matches HR workflow.
+
+---
+
+## howismycommit-114
+
+| Field | Value |
+|---|---|
+| id | howismycommit-114 |
+| generatedAt | 2026-11-27T10:49:19+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | dfb2e2f2d12615da894139e14ffde8b4863587cd |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 49 |
+| files.deletions | 21 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 96 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | Contact details were format-checked only on create; on PUT /v1/lms/customer/:customerId/communication/:id the DTO has no type, so the decorator fell into its default branch and accepted any string. |
+| after | The format logic moved into getCommunicationDetailsError (shared by the decorator and the service), and CommunicationService.update checks input.details against the stored communication.type before saving, returning 400 with the format message. |
+
+### changeType (2)
+
+- bug fix
+- API
+
+### effects (2)
+
+- LMS customer contact edit now returns 400 Invalid email format / Phone number must be 10 digits... / Invalid website format.
+- Decorator messages are unchanged for create (LMS and inquiries create DTOs).
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/common/decorators/is-communication-details.decorator.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/customer/communication/communication.service.ts | modified | amber | F1 |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Edit with empty details skips the new format check and saves an empty contact |
+| location | apps/finnaux-api/src/lms/customer/communication/communication.service.ts:90 |
+| problem | The new check runs only when input.details is truthy. details is required in UpdateCommunicationDto but only has @IsString() and @IsCommunicationDetails(); with type omitted the decorator returns valid, so details: "" passes validation, the guard is skipped, and .set({ ...input }) writes an empty string over an EMAIL/PHONE_NUMBER/WEBSITE contact. |
+| impact | A customer contact (possibly the primary one) can be blanked through edit, which create would reject; the F18 gap is closed only for non-empty strings. |
+| fix | Check whenever details is present: if (input.details !== undefined), or simply always call getCommunicationDetailsError(communication.type, input.details) since details is required. |
+| evidence |     if (input.details) {<br>      const detailsError = getCommunicationDetailsError(<br>        communication.type, |
+| status | resolved |
+| resolvedIn | bbd0c5819bb1d43e8bec5e7162e859f3a490fe8b |
+| resolvedAt | 2026-11-27T05:21:32.076Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Any sent details value is checked; empty or blank returns 400 Contact detail cannot be empty: apps/finnaux-api/src/lms/customer/communication/communication.service.ts:90. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD b05127d0 by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (3)
+
+- Nothing was exercised at runtime or against a database; conclusions come from reading the code and the static checks.
+- Existing stored contact rows that do not match the formats were not counted; they stay until edited.
+- No unit test covers the edit-path format check.
+
+### info (2)
+
+- Fixes howismycommit-101 F1 for non-empty values: communication.service.ts:90-99 validates against the stored type.
+- Pre-existing, not introduced: isWhatsappNumber on edit uses @IgnoreIf((o) => !isTypePhoneNumber(o.type)); the edit body has no type, so that flag may always be ignored on edit (create-communication.dto.ts:37-41). Not verified at runtime.
+
+---
+
+## howismycommit-113
+
+| Field | Value |
+|---|---|
+| id | howismycommit-113 |
+| generatedAt | 2026-11-27T10:49:19+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | c08d0e7edc52f597326f88ba02275dd5e9e412b8 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 6 |
+| files.deletions | 5 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | assertCanManageReport refused every non-creator when the creator level lookup returned null, so templates whose creator was deactivated (getDesignationLevel filters employees.isActive) or whose creatorId was null could never be edited or deleted. |
+| after | When the creator level is null the check returns early, so the Report Builder edit/delete page right alone decides; for an active creator the caller still needs a known, strictly smaller level. |
+
+### changeType (2)
+
+- bug fix
+- security
+
+### effects (2)
+
+- PATCH /v1/reports/builder/templates/:id and DELETE /v1/reports/builder/templates/:id (REPORT_BUILDER canEdit / canDelete).
+- Orphaned templates (deactivated or missing creator) become manageable by any Report Builder editor.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/reports/report-builder/report-builder.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (3)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F1 | Contract says attempts while locked restart the 15-minute lock; the code does not | resolved | Verified: contracts/frontend-security-contract.md:132 now says attempts while locked do not extend the lock, matching auth.service.ts:59-70 which throws 429 before the cache write. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F2 | Rule create path in section 3.15 is wrong | resolved | Verified: contracts/frontend-security-contract.md:366 uses POST /v1/rule, matching rule-engine.controller.ts:26-30. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F3 | Credentials schema path in section 3.5 is wrong | resolved | Verified: contracts/frontend-security-contract.md:215 uses /api-groups/:apiGroupId/credentials/schema, matching external-apis.controller.ts:77. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD b05127d0 by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (2)
+
+- Nothing was exercised at runtime or against a database; conclusions come from reading the code and the static checks.
+- No unit test covers a deactivated creator or a null creatorId for update/delete.
+
+### info (2)
+
+- Fixes howismycommit-98 F1: report-builder.service.ts:190 returns when creatorLevel is null; caller level null cannot occur for a logged-in user because employees.designationId is notNull and the caller is active.
+- Business decision: any user with Report Builder edit/delete, at any level, can now change or delete templates of a deactivated senior creator. If only senior roles should inherit orphaned templates, a level floor is needed.
+
+---
+
+## howismycommit-112
+
+| Field | Value |
+|---|---|
+| id | howismycommit-112 |
+| generatedAt | 2026-11-27T10:49:19+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 159c94f9732c9fcc8b0468014553798648224420 |
+| files.changed | 5 |
+| files.added | 0 |
+| files.modified | 5 |
+| files.deleted | 0 |
+| files.insertions | 25 |
+| files.deletions | 12 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 0 |
+| before | handleLosProcessPageCompletionByAction always checked the designation's process page right for the page being completed, so finalise payment needed canAdd on AMORTIZATION_GENERATE and deleting a payment request needed canDelete on PAYMENT_AUTHORIZATION, even though the user acts only on the first page. |
+| after | A new trailing shouldCheckWriteRight parameter (default true) lets callers skip the check; finalise payment (AMORTIZATION_GENERATE CREATE) and payment request delete (PAYMENT_AUTHORIZATION DELETE) pass null, 1, false, which matches the (session, customerId, count, shouldCheckWriteRight) order. The primary page check (PAYMENT_INITIATION UPSERT, PAYMENT_REQUEST_CREATION DELETE) still runs first in the same transaction. |
+
+### changeType (2)
+
+- security
+- bug fix
+
+### effects (2)
+
+- Finalise payment and payment request deletion no longer 403 for designations without rights on the dependent page.
+- All other completion callers keep the default check.
+
+### filesReviewed (5)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/los/loan-application/disbursement/disbursement.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/finalise-payment/finalise-payment.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/loan-application.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/process-orchestrator/i-process-orchestrator.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/process-orchestrator/process-orchestrator.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (3)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F1 | Contract says attempts while locked restart the 15-minute lock; the code does not | resolved | Verified: contracts/frontend-security-contract.md:130-133 now says attempts while locked are refused and do not extend the lock, matching apps/finnaux-api/src/auth/auth.service.ts:62-67. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F2 | Rule create path in section 3.15 is wrong | resolved | Verified: contracts/frontend-security-contract.md:366 names POST /v1/rule, matching @Post('rule') in rule-engine.controller.ts:30. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F3 | Credentials schema path in section 3.5 is wrong | resolved | Verified: contracts/frontend-security-contract.md:215 uses the api-groups/:apiGroupId/credentials/schema path, matching external-apis.controller.ts:77. |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD, which contains this commit) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+| grey | runtime / database check | not run: review-only task, no servers or database |
+
+### gaps (2)
+
+- Two other side-effect completions still run the right check and were not covered (they were not named in the earlier finding): saving a vehicle asset also CREATEs PDD_DETAIL completion when a PDD entry is needed (asset-vehicles.service.ts:125-131 and :406-412), and saving financials DELETEs RECEIPT_AND_DEDUCTIONS completion when deductions are inserted (financials.service.ts:284-290). Designations without canAdd on PDD Detail or canDelete on Receipt and Deductions would still get 403 there, because the check runs before the no-row early return.
+- Not exercised at runtime with a designation lacking the dependent page rights; nothing was run against a database.
+
+### info (0)
+
+_Empty._
+
+---
+
+## howismycommit-111
+
+| Field | Value |
+|---|---|
+| id | howismycommit-111 |
+| generatedAt | 2026-11-27T10:49:18+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | b618e543783c389a1e0b47db60f46ea4d5fba0c1 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 4 |
+| files.deletions | 6 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | login() read the failure count, then did the employee lookup and the ~80 ms bcrypt compare, and only wrote count + 1 on failure, so concurrent wrong guesses all passed the limit check during the compare. |
+| after | The attempt is written as count + 1 immediately after the limit check and before the lookup and bcrypt compare; a successful login deletes the key, and attempts while locked still return 429 without extending the TTL. |
+
+### changeType (2)
+
+- security
+- bug fix
+
+### effects (2)
+
+- Lockout behaviour matches contracts/frontend-security-contract.md:130-133 (every attempt counted, success clears the count, locked attempts do not extend).
+- A login that fails for an infrastructure reason (DB or bcrypt error) now also counts as an attempt.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/auth/auth.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (3)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F1 | Contract says attempts while locked restart the 15-minute lock; the code does not | resolved | Verified: contracts/frontend-security-contract.md:130-133 now says attempts while locked are refused and do not extend the lock, matching apps/finnaux-api/src/auth/auth.service.ts:62-67. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F2 | Rule create path in section 3.15 is wrong | resolved | Verified: contracts/frontend-security-contract.md:366 names POST /v1/rule, matching @Post('rule') in rule-engine.controller.ts:30. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F3 | Credentials schema path in section 3.5 is wrong | resolved | Verified: contracts/frontend-security-contract.md:215 uses the api-groups/:apiGroupId/credentials/schema path, matching external-apis.controller.ts:77. |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD, which contains this commit) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+| grey | runtime / database check | not run: review-only task, no servers or database |
+
+### gaps (1)
+
+- Not tested with concurrent requests against Redis; nothing was run at runtime.
+
+### info (1)
+
+- The counter is still get-then-set through the Keyv cache (auth.service.ts:60 and :70), not an atomic INCR. Requests whose GET reaches Redis before another request's SET still read the same count, so a tightly parallel burst can get a few extra guesses; the window is now one Redis round trip instead of the bcrypt compare. An atomic Redis INCR + PEXPIRE would close it fully.
+
+---
+
+## howismycommit-110
+
+| Field | Value |
+|---|---|
+| id | howismycommit-110 |
+| generatedAt | 2026-11-27T10:49:18+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 04d16b65913c21354c6bee5f0e1b659466f74360 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 7 |
+| files.deletions | 6 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | importEmployees took the employee code sequence row lock (SELECT ... FOR UPDATE) first and then computed one bcryptjs hash per imported row, holding the lock for rows x ~64 ms. |
+| after | The per-row random-password hashes are computed before getSubsequentValuesPostIncrement, so the sequence lock is held only for the inserts; no other writes happen in the transaction before the hashing. |
+
+### changeType (3)
+
+- security
+- performance
+- bug fix
+
+### effects (2)
+
+- Other employee creates that use the same sequence are no longer blocked during the hashing phase of a large import.
+- Total import request time and CPU use are unchanged.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/configurations/import-data/import-employees.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (3)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F1 | Contract says attempts while locked restart the 15-minute lock; the code does not | resolved | Verified: contracts/frontend-security-contract.md:130-133 now says attempts while locked are refused and do not extend the lock, matching apps/finnaux-api/src/auth/auth.service.ts:62-67. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F2 | Rule create path in section 3.15 is wrong | resolved | Verified: contracts/frontend-security-contract.md:366 names POST /v1/rule, matching @Post('rule') in rule-engine.controller.ts:30. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F3 | Credentials schema path in section 3.5 is wrong | resolved | Verified: contracts/frontend-security-contract.md:215 uses the api-groups/:apiGroupId/credentials/schema path, matching external-apis.controller.ts:77. |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD, which contains this commit) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+| grey | runtime / database check | not run: review-only task, no servers or database |
+
+### gaps (1)
+
+- Not timed at runtime; the import was not run against a database.
+
+### info (1)
+
+- The request still computes one bcryptjs hash (pure JS, cost 10) per row inside the request transaction (import-employees.service.ts:550), so a 5,000-row import still runs for minutes and keeps the CPU busy; only the lock part of the earlier finding is addressed. Hashing one random secret per batch would remove that cost if the team wants it.
+
+---
+
+## howismycommit-109
+
+| Field | Value |
+|---|---|
+| id | howismycommit-109 |
+| generatedAt | 2026-11-27T10:49:18+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 5fce545b63309f6297bbf573eedb1e1146d34e72 |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 8 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | GET /configuration/branch/:branchId/assignments required BRANCH_MAIN view and GET :branchId/product/:productId/deviation-assignments required BRANCH_PROCESS_EMPLOYEE view, so loan-screen users without branch configuration pages got 403 when the deviation and waiver forms loaded approver lists. |
+| after | Both GETs also accept any LOAN_APPLICATION_VIEW_RIGHTS entry (LOS pages plus the LMS pages that open the loan screen); the guard is any-of, and POST/PUT/DELETE stay on the branch configuration pages. |
+
+### changeType (2)
+
+- security
+- bug fix
+
+### effects (2)
+
+- Loan deviation forms (policy, fee, manual, document) and the shared waiver selector used by closure receipt, NPA regularise, vehicle release and legal receipt forms in FINNAUX2.0-UI features/loan-application now get the approver lists.
+- Any employee with view on a loan-screen page can now read a branch's operation assignments and deviation assignments (employee names, percentages, max amounts).
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/configurations/branch/assignments/assignments.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/branch/branch.controller.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (3)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F1 | Contract says attempts while locked restart the 15-minute lock; the code does not | resolved | Verified: contracts/frontend-security-contract.md:130-133 now says attempts while locked are refused and do not extend the lock, matching apps/finnaux-api/src/auth/auth.service.ts:62-67. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F2 | Rule create path in section 3.15 is wrong | resolved | Verified: contracts/frontend-security-contract.md:366 names POST /v1/rule, matching @Post('rule') in rule-engine.controller.ts:30. |
+| 67417c446e8c959ab4fc71034ef05996004bfcf8 | F3 | Credentials schema path in section 3.5 is wrong | resolved | Verified: contracts/frontend-security-contract.md:215 uses the api-groups/:apiGroupId/credentials/schema path, matching external-apis.controller.ts:77. |
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD, which contains this commit) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+| grey | runtime / database check | not run: review-only task, no servers or database |
+
+### gaps (1)
+
+- Not verified at runtime that a designation holding only an LMS page (for example LOAN_CLOSURE_MARKING) gets 200 from both GETs; nothing was run against a database or server.
+
+### info (1)
+
+- The read is widened to every loan-screen page holder, not only to the pages whose forms use it. This is a business call: assignment lists expose approver names and amount ceilings for the whole branch (assignments.service.ts:75 findAll returns every assignment type for the branch).
+
+---
+
+## howismycommit-108
+
+| Field | Value |
+|---|---|
+| id | howismycommit-108 |
+| generatedAt | 2026-11-27T10:36:07+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 67417c446e8c959ab4fc71034ef05996004bfcf8 |
+| files.changed | 1 |
+| files.added | 1 |
+| files.modified | 0 |
+| files.deleted | 0 |
+| files.insertions | 966 |
+| files.deletions | 0 |
+| verdict | review-with-caution |
+| score | 88 |
+| commitScore | 88 |
+| quality | good |
+| summary.red | 0 |
+| summary.amber | 3 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | There was no written contract for the frontend covering the security and validation changes on test/local. |
+| after | contracts/frontend-security-contract.md lists the rights rule, page ids, the behaviour change and frontend action for each finding, named page sets, and a per-module table of every route whose rights changed. |
+
+### changeType (1)
+
+- docs
+
+### effects (1)
+
+- The FINNAUX2.0-UI team will build its changes from this file, so a wrong path or wrong behaviour here becomes a frontend bug.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| contracts/frontend-security-contract.md | added | amber | F1 |
+
+### findings (3)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Contract says attempts while locked restart the 15-minute lock; the code does not |
+| location | contracts/frontend-security-contract.md:130 |
+| problem | Section 3.1 says 'Each new failure while locked restarts the 15 minutes'. In auth.service.ts:60-66, once the count reaches 5 the 429 is thrown before any cache write, so attempts while locked neither count nor extend the TTL. The lock lifts 15 minutes after the 5th counted failure. |
+| impact | The frontend or support may tell users that retrying keeps them locked, or build countdown or retry advice on behaviour that does not exist. |
+| fix | Change the sentence to: the lock lifts 15 minutes after the last counted failure; attempts while locked return 429 and do not extend it. Or change the code if extending is intended. |
+| evidence | 5 failed logins for one username lock that username for 15 minutes. Each new failure while locked |
+| status | resolved |
+| resolvedIn | b05127d0f76a84fa5a021bb5384bbd6b0f9c75cf |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Contract lockout text now matches the code: contracts/frontend-security-contract.md:130. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[2] · F2
+
+| Field | Value |
+|---|---|
+| id | F2 |
+| severity | P3 |
+| title | Rule create path in section 3.15 is wrong |
+| location | contracts/frontend-security-contract.md:354 |
+| problem | Section 3.15 names `POST /v1/rule-engine/rule`. RuleEngineController is @Controller({ version: '1' }) with no path, and the handler is @Post('rule') (rule-engine.controller.ts:26-30), so the real route is POST /v1/rule. The section 5 table (`POST /rule`) is correct. |
+| impact | A frontend change made from the prose would call a route that does not exist (404). |
+| fix | Change the prose to `POST /v1/rule`. |
+| evidence | - `POST /v1/rule-engine/rule` requires `outputConfig` (object): missing returns `400`. |
+| status | resolved |
+| resolvedIn | b05127d0f76a84fa5a021bb5384bbd6b0f9c75cf |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Contract uses POST /v1/rule: contracts/frontend-security-contract.md. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[3] · F3
+
+| Field | Value |
+|---|---|
+| id | F3 |
+| severity | P3 |
+| title | Credentials schema path in section 3.5 is wrong |
+| location | contracts/frontend-security-contract.md:214 |
+| problem | Section 3.5 names `GET /v1/configuration/external-apis/credentials/schema`. The handler is @Get('api-groups/:apiGroupId/credentials/schema') (external-apis.controller.ts:77). The section 5 table has the correct path. |
+| impact | The two sections of the contract disagree, and the prose path returns 404. |
+| fix | Use `GET /v1/configuration/external-apis/api-groups/:apiGroupId/credentials/schema` in 3.5. |
+| evidence | `GET /v1/configuration/external-apis/credentials/schema` needs External APIs view. |
+| status | resolved |
+| resolvedIn | b05127d0f76a84fa5a021bb5384bbd6b0f9c75cf |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Contract uses /v1/configuration/external-apis/api-groups/:apiGroupId/credentials/schema: contracts/frontend-security-contract.md. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (3)
+
+- Nothing was exercised at runtime or against a database; the checks are static (types, lint, build, unit tests).
+- Section 5 has about 300 route rows. Only the CKYC, app, service-accounts, CRM, rule-engine, company and SMS rows were checked against the code. The LOS, HRMS, external and reports rows were not checked one by one.
+- Frontend file references (auth.ctx.tsx User type, external-apis hooks.ts around line 45, use-verification-core.ts) were not checked in FINNAUX2.0-UI.
+
+### info (3)
+
+- Spot-checked against HEAD and matching (17 claims): the 403 text 'You do not have sufficient rights' and the any-entry/named-flags rule (auth.guard.ts); GET /v1/common/page-rights/:pageId exists; login 401 and 429 texts; the deactivated-employee 401; the login response carries designationId and designationLevel; all CKYC rows; app-logs and service-accounts on Company Configuration view under /v1; notification templates on Loan Product Main edit; CRM entry add/edit; company PUTs on view+edit; SMS GET view / PUT edit; the MCLR id 01M2FDGCPNYRNDDH1RFX18R5MD; rules-by-levels using a DTO; 'Add at least one KYC document/contact detail'; 'Enquiries are not affected'; and about 20 error messages from sections 3.2, 3.8, 3.9, 3.12-3.14 found verbatim in the services.
+- Section 3.10 says contact formats are validated 'on create'. That is accurate: the edit route does not validate them (see the review of ea2fac97). The frontend should still validate on edit.
+- The status line says 'final ... nothing else is needed', but F7 is not fully closed on HEAD: GET /lms/customer/review-bank still takes a raw accountNumber query param. The contract does not list it, so this is not a mismatch, but 'final' is optimistic.
+
+---
+
+## howismycommit-107
+
+| Field | Value |
+|---|---|
+| id | howismycommit-107 |
+| generatedAt | 2026-11-27T10:36:07+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | f9ec77a8e9a3013e3674cdd10540c5181b86416a |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 10 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | GET /lms/receipt-authorisations listed the caller's own receipts, which the authorise call (since the F19 maker-checker commit) would then refuse with 403. |
+| after | The list excludes receipts whose creatorId is the caller, while still including receipts with no creator. |
+
+### changeType (2)
+
+- security
+- bug fix
+
+### effects (1)
+
+- Receipt authorisation screen no longer shows the logged-in user's own receipts
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/receipt-authorisations/receipt-authorisations.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run on HEAD, which contains this commit) |
+| green | bunx oxlint apps libs | passed (run on HEAD) |
+| green | bun run build | passed, 0 warnings (run on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run on HEAD) |
+
+### gaps (1)
+
+- Nothing was exercised at runtime or against a database.
+
+### info (1)
+
+- Uses Drizzle or(isNull, ne) as required by AGENTS.md; the list still has no page right of its own.
+
+---
+
+## howismycommit-106
+
+| Field | Value |
+|---|---|
+| id | howismycommit-106 |
+| generatedAt | 2026-11-27T10:36:06+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 0f108d5a675cf3750063bc588bcd21d9837faf6e |
+| files.changed | 74 |
+| files.added | 2 |
+| files.modified | 72 |
+| files.deleted | 0 |
+| files.insertions | 665 |
+| files.deletions | 7 |
+| verdict | review-with-caution |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 5 |
+| summary.info | 9 |
+| before | About 60 loan-application sub-controllers, KVB, MCLR, customer-app update-status, assignment lists, legal receipt authorisations and NACH import-issues accepted any signed-in employee with branch access to the loan; the loan list accepted only five LOS pages; MCLR had no menu page row in the seed or migrations. |
+| after | Each of those controllers requires view rights on one of 37 LOS/LMS pages at class level, with method-level edit/add rights (base LOS/LMS loan pages plus feature pages for NACH, reschedule, repossession and legal) on writes. MCLR routes use the new MCLR page, which migration 0021 and the golden seed create and grant to designations that manage company configuration. |
+
+### changeType (3)
+
+- security
+- schema or migration
+- config or CI
+
+### effects (5)
+
+- Every LOS and LMS loan screen: users without view/edit on the listed pages now get 403 on tabs and writes they could previously use.
+- The loan list (GET los/loan-application) is now visible to LMS workflow page holders.
+- Configuration > MCLR screen now needs the MCLR page right; existing DBs get it copied from COMPANY_CONFIGURATION by migration 0021.
+- KVB integration tab, customer-app inquiry status, executive assignment screens and Bulk NACH import-issues now need page rights.
+- designation_menu_pages, designation_menu_list, master_menu_pages and master_menu_list gain MCLR rows on deploy.
+
+### filesReviewed (74)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/configurations/mclr/mclr.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/customer-app/customer-app.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/fixed-cuids.ts | modified | green | no issues |
+| apps/finnaux-api/src/integrations/kvb/kvb.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/assignment-lists/assignment-lists.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/legal-receipt-authorisations/legal-receipt-authorisations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application-chat/loan-application-chat.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/access/los-page-rights.ts | added | green | no issues |
+| apps/finnaux-api/src/los/loan-application/asset-properties/asset-properties.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/asset-properties/documents/documents.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/asset-properties/fi-answer/fi-answer.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/asset-properties/technicals/technicals.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/asset-properties/valuations/valuations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/asset-vehicles/asset-vehicles.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/asset-vehicles/documents/documents.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/asset-vehicles/events/events.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/asset-vehicles/valuations/valuations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/credit-bureaus/credit-bureaus.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/customer-family-member/family-member.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/customer.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/documents/documents.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/expense/expense.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/fi-answer/fi-answer.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/income/income.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/legals/legals.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/obligation/obligation.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/pd-answer/pd-answer.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/profile-answer/documents/documents.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/profile-answer/profile-answer.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/refactor-legals/refactor-legals.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/reference/reference.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/tvr-answer/tvr-answer.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/dealers/dealers.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/deductions/deductions.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/deviations/asset-property-document-deviations/asset-property-document-deviations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/deviations/asset-vehicle-document-deviations/asset-vehicle-document-deviations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/deviations/customer-document-deviations/customer-document-deviations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/deviations/fee-deviations/fee-deviations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/deviations/income-document-deviations/income-document-deviations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/deviations/loan-document-deviations/loan-document-deviations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/deviations/manual-deviations/manual-deviations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/deviations/policy-deviations/policy-deviations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/disbursement/disbursement.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/documents/document.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/dropdowns/dropdowns.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/esign/esign.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/file-check-answer/file-check-answer.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/finalise-payment/finalise-payment.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/financials/financials.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/foir/foir.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/generate-loan-number/generate-loan-number.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/insurances/insurances.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/loan-application.controller.ts | modified | green | no issues (info: APPLICATION_VIEW_RIGHTS now unused, new import out of group order) |
+| apps/finnaux-api/src/los/loan-application/loan-statement/loan-statement.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/los-process/los-process.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/mortgages/mortgages.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/nach/nach.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/pdd/pdd.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/receipt-and-deductions/receipt-and-deductions.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/remarks/remarks.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/reschedule/reschedule.controller.ts | modified | green | no issues (info: redundant method-level view decorator on financials-preview) |
+| apps/finnaux-api/src/los/loan-application/spdc/spdc.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/templates/templates.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/vehicle-release/vehicle-release.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/vehicle-repossess/vehicle-repossess.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/vendors/vendors.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/nach-entries/nach-entries.controller.ts | modified | green | no issues |
+| drizzle/0021_mclr_menu_page.sql | added | green | no issues (columns, NOT NULL, FKs, unique indexes and idempotency checked by reading; not run) |
+| drizzle/meta/0021_snapshot.json | modified | green | no issues |
+| drizzle/meta/_journal.json | modified | green | no issues |
+| seed/data/designation_menu_list.json | modified | green | no issues |
+| seed/data/designation_menu_pages.json | modified | green | no issues |
+| seed/data/master_menu_list.json | modified | green | no issues |
+| seed/data/master_menu_pages.json | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (6)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run by the main session on HEAD) |
+| green | bunx oxlint apps libs | passed (run by the main session on HEAD) |
+| green | bun run build | passed, 0 warnings (run by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run by the main session on HEAD) |
+| green | bun scripts/check-migrations.ts drizzle/0021_mclr_menu_page.sql | passed (run by the main session on HEAD) |
+| grey | bun db:migrate / bun seed:run on a fresh and an existing DB | not run: review only, no database access allowed |
+
+### gaps (5)
+
+- Nothing was exercised at runtime or against a database: migration 0021 was not applied to a fresh or existing DB, the seed was not run after it, and no request was sent through the guard.
+- Could not check which production designations hold canEdit on APPLICATIONS, LOS_PROCESS_ALL, LMS_CUSTOMERS or MANAGE_LENDERS_LOAN, so the real number of LOS/LMS users who lose write access is unknown.
+- UI usage was spot-checked in the sibling FINNAUX2.0-UI repo (templates preview, MCLR page, customer-app, KVB, assignment lists, vehicle repossess trail, legal receipts); not every LMS tab call was traced to the page that opens it.
+- No tests cover the new page-right constants or the guard decisions per route.
+- No UI caller of /lms/legal-receipt-authorisations was found, so the chosen pages (LEGAL_DEPOSIT add or LEGAL_MARKING edit for create, LEGAL_AUTHORISATION edit for authorise) were not checked against any screen.
+
+### info (9)
+
+- Write rights on every loan sub-route accept canEdit (or canAdd for creates) on APPLICATIONS, LOS_PROCESS_ALL, LMS_CUSTOMERS or MANAGE_LENDERS_LOAN. An LOS process user whose designation holds only process page rights, or canView on LOS_PROCESS_ALL, now gets 403 on FI/PD/TVR answers, documents, deviations, disbursement and remarks. Confirm every working LOS/LMS designation holds canEdit on one of those four pages before deploy.
+- LOAN_APPLICATION_VIEW_RIGHTS widens GET los/loan-application (the loan list) from 5 LOS pages to 37 pages: any LMS workflow page with canView (for example CASH_COLLECTION or LOAN_CLOSURE_DEPOSIT) can now list LOS applications too, still limited by branch access. This is the intended F11 change but is a business decision.
+- Reschedule authorise (los/loan-application/:id/reschedule/:financialDetailId/authorise) accepts the base loan edit pages as well as the authorisation pages. Maker/checker separation then rests on the service check that authoriserId matches the session employee (reschedule.service.ts authorisePendingReschedule); when authoriserId is null any user with APPLICATIONS/LMS_CUSTOMERS edit can authorise.
+- Many GET routes in loan-application.controller.ts (activity-logs, tat, cam-report, application-form, eligible-employees, run-workflow, repossessed-financials, linked-loan-applications, dpd-summary and others) still have no page right; only LoanApplicationAccessGuard (branch access) protects them. The commit title says "remaining" loan routes are guarded.
+- loan-application.controller.ts keeps the now-unused APPLICATION_VIEW_RIGHTS constant and places the new los-page-rights import between the @nestjs/common and @nestjs/swagger imports. oxlint passed, but AGENTS.md asks for unused code to be removed.
+- MCLR GET configuration/mclr/active stays without a page right. In FINNAUX2.0-UI the only importer of features/configurations/mclr outside the MCLR config page is the installment calculator, and it uses useGetActiveMclrQuery (the /active route), so loan screens are unaffected.
+- The migration grants MCLR to every active designation holding an active COMPANY_CONFIGURATION right with the same flags; the golden seed adds the same grants for ADMIN and SUB_ADMIN, which are the two seed designations holding COMPANY_CONFIGURATION, so fresh and existing DBs match.
+- Migration 0021 gives the ADMIN/SUB_ADMIN grants gen_random_uuid() ids while the golden seed carries fixed ids (01M8DMKG...); the 0004 precedent reused the seed ids. seed/scripts/run.ts uses a bare on conflict do nothing, so a later seed:run on a DB that ran 0021 skips the duplicate silently, but row ids differ between migrated and freshly seeded DBs.
+- Configuration > Templates esign preview calls GET los/loan-application/:id/templates/:templateId/pdf, now behind loan view rights. The loan is picked through the loan search, which already used the guarded loan list before this commit, so this is not a new lockout.
+
+---
+
+## howismycommit-105
+
+| Field | Value |
+|---|---|
+| id | howismycommit-105 |
+| generatedAt | 2026-11-27T10:36:06+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | e66b5c1b9726511f43abb5fec44e32ee2e508cc8 |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 3 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | LMS customer create accepted an empty kycDocuments array and an empty communication array. communication: [{}] was filtered to [] by the existing Transform and still passed. |
+| after | kycDocuments and communication have @ArrayMinSize(1) with messages 'Add at least one KYC document' / 'Add at least one contact detail'. Entries without details are still filtered first, so [{}] now fails with 400. |
+
+### changeType (2)
+
+- bug fix
+- API
+
+### effects (2)
+
+- Applies to POST individual and non-individual customer through IntersectionType. The inquiry CreateCustomerDto is separate and unchanged.
+- The UI already requires at least 2 KYC documents and a phone contact (FINNAUX2.0-UI src/features/customers/schema.ts), so normal UI flows are not affected.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/lms/customer/dto/create-customer.dto.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (2)
+
+- Nothing was exercised at runtime or against a database; the checks are static (types, lint, build, unit tests).
+- Other customer-creating paths (bulk customer import, LOS co-applicant flows) were not traced to confirm they don't build CreateCustomerDto-shaped bodies without KYC.
+
+### info (1)
+
+- Pre-existing, not caused by this commit: the communication @Transform calls value.filter, so a request that omits communication or sends a non-array gets a TypeError (500) instead of 400.
+
+---
+
+## howismycommit-104
+
+| Field | Value |
+|---|---|
+| id | howismycommit-104 |
+| generatedAt | 2026-11-27T10:36:06+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 4f90c683832a21e625d5c6db97e3d59c3648183a |
+| files.changed | 5 |
+| files.added | 2 |
+| files.modified | 2 |
+| files.deleted | 1 |
+| files.insertions | 53817 |
+| files.deletions | 53808 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 5 |
+| summary.info | 2 |
+| before | Menu page 'Due List' (01KN16D764G9V50K4S7XGFEFP0, slug due-list) was active, so the Reports-U sidebar linked to a UI route that renders a 404. |
+| after | Custom migration 0020 sets master_menu_pages.isActive = false for that id, and the golden seed row has isActive false. The previous snapshot is replaced by 0020_snapshot.json, following DATABASE.md ('only the newest snapshot is kept'). |
+
+### changeType (2)
+
+- schema or migration
+- config or CI
+
+### effects (2)
+
+- employeeAccessConfigurationDetails (menus) and the designation editor page list both filter menuPagesTable.isActive = true, so the page disappears from the sidebar and from role editing.
+- Existing designation_menu_pages rows for the page are kept (only hidden).
+
+### filesReviewed (5)
+
+| path | change | status | note |
+|---|---|---|---|
+| drizzle/0020_hide_due_list_menu_page.sql | added | green | no issues |
+| drizzle/meta/0020_snapshot.json | added | green | no issues |
+| drizzle/meta/0019_snapshot.json | deleted | green | no issues |
+| drizzle/meta/_journal.json | modified | green | no issues |
+| seed/data/master_menu_pages.json | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+| green | bun scripts/check-migrations.ts drizzle/0020_hide_due_list_menu_page.sql | passed with warning 'updates existing rows' (run once by the main session) |
+
+### gaps (2)
+
+- Nothing was exercised at runtime or against a database; the checks are static (types, lint, build, unit tests).
+- The migration was not applied to a database; only the static check script ran.
+
+### info (2)
+
+- The migration updates an existing row. DATABASE.md asks for every data update to be called out in the PR description.
+- The seed is insert-only, so existing DBs get the change only from the migration. This commit has both parts, as DATABASE.md requires for rows looked up by fixed id.
+
+---
+
+## howismycommit-103
+
+| Field | Value |
+|---|---|
+| id | howismycommit-103 |
+| generatedAt | 2026-11-27T10:36:06+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 3bbd18ae90398445b08b9d6feda0db57b5a1fb84 |
+| files.changed | 4 |
+| files.added | 0 |
+| files.modified | 4 |
+| files.deleted | 0 |
+| files.insertions | 48 |
+| files.deletions | 1 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | SSE /app-logs, GET /service-accounts (HTML with service account names, ids, permissions, domains), all CKYC routes except provider status, and loan product notification template create/delete needed only a login. |
+| after | app-logs and service-accounts need Company Configuration view. CKYC search/download need CKYC Search view, single upload needs CKYC Upload add, bulk upload needs CKYC Bulk Upload add, operations GETs pass with view on any of the three CKYC pages, and bulk batch GETs need CKYC Bulk Upload view. Notification template create/delete need Loan Product Main edit, like the other loan-product sub-resources. |
+
+### changeType (1)
+
+- security
+
+### effects (3)
+
+- The global APP_GUARD AuthGuard reads @RequirePageRight on app.controller and service-accounts, which have no UseGuards of their own.
+- All page ids exist in seed/data/master_menu_pages.json and designation_menu_pages.json.
+- Only the CKYC tabs in the UI (lms/ckyc) call these CKYC routes.
+
+### filesReviewed (4)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/app.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/ckyc/ckyc.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/loan-products/notification-templates/notification-templates.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/service-accounts/service-accounts.controller.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (1)
+
+- Nothing was exercised at runtime or against a database; the checks are static (types, lint, build, unit tests).
+
+### info (3)
+
+- CKYC search and download call the external provider adapter (ckyc.service.ts:50, 107) but need only CKYC Search view. The F10 fix made other paid KYC calls need add or edit. Whether a view-only user may trigger CKYC provider calls is a business decision.
+- GET notification-templates (list) and GET /ckyc/providers/status are still open to any logged-in user (read-only).
+- Notification template delete checks canEdit, not canDelete, like the neighbouring loan-product controllers.
+
+---
+
+## howismycommit-102
+
+| Field | Value |
+|---|---|
+| id | howismycommit-102 |
+| generatedAt | 2026-11-27T10:36:06+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | c0dbd50f148525b919c803d69fffe578a830f614 |
+| files.changed | 7 |
+| files.added | 0 |
+| files.modified | 4 |
+| files.deleted | 3 |
+| files.insertions | 48 |
+| files.deletions | 65 |
+| verdict | review-with-caution |
+| score | 90 |
+| commitScore | 90 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 4 |
+| summary.info | 4 |
+| before | @UserExists() on LoginDto threw 404 'Username or password incorrect' for unknown or inactive usernames before bcrypt ran, while a wrong password gave 401 with different text and a slower reply. There was no per-account lockout. AuthGuard checked the session row but not employees.isActive. |
+| after | Unknown usernames go through the same path, comparing against a dummy bcrypt hash (cost 10, like real hashes), and get 401 'Username or password is incorrect'. Failures are counted in the Redis cache under auth:login-failures:<lowercased username> with a 15-minute TTL. At 5 failures, login returns 429 before the password is checked, and a successful login clears the count. AuthGuard now joins employees and returns 401 for a missing or inactive employee. |
+
+### changeType (2)
+
+- security
+- bug fix
+
+### effects (3)
+
+- Every request on a session now checks employees.isActive (one query: employees left-joined to employee_sessions).
+- Any client can lock a known username for 15 minutes with 5 bad passwords.
+- UserExistsValidator and its decorator are deleted. Nothing else imports them (the build passes).
+
+### filesReviewed (7)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/auth/auth.service.ts | modified | amber | F1 |
+| apps/finnaux-api/src/auth/guards/auth.guard.ts | modified | green | no issues |
+| apps/finnaux-api/src/auth/auth.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/auth/dto/login.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/auth/decorators/index.ts | modified | green | no issues |
+| apps/finnaux-api/src/auth/decorators/user-exists.decorator.ts | deleted | green | no issues |
+| apps/finnaux-api/src/auth/validators/user-exists.validator.ts | deleted | green | no issues |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P2 |
+| title | Lockout counter is read-then-write, so parallel guesses bypass the 5-attempt limit |
+| location | apps/finnaux-api/src/auth/auth.service.ts:60 |
+| problem | login() reads the count with cacheManager.get, waits about 80 ms for bcrypt, then writes failureCount + 1. Requests that arrive together all read the same count, all get a password guess, and all write the same count + 1. A burst of 20 concurrent wrong passwords adds only 1 to the counter. |
+| impact | N12 is only partly fixed. An attacker sending concurrent batches gets about 'batch size' guesses per counted failure, for example roughly 100 guesses instead of 5 before the lock. Only the 100 req/min per-IP throttler limits this, and more IPs get past it. |
+| fix | Increment atomically before the bcrypt compare: use a Redis INCR plus PEXPIRE on the key (through the Keyv Redis client) or a DB row updated with count = count + 1 RETURNING. Reject when the returned value is over the limit, and clear the key on success. |
+| evidence | const failureCount = (await this.cacheManager.get<number>(failureKey)) ?? 0<br>    if (failureCount >= LOGIN_FAILURE_LIMIT) { |
+| status | resolved |
+| resolvedIn | b618e543783c389a1e0b47db60f46ea4d5fba0c1 |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. The attempt is counted before the bcrypt compare, so parallel guesses no longer pass during the slow check (a sub-millisecond read/write gap remains because the cache has no atomic increment): apps/finnaux-api/src/auth/auth.service.ts:68. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (3)
+
+- Nothing was exercised at runtime or against a database; the checks are static (types, lint, build, unit tests).
+- How cache-manager behaves when Redis is down (does get/set throw and block every login?) was not checked.
+- Login timing for unknown and known usernames was not measured. Only code parity was reviewed (one bcrypt compare on both paths, same cache calls).
+
+### info (4)
+
+- Targeted lockout: since usernames can no longer be listed, an attacker needs to know one, but anyone who does (for example an admin's username) can keep that account locked with 5 bad attempts every 15 minutes. Whether to add an IP or device factor is a business decision.
+- Attempts while locked do not extend the lock: the 429 branch returns before the cache write, so the lock lifts 15 minutes after the 5th counted failure. The code comment ('Every failure extends the window') describes counted failures only.
+- A password reset does not clear the failure key, so a user who resets right after being locked still waits out the TTL.
+- auth.guard.ts adds another `session.employee = null as any`. AGENTS.md says to avoid any, but this copies the cast already used a few lines below.
+
+---
+
+## howismycommit-101
+
+| Field | Value |
+|---|---|
+| id | howismycommit-101 |
+| generatedAt | 2026-11-27T10:36:06+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | ea2fac97118010c2f736588bc08a25941883b485 |
+| files.changed | 5 |
+| files.added | 1 |
+| files.modified | 4 |
+| files.deleted | 0 |
+| files.insertions | 75 |
+| files.deletions | 85 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 96 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 4 |
+| summary.info | 0 |
+| before | The contact DTOs validated details in a ValidateIf that switched on o.typeId, a field that does not exist, so no format check ever ran. type was only @IsString. |
+| after | A new @IsCommunicationDetails decorator checks details against the sibling type: EMAIL must pass isEmail, PHONE_NUMBER must match /^[6-9][0-9]{9}$/, WEBSITE must pass isURL. type is @IsEnum(CommunicationTypeEnum). This applies to the LMS and inquiry create DTOs and to the nested communication array on customer create. |
+
+### changeType (2)
+
+- bug fix
+- security
+
+### effects (2)
+
+- Customer create (individual, non-individual, inquiry) and POST contact now reject badly formatted contact details with 400.
+- Phone numbers with +91, a leading 0 or spaces are now rejected. The UI customer schema already uses a 10-digit phone regex.
+
+### filesReviewed (5)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/common/decorators/is-communication-details.decorator.ts | added | amber | F1 |
+| apps/finnaux-api/src/common/decorators/index.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/customer/communication/dto/create-communication.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/inquiries/customer/communication/dto/create-communication.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/regex.ts | modified | green | no issues |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Contact edit skips the new format check because type is omitted |
+| location | apps/finnaux-api/src/common/decorators/is-communication-details.decorator.ts:39 |
+| problem | UpdateCommunicationDto is OmitType(CreateCommunicationDto, ['type']), and the whitelist ValidationPipe strips type if a client sends it. On PUT /lms/customer/:customerId/communication/:id, getCommunicationType() is therefore undefined and the validator falls into the default branch, which returns true. Any string is accepted as details. |
+| impact | F18 is fixed only on create. A user with edit rights can still save 'not-an-email' on an EMAIL contact or a 3-digit PHONE_NUMBER through the edit route, and communication.service.ts update() writes it. |
+| fix | In CommunicationService.update, check input.details against the stored communication.type (reuse the same regex/isEmail/isURL helpers) before writing. Or make the decorator fail closed when type is missing and validate update in the service. |
+| evidence |             default:<br>              return true |
+| status | resolved |
+| resolvedIn | dfb2e2f2d12615da894139e14ffde8b4863587cd |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Contact edit validates details against the stored type: apps/finnaux-api/src/lms/customer/communication/communication.service.ts. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (2)
+
+- Nothing was exercised at runtime or against a database; the checks are static (types, lint, build, unit tests).
+- Existing stored contact rows that do not match the new formats were not counted; they stay as they are until edited.
+
+### info (0)
+
+_Empty._
+
+---
+
+## howismycommit-100
+
+| Field | Value |
+|---|---|
+| id | howismycommit-100 |
+| generatedAt | 2026-11-27T10:36:06+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 6d4e2251a264365bca7f399b88b1d87e4ae1308b |
+| files.changed | 3 |
+| files.added | 1 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 125 |
+| files.deletions | 37 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | 13 dropdown GETs read single @Query('x') params with no validation. A missing param reached the service as undefined and failed as 500. |
+| after | These handlers take small query DTOs (required-query.dto.ts) with @IsString/@IsNotEmpty (or @IsEnum(CustomerTypeEnum)), so a missing param gives 400 before the service runs. |
+
+### changeType (2)
+
+- bug fix
+- API
+
+### effects (3)
+
+- The global ValidationPipe uses whitelist without forbidNonWhitelisted, so extra query params are dropped rather than rejected.
+- UI callers checked (employee-branch, employee-product, asset/product, relation, enum, common, area-details) always send these params or gate the query with enabled.
+- The external-auth route /dropdown/area-details now returns 400 without pincode.
+
+### filesReviewed (3)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/dropdown/dropdown.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/dropdown/dto/index.ts | modified | green | no issues |
+| apps/finnaux-api/src/dropdown/dto/required-query.dto.ts | added | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (2)
+
+- Nothing was exercised at runtime or against a database; the checks are static (types, lint, build, unit tests).
+- This commit covers only the dropdown part of F7. GET /lms/customer/review-bank still takes a raw @Query('accountNumber') on HEAD (customer.controller.ts:117), and GET /hrms/leave-management/resignations has no query params, so its 500 has some other cause. Neither was re-tested.
+
+### info (1)
+
+- GET /dropdown/employee-managers/:employeeId still reads a raw @Query('designationId') (dropdown.controller.ts:233) and passes it into raw SQL. A missing value probably still gives a 500 or an empty result. It was not in the F7 sweep list, which only probed routes without path params.
+
+---
+
+## howismycommit-99
+
+| Field | Value |
+|---|---|
+| id | howismycommit-99 |
+| generatedAt | 2026-11-27T10:36:06+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | fc34cfae6bcf3feee1be92b5b689346485822d9f |
+| files.changed | 4 |
+| files.added | 0 |
+| files.modified | 4 |
+| files.deleted | 0 |
+| files.insertions | 44 |
+| files.deletions | 25 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | POST /crm/entry and PUT /crm/entry/:id/status needed only a login. CRM DTOs passed raw value arrays to @IsEnum, so error messages listed no values. GET /crm/entries and /crm/sub-types gave 500 without query params, and the collection follow-ups subquery used raw snake_case names (created_at) that do not exist under camelCase casing, so it gave 500. |
+| after | Entry create needs CRM add and status update needs CRM edit (page 01KQC298R5YGPS0JPVVMVF6PTV, matches the test log). CRM DTOs use the createEnum enum objects with enumName. type and category are required, so a missing param gives 400. The follow-ups subquery interpolates crmEntriesTable columns. |
+
+### changeType (2)
+
+- security
+- bug fix
+
+### effects (3)
+
+- Callers without CRM add/edit get 403 on entry writes. The UI CRM form (FINNAUX2.0-UI src/features/crm/components/crm-form.tsx) is not imported anywhere, so no current screen breaks.
+- GET /crm/collection-follow-ups SQL now resolves to the real camelCase columns.
+- CRM ticket priority validation and Swagger now use CrmPriorityEnum.
+
+### filesReviewed (4)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/crm/crm-tickets/dto/create-crm-ticket.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/crm/crm.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/crm/crm.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/crm/dto/crm.dto.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (2)
+
+- Nothing was exercised at runtime or against a database; the checks are static (types, lint, build, unit tests).
+- The rewritten collection follow-ups subquery (crm.service.ts:319-328) was read but never run against a database. Under camelCase casing it should render "crm_entries"."createdAt" and bind to the inner FROM.
+
+### info (3)
+
+- The CRM reads (GET /crm/entries, /crm/entry/:id/assignments, /crm/collection-follow-ups) still have no page right and no branch scope, so any logged-in user can read every CRM entry. F20 was about writes; whether reads should be guarded is a business decision.
+- A CRM editor can still reassign an entry to any employee (newAssigneeId is not checked against level or hierarchy). The test log called out reassignment to a level-1 user.
+- Pre-existing mismatch: the UI hook calls PATCH /crm/entry/:id/status (FINNAUX2.0-UI src/features/crm/hooks.ts:46) but the API route is PUT. Not caused by this commit.
+
+---
+
+## howismycommit-98
+
+| Field | Value |
+|---|---|
+| id | howismycommit-98 |
+| generatedAt | 2026-11-27T10:36:06+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 2939b270ade41e44f996ada3fe430f397c575621 |
+| files.changed | 5 |
+| files.added | 0 |
+| files.modified | 5 |
+| files.deleted | 0 |
+| files.insertions | 85 |
+| files.deletions | 3 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 96 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | Any employee with Report Builder edit or delete right could rename or delete any template, including one created by a more senior designation (Eve level 5 changed Adam's level 1 template). |
+| after | Update and delete first allow the creator; otherwise both caller and creator designation levels are looked up and the caller must have a strictly smaller (more senior) level, else 403. Unit tests cover senior allow, same-level refuse and junior refuse. |
+
+### changeType (3)
+
+- security
+- bug fix
+- tests
+
+### effects (2)
+
+- Report Builder PATCH/DELETE /reports/builder/templates/:id.
+- Peers at the same level can no longer edit each other's templates.
+
+### filesReviewed (5)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/reports/report-builder/__tests__/fake-report-builder.repository.ts | modified | green | no issues |
+| apps/finnaux-api/src/reports/report-builder/__tests__/report-builder.service.spec.ts | modified | green | no issues |
+| apps/finnaux-api/src/reports/report-builder/report-builder.repository.ts | modified | amber | F1 |
+| apps/finnaux-api/src/reports/report-builder/report-builder.service.ts | modified | amber | F1 |
+| apps/finnaux-api/src/reports/report-builder/report-builder.types.ts | modified | green | no issues |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P3 |
+| title | Templates of inactive or missing creators can never be changed |
+| location | apps/finnaux-api/src/reports/report-builder/report-builder.service.ts:190 |
+| problem | assertCanManageReport refuses whenever creatorLevel is null. getDesignationLevel filters employees.isActive = true, and customReports.creatorId is nullable, so a template whose creator has been deactivated, or a legacy/system row with no creatorId, returns null for the creator level. |
+| impact | Nobody, not even Admin (level 1), can edit or delete such templates; they stay in every allowed user's list permanently. |
+| fix | Treat a missing or inactive creator as manageable by any caller with a known level (or by the most senior levels), e.g. only refuse when callerLevel is null, and look up the creator level without the isActive filter. |
+| evidence | callerLevel === null \|\|<br>      creatorLevel === null \|\|<br>      callerLevel >= creatorLevel |
+| status | resolved |
+| resolvedIn | c08d0e7edc52f597326f88ba02275dd5e9e412b8 |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Templates whose creator is inactive or missing are governed by the Report Builder page right alone: apps/finnaux-api/src/reports/report-builder/report-builder.service.ts. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (2)
+
+- No test covers an inactive creator or a null creatorId.
+- Nothing was exercised at runtime or against a database; all conclusions come from reading the code (API worktree and the sibling FINNAUX2.0-UI repo).
+
+### info (2)
+
+- Seniority is global: any more senior employee in any branch can edit or delete a template; whether templates should also be branch-bound is a business decision.
+- Same-level colleagues are now blocked from each other's templates; confirm this matches how teams share templates.
+
+---
+
+## howismycommit-97
+
+| Field | Value |
+|---|---|
+| id | howismycommit-97 |
+| generatedAt | 2026-11-27T10:36:05+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 0d7795ce7e8380176898bb9276a4f97b2ba83b93 |
+| files.changed | 3 |
+| files.added | 0 |
+| files.modified | 3 |
+| files.deleted | 0 |
+| files.insertions | 28 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | DNBS02 export and the Schedule VI balance sheet HTML needed only canView, and UCRF report routes (grids, generate, xlsx/tap/tudf downloads) had no page right. |
+| after | DNBS02 export needs DNBS02 canExport, the Schedule VI HTML needs TRIAL_BALANCE canPrint, UCRF grids and generate need UCRF_SUBMISSION canView and the three UCRF downloads need canExport. UCRF_SUBMISSION matches the UI's UCRF_REPORT page id. |
+
+### changeType (2)
+
+- security
+- API
+
+### effects (2)
+
+- DNBS02 page download button (downloadDnbs02Export) now 403s without export right.
+- UCRF submission page: viewing needs canView, downloads need canExport.
+
+### filesReviewed (3)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/accounts/account-group/account-group.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/reports/dnbs02/dnbs02.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/reports/ucrf-report/ucrf-report.controller.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (4)
+
+- F12 said no controller checks print or export; other download routes still rely on view or nothing, for example payroll bank-export, recruitment payslip pdf, KVB download-esign-document and loan-application templates :templateId/pdf.
+- Client-side exports (Collection Efficiency, Master Data and other report pages) stay UI-only; a view holder can still copy the JSON data.
+- The JSON schedule-vi-balance-sheet route still needs only canView, so the same data is available without print right.
+- Nothing was exercised at runtime or against a database; all conclusions come from reading the code (API worktree and the sibling FINNAUX2.0-UI repo).
+
+### info (1)
+
+- The UI marks the TRIAL_BALANCE page id as not existing; if no designation holds it, the Schedule VI HTML route was and remains unreachable for everyone, so that change has no practical effect.
+
+---
+
+## howismycommit-96
+
+| Field | Value |
+|---|---|
+| id | howismycommit-96 |
+| generatedAt | 2026-11-27T10:36:05+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 32fbffebdc3a2af14cc3c0e2785550c0de3fd089 |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 68 |
+| files.deletions | 5 |
+| verdict | review-with-caution |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | GET /accounts/vouchers returned every voucher of every branch and voucher type to anyone with view on a voucher page. |
+| after | When called from the controller with a session, findAll keeps only vouchers whose header branch, or any active detail line's branch, is one of the caller's active employeeBranches, and whose voucherUnderSubTypeId the caller's designation has canRead on. Internal callers without a session are unchanged. The detail CTE was renamed to voucherDetailRows so the new EXISTS subquery reads the real voucherDetails table. |
+
+### changeType (2)
+
+- security
+- API
+
+### effects (2)
+
+- Voucher list and every UI screen that loads a voucher by id or idArr through GET /accounts/vouchers (edit, print).
+- Admin and head-office accountants now need employeeBranches rows for every branch and canRead voucher rights, or they see fewer vouchers.
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/accounts/vouchers/vouchers.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/accounts/vouchers/vouchers.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (5)
+
+- The new scope SQL (correlated EXISTS on voucherDetails, inArray subqueries on employeeBranches and designation_voucher_types) was read carefully and looks correct (columns qualified, CTE no longer shadows the table, outer vouchers not aliased), but it has never been executed.
+- PUT and DELETE /accounts/vouchers/:voucherId are not branch-scoped.
+- A multi-branch journal or contra voucher is returned with all its lines once any one line matches the caller's branch.
+- Real role data was not checked: canRead was never enforced on reads before, so roles other than the seeded Admin (seed grants canRead on all 63 types) may have canRead=false and lose their whole list.
+- Nothing was exercised at runtime or against a database; all conclusions come from reading the code (API worktree and the sibling FINNAUX2.0-UI repo).
+
+### info (2)
+
+- Before deploy, confirm each accounting role has canRead on its voucher under-sub-types (Designation > Voucher Rights 'View' toggle) and employeeBranches rows for every branch it should see.
+- The correlated EXISTS runs per voucher row; an index on voucherDetails(voucherId) keeps it cheap on large ledgers.
+
+---
+
+## howismycommit-95
+
+| Field | Value |
+|---|---|
+| id | howismycommit-95 |
+| generatedAt | 2026-11-27T10:36:05+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | e54d0e84766f2d7e2219b7904c7633b2d044c6ba |
+| files.changed | 6 |
+| files.added | 1 |
+| files.modified | 5 |
+| files.deleted | 0 |
+| files.insertions | 34 |
+| files.deletions | 18 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | Finnaux KYC calls needed only canView on any of 12 customer/LOS/vendor/dealer/branch/employee pages; Surepass, Digio, DigiPehchan and CRIF High Mark controllers had no page right at all, so any logged-in user could trigger paid calls and Aadhaar OTPs. |
+| after | A shared KYC_PAGE_RIGHTS list requires canAdd or canEdit on any of the same 12 pages, applied per handler on the Finnaux controller and at class level on Surepass, Digio, DigiPehchan and CRIF (the guard reads handler then class metadata). |
+
+### changeType (3)
+
+- security
+- API
+- refactor
+
+### effects (2)
+
+- Every external KYC, eSign, face-match, CIBIL and Udyam call made from customer, LOS and vendor screens.
+- View-only users now get 403 on these calls, including status/get-request and document download calls.
+
+### filesReviewed (6)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/external/crif-high-mark/crif-high-mark.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/digio/digio.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/digipehchan/digipehchan.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/finnaux/finnaux.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/external/shared/kyc-page-rights.ts | added | green | no issues |
+| apps/finnaux-api/src/external/surepass/surepass.controller.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (3)
+
+- Could not check role data: whether LOS process workers (who act through process rights, not page rights) hold add or edit on APPLICATIONS or LOS_PROCESS_ALL. If not, eSign, CIBIL and KYC steps inside LOS will 403.
+- pdf-converter controller has no page right; not a paid provider call, not reviewed further.
+- Nothing was exercised at runtime or against a database; all conclusions come from reading the code (API worktree and the sibling FINNAUX2.0-UI repo).
+
+### info (2)
+
+- Read-only follow-up calls (Digio get-request, esign get-document/download-document, Udyam status) now also need add or edit; a view-only reviewer can no longer fetch a signed document.
+- EMPLOYEE_ALL and BRANCH_ALL add/edit holders (HR, branch admins) can still trigger paid KYC calls; whether that is wanted is a business decision.
+
+---
+
+## howismycommit-94
+
+| Field | Value |
+|---|---|
+| id | howismycommit-94 |
+| generatedAt | 2026-11-27T10:36:05+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 37ce1ebedc5237609176072b22e065c6bc89d4ff |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 8 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | GET /configuration/message-configuration/sms-configuration and PUT /sms-configuration/:id needed only a login, so any user could read and change all SMS event configurations and templates. |
+| after | The GET requires canView and the PUT requires canEdit on COMPANY_CONFIGURATION. |
+
+### changeType (2)
+
+- security
+- API
+
+### effects (1)
+
+- findAllSms has no other caller than this route, and the UI (FINNAUX2.0-UI/src) has no caller of sms-configuration, so no screen loses access.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/configurations/message-configuration/message-configuration.controller.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed, 0 warnings (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+
+### gaps (1)
+
+- Nothing was exercised at runtime or against a database; behaviour is verified by reading code only.
+
+### info (1)
+
+- There is no dedicated SMS or message configuration page id in fixed-cuids, so COMPANY_CONFIGURATION is a reasonable choice; it is a business decision who may edit SMS templates.
+
+---
+
+## howismycommit-93
+
+| Field | Value |
+|---|---|
+| id | howismycommit-93 |
+| generatedAt | 2026-11-27T10:36:05+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | cbb70c24c6c7d72b5f02d4a233a6d80b8646ee1c |
+| files.changed | 3 |
+| files.added | 0 |
+| files.modified | 3 |
+| files.deleted | 0 |
+| files.insertions | 50 |
+| files.deletions | 11 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | GET /configuration/external-apis returned full integration config (endpoints, authSecretRef, headers) to any logged-in user, the integration-group PUT and credentials schema GET had no page right, and stored credentials were masked by showing the first and last 10 percent of the value. |
+| after | Users without EXTERNAL_APIS canView get only group/api-group ids, names, provider and enabled flags; the PUT needs EXTERNAL_APIS canEdit and the schema GET canView. Credentials are masked as a fixed 8-character mask plus the last 4 characters (fully masked under 12 characters), and the merge on save still treats an unchanged mask as keep-stored. |
+
+### changeType (2)
+
+- security
+- API
+
+### effects (2)
+
+- KYC hooks in the UI (use-verification-core, use-electricity-provider, kyc-section, assets-vehicle) read only id, enabledApiGroupId, apiGroups[].id/provider/isEnabled, all kept in the reduced view.
+- External APIs configuration page: credential fields now show the new mask format.
+
+### filesReviewed (3)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/configurations/external-apis/external-apis.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/external-apis/external-apis.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (2)
+
+- The masked output and the save round-trip (resubmitting a mask keeps the stored key) were not exercised against real stored credentials.
+- Nothing was exercised at runtime or against a database; all conclusions come from reading the code (API worktree and the sibling FINNAUX2.0-UI repo).
+
+### info (2)
+
+- Keys that were exposed before this fix (F30: possibly live keys from a production copy) still need rotating; code cannot fix that.
+- For 12 to 15 character secrets the last 4 characters are a noticeable share of the value; acceptable per the F30 fix guidance.
+
+---
+
+## howismycommit-92
+
+| Field | Value |
+|---|---|
+| id | howismycommit-92 |
+| generatedAt | 2026-11-27T10:36:05+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | c206dc6ab69540538005caeb83877b0cf1011ae9 |
+| files.changed | 5 |
+| files.added | 1 |
+| files.modified | 4 |
+| files.deleted | 0 |
+| files.insertions | 54 |
+| files.deletions | 8 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | POST rule, POST/PUT ruleset and POST/PUT workflow needed only a login. outputConfig was effectively optional in CreateRuleDto (ValidateNested each), so a missing value hit the DB NOT NULL and returned 500. rules-by-levels took raw query params and answered 500 when they were missing. |
+| after | Rule, ruleset and workflow writes need RULE_ENGINE canAdd (create) or canEdit (update). outputConfig is required and validated as a nested object (missing or null gives 400). rules-by-levels uses RulesByLevelsQueryDto with required non-empty level0-level2, so missing params give 400. |
+
+### changeType (3)
+
+- security
+- API
+- bug fix
+
+### effects (2)
+
+- Admin Rule Engine screens (rules, rulesets, workflows tabs) gate on RULE_ENGINE, matching the API.
+- Loan product form reads GET /workflow, which stays open, so product setup is not affected.
+
+### filesReviewed (5)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/rule-engine/dto/create-rule.dto.ts | modified | green | no issues |
+| apps/finnaux-api/src/rule-engine/dto/index.ts | modified | green | no issues |
+| apps/finnaux-api/src/rule-engine/dto/rules-by-levels-query.dto.ts | added | green | no issues |
+| apps/finnaux-api/src/rule-engine/rule-engine.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/workflow/workflow.controller.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (3)
+
+- GET /rule, GET /ruleset and GET /workflow remain readable by any logged-in user (credit rule expressions and scores).
+- Only the rule-engine part of F7 is addressed here; the other GET routes listed in F7 are outside this commit.
+- Nothing was exercised at runtime or against a database; all conclusions come from reading the code (API worktree and the sibling FINNAUX2.0-UI repo).
+
+### info (3)
+
+- F25's expr-eval 2.0.2 advisory risk is not addressed; expressions are now writable only by RULE_ENGINE add/edit holders, which lowers but does not remove it.
+- Rule and workflow tables still keep no creator, updater or timestamps, so changes to live decisioning are not auditable.
+- Write guards check only canAdd/canEdit without canView, unlike most modules; harmless because the guard compares only the listed flags.
+
+---
+
+## howismycommit-91
+
+| Field | Value |
+|---|---|
+| id | howismycommit-91 |
+| generatedAt | 2026-11-27T10:36:05+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | dc806861831b21efd77653af69e7d77558a39d80 |
+| files.changed | 3 |
+| files.added | 0 |
+| files.modified | 3 |
+| files.deleted | 0 |
+| files.insertions | 389 |
+| files.deletions | 64 |
+| verdict | request-changes |
+| score | 65 |
+| commitScore | 65 |
+| quality | fair |
+| summary.red | 1 |
+| summary.amber | 1 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | Deviation-assignment GET/POST/PUT and branch operation (waiver/write-off) assignment routes had no page right. The deviation PUT ignored the URL branch and product, hard-deleted every deviation type of the body's rangeId and re-inserted; the range PUT hard-deleted and re-created all process-employee rows with new creator ids. |
+| after | Deviation routes need BRANCH_PROCESS_EMPLOYEE (view/add/edit) and operation assignments need BRANCH_MAIN (view/add/edit/delete). The deviation POST/PUT first check that rangeId belongs to the URL branch and product, and both deviation and range PUTs now diff and soft-deactivate or reactivate rows instead of hard-deleting; POST returns 409 when a type is already active. |
+
+### changeType (3)
+
+- security
+- bug fix
+- API
+
+### effects (4)
+
+- LOS deviation forms (policy, fee, manual, document) read GET deviation-assignments for approver lists (see F1).
+- Closure receipt, vehicle release, NPA regularise and legal receipt forms read GET /assignments for waiver approvers (see F2).
+- Branch configuration screens: Employee Assign range PUT and Approvals tabs.
+- process-orchestrator and los.service read branchProductRangeProcessEmployees and already filter isActive = true, so soft-deactivated rows are ignored.
+
+### filesReviewed (3)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/configurations/branch/assignments/assignments.controller.ts | modified | amber | F2 |
+| apps/finnaux-api/src/configurations/branch/branch.controller.ts | modified | red | F1 |
+| apps/finnaux-api/src/configurations/branch/branch.service.ts | modified | green | no issues |
+
+### findings (2)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| id | F1 |
+| severity | P1 |
+| title | Deviation approver lookup now 403s for LOS users |
+| location | apps/finnaux-api/src/configurations/branch/branch.controller.ts:218 |
+| problem | GET :branchId/product/:productId/deviation-assignments now requires BRANCH_PROCESS_EMPLOYEE canView. The LOS deviation forms in FINNAUX2.0-UI (policy, fee, manual and document deviation form.tsx) call this same GET through getBranchProductDeviationAssignments to list eligible and escalation approvers. Loan staff normally hold LOS pages, not the branch-configuration page, so they now get 403. |
+| impact | Users raising or escalating a loan deviation get an empty approver list. Loans with deviations cannot be assigned for approval, which blocks the LOS deviation flow for every role without the branch config page. |
+| fix | The guard is any-of (requiredRights.some), so add the LOS page view rights used by the deviation screens (for example APPLICATIONS / LOS_PROCESS_ALL canView) to this GET's array, or add a narrow read endpoint for approver lists. Keep POST/PUT on BRANCH_PROCESS_EMPLOYEE. |
+| evidence | @Get(':branchId/product/:productId/deviation-assignments')<br>  @RequirePageRight([<br>    {<br>      pageId: fixedIds.MASTER_MENU_PAGE.BRANCH_PROCESS_EMPLOYEE, |
+| status | resolved |
+| resolvedIn | 5fce545b63309f6297bbf573eedb1e1146d34e72 |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Deviation assignments GET also accepts LOAN_APPLICATION_VIEW_RIGHTS: apps/finnaux-api/src/configurations/branch/branch.controller.ts. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+#### findings[2] · F2
+
+| Field | Value |
+|---|---|
+| id | F2 |
+| severity | P2 |
+| title | Waiver approver lookup now 403s for receipt and collection users |
+| location | apps/finnaux-api/src/configurations/branch/assignments/assignments.controller.ts:51 |
+| problem | GET /configuration/branch/:branchId/assignments now requires BRANCH_MAIN canView. In the UI, shared-employee-waiver-selector.tsx calls it (useGetBranchProductWaiverAssignmentsQuery) from the closure receipt, vehicle release, NPA regularise and legal receipt forms to find who may approve a waiver or write-off. Collection and receipt staff rarely hold the Branch page. |
+| impact | Those users get 403 and an empty waiver or write-off approver list, so receipts that need a waiver approval cannot be completed. |
+| fix | Add the receipt and collection page view rights (the pages that guard those receipt flows) to the GET's RequirePageRight array, since the guard accepts any listed right. Keep POST/PUT/DELETE on BRANCH_MAIN. |
+| evidence | @Get()<br>  @RequirePageRight([<br>    {<br>      pageId: fixedIds.MASTER_MENU_PAGE.BRANCH_MAIN, |
+| status | resolved |
+| resolvedIn | 5fce545b63309f6297bbf573eedb1e1146d34e72 |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Branch assignments GET also accepts LOAN_APPLICATION_VIEW_RIGHTS: apps/finnaux-api/src/configurations/branch/assignments/assignments.controller.ts. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+
+### gaps (5)
+
+- No caller-branch scope: a holder of BRANCH_PROCESS_EMPLOYEE or BRANCH_MAIN can still read or change any branch's deviation and waiver assignments; F26 expected 403 on another branch.
+- assignments.service update/delete by assignmentId were not reviewed for URL-branch ownership (not touched by this commit).
+- Backend deviation services do not read branchProductRangeDeviation* tables, so the approver chosen in the UI is not validated server-side against these assignments; the maker-checker part of F26 still depends on the UI.
+- The new sync logic (syncRangeProcessEmployees, syncDeviationAssignments) has no unit tests.
+- Nothing was exercised at runtime or against a database; all conclusions come from reading the code (API worktree and the sibling FINNAUX2.0-UI repo).
+
+### info (3)
+
+- N5 has no explicit NOTE line in TEST_LOG.md; it is assumed to be the observation that the range PUT re-creates every process-employee row with new ids and the caller as creator, which syncRangeProcessEmployees addresses.
+- The UI Branch Approvals tabs gate on ASSETS_PRODUCT_VARIANT_ALL, which no longer matches the API rights (BRANCH_PROCESS_EMPLOYEE / BRANCH_MAIN), so admins may see enabled buttons that 403.
+- branchProductRangeDeviationEmployees has no unique key, so each remove-then-add cycle leaves another inactive row; harmless for reads that filter isActive.
+
+---
+
+## howismycommit-90
+
+| Field | Value |
+|---|---|
+| id | howismycommit-90 |
+| generatedAt | 2026-11-27T10:36:04+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 39a10f9c37351ec4463dbad68bdf622a7763668b |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 36 |
+| files.deletions | 3 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | PUT individual and non-individual customer basic-detail updated by customerId with no existence check, returning 200 for an unknown id; the non-individual update returned no body. |
+| after | Both updates first require an active customer (404 otherwise) and use returning() to throw 404 when no detail row of that customer type was updated (non-individual inside the transaction, so contacts are not rewritten); the non-individual update now returns { message: 'OK' }. |
+
+### changeType (3)
+
+- security
+- bug fix
+- API
+
+### effects (2)
+
+- Customer demographic edit screens get 404 instead of a silent 200 for unknown, inactive or wrong-type customers.
+- Non-individual update response body changes from empty to { message: 'OK' }, matching the service response rule.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/lms/customer/customer.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed, 0 warnings (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+
+### gaps (3)
+
+- Nothing was exercised at runtime or against a database; behaviour is verified by reading code only.
+- F15 also reported "no branch scope": any holder of CUSTOMER_DEMOGRAPHIC edit can still edit any existing customer of any branch. This commit only adds the existence check.
+- Other customer write routes (addresses, contacts, KYC, bank) were not checked for the same missing existence check.
+
+### info (1)
+
+- The individual update runs the existence check and the update as two statements outside a transaction; harmless here because the update itself is guarded by returning().
+
+---
+
+## howismycommit-89
+
+| Field | Value |
+|---|---|
+| id | howismycommit-89 |
+| generatedAt | 2026-11-27T10:36:04+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | aaabcd5ba7d202f79881c2205a38919adff54d9a |
+| files.changed | 6 |
+| files.added | 0 |
+| files.modified | 6 |
+| files.deleted | 0 |
+| files.insertions | 76 |
+| files.deletions | 1 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | Receipt create, collect, voucher generation and principal prepayment authorisation, PUT /lms/collection, receipt authorisation and all NACH post/clear/bounce/undo/import routes had no page rights, receipt routes had no loan scope check, and a user could authorise a receipt they created. |
+| after | Receipt routes require add/edit on Consolidated Receipt(s), Cash Collection or Principal Prepayment Receipts and pass the loan scope guard; PUT /lms/collection needs Cash Collection edit; NACH writes need Bulk NACH Processing add/edit; receipt authorisation needs Consolidated Receipt(s) edit; both the generic and the principal prepayment authorisation refuse the receipt's own creator with 403. |
+
+### changeType (2)
+
+- security
+- API
+
+### effects (3)
+
+- LMS receipts screen and Consolidated Receipt / Cash Collection / Principal Prepayment / Bulk NACH pages: users without those menu rights now get 403
+- GET /lms/:loanApplicationId/receipts is now branch/product scoped through LoanApplicationAccessGuard
+- Receipt authorisers can no longer act on their own receipts
+
+### filesReviewed (6)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/lms/receipts/receipts.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/receipts/receipts.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/lms/collection/collection.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/nach-entries/nach-entries.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/receipt-authorisations/receipt-authorisations.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/receipt-authorisations/receipt-authorisations.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run on HEAD, which contains this commit) |
+| green | bunx oxlint apps libs | passed (run on HEAD) |
+| green | bun run build | passed, 0 warnings (run on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run on HEAD) |
+
+### gaps (3)
+
+- Nothing was exercised at runtime or against a database (receipt money flows were BLOCKED during testing too).
+- GET /lms/receipt-authorisations still declares no page right (it is branch/product scoped).
+- Other receipt authorisation flows (closure, legal, NPA regularise receipt authorisations) were not checked for the same creator-cannot-authorise rule.
+
+### info (2)
+
+- Receipt create/collect accept only the four receipt menu pages, not the LMS 'Receipts' process page (01KF03VBVF3AGSBM52F0WDPDMH) or LMS Customers / Manage Lenders Loan used by later LMS write routes; this is documented as intended in contracts/frontend-security-contract.md:261, but users who created receipts only from the LMS loan tab will need one of those menu rights.
+- Receipts with a null creatorId can still be authorised by anyone with the right (no creator to compare).
+
+---
+
+## howismycommit-88
+
+| Field | Value |
+|---|---|
+| id | howismycommit-88 |
+| generatedAt | 2026-11-27T10:36:04+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | df6c8acbb7582b4e3b7067f93be799bb4199bd9e |
+| files.changed | 70 |
+| files.added | 3 |
+| files.modified | 67 |
+| files.deleted | 0 |
+| files.insertions | 526 |
+| files.deletions | 74 |
+| verdict | review-with-caution |
+| score | 96 |
+| commitScore | 86 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 4 |
+| summary.info | 4 |
+| before | Loan application list, DPD summary and /financials returned every loan regardless of the caller's branches and products; any :loanApplicationId route answered for any loan id; loan lifecycle routes (create, edit, next-process, hold, reject, NPA) and the application swap had no page rights; LOS process-page rights were only shown to the UI; rejecting an already rejected loan returned 201. |
+| after | A new LoanApplicationAccessGuard on every LOS loan controller returns 404 when the loan's branch AND product are not in the employee's scope; list, DPD summary and financials filter by that scope; lifecycle and swap routes require menu page rights; the swap re-checks the from-employee and the caller's scope; every process-page completion hook now requires the designation's process-page add/edit/delete right; reject only updates PENDING loans and returns 400/404 otherwise; three un-awaited completion calls are now awaited and generate-loan-number writes through the transaction. |
+
+### changeType (3)
+
+- security
+- bug fix
+- API
+
+### effects (6)
+
+- Every LOS loan-application sub-controller (customer, documents, deviations, disbursement, NACH, SPDC, PDD, reschedule, etc.) now runs an extra loan scope query per request
+- GET /financials and GET /los/loan-application/dpd-summary results shrink to the caller's branches and products
+- Users without a designationLmsProcessPageRights row for a process page can no longer save that process step
+- Application swap screen needs APPLICATION_SWAP view/edit
+- External bearer-token callers of GET /los/loan-application stay unscoped (no employee)
+- LoanApplicationAccessGuard added to about 55 LOS sub-controllers (guard-only change)
+
+### filesReviewed (15)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/los/loan-application/access/loan-application-access.ts | added | green | no issues |
+| apps/finnaux-api/src/los/loan-application/access/loan-application-access.guard.ts | added | green | no issues |
+| apps/finnaux-api/src/los/loan-application/access/index.ts | added | green | no issues |
+| apps/finnaux-api/src/los/loan-application/loan-application.controller.ts | modified | green | F1 (resolved) |
+| apps/finnaux-api/src/los/loan-application/loan-application.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/process-orchestrator/process-orchestrator.ts | modified | amber | F2 |
+| apps/finnaux-api/src/los/los.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/los.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/financials/financials.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/financials/financials.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/generate-loan-number/generate-loan-number.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/expense/expense.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/obligation/obligation.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/profile-answer/profile-answer.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/los/loan-application/customer/customer.controller.ts | modified | green | no issues (same guard-only change in the other sub-controllers) |
+
+### findings (2)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| status | resolved |
+| resolvedIn | 0f108d5a675cf3750063bc588bcd21d9837faf6e |
+| resolvedAt | 2026-11-27T05:00:00Z |
+| resolvedNote | HEAD uses LOAN_APPLICATION_VIEW_RIGHTS (LOS + LMS pages) at apps/finnaux-api/src/los/loan-application/loan-application.controller.ts:113, defined in apps/finnaux-api/src/los/loan-application/access/los-page-rights.ts:76. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+| id | F1 |
+| severity | P2 |
+| title | Loan list view right excluded LMS pages, blocking LMS-only users |
+| location | apps/finnaux-api/src/los/loan-application/loan-application.controller.ts:112 |
+| problem | GET /los/loan-application required view on APPLICATION_VIEW_RIGHTS, which lists only LOS pages (Applications, LOS Process All, Application Status All, LOS Dashboard, Quick Loan). The LMS loan screen is opened from LMS pages (LMS Customers, receipts, NPA, repossession, etc.) and has no menu page of its own. |
+| impact | Employees whose designation holds only LMS page rights got 403 on the loan list as of this commit. |
+| fix | Accept view on the LMS pages that open the loan screen as well. |
+| evidence | @RequirePageRight(APPLICATION_VIEW_RIGHTS) |
+
+#### findings[2] · F2
+
+| Field | Value |
+|---|---|
+| status | resolved |
+| resolvedIn | 159c94f9732c9fcc8b0468014553798648224420 |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Side-effect completions (amortization generate, payment authorisation delete) skip the process-right check: apps/finnaux-api/src/los/loan-application/process-orchestrator/process-orchestrator.ts. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+| id | F2 |
+| severity | P3 |
+| title | Side-effect completion pages now need their own process write right |
+| location | apps/finnaux-api/src/los/loan-application/process-orchestrator/process-orchestrator.ts:3638 |
+| problem | The right check runs inside handleLosProcessPageCompletionByAction, which services also call for secondary pages. Finalise payment marks PAYMENT_INITIATION (UPSERT) and then AMORTIZATION_GENERATE (CREATE); deleting a payment request also DELETEs PAYMENT_AUTHORIZATION completion. Each call now requires the matching canAdd/canDelete on that second page. |
+| impact | A designation configured for Payment Initiation (or Payment Request Creation) but without canAdd on Amortization Generate (or canDelete on Payment Authorization) gets 403 and the whole step rolls back, although the user only works the first page. |
+| fix | Check the right once for the page the user acts on (e.g. in the controller/service entry) or pass a flag so system-driven completion of dependent pages skips the check. |
+| evidence | await this.ensureProcessPageWriteRight(<br>      tx,<br>      losProcessPageId, |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run on HEAD, which contains this commit) |
+| green | bunx oxlint apps libs | passed (run on HEAD) |
+| green | bun run build | passed, 0 warnings (run on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run on HEAD) |
+
+### gaps (5)
+
+- Nothing was exercised at runtime or against a database; scope filters, the guard and the process-right check are verified by reading code only.
+- F17 process rights are enforced only where a service calls handleLosProcessPageCompletionByAction; writes that never call it (e.g. customer income create/update, most PUT updates) still ignore designationLmsProcessPageRights.
+- GET /los/swap-loan-application (list) still takes no session and is not filtered by the caller's branches/products; only the PUT re-checks scope.
+- GET /los/loan-application/dpd-summary and GET /financials are now scoped but still declare no page right.
+- dropdown.controller.ts routes that take :loanApplicationId do not use LoanApplicationAccessGuard.
+
+### info (4)
+
+- Scope is branch AND loan product (loan must match both); this was chosen deliberately. Employees with no employeeProducts rows will see no loans and get 404 on every loan route.
+- Out-of-scope loans answer 404, same as missing ones, so ids cannot be probed; inactive loans also answer 404 on every guarded route now.
+- process-to-complete (marked DEVELOPMENT PURPOSES ONLY) is still reachable by anyone with Applications/LOS Process All edit.
+- next-process, hold, resume, send-back and reject accept edit only on Applications or LOS Process All; Quick Loan users can create (add) but cannot move the loan without one of those rights. Confirm this matches the intended role setup.
+
+---
+
+## howismycommit-87
+
+| Field | Value |
+|---|---|
+| id | howismycommit-87 |
+| generatedAt | 2026-11-27T10:36:04+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 1e9360d719002998b2666b52e2763434c2fb4675 |
+| files.changed | 19 |
+| files.added | 0 |
+| files.modified | 19 |
+| files.deleted | 0 |
+| files.insertions | 1027 |
+| files.deletions | 121 |
+| verdict | review-with-caution |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 7 |
+| before | HRMS writes in attendance, leave, payroll, performance, recruitment, holidays and tours had no page rights, so a view-only user could create jobs, holidays, salary assignments and more; HR members could approve their own leave, performance DTOs were imported as types so bodies were never validated, and salary assignments, salary history, the org chart and all tours were readable by anyone. |
+| after | Every HRMS admin write now carries @RequirePageRight on a real HRMS page (self-service routes stay open), leave/cancellation/resignation/extra-work approvals, balance adjustments, appraisal finalize/revise and PIP updates refuse the caller's own records, performance DTOs are validated and createGoal runs in a transaction, salary assignments/history, hierarchy and tours are scoped by page rights, and job min salary > max salary returns 400. |
+
+### changeType (2)
+
+- security
+- bug fix
+
+### effects (5)
+
+- HRMS screens: users without the matching page right now get 403 on admin actions; reporting managers need Leave Applications edit for L1 approval; employees need Performance Management view for My Target actions
+- Leave status endpoint now accepts only L1_APPROVED, APPROVED and REJECTED
+- Performance request bodies are validated (whitelist) for the first time
+- DesignationAccessService gains hasPageRight/assertPageRight and is provided in attendance, employee, employee-tour and performance modules
+- resolveDefaultCycleId accepts an optional transaction executor
+
+### filesReviewed (19)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/hrms/attendance-management/attendance-management.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/attendance-management/attendance-management.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/attendance-management/attendance-management.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/designation/designation-access.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/employee-tour/employee-tour.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/employee-tour/employee-tour.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/employee-tour/employee-tour.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/employee/employee.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/employee/employee.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/employee/employee.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/holiday-management/holiday-management.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/leave-management/leave-management.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/leave-management/leave-management.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/payroll-management/payroll-management.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/performance-management/performance-management.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/performance-management/performance-management.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/performance-management/performance-management.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/recruitment/recruitment.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/recruitment/recruitment.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (5)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once on HEAD by the main session) |
+| green | bunx oxlint apps libs | passed (run once on HEAD by the main session) |
+| green | bun run build | passed, 0 warnings (run once on HEAD by the main session) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once on HEAD by the main session) |
+| grey | runtime / database exercise | not run: review only, no server or database touched |
+
+### gaps (6)
+
+- Nothing was exercised at runtime or against a database: no request was replayed for rows 77-82/99 or the P2 F5/F9 probes, and app bootstrap/DI of the four new DesignationAccessService providers was not started (tsc and build cannot catch DI failures; DatabaseService appears global so resolution is expected to work).
+- F5 only partly fixed: GET assignments and salary-history are now gated, but these payroll GETs remain unguarded at HEAD and expose salary or bank data to any logged-in user: employees/:employeeId/revisions, payrolls, payrolls/:payrollId/items, payrolls/:payrollId/employees/:employeeId/payslip (any employee's payslip), payrolls/:payrollId/register, payrolls/:payrollId/bank-export, loans, adjustments/:month, dashboard-stats (payroll-management.controller.ts). These were BLOCKED in the test log (money), so never tested.
+- F6 not changed in code: GET /hrms/employees/filter stays unguarded by design (contract 3.13 says it returns only id and name for pickers). The finding itself (29 rows to a user without EMPLOYEE_ALL) stands as an accepted risk.
+- Maker-checker gaps the commit does not cover: a goal owner can still set status, targetValue, achievedValue and incentiveSchemeId on their own goal (updateGoal allows the owner; achievedValue/targetValue feed incentive sums), and users with Salary Structures add / Payroll Process add / Payroll Loans add can assign their own salary, add their own manual payroll adjustment or create their own loan; no self-check on those.
+- F9 switches 32 performance DTOs from type to value imports, so validation (whitelist: true, strip unknown) runs on these bodies for the first time. All DTO properties are decorated (scanned), but real frontend payloads (numbers sent as strings, extra fields) were not replayed, so 400s on legitimate saves cannot be ruled out.
+- No automated tests cover the new self-approval checks, salary scoping or performance access rules.
+
+### info (7)
+
+- Reporting managers now need Leave Applications view+edit to give L1 leave approval or reject (route guard on PUT requests/:id/status); documented in contracts/frontend-security-contract.md 3.13. Confirm production roles for managers carry this right.
+- Every performance write (goals, targets submit, PIP, manager review, return) now needs Performance Management view. It is the only HRMS performance page, so employees who use My Target must be granted at least view on it. HR acting on others' goals/PIPs now needs HR department membership AND Performance Management add/edit (hasPerformanceAdminRight).
+- Marking attendance for another employee (including a reporting manager for their team) now needs Attendance View view+edit; viewing another employee's hierarchy needs Employee All view.
+- Tour creation now needs Attendance View add. Because an active tour skips the attendance geofence check (attendance-management.service.ts markAttendance), this also closes a self-service geofence bypass.
+- PUT leave requests/:id/status now rejects CANCELLED and PENDING with 400. Before, those values passed straight through with no authorization or balance refund; the separate cancellations flow handles CANCELLED, so this closes a hole rather than breaking a flow.
+- DesignationAccessService.hasPageRight duplicates the AuthGuard page-right evaluation (auth.guard.ts validatePageRights); keep the two in sync if the guard semantics change.
+- Pre-existing, unchanged by this commit: CreateGoalDto.employeeIds has @IsArray() without @ToArray() (performance-management.dto.ts:119), against the AGENTS.md array rule. Now that validation is active it matters for query-style payloads only.
+
+---
+
+## howismycommit-86
+
+| Field | Value |
+|---|---|
+| id | howismycommit-86 |
+| generatedAt | 2026-11-27T10:36:04+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | e12179b2d0bff941794060be1399a68721de83f8 |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 2 |
+| files.deletions | 2 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | CrmConfigurationController (10 DTOs) and CrmTicketsController (4 DTOs) imported their DTOs with import type, so the classes were erased at runtime, the ValidationPipe had no metatype, and request bodies and queries reached the services unvalidated and untransformed. |
+| after | The DTOs are imported as values, so the global ValidationPipe (transform, whitelist) validates and strips bodies and queries; for example ListCrmTicketsQueryDto now turns limit into a number and showProcessCompleted into a boolean, where the string "false" used to be truthy. |
+
+### changeType (2)
+
+- security
+- bug fix
+
+### effects (2)
+
+- All CRM configuration writes (ticket types, statuses, workflows, matrix, employee assignments) and CRM ticket create, forward and list now return 400 on invalid input and drop undeclared fields.
+- Services only read fields declared in the DTOs (checked against crm-configuration.service.ts), and the UI sends the same body for assignment create and update, so legitimate calls keep working.
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/configurations/crm-configuration/crm-configuration.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/crm/crm-tickets/crm-tickets.controller.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed, 0 warnings (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+
+### gaps (3)
+
+- Nothing was exercised at runtime or against a database; behaviour is verified by reading code only.
+- This commit covers only the CRM part of F9; performance-management (32 DTOs, page rights, createGoal transaction) is handled in commit 1e9360d7, which this review did not cover.
+- The minified dist bundle mangles class names, so design:paramtypes could not be confirmed against the built output.
+
+### info (1)
+
+- A scan of every controller on HEAD found no remaining import type of a Dto class.
+
+---
+
+## howismycommit-85
+
+| Field | Value |
+|---|---|
+| id | howismycommit-85 |
+| generatedAt | 2026-11-27T10:36:04+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | 9d2e66a6f01bac319f3f24ece5dd402156f91b85 |
+| files.changed | 2 |
+| files.added | 0 |
+| files.modified | 2 |
+| files.deleted | 0 |
+| files.insertions | 62 |
+| files.deletions | 8 |
+| verdict | review-with-caution |
+| score | 90 |
+| commitScore | 90 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 1 |
+| summary.green | 4 |
+| summary.info | 2 |
+| before | Every /configuration/import-data route (templates, validate, import for employees, customers, loans, vouchers, salary, attendance and more) needed only a login, and imported employees all got the hash of a hardcoded default password, so any user could import an Admin login with a known password. |
+| after | The whole ImportDataController requires canView and canEdit on COMPANY_CONFIGURATION (class-level metadata read by the global AuthGuard), employee import refuses any row whose designation is at or above the caller's level, and each imported employee gets a bcrypt hash of a random 24-byte secret. |
+
+### changeType (2)
+
+- security
+- API
+
+### effects (3)
+
+- UI Import Data page (configuration/import-data) has no page guard of its own; users without COMPANY_CONFIGURATION edit will now get 403 on every tab, including template downloads.
+- Imported employees cannot log in until someone senior resets the password from the employee edit screen.
+- Import runtime and the employee-code sequence lock now scale with one bcrypt hash per row.
+
+### filesReviewed (2)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/configurations/import-data/import-data.controller.ts | modified | green | no issues |
+| apps/finnaux-api/src/configurations/import-data/import-employees.service.ts | modified | amber | F1 |
+
+### findings (1)
+
+#### findings[1] · F1
+
+| Field | Value |
+|---|---|
+| status | resolved |
+| resolvedIn | 04d16b65913c21354c6bee5f0e1b659466f74360 |
+| resolvedAt | 2026-11-27T05:14:39.763Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Passwords are hashed before the employee sequence row is locked: apps/finnaux-api/src/configurations/import-data/import-employees.service.ts:548. |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | false |
+| confirmedNote | null |
+| id | F1 |
+| severity | P2 |
+| title | One bcrypt hash per imported row while the employee sequence row is locked |
+| location | apps/finnaux-api/src/configurations/import-data/import-employees.service.ts:555 |
+| problem | getSubsequentValuesPostIncrement (line 548) takes SELECT ... FOR UPDATE on the employee code sequence inside the request transaction, and only then the commit hashes a random password once per row with bcryptjs cost 10. bcryptjs is pure JS, so Promise.all does not parallelise it; measured about 64 ms per hash here, so 1,000 rows take about 64 s and the 5,000-row limit about 5 minutes. |
+| impact | Large employee imports that worked before (one hash) now run for minutes, hit gateway or client timeouts and roll back; meanwhile every other employee create (same sequence) waits on the row lock and the event loop is busy for all API users. |
+| fix | Hash one random secret per batch (still unknown to anyone) or compute the hashes before allocating the sequence; either keeps the passwords unusable without holding the lock for rows x hash time. |
+| evidence |     const passwordHashes = await Promise.all(<br>      rows.map(() =><br>        bcrypt.hash(randomBytes(24).toString('base64url'), saltOrRounds) |
+
+### previousFindings (0)
+
+_Empty._
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed, 0 warnings (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+
+### gaps (3)
+
+- Nothing was exercised at runtime or against a database; behaviour is verified by reading code only.
+- Recruitment convert-to-employee (recruitment.service.ts:951) still uses a hardcoded shared password and no level check, so a second path to a known-password senior login remains (pre-existing, outside import-data).
+- Customer, loan, voucher, salary and attendance imports are gated only by COMPANY_CONFIGURATION edit; there is no per-domain right (no dedicated Import Data page id exists in fixed-cuids).
+
+### info (2)
+
+- Using COMPANY_CONFIGURATION for all imports is a business decision; the UI Import Data page does not check any page id, so users who see it without that right will get 403s.
+- With random passwords, onboarding by import now needs a password reset per employee by someone strictly senior (updateOnRoleEmployee requires that after c55568fb); confirm the process.
+
+---
+
+## howismycommit-84
+
+| Field | Value |
+|---|---|
+| id | howismycommit-84 |
+| generatedAt | 2026-11-27T10:36:04+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | c55568fb7beb82acbbeeeabc93e18e0479bc704c |
+| files.changed | 9 |
+| files.added | 1 |
+| files.modified | 8 |
+| files.deleted | 0 |
+| files.insertions | 297 |
+| files.deletions | 8 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 3 |
+| before | Designation create/update, menu rights, page rights, LMS process rights, voucher types and report rights could be written for any role, including the caller's own role and the Admin role; page rights accepted page ids from any module (N15); on-role employee create/update could assign any role and change any employee's username and password. |
+| after | A new DesignationAccessService refuses writes to the caller's own role or to roles at the same or a higher level (level 1 is highest), refuses setting a role level at or above the caller, and for page rights refuses newly granting a flag the caller does not hold; page rights must belong to the module in the URL. Employee create/update now require the caller to be strictly senior to the target employee and to assign only roles below their own level, and a missing employee now returns 404. |
+
+### changeType (3)
+
+- security
+- feature
+- tests
+
+### effects (3)
+
+- HRMS Designation screens (role edit, menu rights, page rights, LMS process rights, voucher types, report rights) and Employee create/edit.
+- DesignationAccessService is provided in DesignationModule, VoucherTypesModule and ReportRightsModule (and later in EmployeeModule and others); DatabaseService is global so DI resolves.
+- Nobody can edit their own role or a role at their own level any more, including the top Admin role; new pages for the top role must arrive through migrations (as drizzle/0021_mclr_menu_page.sql does).
+
+### filesReviewed (9)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/hrms/designation/designation-access.service.ts | added | green | no issues |
+| apps/finnaux-api/src/hrms/designation/designation.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/designation/designation.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/designation/report-rights/__tests__/report-rights.service.spec.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/designation/report-rights/report-rights.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/designation/report-rights/report-rights.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/designation/voucher-types/voucher-types.module.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/designation/voucher-types/voucher-types.service.ts | modified | green | no issues |
+| apps/finnaux-api/src/hrms/employee/employee.service.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | resolved | Still fixed: apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1087 includes input.regMobileNo ?? '' in the cache key. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | Still fixed: drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates electricity_bill_service_provider_enum. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed, 0 warnings (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+
+### gaps (5)
+
+- Nothing was exercised at runtime or against a database; behaviour is verified by reading code only.
+- Recruitment POST /hrms/recruitment/candidates/convert-to-employee (recruitment.service.ts:912) still creates an employee with the job posting's designation at any level and the hardcoded password at recruitment.service.ts:951, with no level check; a RECRUITMENT_MANAGEMENT add user can still create a senior or Admin login, bypassing this fix (pre-existing, not introduced).
+- Voucher types, report rights and LMS process page rights only call assertCanManage (target role must be below the caller); they do not apply the "cannot grant what you do not hold" rule that page rights now apply.
+- F29 also asked to log every rights change; no audit logging was added.
+- No unit tests cover DesignationAccessService or the new employee hierarchy checks; the report-rights spec only stubs assertCanManage.
+
+### info (3)
+
+- Business consequence: the top role (level 1) cannot edit its own role, create another level-1 role, create or edit another level-1 employee, or edit its own employee record through PUT /hrms/employees/:id/on-role. Confirm this is intended and that new pages for the top role are always granted by migration.
+- assertCanAssignDesignation in employee.service.ts duplicates the level logic of DesignationAccessService.assertCanManage, and was inserted between the existing JSDoc of hasHigherDesignation and its signature, so that JSDoc now documents the wrong method.
+- updatePageRights now rejects pages outside the menu lists assigned to the role in that module; since getPageRights returns exactly those pages, the UI flow (assign menu, then set page rights) is unaffected.
+
+---
+
+## howismycommit-83
+
+| Field | Value |
+|---|---|
+| id | howismycommit-83 |
+| generatedAt | 2026-11-27T10:36:04+05:30 |
+| author | Dhruv |
+| branch | test/local |
+| target.kind | commit |
+| target.commit | d2442c0502abc6232655770fa47e2694a11f98df |
+| files.changed | 1 |
+| files.added | 0 |
+| files.modified | 1 |
+| files.deleted | 0 |
+| files.insertions | 35 |
+| files.deletions | 0 |
+| verdict | looks-good |
+| score | 100 |
+| commitScore | 100 |
+| quality | excellent |
+| summary.red | 0 |
+| summary.amber | 0 |
+| summary.green | 4 |
+| summary.info | 1 |
+| before | PUT /configuration/company, /company-addresses, /company-financial-details, /company-system-settings and /company-security-settings only needed a logged-in session, so a view-only user could change company identity, limits and security switches (OTP, MAC, maker-checker, masking). |
+| after | All five PUTs require canView and canEdit on COMPANY_CONFIGURATION, the same right the logo upload and delete routes already used; the AuthGuard (global APP_GUARD) enforces it before the handler. |
+
+### changeType (2)
+
+- security
+- API
+
+### effects (2)
+
+- Company configuration screen in the UI (src/app/(app)/(main)/configuration/company-configuration) already gates on COMPANY_CONFIGURATION, so legitimate editors keep access.
+- Roles without COMPANY_CONFIGURATION edit now get 403 on these PUTs.
+
+### filesReviewed (1)
+
+| path | change | status | note |
+|---|---|---|---|
+| apps/finnaux-api/src/configurations/configurations.controller.ts | modified | green | no issues |
+
+### findings (0)
+
+_Empty._
+
+### previousFindings (2)
+
+| commit | findingId | title | result | note |
+|---|---|---|---|---|
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F1 | Kerala mobile number not part of the cache key | resolved | Still fixed: apps/finnaux-api/src/external/finnaux/finnaux.service.ts:1087 includes input.regMobileNo ?? '' in the cache key. |
+| 188da1274484dfa371f2c68744143f3ed2d29c7c | F2 | New pg enum without a migration in this commit | resolved | Still fixed: drizzle/0019_finnaux_bank_and_electricity_bill.sql:1 creates electricity_bill_service_provider_enum. |
+
+### checks (4)
+
+| status | command | result |
+|---|---|---|
+| green | bunx tsc --noEmit | passed (run once by the main session on HEAD) |
+| green | bunx oxlint apps libs | passed (run once by the main session on HEAD) |
+| green | bun run build | passed, 0 warnings (run once by the main session on HEAD) |
+| green | bunx jest | passed: 135 passed, 78 skipped (run once by the main session on HEAD) |
+
+### gaps (2)
+
+- Nothing was exercised at runtime or against a database; behaviour is verified by reading code only.
+- The matching GET routes (company, company-addresses, company-financial-details, company-system-settings, company-security-settings) still need only a login; F8/F24 are about writes, so this is outside the finding but means any user can still read the security switch state.
+
+### info (1)
+
+- The fix matches the guard pattern already used on PUT/DELETE company/logo in the same controller, and the UI calls all five endpoints from the COMPANY_CONFIGURATION page, so the page id is consistent.
+
+---
 
 ## howismycommit-82
 
@@ -979,12 +4150,12 @@ _Empty._
 | impact | Any user given one of these pages can become Admin, raise own waiver/payment limits or reset the Admin password. With F23 (open employee import) it is a full takeover path. |
 | fix | Refuse writes to the caller's own role and to equal or higher roles/employees (hasHigherDesignation, allowEqual=false); refuse granting rights the caller lacks; audit every rights change. |
 | evidence | penguin/testing/TEST_LOG.md rows 108-111 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P5 T6 |
+| status | resolved |
+| resolvedIn | c55568fb7beb82acbbeeeabc93e18e0479bc704c |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Role and employee edits refuse own role, equal or senior targets and rights the caller lacks: apps/finnaux-api/src/hrms/designation/designation-access.service.ts. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1001,12 +4172,12 @@ _Empty._
 | impact | Holders of the page or a stolen session can call paid KYC/eSign/bureau services as the company and decrypt data under the encryption key. |
 | fix | Never return secret values: return set/not-set and last 4 characters; keep PUT for replacement; rotate keys that were exposed. |
 | evidence | test-evidence/data/P5-T6-external-api-credentials-summary.txt (counts and field names only) |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P5 T6 |
+| status | resolved |
+| resolvedIn | cbb70c24c6c7d72b5f02d4a233a6d80b8646ee1c |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Credentials masked to XXXXXXXX plus last 4: apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts:554. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1087,12 +4258,12 @@ _Empty._
 | impact | A branch user can make themselves approver of their own loan deviations (maker-checker bypass) or wipe approvers of any branch. Fee, policy, manual and document deviation services read these tables. |
 | fix | Require BRANCH_PROCESS_EMPLOYEE view/edit; check rangeId belongs to the URL branch and product; soft-delete instead of hard delete. |
 | evidence | penguin/testing/TEST_LOG.md rows 96-97 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P5 |
+| status | resolved |
+| resolvedIn | dc806861831b21efd77653af69e7d77558a39d80 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Deviation assignments need BRANCH_PROCESS_EMPLOYEE rights, rangeId must match URL branch and product, soft sync instead of hard delete: apps/finnaux-api/src/configurations/branch/branch.controller.ts:196. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1109,12 +4280,12 @@ _Empty._
 | impact | Any user can read personal data of customers in every branch by loan id; ULIDs are time-ordered and guessable near known ids. Per-record form of F2. |
 | fix | Add a shared loan-application access check: loan.branchId must be in the caller's employeeBranches before any :loanApplicationId route runs. |
 | evidence | penguin/testing/TEST_LOG.md row 102; test-evidence/data/P5-idor-customer-field-names.txt |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P5 |
+| status | resolved |
+| resolvedIn | df6c8acbb7582b4e3b7067f93be799bb4199bd9e |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. LoanApplicationAccessGuard returns 404 for loans outside caller branch and product: apps/finnaux-api/src/los/loan-application/access/loan-application-access.guard.ts:28. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1131,12 +4302,12 @@ _Empty._
 | impact | Staff usernames can be listed and then targeted; there is no account lockout (only 100 req/min per IP). |
 | fix | Remove @UserExists() from LoginDto; same 401 and text for both cases; compare against a dummy hash when the user is missing; add per-account failed-login limits. |
 | evidence | test-evidence/data/P5-login-enumeration.txt |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P5 |
+| status | resolved |
+| resolvedIn | c0dbd50f148525b919c803d69fffe578a830f614 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Unknown user and wrong password both return the same 401 with a dummy hash compare: apps/finnaux-api/src/auth/auth.service.ts:74. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1231,12 +4402,12 @@ _Empty._
 | impact | Anyone can change live loan decisioning; user-controlled expressions reach a library with published code-execution advisories; changes are untraceable. |
 | fix | Guard with RULE_ENGINE canAdd/canEdit (admin only); replace or sandbox expr-eval (restricted operators, no member access); add audit columns. |
 | evidence | penguin/testing/TEST_LOG.md rows 90-93 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (Admin) |
+| status | resolved |
+| resolvedIn | c206dc6ab69540538005caeb83877b0cf1011ae9 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Rule, ruleset and workflow writes need RULE_ENGINE add/edit (expr-eval not upgraded): apps/finnaux-api/src/rule-engine/rule-engine.controller.ts:32. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1253,12 +4424,12 @@ _Empty._
 | impact | Unclear errors. |
 | fix | Make outputConfig required (@IsDefined) or give it a default. |
 | evidence | penguin/testing/TEST_LOG.md row 92 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (Admin) |
+| status | resolved |
+| resolvedIn | c206dc6ab69540538005caeb83877b0cf1011ae9 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. OutputConfig is required: apps/finnaux-api/src/rule-engine/dto/create-rule.dto.ts:43. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1342,12 +4513,12 @@ _Empty._
 | impact | Any logged-in user can create an Admin-designation account with a known password (full privilege escalation), and bulk-import salaries, attendance, vouchers, loans and customers. |
 | fix | Guard every import with the matching page add right (and admin-only for employees/salary/vouchers); generate a random one-time password per employee and force reset; never keep passwords in source. |
 | evidence | penguin/testing/TEST_LOG.md row 83 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (Configuration) |
+| status | resolved |
+| resolvedIn | 9d2e66a6f01bac319f3f24ece5dd402156f91b85 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Imports need COMPANY_CONFIGURATION edit, imported logins get random passwords, roles at or above the caller are refused: apps/finnaux-api/src/configurations/import-data/import-employees.service.ts. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1364,12 +4535,12 @@ _Empty._
 | impact | Anyone can disable core security controls company-wide. |
 | fix | Guard with COMPANY_CONFIGURATION canEdit (admin only) and audit changes. |
 | evidence | penguin/testing/TEST_LOG.md row 84 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (Configuration) |
+| status | resolved |
+| resolvedIn | d2442c0502abc6232655770fa47e2694a11f98df |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Company security settings PUT needs COMPANY_CONFIGURATION edit: apps/finnaux-api/src/configurations/configurations.controller.ts. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1454,12 +4625,12 @@ _Empty._
 | impact | Maker-checker on leave is defeated for every HR employee; same pattern likely for extra-work requests and cancellations. |
 | fix | Reject status changes where session.employee.id equals the requester, and add a page right on the status endpoints. |
 | evidence | penguin/testing/TEST_LOG.md rows 77-78 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (HRMS) |
+| status | resolved |
+| resolvedIn | 1e9360d719002998b2666b52e2763434c2fb4675 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Approver cannot be the requester for leave, resignation, extra work and cancellations: apps/finnaux-api/src/hrms/leave-management/leave-management.service.ts:408. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1476,12 +4647,12 @@ _Empty._
 | impact | Any logged-in employee can change HR, payroll and recruitment data for anyone. |
 | fix | Add page rights per HRMS page and scope by reporting line/HR department. |
 | evidence | penguin/testing/TEST_LOG.md rows 79-82; P2-probe-results.json |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (HRMS) |
+| status | resolved |
+| resolvedIn | 1e9360d719002998b2666b52e2763434c2fb4675 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. HRMS admin writes need page rights; self-service routes act on the caller only: apps/finnaux-api/src/hrms/recruitment/recruitment.controller.ts:55. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1498,12 +4669,12 @@ _Empty._
 | impact | Inconsistent job data. |
 | fix | Validate min <= max (and experience range). |
 | evidence | penguin/testing/TEST_LOG.md row 81 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (HRMS) |
+| status | resolved |
+| resolvedIn | 1e9360d719002998b2666b52e2763434c2fb4675 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Salary min above max refused on create and update: apps/finnaux-api/src/hrms/recruitment/recruitment.service.ts:192. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1588,12 +4759,12 @@ _Empty._
 | impact | Customer request/complaint records can be opened, closed or moved by anyone with a session. |
 | fix | Guard with the CRM page (canAdd / canEdit) and check the caller may reassign to the target employee. |
 | evidence | penguin/testing/TEST_LOG.md rows 70-73 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (CRM) |
+| status | resolved |
+| resolvedIn | fc34cfae6bcf3feee1be92b5b689346485822d9f |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. CRM entry create/status need CRM add/edit: apps/finnaux-api/src/crm/crm.controller.ts:39. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1610,12 +4781,12 @@ _Empty._
 | impact | Bad input reaches the service and DB layer; errors surface as 500. |
 | fix | Import DTOs as values (see F9). |
 | evidence | penguin/testing/TEST_LOG.md row 76 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (CRM) |
+| status | resolved |
+| resolvedIn | e12179b2d0bff941794060be1399a68721de83f8 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. CRM ticket DTOs imported as values, so the body is validated: apps/finnaux-api/src/crm/crm-tickets/crm-tickets.controller.ts. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1632,12 +4803,12 @@ _Empty._
 | impact | Unhelpful errors; schema breaks the camelCase rule in AGENTS.md. |
 | fix | Use CrmEntryTypeEnum etc. in @IsEnum and @ApiProperty; rename columns via migration. |
 | evidence | penguin/testing/TEST_LOG.md (CRM section) |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (CRM) |
+| status | resolved |
+| resolvedIn | fc34cfae6bcf3feee1be92b5b689346485822d9f |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. CRM enums validated with enum objects (snake_case columns need a migration, not done): apps/finnaux-api/src/crm/dto/crm.dto.ts:34. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1722,12 +4893,12 @@ _Empty._
 | impact | Any logged-in user can create and authorise money receipts on any loan; the maker-checker control is not enforced server-side. |
 | fix | Guard receipt create/collect with the receipt pages (canAdd), authorisation with the authorisation page (canEdit) and block the maker from authorising their own receipt. |
 | evidence | penguin/testing/TEST_LOG.md (P3 LMS table); P2-probe-results.json |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (LMS) |
+| status | resolved |
+| resolvedIn | aaabcd5ba7d202f79881c2205a38919adff54d9a |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Receipt, collection and NACH writes need page rights; authoriser cannot be the receipt creator: apps/finnaux-api/src/receipt-authorisations/receipt-authorisations.service.ts:113. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1744,12 +4915,12 @@ _Empty._
 | impact | Bad contact data reaches SMS/email senders. |
 | fix | Validate by type (IsEmail / phone pattern) and use @IsEnum for type. |
 | evidence | penguin/testing/TEST_LOG.md row 53 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (LMS) |
+| status | resolved |
+| resolvedIn | ea2fac97118010c2f736588bc08a25941883b485 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. EMAIL, PHONE_NUMBER and WEBSITE formats validated on create (update still unchecked): apps/finnaux-api/src/lms/customer/communication/dto/create-communication.dto.ts:26. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1833,12 +5004,12 @@ _Empty._
 | impact | Any logged-in user can edit or reject any loan application in any branch, and initiate NPA flows. |
 | fix | Add page/process-right guards to every loan-application write, and scope by hasEmployeeBranchLoanProductAccess (already exists in process-orchestrator). |
 | evidence | penguin/testing/TEST_LOG.md rows 39-43 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (LOS T1-T3) |
+| status | resolved |
+| resolvedIn | df6c8acbb7582b4e3b7067f93be799bb4199bd9e |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Loan writes need LOS page rights and process steps check designation process rights: apps/finnaux-api/src/los/loan-application/process-orchestrator/process-orchestrator.ts:3638. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1855,12 +5026,12 @@ _Empty._
 | impact | Audit trail of who assigned whom is lost on every edit. |
 | fix | Diff the lists and only insert/deactivate the changes. |
 | evidence | penguin/testing/TEST_LOG.md (LOS T1-T3 journal) |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (LOS T1-T3) |
+| status | resolved |
+| resolvedIn | dc806861831b21efd77653af69e7d77558a39d80 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Range employee update keeps existing rows and soft-deletes removed ones: apps/finnaux-api/src/configurations/branch/branch.service.ts:631. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1877,12 +5048,12 @@ _Empty._
 | impact | Clients cannot tell a no-op from success. |
 | fix | Return 404/409 when no row is updated. |
 | evidence | penguin/testing/TEST_LOG.md row 43 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (LOS T1-T3) |
+| status | resolved |
+| resolvedIn | df6c8acbb7582b4e3b7067f93be799bb4199bd9e |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Repeat reject returns 400: apps/finnaux-api/src/los/loan-application/process-orchestrator/process-orchestrator.ts:4279. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -1967,12 +5138,12 @@ _Empty._
 | impact | Ownership and work queues of real loan applications can be moved by anyone with a session. |
 | fix | Add @RequirePageRight(APPLICATION_SWAP canEdit) and check the caller manages fromEmployeeId (or is HR/admin). |
 | evidence | penguin/testing/TEST_LOG.md row 37 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (LOS T0) |
+| status | resolved |
+| resolvedIn | df6c8acbb7582b4e3b7067f93be799bb4199bd9e |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Swap needs APPLICATION_SWAP edit and every loan must be in caller scope: apps/finnaux-api/src/los/los.service.ts:776. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2060,12 +5231,12 @@ _Empty._
 | impact | Any holder of the page right can change or remove every user's reports, including those assigned to roles. |
 | fix | Restrict edit/delete to the creator, or to users at or above the creator's level; consider an owner check in the repository where clause. |
 | evidence | penguin/testing/TEST_LOG.md rows 19-20 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (T1-T3 with ZZ-TEST data) |
+| status | resolved |
+| resolvedIn | 2939b270ade41e44f996ada3fe430f397c575621 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Template edit/delete only by creator or a more senior role: apps/finnaux-api/src/reports/report-builder/report-builder.service.ts:174. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2082,12 +5253,12 @@ _Empty._
 | impact | Silent no-op success hides client errors; cross-branch edits of customer identity data. |
 | fix | Return 404 when no row is updated; check the customer belongs to the caller's branches. |
 | evidence | penguin/testing/TEST_LOG.md rows 30-32 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (T1-T3 with ZZ-TEST data) |
+| status | resolved |
+| resolvedIn | 39a10f9c37351ec4463dbad68bdf622a7763668b |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Basic-detail updates return 404 for missing customers (no branch link on customers, so no branch scope): apps/finnaux-api/src/lms/customer/customer.service.ts:202. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2104,12 +5275,12 @@ _Empty._
 | impact | Incomplete customer records; other flows assume contact rows exist (see login crash in TEST_ARCHITECTURE section 13). |
 | fix | Enforce the KYC/contact policy in the DTO (ArrayMinSize, ValidateNested) or document that it is optional. |
 | evidence | penguin/testing/TEST_LOG.md rows 26-27 |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (T1-T3 with ZZ-TEST data) |
+| status | resolved |
+| resolvedIn | e66b5c1b9726511f43abb5fec44e32ee2e508cc8 |
+| resolvedAt | 2026-11-27T04:42:36.684Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Customer create needs at least one KYC document and one contact detail (enquiries unchanged): apps/finnaux-api/src/lms/customer/dto/create-customer.dto.ts. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2199,12 +5370,12 @@ _Empty._
 | impact | Any viewer can export full reports; the rights matrix suggests control that does not exist. |
 | fix | Require canExport on export endpoints (dnbs02/export, ucrf downloads) and gate export buttons with the page canExport flag (permission-guard). |
 | evidence | penguin/testing/test-evidence/responses/P3-T0-ui-actions.json, P3-T4-ui-actions.json, screenshots/P3-T0-master-data.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (Dashboard, Reports-U) |
+| status | resolved |
+| resolvedIn | 0d7795ce7e8380176898bb9276a4f97b2ba83b93 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. DNBS02 export needs canExport, UCRF downloads need canExport, schedule VI HTML needs canPrint (browser-side exports cannot be enforced): apps/finnaux-api/src/reports/dnbs02/dnbs02.controller.ts:53. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2221,12 +5392,12 @@ _Empty._
 | impact | Broken menu entry for users with the right. |
 | fix | Add the route or deactivate the menu page. |
 | evidence | penguin/testing/test-evidence/screenshots/P3-T4-due-list.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P3 (Dashboard, Reports-U) |
+| status | resolved |
+| resolvedIn | 4f90c683832a21e625d5c6db97e3d59c3648183a |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Due List menu page set inactive in seed and migration 0020_hide_due_list_menu_page.sql (no screen exists in UI or API): seed/data/master_menu_pages.json:116. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2335,12 +5506,12 @@ _Empty._
 | impact | Any employee can change company identity, addresses, cash limits and system settings. |
 | fix | Add @RequirePageRight with COMPANY_CONFIGURATION canEdit on all company PUTs. |
 | evidence | penguin/testing/test-evidence/responses/P2-F8-company-settings-writable.json, penguin/testing/test-evidence/screenshots/P2-F8-company-settings-writable.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| status | resolved |
+| resolvedIn | d2442c0502abc6232655770fa47e2694a11f98df |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Company settings PUTs need COMPANY_CONFIGURATION edit: apps/finnaux-api/src/configurations/configurations.controller.ts. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2357,12 +5528,12 @@ _Empty._
 | impact | Unvalidated writes by any logged-in user; partial writes left behind on error. |
 | fix | Import DTOs as values (`import { ... }`); check scripts/fix-type-imports.ts does not convert DTO imports; add page rights; wrap createGoal (service.ts:989) in a transaction. |
 | evidence | penguin/testing/test-evidence/responses/P2-F9-validation-bypass-partial-write.json, penguin/testing/test-evidence/screenshots/P2-F9-validation-bypass-partial-write.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| status | resolved |
+| resolvedIn | 1e9360d719002998b2666b52e2763434c2fb4675 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. DTOs imported as values in performance, CRM ticket and CRM config controllers; createGoal runs in a transaction: apps/finnaux-api/src/hrms/performance-management/performance-management.controller.ts:17. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2379,12 +5550,12 @@ _Empty._
 | impact | A view-only user can trigger paid KYC calls and send OTPs to real people (throttle 10/min). |
 | fix | Require canAdd/canEdit on the customer KYC page for provider calls, not canView on any page. |
 | evidence | penguin/testing/test-evidence/screenshots/P2-F10-kyc-otp-view-right.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| status | resolved |
+| resolvedIn | e54d0e84766f2d7e2219b7904c7633b2d044c6ba |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. KYC calls need add or edit on the 12 pages (Finnaux, SurePass, Digio, DigiPehchan, CRIF): apps/finnaux-api/src/external/shared/kyc-page-rights.ts:18. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2401,12 +5572,12 @@ _Empty._
 | impact | Any employee can change SMS events/templates. |
 | fix | Add @RequirePageRight canEdit. |
 | evidence | penguin/testing/test-evidence/screenshots/P2-F4-sms-config-writable.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| status | resolved |
+| resolvedIn | 37ce1ebedc5237609176072b22e065c6bc89d4ff |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. SMS config PUT needs COMPANY_CONFIGURATION edit: apps/finnaux-api/src/configurations/message-configuration/message-configuration.controller.ts:39. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2423,12 +5594,12 @@ _Empty._
 | impact | The UI hides buttons, but the API does not enforce rights for most writes. |
 | fix | Add @RequirePageRight to every mutating handler (or a deny-by-default global guard that requires a page right unless marked otherwise). |
 | evidence | penguin/testing/test-evidence/responses/P2-all-write-probes.json |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P2 (T0 write probes) |
+| status | resolved |
+| resolvedIn | 0f108d5a675cf3750063bc588bcd21d9837faf6e |
+| resolvedAt | 2026-11-27T04:42:36.684Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Loan-application sub-routes, KVB, MCLR (new page id plus migration 0021_mclr_menu_page.sql), customer-app, assignment lists, legal receipt authorisations and NACH import-issues now need page rights; only self-service routes (logout, password, sessions, preferences, notifications, upload, chat, own leave/attendance) stay open: apps/finnaux-api/src/los/loan-application/access/los-page-rights.ts:75. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2539,12 +5710,12 @@ _Empty._
 | impact | Any user with the voucher view right sees every branch's vouchers, amounts and customer names. Unpaginated 4 MB response. |
 | fix | Pass the session to findAll and filter by the employee's branches (employeeBranches) and by designation_voucher_types canView. Add pagination. |
 | evidence | API eve 200 / adam 200, 1104 rows each. penguin/testing/test-evidence/responses/F1-vouchers-unscoped.json, penguin/testing/test-evidence/screenshots/F1-vouchers-unscoped.png, penguin/testing/test-evidence/screenshots/UI-02-eve-vouchers-list.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| status | resolved |
+| resolvedIn | 32fbffebdc3a2af14cc3c0e2785550c0de3fd089 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Voucher list scoped to caller branches and readable voucher types: apps/finnaux-api/src/accounts/vouchers/vouchers.service.ts:501. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2561,12 +5732,12 @@ _Empty._
 | impact | Every logged-in employee can read all loan applications and financials across branches and products. |
 | fix | Add @RequirePageRight with the LOS page id and filter by employeeBranches/employeeProducts from the session, as application-current-status does. |
 | evidence | penguin/testing/test-evidence/responses/F2-loan-applications-unscoped.json, F2b-dpd-summary-unscoped.json, F2c-financials-unscoped.json, F2d-scoped-control.json; screenshots F2-*.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| status | resolved |
+| resolvedIn | df6c8acbb7582b4e3b7067f93be799bb4199bd9e |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Loan list needs an LOS page right and loan list, DPD summary and financials are scoped to caller branch and product: apps/finnaux-api/src/los/loan-application/loan-application.service.ts:1804. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2583,12 +5754,12 @@ _Empty._
 | impact | Read: integration map disclosed. Write (if confirmed): any user could switch KYC/eSign/bureau providers. |
 | fix | Guard both handlers with the External APIs page (canView for GET, canEdit for PUT), like the credentials endpoints in the same controller. |
 | evidence | penguin/testing/test-evidence/responses/F3-external-apis-readable.json, penguin/testing/test-evidence/screenshots/F3-external-apis-readable.png, penguin/testing/test-evidence/screenshots/UI-03-eve-external-apis-restricted.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| status | resolved |
+| resolvedIn | cbb70c24c6c7d72b5f02d4a233a6d80b8646ee1c |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Integration-group PUT needs EXTERNAL_APIS edit; GET returns only provider names without EXTERNAL_APIS view: apps/finnaux-api/src/configurations/external-apis/external-apis.service.ts:254. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2605,12 +5776,12 @@ _Empty._
 | impact | Any employee could enable/disable or rewrite customer SMS templates (if PUT confirmed). |
 | fix | Add @RequirePageRight with the message-configuration page (canView / canEdit). |
 | evidence | penguin/testing/test-evidence/responses/F4-sms-config-readable.json, penguin/testing/test-evidence/screenshots/F4-sms-config-readable.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| status | resolved |
+| resolvedIn | 37ce1ebedc5237609176072b22e065c6bc89d4ff |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. SMS config GET/PUT need COMPANY_CONFIGURATION view/edit: apps/finnaux-api/src/configurations/message-configuration/message-configuration.controller.ts:39. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2627,12 +5798,12 @@ _Empty._
 | impact | Exposure of personal financial data to any logged-in employee. |
 | fix | Guard with the payroll / salary pages and scope to the caller's reporting tree or branch. |
 | evidence | penguin/testing/test-evidence/responses/F5-salary-assignments.json, F5b-salary-history.json, penguin/testing/test-evidence/screenshots/F5-salary-assignments.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| status | resolved |
+| resolvedIn | 1e9360d719002998b2666b52e2763434c2fb4675 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Salary assignments guarded; salary history limited to self and direct reports without salary rights: apps/finnaux-api/src/hrms/payroll-management/payroll-management.controller.ts:99. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2649,12 +5820,12 @@ _Empty._
 | impact | Employee directory readable by anyone; off-role creation possibly open to any user. |
 | fix | Apply the same EMPLOYEE_ALL view right to /filter, and EMPLOYEE add right to off-role. |
 | evidence | penguin/testing/test-evidence/responses/F6-employees-filter.json, penguin/testing/test-evidence/screenshots/F6-employees-filter.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| status | resolved |
+| resolvedIn | 1e9360d719002998b2666b52e2763434c2fb4675 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Off-role create guarded like on-role; employee filter kept open by design (returns id and name only, used by LOS forms): apps/finnaux-api/src/hrms/employee/employee.controller.ts:74. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2671,12 +5842,12 @@ _Empty._
 | impact | Noisy errors, unclear client feedback; hides real server errors in monitoring. |
 | fix | Mark required query params in the DTOs so validation returns 400. |
 | evidence | penguin/testing/test-evidence/screenshots/N3-500-on-missing-params.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| status | resolved |
+| resolvedIn | 6d4e2251a264365bca7f399b88b1d87e4ae1308b |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Required query DTOs return 400 on dropdown, CRM and rule-engine GETs (hrms resignations and lms review-bank not covered): apps/finnaux-api/src/dropdown/dropdown.controller.ts:42. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2693,12 +5864,12 @@ _Empty._
 | impact | Dead endpoint holding connections open. |
 | fix | Remove it or guard it and wire it up. |
 | evidence | curl timed out after 60 s for eve and adam with 0 bytes. |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| status | resolved |
+| resolvedIn | 3bbd18ae90398445b08b9d6feda0db57b5a1fb84 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. App-logs needs COMPANY_CONFIGURATION view: apps/finnaux-api/src/app.controller.ts:55. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -2715,12 +5886,12 @@ _Empty._
 | impact | Information disclosure useful for an attacker mapping integrations. |
 | fix | Guard with an admin page right. |
 | evidence | penguin/testing/test-evidence/screenshots/N2-service-accounts.png |
-| status | open |
-| resolvedIn | null |
-| resolvedAt | null |
-| resolvedNote | null |
-| needsAttention | true |
-| attentionNote | Found in Adam/Eve test run P1 (T0 view-only) |
+| status | resolved |
+| resolvedIn | 3bbd18ae90398445b08b9d6feda0db57b5a1fb84 |
+| resolvedAt | 2026-11-26T12:58:12.643Z |
+| resolvedNote | Only on local branch test/local, not in dev or feat/finnaux-apis. Service accounts page needs COMPANY_CONFIGURATION view: apps/finnaux-api/src/service-accounts/service-accounts.controller.ts:17. |
+| needsAttention | false |
+| attentionNote | null |
 | confirmed | false |
 | confirmedNote | null |
 | future | false |
@@ -8085,10 +11256,10 @@ _Empty._
 | resolvedIn | null |
 | resolvedAt | 2026-11-23T12:33:32.201Z |
 | resolvedNote | Marked resolved manually |
-| needsAttention | true |
-| attentionNote | The aggregation row still returns a fixed 0 without querying anything (apps/finnaux-api/src/reports/report-builder/report-builder.query.ts:87). |
-| confirmed | false |
-| confirmedNote | null |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | true |
+| confirmedNote | Confirmed by Backend (Working on it) |
 | future | false |
 
 #### findings[6] · F6
@@ -8107,10 +11278,10 @@ _Empty._
 | resolvedIn | null |
 | resolvedAt | 2026-11-23T12:33:33.741Z |
 | resolvedNote | Marked resolved manually |
-| needsAttention | true |
-| attentionNote | The filter still types the raw name "lao"."loanDate" inside sql (apps/finnaux-api/src/reports/report-builder/report-builder.query.ts:33). |
-| confirmed | false |
-| confirmedNote | null |
+| needsAttention | false |
+| attentionNote | null |
+| confirmed | true |
+| confirmedNote | Confirmed by Backend (Old Code Practise) |
 | future | false |
 
 ### previousFindings (1)

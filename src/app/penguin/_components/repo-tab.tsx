@@ -3,32 +3,22 @@
 import { LoadingIndicatorView } from "@/components/loading-indicator-view"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
-import { useInfiniteQuery, useQuery, type UseQueryResult } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { format } from "date-fns"
-import { CheckIcon, ChevronDownIcon, GitBranchIcon, UsersIcon, XIcon } from "lucide-react"
-import { useMemo, useState } from "react"
+import { XIcon } from "lucide-react"
+import { useCallback, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react"
 import { matchesQuery } from "../_lib/fuzzy"
-import { branchColorName, colorForBranch, layoutGraph, type GraphEdge, type GraphRow } from "../_lib/graph-layout"
-import type {
-  BranchInfo,
-  CommitInfo,
-  CommitPage,
-  Contributor,
-  GraphData,
-  RepoInfo,
-  RepoKey,
-  Review,
-} from "../_lib/types"
+import {
+  branchColorName,
+  branchKey,
+  colorForBranch,
+  layoutGraph,
+  type GraphEdge,
+  type GraphLayout,
+  type GraphRow,
+} from "../_lib/graph-layout"
+import type { CommitInfo, CommitPage, Contributor, GraphData, RepoInfo, RepoKey, Review } from "../_lib/types"
 import { CommitTimeline } from "./commits-tab"
 import { CopyHash } from "./copy-hash"
 import { Highlight, SearchHighlightProvider } from "./highlight"
@@ -44,7 +34,7 @@ const ROW_H = 40
 const COL_W = 24
 const DATE_W = 92
 
-type Mode = "verbose" | "flow" | "data" | "files"
+type Mode = "verbose" | "flow" | "data" | "files" | "options"
 
 async function getJson<T>(url: string): Promise<T> {
   const res = await fetch(url)
@@ -116,137 +106,6 @@ function Segmented<T extends string>({
   )
 }
 
-function BranchPicker({
-  branches,
-  value,
-  onChange,
-}: {
-  branches: BranchInfo[]
-  value: string
-  onChange: (value: string) => void
-}) {
-  const local = branches.filter((b) => !b.remote)
-  const remote = branches.filter((b) => b.remote)
-
-  const item = (branch: BranchInfo) => (
-    <DropdownMenuItem key={branch.name} onSelect={() => onChange(branch.name)} className="cursor-pointer gap-2">
-      <GitBranchIcon className="size-3.5 shrink-0" style={{ color: colorForBranch(branchColorName(branch)) }} />
-      <span className="flex-1 truncate">{branch.name}</span>
-      {branch.current && (
-        <span className=" bg-green-600/10 dark:bg-green-600/20 px-2 py-1 rounded-md font-medium text-xs text-green-600">
-          Current
-        </span>
-      )}
-    </DropdownMenuItem>
-  )
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="outline" className="max-w-72 bg-white border-0 dark:bg-card">
-          <GitBranchIcon className="size-4 shrink-0" />
-          <span className="truncate">{branchLabel(value)}</span>
-          <ChevronDownIcon className="size-3.5 shrink-0" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        className="max-h-96 min-w-64 overflow-y-auto rounded-xl bg-white p-2 dark:bg-card"
-      >
-        <DropdownMenuItem onSelect={() => onChange(ALL_BRANCHES)} className="cursor-pointer gap-2">
-          <span className="flex-1">All branches</span>
-          {value === ALL_BRANCHES && <CheckIcon className="size-4" />}
-        </DropdownMenuItem>
-        {local.length > 0 && (
-          <>
-            <DropdownMenuSeparator className="bg-black/10" />
-            <DropdownMenuLabel className="text-xs uppercase text-muted-foreground">
-              Local ({local.length})
-            </DropdownMenuLabel>
-            {local.map(item)}
-          </>
-        )}
-        {remote.length > 0 && (
-          <>
-            <DropdownMenuSeparator className="bg-black/10" />
-            <DropdownMenuLabel className="text-xs uppercase text-muted-foreground">
-              Remote ({remote.length})
-            </DropdownMenuLabel>
-            {remote.map(item)}
-          </>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
-
-function ContributorPicker({
-  query,
-  value,
-  onChange,
-}: {
-  query: UseQueryResult<Contributor[]>
-  value: string[]
-  onChange: (value: string[]) => void
-}) {
-  const [search, setSearch] = useState("")
-  const people = (query.data ?? []).filter((p) => matchesQuery(search, [p.name]))
-  const toggle = (name: string) => onChange(value.includes(name) ? value.filter((n) => n !== name) : [...value, name])
-
-  return (
-    <DropdownMenu onOpenChange={(open) => !open && setSearch("")}>
-      <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="outline" className="max-w-72 bg-white border-0 dark:bg-card">
-          <UsersIcon className="size-4 shrink-0" />
-          <span className="truncate">
-            {value.length === 0
-              ? "All contributors"
-              : value.length === 1
-                ? value[0]
-                : `${value[0]} +${value.length - 1}`}
-          </span>
-          <ChevronDownIcon className="size-3.5 shrink-0" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        className="max-h-96 min-w-72 overflow-y-auto rounded-xl bg-white p-2 dark:bg-card"
-      >
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={(e) => e.stopPropagation()}
-          placeholder="Find a contributor"
-          aria-label="Find a contributor"
-          className="mb-1 w-full rounded-md bg-black/5 px-2 py-1.5 text-sm outline-none dark:bg-white/10"
-        />
-        {value.length > 0 && (
-          <DropdownMenuItem onSelect={() => onChange([])} className="cursor-pointer gap-2 text-muted-foreground">
-            <XIcon className="size-4" /> Clear ({value.length})
-          </DropdownMenuItem>
-        )}
-        {query.isLoading && <div className="p-2 text-xs text-muted-foreground">Reading contributors…</div>}
-        {query.isError && <div className="p-2 text-xs text-destructive">{query.error.message}</div>}
-        {people.map((person) => (
-          <DropdownMenuCheckboxItem
-            key={person.name}
-            checked={value.includes(person.name)}
-            onCheckedChange={() => toggle(person.name)}
-            onSelect={(e) => e.preventDefault()}
-            className="cursor-pointer gap-2"
-          >
-            <span className="flex-1 truncate">{person.name}</span>
-            <span className="text-xs text-muted-foreground">
-              {person.commits} · {format(new Date(person.lastDate), "dd MMM yy")}
-            </span>
-          </DropdownMenuCheckboxItem>
-        ))}
-        {query.data && people.length === 0 && <div className="p-2 text-xs text-muted-foreground">No one found.</div>}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
-
 function VerboseHistory({
   repo,
   branch,
@@ -254,6 +113,7 @@ function VerboseHistory({
   keyword,
   authors,
   showRemote,
+  onlyBranches,
 }: {
   repo: RepoKey
   branch: string
@@ -261,14 +121,16 @@ function VerboseHistory({
   keyword: string
   authors: string[]
   showRemote: boolean
+  /** The branches switched on in the Options tab. */
+  onlyBranches: string[]
 }) {
   const [openHash, setOpenHash] = useState<string | null>(null)
 
   const query = useInfiniteQuery({
-    queryKey: ["penguin", "log", repo, branch, authors, showRemote],
+    queryKey: ["penguin", "log", repo, branch, authors, showRemote, onlyBranches],
     queryFn: ({ pageParam }) =>
       getJson<CommitPage>(
-        `/penguin/api/git/log?repo=${repo}&branch=${encodeURIComponent(branch)}&remote=${showRemote ? 1 : 0}&skip=${pageParam}&limit=${PAGE_SIZE}${authors
+        `/penguin/api/git/log?repo=${repo}&branch=${encodeURIComponent(branch)}&remote=${showRemote ? 1 : 0}&shown=${encodeURIComponent(onlyBranches.join(","))}&skip=${pageParam}&limit=${PAGE_SIZE}${authors
           .map((name) => `&author=${encodeURIComponent(name)}`)
           .join("")}`,
       ),
@@ -371,6 +233,313 @@ function edgePath(fromRow: number, fromCol: number, toRow: number, toCol: number
   // Merge: bend into the merged lane right away, then run along it to its commit.
   const bend = R1 + rowSpan
   return `M${P(L1, R1)}C${P(L1, R1 + rowSpan / 2)} ${P(L2, R1 + rowSpan / 2)} ${P(L2, bend)}L${P(L2, R2)}`
+}
+const BRANCH_CATEGORY_ORDER = ["main", "dev", "feat", "fix", "refactor", "hotfix"] as const
+const OTHER_CATEGORY_RANK = BRANCH_CATEGORY_ORDER.length
+
+type BranchCategoryRank = 0 | 1 | 2 | 3 | 4 | 5 | typeof OTHER_CATEGORY_RANK
+
+function getBranchCategoryRank(branchName: string): BranchCategoryRank {
+  const normalized = branchName.trim().toLowerCase()
+
+  if (normalized === "main") return 0
+  if (normalized === "dev" || normalized === "develop") return 1
+
+  const prefix = normalized.split("/")[0]
+  if (prefix === "feat" || prefix === "feature") return 2
+  if (prefix === "fix" || prefix === "bugfix") return 3
+  if (prefix === "refactor") return 4
+  if (prefix === "hotfix") return 5
+
+  return OTHER_CATEGORY_RANK
+}
+
+function getCategoryLabel(rank: BranchCategoryRank): string | null {
+  return rank < OTHER_CATEGORY_RANK ? ((BRANCH_CATEGORY_ORDER as readonly string[])[rank] ?? null) : "other"
+}
+
+function sortBranchEntries(entries: [string, string][]): [string, string][] {
+  return [...entries].sort(([nameA], [nameB]) => {
+    const rankDiff = getBranchCategoryRank(nameA) - getBranchCategoryRank(nameB)
+    if (rankDiff !== 0) return rankDiff
+    return nameA.localeCompare(nameB, undefined, { sensitivity: "base" })
+  })
+}
+
+function groupBranchesByCategory(entries: [string, string][]): {
+  rank: BranchCategoryRank
+  label: string | null
+  items: [string, string][]
+}[] {
+  const buckets = new Map<BranchCategoryRank, [string, string][]>()
+
+  for (const [name, color] of sortBranchEntries(entries)) {
+    const rank = getBranchCategoryRank(name)
+    const bucket = buckets.get(rank) ?? []
+    bucket.push([name, color])
+    buckets.set(rank, bucket)
+  }
+
+  return Array.from(buckets.entries())
+    .sort(([rankA], [rankB]) => rankA - rankB)
+    .map(([rank, items]) => ({
+      rank,
+      label: getCategoryLabel(rank),
+      items,
+    }))
+}
+
+// The layout without the hidden branches: their rows and the lines that touch them are dropped.
+function hideBranches(layout: GraphLayout, hidden: Set<string>): GraphLayout {
+  if (hidden.size === 0) return layout
+  const kept = new Map<number, number>()
+  const rows: GraphRow[] = []
+  layout.rows.forEach((row, index) => {
+    if (row.lane && hidden.has(row.lane)) return
+    kept.set(index, rows.length)
+    rows.push(row)
+  })
+  const edges: GraphEdge[] = []
+  for (const edge of layout.edges) {
+    const from = kept.get(edge.fromRow)
+    if (from === undefined) continue
+    // A line still open at the bottom of the history stays open.
+    if (edge.toRow >= layout.rows.length) {
+      edges.push({ ...edge, fromRow: from, toRow: rows.length })
+      continue
+    }
+    const to = kept.get(edge.toRow)
+    if (to === undefined) continue
+    edges.push({ ...edge, fromRow: from, toRow: to })
+  }
+  return { ...layout, rows, edges }
+}
+
+// Authors always use the same green as main, so the legend reads the same on every repo and tab.
+function authorColor() {
+  return colorForBranch("main")
+}
+
+// One toggle in the legend: the name is plain text, the track takes the colour when it is on.
+// The entries that are on come first; the rest keep their order.
+function onFirst<T>(items: T[], isOn: (item: T) => boolean) {
+  return [...items].sort((a, b) => Number(isOn(b)) - Number(isOn(a)))
+}
+
+// A list of legend toggles that scrolls past five rows. Entries that change place glide to their new spot,
+// and a fade with a count at the bottom says how many entries are still out of sight.
+function ListColumn({
+  children,
+  className,
+  innerClassName = "flex flex-col gap-1",
+  innerStyle,
+}: {
+  children: ReactNode
+  className?: string
+  innerClassName?: string
+  innerStyle?: CSSProperties
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const tops = useRef(new Map<string, number>())
+  const [more, setMore] = useState(0)
+
+  const measure = useCallback(() => {
+    const el = ref.current
+    if (!el) return
+    const edge = el.scrollTop + el.clientHeight
+    let hiddenBelow = 0
+    el.querySelectorAll<HTMLElement>("[data-flip]").forEach((node) => {
+      if (node.offsetTop + node.offsetHeight / 2 > edge) hiddenBelow++
+    })
+    setMore(hiddenBelow)
+  }, [])
+
+  // FLIP: remember where each entry was, and after a reorder slide it from there to where it is now.
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const next = new Map<string, number>()
+    el.querySelectorAll<HTMLElement>("[data-flip]").forEach((node) => {
+      const key = node.dataset.flip ?? ""
+      next.set(key, node.offsetTop)
+      const before = tops.current.get(key)
+      if (before === undefined || before === node.offsetTop) return
+      node.style.transition = "none"
+      node.style.transform = `translateY(${before - node.offsetTop}px)`
+      // Reading offsetHeight forces the start position to be painted before the transition starts.
+      void node.offsetHeight
+      node.style.transition = "transform 600ms cubic-bezier(0.22, 1, 0.36, 1)"
+      node.style.transform = ""
+    })
+    tops.current = next
+    measure()
+  })
+
+  return (
+    <div className={cn("relative min-w-0", className)}>
+      <div
+        ref={ref}
+        onScroll={measure}
+        className={cn("relative max-h-[11rem] overflow-y-auto", innerClassName)}
+        style={innerStyle}
+      >
+        {children}
+      </div>
+      {more > 0 && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-9 items-end justify-center bg-gradient-to-t from-background via-background/80 to-transparent pb-0.5">
+          <span className="rounded-full border border-dashed bg-background px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+            ↓ {more} more
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function LegendToggle({
+  name,
+  on,
+  color,
+  title,
+  onClick,
+}: {
+  name: string
+  on: boolean
+  color: string
+  title: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      data-flip={name}
+      title={title}
+      onClick={onClick}
+      className="inline-flex h-8 shrink-0 w-full items-center justify-between gap-2 rounded-lg border border-dashed bg-card px-2.5 text-xs font-medium"
+    >
+      <span className={cn("truncate", on ? "text-foreground/80" : "text-foreground/50")}>{name}</span>
+      <span
+        className="relative inline-block h-4 w-7 shrink-0 rounded-full transition-colors duration-300 ease-out"
+        style={{
+          background: on ? color : "hsl(var(--muted-foreground) / 0.35)",
+        }}
+      >
+        <span
+          className={cn(
+            "absolute left-0.5 top-0.5 size-3 rounded-full bg-white shadow-sm transition-transform duration-300 ease-out",
+            on && "translate-x-3",
+          )}
+        />
+      </span>
+    </button>
+  )
+}
+
+// The legend of the Options tab. Its switches (remote branches, horizontal flow) live here only, and it lists
+// the branches and the authors as toggles: a branch that is off is hidden from the flow, an author that is
+// off is dimmed out of it. Nothing is sticky, so it scrolls away with the page.
+function FlowLegend({
+  entries,
+  hidden,
+  onToggle,
+  onShowAll,
+  onResetBranches,
+  contributors,
+  authors,
+  onAuthors,
+  showRemote,
+  onShowRemote,
+  horizontal,
+  onHorizontal,
+}: {
+  entries: [string, string][]
+  hidden: Set<string>
+  onToggle: (name: string) => void
+  onShowAll: () => void
+  onResetBranches: () => void
+  contributors: Contributor[]
+  authors: string[]
+  onAuthors: (next: string[] | null) => void
+  showRemote: boolean
+  onShowRemote: (next: boolean) => void
+  horizontal: boolean
+  onHorizontal: (next: boolean) => void
+}) {
+  const columns = groupBranchesByCategory(entries)
+  const names = contributors.map((c) => c.name)
+  // An empty selection means everyone, so every author reads as on until one is switched off.
+  const isOn = (name: string) => authors.length === 0 || authors.includes(name)
+  const toggleAuthor = (name: string) => {
+    const base = authors.length === 0 ? names : authors
+    onAuthors(base.includes(name) ? base.filter((n) => n !== name) : [...base, name])
+  }
+  const columnCount = columns.length
+
+  return (
+    <div className="space-y-2 rounded-xl border border-dashed px-3 py-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <Switch checked={showRemote} onChange={onShowRemote} label="Remote branches" />
+        <Switch checked={horizontal} onChange={onHorizontal} label="Horizontal flow" />
+        {entries.length > 0 && (
+          <Switch
+            checked={hidden.size === 0}
+            onChange={(on) => (on ? onShowAll() : onResetBranches())}
+            label="Show all"
+          />
+        )}
+      </div>
+      {columnCount > 0 && (
+        <div className="border-t border-dashed pt-2">
+          <div
+            className="grid gap-2 overflow-x-auto"
+            style={{ gridTemplateColumns: `repeat(${columnCount}, minmax(7.5rem, 1fr))` }}
+          >
+            {columns.map(({ rank, items }) => (
+              <ListColumn key={rank}>
+                {onFirst(items, (entry) => !hidden.has(entry[0])).map(([name]) => {
+                  const on = !hidden.has(name)
+                  return (
+                    <LegendToggle
+                      key={name}
+                      name={name}
+                      on={on}
+                      color={colorForBranch(name)}
+                      title={on ? `Hide ${name}` : `Show ${name}`}
+                      onClick={() => onToggle(name)}
+                    />
+                  )
+                })}
+              </ListColumn>
+            ))}
+          </div>
+        </div>
+      )}
+      {names.length > 0 && (
+        <div className="border-t border-dashed pt-2">
+          <ListColumn
+            innerClassName="grid gap-1"
+            innerStyle={{ gridTemplateColumns: "repeat(auto-fill, minmax(9rem, 1fr))" }}
+          >
+            {onFirst(names, isOn).map((name) => {
+              const on = isOn(name)
+              return (
+                <LegendToggle
+                  key={name}
+                  name={name}
+                  on={on}
+                  color={authorColor()}
+                  title={on ? `Dim ${name}` : `Show ${name}`}
+                  onClick={() => toggleAuthor(name)}
+                />
+              )
+            })}
+          </ListColumn>
+        </div>
+      )}
+    </div>
+  )
 }
 
 function FlowHorizontal({
@@ -542,24 +711,18 @@ function FlowHorizontal({
   )
 }
 
-function FlowHistory({
-  repo,
-  branch,
-  keyword,
-  authors,
-  showRemote,
-  horizontal,
-}: {
-  repo: RepoKey
-  branch: string
-  keyword: string
-  authors: string[]
-  showRemote: boolean
-  horizontal: boolean
-}) {
-  const [more, setMore] = useState(0)
-  const [selected, setSelected] = useState<string | null>(null)
+// Branches that start shown in the flow: the checked-out one, dev and main.
+const DEFAULT_SHOWN = ["main", "dev"]
 
+// The graph of a repo and which of its branches are hidden. The Options tab and the flow both read it, so they agree.
+function useFlowGraph(
+  repo: RepoKey,
+  branch: string,
+  showRemote: boolean,
+  currentBranch: string | null,
+  hiddenBranches: string[] | null,
+  onHiddenBranches: (next: string[]) => void,
+) {
   const query = useQuery({
     queryKey: ["penguin", "graph", repo, branch, showRemote],
     queryFn: () =>
@@ -567,7 +730,6 @@ function FlowHistory({
         `/penguin/api/git/graph?repo=${repo}&branch=${encodeURIComponent(branch)}&remote=${showRemote ? 1 : 0}`,
       ),
   })
-
   const layout = useMemo(
     () =>
       query.data
@@ -578,19 +740,130 @@ function FlowHistory({
         : null,
     [query.data, showRemote],
   )
+  // One entry per branch lane in the flow, in the colour the lane is drawn with.
+  const legendEntries = useMemo<[string, string][]>(() => {
+    if (!layout) return []
+    const seen = new Map<string, string>()
+    for (const row of layout.rows) if (row.lane && !seen.has(row.lane)) seen.set(row.lane, row.color)
+    return [...seen]
+  }, [layout])
+  // Until the user changes it, everything except the checked-out branch, dev and main is hidden.
+  const defaultHidden = useMemo(() => {
+    const shown = new Set([...DEFAULT_SHOWN, ...(currentBranch ? [currentBranch] : [])])
+    return legendEntries.map(([name]) => name).filter((name) => !shown.has(name))
+  }, [currentBranch, legendEntries])
+  const hidden = useMemo(
+    () => (hiddenBranches ? new Set(hiddenBranches) : new Set(defaultHidden)),
+    [hiddenBranches, defaultHidden],
+  )
+  const toggleBranch = (name: string) => {
+    const next = new Set(hidden)
+    if (next.has(name)) next.delete(name)
+    else next.add(name)
+    onHiddenBranches([...next])
+  }
+  return { query, layout, legendEntries, defaultHidden, hidden, toggleBranch }
+}
+
+// The Options tab: every switch and toggle that shapes the views, kept in one place.
+function OptionsPanel({
+  repo,
+  branch,
+  authors,
+  onAuthors,
+  contributors,
+  showRemote,
+  onShowRemote,
+  horizontal,
+  onHorizontal,
+  currentBranch,
+  hiddenBranches,
+  onHiddenBranches,
+}: {
+  repo: RepoKey
+  branch: string
+  authors: string[]
+  onAuthors: (next: string[] | null) => void
+  contributors: Contributor[]
+  showRemote: boolean
+  onShowRemote: (next: boolean) => void
+  horizontal: boolean
+  onHorizontal: (next: boolean) => void
+  currentBranch: string | null
+  hiddenBranches: string[] | null
+  onHiddenBranches: (next: string[]) => void
+}) {
+  const { legendEntries, defaultHidden, hidden, toggleBranch } = useFlowGraph(
+    repo,
+    branch,
+    showRemote,
+    currentBranch,
+    hiddenBranches,
+    onHiddenBranches,
+  )
+  return (
+    <FlowLegend
+      entries={legendEntries}
+      hidden={hidden}
+      onToggle={toggleBranch}
+      onShowAll={() => onHiddenBranches([])}
+      onResetBranches={() => onHiddenBranches(defaultHidden)}
+      contributors={contributors}
+      authors={authors}
+      onAuthors={onAuthors}
+      showRemote={showRemote}
+      onShowRemote={onShowRemote}
+      horizontal={horizontal}
+      onHorizontal={onHorizontal}
+    />
+  )
+}
+
+function FlowHistory({
+  repo,
+  branch,
+  keyword,
+  authors,
+  showRemote,
+  horizontal,
+  currentBranch,
+  hiddenBranches,
+  onHiddenBranches,
+}: {
+  repo: RepoKey
+  branch: string
+  keyword: string
+  authors: string[]
+  showRemote: boolean
+  horizontal: boolean
+  currentBranch: string | null
+  hiddenBranches: string[] | null
+  onHiddenBranches: (next: string[]) => void
+}) {
+  const [more, setMore] = useState(0)
+  const [selected, setSelected] = useState<string | null>(null)
+  const { query, layout, hidden } = useFlowGraph(
+    repo,
+    branch,
+    showRemote,
+    currentBranch,
+    hiddenBranches,
+    onHiddenBranches,
+  )
+  const visible = useMemo(() => (layout ? hideBranches(layout, hidden) : null), [layout, hidden])
 
   // The graph cannot drop rows without breaking its lines, so a search dims the rest instead.
   const matches = useMemo(() => {
-    if (!layout || (!keyword.trim() && authors.length === 0)) return null
+    if (!visible || (!keyword.trim() && authors.length === 0)) return null
     const found = new Set<number>()
-    layout.rows.forEach((row, i) => {
+    visible.rows.forEach((row, i) => {
       if (authors.length > 0 && !authors.includes(row.commit.author)) return
       if (!keyword.trim()) return void found.add(i)
       const fields = [row.commit.hash, row.commit.subject, row.commit.author, row.lane ?? ""]
       if (matchesQuery(keyword, [...fields, ...row.tips.map((tip) => tip.name)])) found.add(i)
     })
     return found
-  }, [layout, keyword, authors])
+  }, [visible, keyword, authors])
 
   // Show enough rows to reach the first match.
   const firstMatch = matches && matches.size > 0 ? Math.min(...matches) : 0
@@ -598,7 +871,7 @@ function FlowHistory({
 
   if (query.isLoading) return <LoadingIndicatorView className="min-h-[60vh]" />
   if (query.isError) return <ErrorBox message={query.error.message} onRetry={() => query.refetch()} />
-  if (!layout || layout.rows.length === 0) {
+  if (!visible || visible.rows.length === 0) {
     return (
       <Card className="border-0 p-20 text-center text-sm text-muted-foreground">
         No commits on {branchLabel(branch)}.
@@ -606,14 +879,14 @@ function FlowHistory({
     )
   }
 
-  const rows = layout.rows.slice(0, shown)
+  const rows = visible.rows.slice(0, shown)
   if (horizontal) {
     return (
       <FlowHorizontal
         rows={rows}
-        edges={layout.edges}
-        columns={layout.columns}
-        total={layout.rows.length}
+        edges={visible.edges}
+        columns={visible.columns}
+        total={visible.rows.length}
         truncated={query.data?.truncated ?? false}
         matches={matches}
         selected={selected}
@@ -621,9 +894,9 @@ function FlowHistory({
       />
     )
   }
-  const width = layout.columns * COL_W
+  const width = visible.columns * COL_W
   const height = rows.length * ROW_H
-  const edges = layout.edges.filter((edge) => edge.fromRow < rows.length)
+  const edges = visible.edges.filter((edge) => edge.fromRow < rows.length)
   const left = DATE_W + 8
   const dim = (color: string) => selected !== null && selected !== color
   const delay = (row: number) => Math.min(row, 40) * 14
@@ -741,12 +1014,12 @@ function FlowHistory({
       <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
         <span>
           {matches && `${matches.size} matching · `}
-          {rows.length} of {layout.rows.length}
+          {rows.length} of {visible.rows.length}
           {query.data?.truncated ? "+" : ""} commits
         </span>
-        {rows.length < layout.rows.length && (
+        {rows.length < visible.rows.length && (
           <Button size="sm" variant="outline" onClick={() => setMore((v) => v + FLOW_STEP)}>
-            Show {Math.min(FLOW_STEP, layout.rows.length - rows.length)} more
+            Show {Math.min(FLOW_STEP, visible.rows.length - rows.length)} more
           </Button>
         )}
       </div>
@@ -761,17 +1034,30 @@ export interface ViewOptions {
   horizontal: boolean
 }
 
-export const DEFAULT_VIEW_OPTIONS: ViewOptions = { mode: "verbose", showRemote: false, horizontal: false }
+export const DEFAULT_VIEW_OPTIONS: ViewOptions = {
+  mode: "verbose",
+  showRemote: false,
+  horizontal: false,
+}
 
 // The branch and author filters of a repo tab. They live above the tabs, so they survive switching repos.
 export interface RepoFilters {
+  /** Branches hidden in the flow. Null until the user changes them: then the default set is used. */
+  hidden: string[] | null
   /** Undefined until the user picks a branch: then the repo's checked-out branch is used. */
   branch?: string
   /** Null until the user picks: then the repo's own git user is selected, when they have commits here. */
   authors: string[] | null
+  /** The search text of the repo tab. */
+  keyword: string
 }
 
-export const DEFAULT_REPO_FILTERS: RepoFilters = { branch: undefined, authors: null }
+export const DEFAULT_REPO_FILTERS: RepoFilters = {
+  branch: undefined,
+  authors: null,
+  hidden: null,
+  keyword: "",
+}
 
 export function RepoTab({
   repo,
@@ -788,13 +1074,24 @@ export function RepoTab({
   filters: RepoFilters
   onFilters: (next: RepoFilters) => void
 }) {
-  const branch = filters.branch ?? repo.currentBranch ?? ALL_BRANCHES
-  const setBranch = (next: string) => onFilters({ branch: next, authors: null })
+  const branch = ALL_BRANCHES
   const { mode, showRemote, horizontal } = options
   const setMode = (next: Mode) => onOptions({ ...options, mode: next })
   const setShowRemote = (next: boolean) => onOptions({ ...options, showRemote: next })
   const setHorizontal = (next: boolean) => onOptions({ ...options, horizontal: next })
-  const [keyword, setKeyword] = useState("")
+  const keyword = filters.keyword ?? ""
+  const setKeyword = (next: string) => onFilters({ ...filters, keyword: next })
+  // The branches switched on in Options: what Verbose, Data and Files read. Until the user changes the toggles
+  // that is main, dev and the checked-out branch, the same default the Options tab starts with.
+  const onlyBranches = useMemo(() => {
+    const keys = [...new Set(repo.branches.map(branchKey))]
+    if (filters.hidden) {
+      const hidden = new Set(filters.hidden)
+      return keys.filter((key) => !hidden.has(key))
+    }
+    const keep = new Set([...DEFAULT_SHOWN, ...(repo.currentBranch ? [repo.currentBranch] : [])])
+    return keys.filter((key) => keep.has(key))
+  }, [repo.branches, repo.currentBranch, filters.hidden])
   const picked = filters.authors
   const setPicked = (next: string[] | null) => onFilters({ ...filters, authors: next })
   const contributors = useQuery({
@@ -832,16 +1129,6 @@ export function RepoTab({
             </span>
           )}
         </div>
-        <BranchPicker
-          branches={repo.branches}
-          value={branch}
-          onChange={(next) => {
-            setBranch(next)
-          }}
-        />
-        <ContributorPicker query={contributors} value={authors} onChange={setPicked} />
-        <Switch checked={showRemote} onChange={setShowRemote} label="Remote branches" />
-        <Switch checked={horizontal} onChange={setHorizontal} label="Horizontal flow" />
         <Segmented
           value={mode}
           onChange={setMode}
@@ -850,27 +1137,45 @@ export function RepoTab({
             { value: "flow", label: "Flow" },
             { value: "data", label: "Data" },
             { value: "files", label: "Files" },
+            { value: "options", label: "Options" },
           ]}
         />
       </div>
 
-      <SearchBox
-        value={keyword}
-        onChange={setKeyword}
-        placeholder={
-          mode === "verbose"
-            ? "Search branches and loaded commits by hash, message, author or file"
-            : mode === "data"
-              ? "Search contributors"
-              : mode === "files"
-                ? "Search changed files by path"
-                : "Search branches and commits by hash, message, author or branch"
-        }
-      />
+      {mode !== "options" && (
+        <SearchBox
+          value={keyword}
+          onChange={setKeyword}
+          placeholder={
+            mode === "verbose"
+              ? "Search branches and loaded commits by hash, message, author or file"
+              : mode === "data"
+                ? "Search contributors"
+                : mode === "files"
+                  ? "Search changed files by path"
+                  : "Search branches and commits by hash, message, author or branch"
+          }
+        />
+      )}
 
       <SearchHighlightProvider query={keyword}>
         <div className="space-y-4">
-          {mode === "verbose" ? (
+          {mode === "options" ? (
+            <OptionsPanel
+              repo={repo.key}
+              branch={branch}
+              authors={authors}
+              onAuthors={setPicked}
+              contributors={contributors.data ?? []}
+              showRemote={showRemote}
+              onShowRemote={setShowRemote}
+              horizontal={horizontal}
+              onHorizontal={setHorizontal}
+              currentBranch={repo.currentBranch}
+              hiddenBranches={filters.hidden}
+              onHiddenBranches={(next) => onFilters({ ...filters, hidden: next })}
+            />
+          ) : mode === "verbose" ? (
             <VerboseHistory
               key={branch}
               repo={repo.key}
@@ -879,6 +1184,7 @@ export function RepoTab({
               keyword={keyword}
               authors={authors}
               showRemote={showRemote}
+              onlyBranches={onlyBranches}
             />
           ) : mode === "files" ? (
             <FileActivityPanel
@@ -888,6 +1194,7 @@ export function RepoTab({
               authors={authors}
               keyword={keyword}
               showRemote={showRemote}
+              onlyBranches={onlyBranches}
             />
           ) : mode === "data" ? (
             <ActivityHeatmap
@@ -897,6 +1204,7 @@ export function RepoTab({
               keyword={keyword}
               authors={authors}
               showRemote={showRemote}
+              onlyBranches={onlyBranches}
             />
           ) : (
             <FlowHistory
@@ -907,6 +1215,9 @@ export function RepoTab({
               authors={authors}
               showRemote={showRemote}
               horizontal={horizontal}
+              currentBranch={repo.currentBranch}
+              hiddenBranches={filters.hidden}
+              onHiddenBranches={(next) => onFilters({ ...filters, hidden: next })}
             />
           )}
         </div>
